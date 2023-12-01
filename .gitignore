@@ -1,0 +1,10 @@
+*.exe
+*.exe~
+*.so
+*.dylib
+*.test
+go.work
+.env
+*.log
+tmp/
+__debug_bin*

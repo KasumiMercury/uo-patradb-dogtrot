@@ -34,7 +34,7 @@ ENV GO111MODULE auto
 RUN apk --no-cache add git bash
 
 WORKDIR /app
-COPY . ./app
+COPY . .
 
 RUN go install github.com/go-delve/delve/cmd/dlv@latest && \
     go install github.com/cosmtrek/air@latest

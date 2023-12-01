@@ -5,7 +5,7 @@ run-dev:
 stop-dev:
 	docker stop patradb-dogtrot-dev
 build-prod:
-	docker build -t patradb-dogtrot-prod:latest -f Dockerfile.prod .
+	docker build -t patradb-dogtrot-prod:latest .
 run-prod:
 	docker run -it --rm -p 8080:8080 --name patradb-dogtrot-prod patradb-dogtrot-prod:latest
 stop-prod:

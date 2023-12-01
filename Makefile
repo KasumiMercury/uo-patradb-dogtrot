@@ -1,9 +1,14 @@
 build-dev:
-	docker build --target dev -t patradb-dogtrot-dev:latest .
-run-dev:
-	docker run -it --rm -p 8080:8080 -p 2345:2345 --name patradb-dogtrot-dev -d patradb-dogtrot-dev:latest
-stop-dev:
-	docker stop patradb-dogtrot-dev
+	docker compose build
+build-dev-no-cache:
+	docker compose build --no-cache
+up:
+	docker compose up -d
+down:
+	docker compose down --remove-orphans
+ps:
+	docker compose ps
+
 build-prod:
 	docker build --target runner -t patradb-dogtrot-prod:latest .
 run-prod:
@@ -11,7 +16,8 @@ run-prod:
 stop-prod:
 	docker stop patradb-dogtrot-prod
 
+
 bash-dev:
-	docker exec -it patradb-dogtrot-dev bash
+	docker compose exec dogtrot bash
 air:
-	docker exec -it patradb-dogtrot-dev air -c .air.toml
+	docker compose exec dogtrot air -c .air.toml

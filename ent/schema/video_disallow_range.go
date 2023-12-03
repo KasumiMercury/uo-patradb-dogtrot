@@ -30,6 +30,6 @@ func (Video_disallow_range) Fields() []ent.Field {
 // Edges of the Video_disallow_range.
 func (Video_disallow_range) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("video", Video.Type).Ref("video_disallow_ranges").Required(),
+		edge.From("video", Video.Type).Ref("video_disallow_ranges").Required().Unique(),
 	}
 }

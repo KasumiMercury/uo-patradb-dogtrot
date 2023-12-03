@@ -32,6 +32,6 @@ func (Video_title_change) Fields() []ent.Field {
 // Edges of the Video_title_change.
 func (Video_title_change) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("video", Video.Type).Ref("video_title_changes").Required(),
+		edge.From("video", Video.Type).Ref("video_title_changes").Unique().Required(),
 	}
 }

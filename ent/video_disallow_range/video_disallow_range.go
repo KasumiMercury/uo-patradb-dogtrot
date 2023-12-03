@@ -21,11 +21,13 @@ const (
 	EdgeVideo = "video"
 	// Table holds the table name of the video_disallow_range in the database.
 	Table = "video_disallow_ranges"
-	// VideoTable is the table that holds the video relation/edge. The primary key declared below.
-	VideoTable = "video_video_disallow_ranges"
+	// VideoTable is the table that holds the video relation/edge.
+	VideoTable = "video_disallow_ranges"
 	// VideoInverseTable is the table name for the Video entity.
 	// It exists in this package in order to avoid circular dependency with the "video" package.
 	VideoInverseTable = "videos"
+	// VideoColumn is the table column denoting the video relation/edge.
+	VideoColumn = "video_video_disallow_ranges"
 )
 
 // Columns holds all SQL columns for video_disallow_range fields.
@@ -35,16 +37,21 @@ var Columns = []string{
 	FieldEndSeconds,
 }
 
-var (
-	// VideoPrimaryKey and VideoColumn2 are the table columns denoting the
-	// primary key for the video relation (M2M).
-	VideoPrimaryKey = []string{"video_id", "video_disallow_range_id"}
-)
+// ForeignKeys holds the SQL foreign-keys that are owned by the "video_disallow_ranges"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"video_video_disallow_ranges",
+}
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -74,23 +81,16 @@ func ByEndSeconds(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEndSeconds, opts...).ToFunc()
 }
 
-// ByVideoCount orders the results by video count.
-func ByVideoCount(opts ...sql.OrderTermOption) OrderOption {
+// ByVideoField orders the results by video field.
+func ByVideoField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newVideoStep(), opts...)
-	}
-}
-
-// ByVideo orders the results by video terms.
-func ByVideo(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newVideoStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newVideoStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newVideoStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VideoInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, VideoTable, VideoPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.M2O, true, VideoTable, VideoColumn),
 	)
 }

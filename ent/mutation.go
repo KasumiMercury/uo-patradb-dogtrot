@@ -4728,8 +4728,7 @@ type VideoDisallowRangeMutation struct {
 	end_seconds      *int
 	addend_seconds   *int
 	clearedFields    map[string]struct{}
-	video            map[pulid.ID]struct{}
-	removedvideo     map[pulid.ID]struct{}
+	video            *pulid.ID
 	clearedvideo     bool
 	done             bool
 	oldValue         func(context.Context) (*Video_disallow_range, error)
@@ -4952,14 +4951,9 @@ func (m *VideoDisallowRangeMutation) ResetEndSeconds() {
 	m.addend_seconds = nil
 }
 
-// AddVideoIDs adds the "video" edge to the Video entity by ids.
-func (m *VideoDisallowRangeMutation) AddVideoIDs(ids ...pulid.ID) {
-	if m.video == nil {
-		m.video = make(map[pulid.ID]struct{})
-	}
-	for i := range ids {
-		m.video[ids[i]] = struct{}{}
-	}
+// SetVideoID sets the "video" edge to the Video entity by id.
+func (m *VideoDisallowRangeMutation) SetVideoID(id pulid.ID) {
+	m.video = &id
 }
 
 // ClearVideo clears the "video" edge to the Video entity.
@@ -4972,29 +4966,20 @@ func (m *VideoDisallowRangeMutation) VideoCleared() bool {
 	return m.clearedvideo
 }
 
-// RemoveVideoIDs removes the "video" edge to the Video entity by IDs.
-func (m *VideoDisallowRangeMutation) RemoveVideoIDs(ids ...pulid.ID) {
-	if m.removedvideo == nil {
-		m.removedvideo = make(map[pulid.ID]struct{})
-	}
-	for i := range ids {
-		delete(m.video, ids[i])
-		m.removedvideo[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedVideo returns the removed IDs of the "video" edge to the Video entity.
-func (m *VideoDisallowRangeMutation) RemovedVideoIDs() (ids []pulid.ID) {
-	for id := range m.removedvideo {
-		ids = append(ids, id)
+// VideoID returns the "video" edge ID in the mutation.
+func (m *VideoDisallowRangeMutation) VideoID() (id pulid.ID, exists bool) {
+	if m.video != nil {
+		return *m.video, true
 	}
 	return
 }
 
 // VideoIDs returns the "video" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// VideoID instead. It exists only for internal usage by the builders.
 func (m *VideoDisallowRangeMutation) VideoIDs() (ids []pulid.ID) {
-	for id := range m.video {
-		ids = append(ids, id)
+	if id := m.video; id != nil {
+		ids = append(ids, *id)
 	}
 	return
 }
@@ -5003,7 +4988,6 @@ func (m *VideoDisallowRangeMutation) VideoIDs() (ids []pulid.ID) {
 func (m *VideoDisallowRangeMutation) ResetVideo() {
 	m.video = nil
 	m.clearedvideo = false
-	m.removedvideo = nil
 }
 
 // Where appends a list predicates to the VideoDisallowRangeMutation builder.
@@ -5195,11 +5179,9 @@ func (m *VideoDisallowRangeMutation) AddedEdges() []string {
 func (m *VideoDisallowRangeMutation) AddedIDs(name string) []ent.Value {
 	switch name {
 	case video_disallow_range.EdgeVideo:
-		ids := make([]ent.Value, 0, len(m.video))
-		for id := range m.video {
-			ids = append(ids, id)
+		if id := m.video; id != nil {
+			return []ent.Value{*id}
 		}
-		return ids
 	}
 	return nil
 }
@@ -5207,23 +5189,12 @@ func (m *VideoDisallowRangeMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *VideoDisallowRangeMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.removedvideo != nil {
-		edges = append(edges, video_disallow_range.EdgeVideo)
-	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *VideoDisallowRangeMutation) RemovedIDs(name string) []ent.Value {
-	switch name {
-	case video_disallow_range.EdgeVideo:
-		ids := make([]ent.Value, 0, len(m.removedvideo))
-		for id := range m.removedvideo {
-			ids = append(ids, id)
-		}
-		return ids
-	}
 	return nil
 }
 
@@ -5250,6 +5221,9 @@ func (m *VideoDisallowRangeMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *VideoDisallowRangeMutation) ClearEdge(name string) error {
 	switch name {
+	case video_disallow_range.EdgeVideo:
+		m.ClearVideo()
+		return nil
 	}
 	return fmt.Errorf("unknown Video_disallow_range unique edge %s", name)
 }
@@ -5276,8 +5250,7 @@ type VideoPlayRangeMutation struct {
 	end_seconds      *int
 	addend_seconds   *int
 	clearedFields    map[string]struct{}
-	video            map[pulid.ID]struct{}
-	removedvideo     map[pulid.ID]struct{}
+	video            *pulid.ID
 	clearedvideo     bool
 	done             bool
 	oldValue         func(context.Context) (*Video_play_range, error)
@@ -5514,14 +5487,9 @@ func (m *VideoPlayRangeMutation) ResetEndSeconds() {
 	delete(m.clearedFields, video_play_range.FieldEndSeconds)
 }
 
-// AddVideoIDs adds the "video" edge to the Video entity by ids.
-func (m *VideoPlayRangeMutation) AddVideoIDs(ids ...pulid.ID) {
-	if m.video == nil {
-		m.video = make(map[pulid.ID]struct{})
-	}
-	for i := range ids {
-		m.video[ids[i]] = struct{}{}
-	}
+// SetVideoID sets the "video" edge to the Video entity by id.
+func (m *VideoPlayRangeMutation) SetVideoID(id pulid.ID) {
+	m.video = &id
 }
 
 // ClearVideo clears the "video" edge to the Video entity.
@@ -5534,29 +5502,20 @@ func (m *VideoPlayRangeMutation) VideoCleared() bool {
 	return m.clearedvideo
 }
 
-// RemoveVideoIDs removes the "video" edge to the Video entity by IDs.
-func (m *VideoPlayRangeMutation) RemoveVideoIDs(ids ...pulid.ID) {
-	if m.removedvideo == nil {
-		m.removedvideo = make(map[pulid.ID]struct{})
-	}
-	for i := range ids {
-		delete(m.video, ids[i])
-		m.removedvideo[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedVideo returns the removed IDs of the "video" edge to the Video entity.
-func (m *VideoPlayRangeMutation) RemovedVideoIDs() (ids []pulid.ID) {
-	for id := range m.removedvideo {
-		ids = append(ids, id)
+// VideoID returns the "video" edge ID in the mutation.
+func (m *VideoPlayRangeMutation) VideoID() (id pulid.ID, exists bool) {
+	if m.video != nil {
+		return *m.video, true
 	}
 	return
 }
 
 // VideoIDs returns the "video" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// VideoID instead. It exists only for internal usage by the builders.
 func (m *VideoPlayRangeMutation) VideoIDs() (ids []pulid.ID) {
-	for id := range m.video {
-		ids = append(ids, id)
+	if id := m.video; id != nil {
+		ids = append(ids, *id)
 	}
 	return
 }
@@ -5565,7 +5524,6 @@ func (m *VideoPlayRangeMutation) VideoIDs() (ids []pulid.ID) {
 func (m *VideoPlayRangeMutation) ResetVideo() {
 	m.video = nil
 	m.clearedvideo = false
-	m.removedvideo = nil
 }
 
 // Where appends a list predicates to the VideoPlayRangeMutation builder.
@@ -5766,11 +5724,9 @@ func (m *VideoPlayRangeMutation) AddedEdges() []string {
 func (m *VideoPlayRangeMutation) AddedIDs(name string) []ent.Value {
 	switch name {
 	case video_play_range.EdgeVideo:
-		ids := make([]ent.Value, 0, len(m.video))
-		for id := range m.video {
-			ids = append(ids, id)
+		if id := m.video; id != nil {
+			return []ent.Value{*id}
 		}
-		return ids
 	}
 	return nil
 }
@@ -5778,23 +5734,12 @@ func (m *VideoPlayRangeMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *VideoPlayRangeMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.removedvideo != nil {
-		edges = append(edges, video_play_range.EdgeVideo)
-	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *VideoPlayRangeMutation) RemovedIDs(name string) []ent.Value {
-	switch name {
-	case video_play_range.EdgeVideo:
-		ids := make([]ent.Value, 0, len(m.removedvideo))
-		for id := range m.removedvideo {
-			ids = append(ids, id)
-		}
-		return ids
-	}
 	return nil
 }
 
@@ -5821,6 +5766,9 @@ func (m *VideoPlayRangeMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *VideoPlayRangeMutation) ClearEdge(name string) error {
 	switch name {
+	case video_play_range.EdgeVideo:
+		m.ClearVideo()
+		return nil
 	}
 	return fmt.Errorf("unknown Video_play_range unique edge %s", name)
 }

@@ -65,16 +65,20 @@ const (
 	// ChannelInverseTable is the table name for the Channel entity.
 	// It exists in this package in order to avoid circular dependency with the "channel" package.
 	ChannelInverseTable = "channels"
-	// VideoPlayRangesTable is the table that holds the video_play_ranges relation/edge. The primary key declared below.
-	VideoPlayRangesTable = "video_video_play_ranges"
+	// VideoPlayRangesTable is the table that holds the video_play_ranges relation/edge.
+	VideoPlayRangesTable = "video_play_ranges"
 	// VideoPlayRangesInverseTable is the table name for the Video_play_range entity.
 	// It exists in this package in order to avoid circular dependency with the "video_play_range" package.
 	VideoPlayRangesInverseTable = "video_play_ranges"
-	// VideoDisallowRangesTable is the table that holds the video_disallow_ranges relation/edge. The primary key declared below.
-	VideoDisallowRangesTable = "video_video_disallow_ranges"
+	// VideoPlayRangesColumn is the table column denoting the video_play_ranges relation/edge.
+	VideoPlayRangesColumn = "video_video_play_ranges"
+	// VideoDisallowRangesTable is the table that holds the video_disallow_ranges relation/edge.
+	VideoDisallowRangesTable = "video_disallow_ranges"
 	// VideoDisallowRangesInverseTable is the table name for the Video_disallow_range entity.
 	// It exists in this package in order to avoid circular dependency with the "video_disallow_range" package.
 	VideoDisallowRangesInverseTable = "video_disallow_ranges"
+	// VideoDisallowRangesColumn is the table column denoting the video_disallow_ranges relation/edge.
+	VideoDisallowRangesColumn = "video_video_disallow_ranges"
 	// VideoTitleChangesTable is the table that holds the video_title_changes relation/edge.
 	VideoTitleChangesTable = "video_title_changes"
 	// VideoTitleChangesInverseTable is the table name for the Video_title_change entity.
@@ -106,12 +110,6 @@ var (
 	// ChannelPrimaryKey and ChannelColumn2 are the table columns denoting the
 	// primary key for the channel relation (M2M).
 	ChannelPrimaryKey = []string{"video_id", "channel_id"}
-	// VideoPlayRangesPrimaryKey and VideoPlayRangesColumn2 are the table columns denoting the
-	// primary key for the video_play_ranges relation (M2M).
-	VideoPlayRangesPrimaryKey = []string{"video_id", "video_play_range_id"}
-	// VideoDisallowRangesPrimaryKey and VideoDisallowRangesColumn2 are the table columns denoting the
-	// primary key for the video_disallow_ranges relation (M2M).
-	VideoDisallowRangesPrimaryKey = []string{"video_id", "video_disallow_range_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -290,14 +288,14 @@ func newVideoPlayRangesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VideoPlayRangesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, VideoPlayRangesTable, VideoPlayRangesPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, VideoPlayRangesTable, VideoPlayRangesColumn),
 	)
 }
 func newVideoDisallowRangesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VideoDisallowRangesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, VideoDisallowRangesTable, VideoDisallowRangesPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, VideoDisallowRangesTable, VideoDisallowRangesColumn),
 	)
 }
 func newVideoTitleChangesStep() *sqlgraph.Step {

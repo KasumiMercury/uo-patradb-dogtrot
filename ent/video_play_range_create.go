@@ -63,19 +63,15 @@ func (vprc *VideoPlayRangeCreate) SetNillableID(pu *pulid.ID) *VideoPlayRangeCre
 	return vprc
 }
 
-// AddVideoIDs adds the "video" edge to the Video entity by IDs.
-func (vprc *VideoPlayRangeCreate) AddVideoIDs(ids ...pulid.ID) *VideoPlayRangeCreate {
-	vprc.mutation.AddVideoIDs(ids...)
+// SetVideoID sets the "video" edge to the Video entity by ID.
+func (vprc *VideoPlayRangeCreate) SetVideoID(id pulid.ID) *VideoPlayRangeCreate {
+	vprc.mutation.SetVideoID(id)
 	return vprc
 }
 
-// AddVideo adds the "video" edges to the Video entity.
-func (vprc *VideoPlayRangeCreate) AddVideo(v ...*Video) *VideoPlayRangeCreate {
-	ids := make([]pulid.ID, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return vprc.AddVideoIDs(ids...)
+// SetVideo sets the "video" edge to the Video entity.
+func (vprc *VideoPlayRangeCreate) SetVideo(v *Video) *VideoPlayRangeCreate {
+	return vprc.SetVideoID(v.ID)
 }
 
 // Mutation returns the VideoPlayRangeMutation object of the builder.
@@ -128,7 +124,7 @@ func (vprc *VideoPlayRangeCreate) check() error {
 	if _, ok := vprc.mutation.StartSeconds(); !ok {
 		return &ValidationError{Name: "start_seconds", err: errors.New(`ent: missing required field "Video_play_range.start_seconds"`)}
 	}
-	if len(vprc.mutation.VideoIDs()) == 0 {
+	if _, ok := vprc.mutation.VideoID(); !ok {
 		return &ValidationError{Name: "video", err: errors.New(`ent: missing required edge "Video_play_range.video"`)}
 	}
 	return nil
@@ -176,10 +172,10 @@ func (vprc *VideoPlayRangeCreate) createSpec() (*Video_play_range, *sqlgraph.Cre
 	}
 	if nodes := vprc.mutation.VideoIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   video_play_range.VideoTable,
-			Columns: video_play_range.VideoPrimaryKey,
+			Columns: []string{video_play_range.VideoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video.FieldID, field.TypeString),
@@ -188,6 +184,7 @@ func (vprc *VideoPlayRangeCreate) createSpec() (*Video_play_range, *sqlgraph.Cre
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_node.video_video_play_ranges = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

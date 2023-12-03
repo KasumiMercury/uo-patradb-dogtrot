@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"database/sql/driver"
 	"fmt"
 	"math"
 
@@ -25,6 +24,7 @@ type VideoPlayRangeQuery struct {
 	inters     []Interceptor
 	predicates []predicate.Video_play_range
 	withVideo  *VideoQuery
+	withFKs    bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -75,7 +75,7 @@ func (vprq *VideoPlayRangeQuery) QueryVideo() *VideoQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(video_play_range.Table, video_play_range.FieldID, selector),
 			sqlgraph.To(video.Table, video.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, video_play_range.VideoTable, video_play_range.VideoPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2O, true, video_play_range.VideoTable, video_play_range.VideoColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(vprq.driver.Dialect(), step)
 		return fromU, nil
@@ -370,11 +370,18 @@ func (vprq *VideoPlayRangeQuery) prepareQuery(ctx context.Context) error {
 func (vprq *VideoPlayRangeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Video_play_range, error) {
 	var (
 		nodes       = []*Video_play_range{}
+		withFKs     = vprq.withFKs
 		_spec       = vprq.querySpec()
 		loadedTypes = [1]bool{
 			vprq.withVideo != nil,
 		}
 	)
+	if vprq.withVideo != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, video_play_range.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Video_play_range).scanValues(nil, columns)
 	}
@@ -394,9 +401,8 @@ func (vprq *VideoPlayRangeQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 		return nodes, nil
 	}
 	if query := vprq.withVideo; query != nil {
-		if err := vprq.loadVideo(ctx, query, nodes,
-			func(n *Video_play_range) { n.Edges.Video = []*Video{} },
-			func(n *Video_play_range, e *Video) { n.Edges.Video = append(n.Edges.Video, e) }); err != nil {
+		if err := vprq.loadVideo(ctx, query, nodes, nil,
+			func(n *Video_play_range, e *Video) { n.Edges.Video = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -404,62 +410,33 @@ func (vprq *VideoPlayRangeQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 }
 
 func (vprq *VideoPlayRangeQuery) loadVideo(ctx context.Context, query *VideoQuery, nodes []*Video_play_range, init func(*Video_play_range), assign func(*Video_play_range, *Video)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[pulid.ID]*Video_play_range)
-	nids := make(map[pulid.ID]map[*Video_play_range]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
+	ids := make([]pulid.ID, 0, len(nodes))
+	nodeids := make(map[pulid.ID][]*Video_play_range)
+	for i := range nodes {
+		if nodes[i].video_video_play_ranges == nil {
+			continue
 		}
+		fk := *nodes[i].video_video_play_ranges
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(video_play_range.VideoTable)
-		s.Join(joinT).On(s.C(video.FieldID), joinT.C(video_play_range.VideoPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(video_play_range.VideoPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(video_play_range.VideoPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
+	if len(ids) == 0 {
+		return nil
 	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := pulid.ID(values[0].(*sql.NullString).String)
-				inValue := pulid.ID(values[1].(*sql.NullString).String)
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Video_play_range]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Video](ctx, query, qr, query.inters)
+	query.Where(video.IDIn(ids...))
+	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
+		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "video" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "video_video_play_ranges" returned %v`, n.ID)
 		}
-		for kn := range nodes {
-			assign(kn, n)
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil

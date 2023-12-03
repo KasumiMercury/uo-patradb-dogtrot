@@ -159,7 +159,7 @@ func HasVideo() predicate.Video_play_range {
 	return predicate.Video_play_range(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, VideoTable, VideoPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2O, true, VideoTable, VideoColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})

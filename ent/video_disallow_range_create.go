@@ -47,19 +47,15 @@ func (vdrc *VideoDisallowRangeCreate) SetNillableID(pu *pulid.ID) *VideoDisallow
 	return vdrc
 }
 
-// AddVideoIDs adds the "video" edge to the Video entity by IDs.
-func (vdrc *VideoDisallowRangeCreate) AddVideoIDs(ids ...pulid.ID) *VideoDisallowRangeCreate {
-	vdrc.mutation.AddVideoIDs(ids...)
+// SetVideoID sets the "video" edge to the Video entity by ID.
+func (vdrc *VideoDisallowRangeCreate) SetVideoID(id pulid.ID) *VideoDisallowRangeCreate {
+	vdrc.mutation.SetVideoID(id)
 	return vdrc
 }
 
-// AddVideo adds the "video" edges to the Video entity.
-func (vdrc *VideoDisallowRangeCreate) AddVideo(v ...*Video) *VideoDisallowRangeCreate {
-	ids := make([]pulid.ID, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return vdrc.AddVideoIDs(ids...)
+// SetVideo sets the "video" edge to the Video entity.
+func (vdrc *VideoDisallowRangeCreate) SetVideo(v *Video) *VideoDisallowRangeCreate {
+	return vdrc.SetVideoID(v.ID)
 }
 
 // Mutation returns the VideoDisallowRangeMutation object of the builder.
@@ -111,7 +107,7 @@ func (vdrc *VideoDisallowRangeCreate) check() error {
 	if _, ok := vdrc.mutation.EndSeconds(); !ok {
 		return &ValidationError{Name: "end_seconds", err: errors.New(`ent: missing required field "Video_disallow_range.end_seconds"`)}
 	}
-	if len(vdrc.mutation.VideoIDs()) == 0 {
+	if _, ok := vdrc.mutation.VideoID(); !ok {
 		return &ValidationError{Name: "video", err: errors.New(`ent: missing required edge "Video_disallow_range.video"`)}
 	}
 	return nil
@@ -159,10 +155,10 @@ func (vdrc *VideoDisallowRangeCreate) createSpec() (*Video_disallow_range, *sqlg
 	}
 	if nodes := vdrc.mutation.VideoIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   video_disallow_range.VideoTable,
-			Columns: video_disallow_range.VideoPrimaryKey,
+			Columns: []string{video_disallow_range.VideoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video.FieldID, field.TypeString),
@@ -171,6 +167,7 @@ func (vdrc *VideoDisallowRangeCreate) createSpec() (*Video_disallow_range, *sqlg
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_node.video_video_disallow_ranges = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

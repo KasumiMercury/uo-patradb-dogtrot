@@ -579,10 +579,10 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if vu.mutation.VideoPlayRangesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   video.VideoPlayRangesTable,
-			Columns: video.VideoPlayRangesPrimaryKey,
+			Columns: []string{video.VideoPlayRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video_play_range.FieldID, field.TypeString),
@@ -592,10 +592,10 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := vu.mutation.RemovedVideoPlayRangesIDs(); len(nodes) > 0 && !vu.mutation.VideoPlayRangesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   video.VideoPlayRangesTable,
-			Columns: video.VideoPlayRangesPrimaryKey,
+			Columns: []string{video.VideoPlayRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video_play_range.FieldID, field.TypeString),
@@ -608,10 +608,10 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := vu.mutation.VideoPlayRangesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   video.VideoPlayRangesTable,
-			Columns: video.VideoPlayRangesPrimaryKey,
+			Columns: []string{video.VideoPlayRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video_play_range.FieldID, field.TypeString),
@@ -624,10 +624,10 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if vu.mutation.VideoDisallowRangesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   video.VideoDisallowRangesTable,
-			Columns: video.VideoDisallowRangesPrimaryKey,
+			Columns: []string{video.VideoDisallowRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video_disallow_range.FieldID, field.TypeString),
@@ -637,10 +637,10 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := vu.mutation.RemovedVideoDisallowRangesIDs(); len(nodes) > 0 && !vu.mutation.VideoDisallowRangesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   video.VideoDisallowRangesTable,
-			Columns: video.VideoDisallowRangesPrimaryKey,
+			Columns: []string{video.VideoDisallowRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video_disallow_range.FieldID, field.TypeString),
@@ -653,10 +653,10 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := vu.mutation.VideoDisallowRangesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   video.VideoDisallowRangesTable,
-			Columns: video.VideoDisallowRangesPrimaryKey,
+			Columns: []string{video.VideoDisallowRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video_disallow_range.FieldID, field.TypeString),
@@ -1307,10 +1307,10 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 	}
 	if vuo.mutation.VideoPlayRangesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   video.VideoPlayRangesTable,
-			Columns: video.VideoPlayRangesPrimaryKey,
+			Columns: []string{video.VideoPlayRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video_play_range.FieldID, field.TypeString),
@@ -1320,10 +1320,10 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 	}
 	if nodes := vuo.mutation.RemovedVideoPlayRangesIDs(); len(nodes) > 0 && !vuo.mutation.VideoPlayRangesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   video.VideoPlayRangesTable,
-			Columns: video.VideoPlayRangesPrimaryKey,
+			Columns: []string{video.VideoPlayRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video_play_range.FieldID, field.TypeString),
@@ -1336,10 +1336,10 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 	}
 	if nodes := vuo.mutation.VideoPlayRangesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   video.VideoPlayRangesTable,
-			Columns: video.VideoPlayRangesPrimaryKey,
+			Columns: []string{video.VideoPlayRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video_play_range.FieldID, field.TypeString),
@@ -1352,10 +1352,10 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 	}
 	if vuo.mutation.VideoDisallowRangesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   video.VideoDisallowRangesTable,
-			Columns: video.VideoDisallowRangesPrimaryKey,
+			Columns: []string{video.VideoDisallowRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video_disallow_range.FieldID, field.TypeString),
@@ -1365,10 +1365,10 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 	}
 	if nodes := vuo.mutation.RemovedVideoDisallowRangesIDs(); len(nodes) > 0 && !vuo.mutation.VideoDisallowRangesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   video.VideoDisallowRangesTable,
-			Columns: video.VideoDisallowRangesPrimaryKey,
+			Columns: []string{video.VideoDisallowRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video_disallow_range.FieldID, field.TypeString),
@@ -1381,10 +1381,10 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 	}
 	if nodes := vuo.mutation.VideoDisallowRangesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   video.VideoDisallowRangesTable,
-			Columns: video.VideoDisallowRangesPrimaryKey,
+			Columns: []string{video.VideoDisallowRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video_disallow_range.FieldID, field.TypeString),

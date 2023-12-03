@@ -71,19 +71,15 @@ func (vdru *VideoDisallowRangeUpdate) AddEndSeconds(i int) *VideoDisallowRangeUp
 	return vdru
 }
 
-// AddVideoIDs adds the "video" edge to the Video entity by IDs.
-func (vdru *VideoDisallowRangeUpdate) AddVideoIDs(ids ...pulid.ID) *VideoDisallowRangeUpdate {
-	vdru.mutation.AddVideoIDs(ids...)
+// SetVideoID sets the "video" edge to the Video entity by ID.
+func (vdru *VideoDisallowRangeUpdate) SetVideoID(id pulid.ID) *VideoDisallowRangeUpdate {
+	vdru.mutation.SetVideoID(id)
 	return vdru
 }
 
-// AddVideo adds the "video" edges to the Video entity.
-func (vdru *VideoDisallowRangeUpdate) AddVideo(v ...*Video) *VideoDisallowRangeUpdate {
-	ids := make([]pulid.ID, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return vdru.AddVideoIDs(ids...)
+// SetVideo sets the "video" edge to the Video entity.
+func (vdru *VideoDisallowRangeUpdate) SetVideo(v *Video) *VideoDisallowRangeUpdate {
+	return vdru.SetVideoID(v.ID)
 }
 
 // Mutation returns the VideoDisallowRangeMutation object of the builder.
@@ -91,25 +87,10 @@ func (vdru *VideoDisallowRangeUpdate) Mutation() *VideoDisallowRangeMutation {
 	return vdru.mutation
 }
 
-// ClearVideo clears all "video" edges to the Video entity.
+// ClearVideo clears the "video" edge to the Video entity.
 func (vdru *VideoDisallowRangeUpdate) ClearVideo() *VideoDisallowRangeUpdate {
 	vdru.mutation.ClearVideo()
 	return vdru
-}
-
-// RemoveVideoIDs removes the "video" edge to Video entities by IDs.
-func (vdru *VideoDisallowRangeUpdate) RemoveVideoIDs(ids ...pulid.ID) *VideoDisallowRangeUpdate {
-	vdru.mutation.RemoveVideoIDs(ids...)
-	return vdru
-}
-
-// RemoveVideo removes "video" edges to Video entities.
-func (vdru *VideoDisallowRangeUpdate) RemoveVideo(v ...*Video) *VideoDisallowRangeUpdate {
-	ids := make([]pulid.ID, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return vdru.RemoveVideoIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -139,7 +120,18 @@ func (vdru *VideoDisallowRangeUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (vdru *VideoDisallowRangeUpdate) check() error {
+	if _, ok := vdru.mutation.VideoID(); vdru.mutation.VideoCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Video_disallow_range.video"`)
+	}
+	return nil
+}
+
 func (vdru *VideoDisallowRangeUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := vdru.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(video_disallow_range.Table, video_disallow_range.Columns, sqlgraph.NewFieldSpec(video_disallow_range.FieldID, field.TypeString))
 	if ps := vdru.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -162,39 +154,23 @@ func (vdru *VideoDisallowRangeUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if vdru.mutation.VideoCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   video_disallow_range.VideoTable,
-			Columns: video_disallow_range.VideoPrimaryKey,
+			Columns: []string{video_disallow_range.VideoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video.FieldID, field.TypeString),
 			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := vdru.mutation.RemovedVideoIDs(); len(nodes) > 0 && !vdru.mutation.VideoCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   video_disallow_range.VideoTable,
-			Columns: video_disallow_range.VideoPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vdru.mutation.VideoIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   video_disallow_range.VideoTable,
-			Columns: video_disallow_range.VideoPrimaryKey,
+			Columns: []string{video_disallow_range.VideoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video.FieldID, field.TypeString),
@@ -267,19 +243,15 @@ func (vdruo *VideoDisallowRangeUpdateOne) AddEndSeconds(i int) *VideoDisallowRan
 	return vdruo
 }
 
-// AddVideoIDs adds the "video" edge to the Video entity by IDs.
-func (vdruo *VideoDisallowRangeUpdateOne) AddVideoIDs(ids ...pulid.ID) *VideoDisallowRangeUpdateOne {
-	vdruo.mutation.AddVideoIDs(ids...)
+// SetVideoID sets the "video" edge to the Video entity by ID.
+func (vdruo *VideoDisallowRangeUpdateOne) SetVideoID(id pulid.ID) *VideoDisallowRangeUpdateOne {
+	vdruo.mutation.SetVideoID(id)
 	return vdruo
 }
 
-// AddVideo adds the "video" edges to the Video entity.
-func (vdruo *VideoDisallowRangeUpdateOne) AddVideo(v ...*Video) *VideoDisallowRangeUpdateOne {
-	ids := make([]pulid.ID, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return vdruo.AddVideoIDs(ids...)
+// SetVideo sets the "video" edge to the Video entity.
+func (vdruo *VideoDisallowRangeUpdateOne) SetVideo(v *Video) *VideoDisallowRangeUpdateOne {
+	return vdruo.SetVideoID(v.ID)
 }
 
 // Mutation returns the VideoDisallowRangeMutation object of the builder.
@@ -287,25 +259,10 @@ func (vdruo *VideoDisallowRangeUpdateOne) Mutation() *VideoDisallowRangeMutation
 	return vdruo.mutation
 }
 
-// ClearVideo clears all "video" edges to the Video entity.
+// ClearVideo clears the "video" edge to the Video entity.
 func (vdruo *VideoDisallowRangeUpdateOne) ClearVideo() *VideoDisallowRangeUpdateOne {
 	vdruo.mutation.ClearVideo()
 	return vdruo
-}
-
-// RemoveVideoIDs removes the "video" edge to Video entities by IDs.
-func (vdruo *VideoDisallowRangeUpdateOne) RemoveVideoIDs(ids ...pulid.ID) *VideoDisallowRangeUpdateOne {
-	vdruo.mutation.RemoveVideoIDs(ids...)
-	return vdruo
-}
-
-// RemoveVideo removes "video" edges to Video entities.
-func (vdruo *VideoDisallowRangeUpdateOne) RemoveVideo(v ...*Video) *VideoDisallowRangeUpdateOne {
-	ids := make([]pulid.ID, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return vdruo.RemoveVideoIDs(ids...)
 }
 
 // Where appends a list predicates to the VideoDisallowRangeUpdate builder.
@@ -348,7 +305,18 @@ func (vdruo *VideoDisallowRangeUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (vdruo *VideoDisallowRangeUpdateOne) check() error {
+	if _, ok := vdruo.mutation.VideoID(); vdruo.mutation.VideoCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Video_disallow_range.video"`)
+	}
+	return nil
+}
+
 func (vdruo *VideoDisallowRangeUpdateOne) sqlSave(ctx context.Context) (_node *Video_disallow_range, err error) {
+	if err := vdruo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(video_disallow_range.Table, video_disallow_range.Columns, sqlgraph.NewFieldSpec(video_disallow_range.FieldID, field.TypeString))
 	id, ok := vdruo.mutation.ID()
 	if !ok {
@@ -388,39 +356,23 @@ func (vdruo *VideoDisallowRangeUpdateOne) sqlSave(ctx context.Context) (_node *V
 	}
 	if vdruo.mutation.VideoCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   video_disallow_range.VideoTable,
-			Columns: video_disallow_range.VideoPrimaryKey,
+			Columns: []string{video_disallow_range.VideoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video.FieldID, field.TypeString),
 			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := vdruo.mutation.RemovedVideoIDs(); len(nodes) > 0 && !vdruo.mutation.VideoCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   video_disallow_range.VideoTable,
-			Columns: video_disallow_range.VideoPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vdruo.mutation.VideoIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   video_disallow_range.VideoTable,
-			Columns: video_disallow_range.VideoPrimaryKey,
+			Columns: []string{video_disallow_range.VideoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video.FieldID, field.TypeString),

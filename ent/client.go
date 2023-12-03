@@ -1215,7 +1215,7 @@ func (c *VideoClient) QueryVideoPlayRanges(v *Video) *VideoPlayRangeQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(video.Table, video.FieldID, id),
 			sqlgraph.To(video_play_range.Table, video_play_range.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, video.VideoPlayRangesTable, video.VideoPlayRangesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, video.VideoPlayRangesTable, video.VideoPlayRangesColumn),
 		)
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
 		return fromV, nil
@@ -1231,7 +1231,7 @@ func (c *VideoClient) QueryVideoDisallowRanges(v *Video) *VideoDisallowRangeQuer
 		step := sqlgraph.NewStep(
 			sqlgraph.From(video.Table, video.FieldID, id),
 			sqlgraph.To(video_disallow_range.Table, video_disallow_range.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, video.VideoDisallowRangesTable, video.VideoDisallowRangesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, video.VideoDisallowRangesTable, video.VideoDisallowRangesColumn),
 		)
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
 		return fromV, nil
@@ -1396,7 +1396,7 @@ func (c *VideoDisallowRangeClient) QueryVideo(vdr *Video_disallow_range) *VideoQ
 		step := sqlgraph.NewStep(
 			sqlgraph.From(video_disallow_range.Table, video_disallow_range.FieldID, id),
 			sqlgraph.To(video.Table, video.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, video_disallow_range.VideoTable, video_disallow_range.VideoPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2O, true, video_disallow_range.VideoTable, video_disallow_range.VideoColumn),
 		)
 		fromV = sqlgraph.Neighbors(vdr.driver.Dialect(), step)
 		return fromV, nil
@@ -1545,7 +1545,7 @@ func (c *VideoPlayRangeClient) QueryVideo(vpr *Video_play_range) *VideoQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(video_play_range.Table, video_play_range.FieldID, id),
 			sqlgraph.To(video.Table, video.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, video_play_range.VideoTable, video_play_range.VideoPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2O, true, video_play_range.VideoTable, video_play_range.VideoColumn),
 		)
 		fromV = sqlgraph.Neighbors(vpr.driver.Dialect(), step)
 		return fromV, nil

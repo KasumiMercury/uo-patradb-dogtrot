@@ -137,24 +137,42 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "start_seconds", Type: field.TypeInt},
 		{Name: "end_seconds", Type: field.TypeInt},
+		{Name: "video_video_disallow_ranges", Type: field.TypeString},
 	}
 	// VideoDisallowRangesTable holds the schema information for the "video_disallow_ranges" table.
 	VideoDisallowRangesTable = &schema.Table{
 		Name:       "video_disallow_ranges",
 		Columns:    VideoDisallowRangesColumns,
 		PrimaryKey: []*schema.Column{VideoDisallowRangesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "video_disallow_ranges_videos_video_disallow_ranges",
+				Columns:    []*schema.Column{VideoDisallowRangesColumns[3]},
+				RefColumns: []*schema.Column{VideosColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
 	}
 	// VideoPlayRangesColumns holds the columns for the "video_play_ranges" table.
 	VideoPlayRangesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
 		{Name: "start_seconds", Type: field.TypeInt, Default: 0},
 		{Name: "end_seconds", Type: field.TypeInt, Nullable: true},
+		{Name: "video_video_play_ranges", Type: field.TypeString},
 	}
 	// VideoPlayRangesTable holds the schema information for the "video_play_ranges" table.
 	VideoPlayRangesTable = &schema.Table{
 		Name:       "video_play_ranges",
 		Columns:    VideoPlayRangesColumns,
 		PrimaryKey: []*schema.Column{VideoPlayRangesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "video_play_ranges_videos_video_play_ranges",
+				Columns:    []*schema.Column{VideoPlayRangesColumns[3]},
+				RefColumns: []*schema.Column{VideosColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
 	}
 	// VideoTitleChangesColumns holds the columns for the "video_title_changes" table.
 	VideoTitleChangesColumns = []*schema.Column{
@@ -203,56 +221,6 @@ var (
 			},
 		},
 	}
-	// VideoVideoPlayRangesColumns holds the columns for the "video_video_play_ranges" table.
-	VideoVideoPlayRangesColumns = []*schema.Column{
-		{Name: "video_id", Type: field.TypeString},
-		{Name: "video_play_range_id", Type: field.TypeString},
-	}
-	// VideoVideoPlayRangesTable holds the schema information for the "video_video_play_ranges" table.
-	VideoVideoPlayRangesTable = &schema.Table{
-		Name:       "video_video_play_ranges",
-		Columns:    VideoVideoPlayRangesColumns,
-		PrimaryKey: []*schema.Column{VideoVideoPlayRangesColumns[0], VideoVideoPlayRangesColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "video_video_play_ranges_video_id",
-				Columns:    []*schema.Column{VideoVideoPlayRangesColumns[0]},
-				RefColumns: []*schema.Column{VideosColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "video_video_play_ranges_video_play_range_id",
-				Columns:    []*schema.Column{VideoVideoPlayRangesColumns[1]},
-				RefColumns: []*schema.Column{VideoPlayRangesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// VideoVideoDisallowRangesColumns holds the columns for the "video_video_disallow_ranges" table.
-	VideoVideoDisallowRangesColumns = []*schema.Column{
-		{Name: "video_id", Type: field.TypeString},
-		{Name: "video_disallow_range_id", Type: field.TypeString},
-	}
-	// VideoVideoDisallowRangesTable holds the schema information for the "video_video_disallow_ranges" table.
-	VideoVideoDisallowRangesTable = &schema.Table{
-		Name:       "video_video_disallow_ranges",
-		Columns:    VideoVideoDisallowRangesColumns,
-		PrimaryKey: []*schema.Column{VideoVideoDisallowRangesColumns[0], VideoVideoDisallowRangesColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "video_video_disallow_ranges_video_id",
-				Columns:    []*schema.Column{VideoVideoDisallowRangesColumns[0]},
-				RefColumns: []*schema.Column{VideosColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "video_video_disallow_ranges_video_disallow_range_id",
-				Columns:    []*schema.Column{VideoVideoDisallowRangesColumns[1]},
-				RefColumns: []*schema.Column{VideoDisallowRangesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		CategoryDescriptionTemplatesTable,
@@ -265,8 +233,6 @@ var (
 		VideoPlayRangesTable,
 		VideoTitleChangesTable,
 		VideoChannelTable,
-		VideoVideoPlayRangesTable,
-		VideoVideoDisallowRangesTable,
 	}
 )
 
@@ -275,11 +241,9 @@ func init() {
 	DescriptionsTable.ForeignKeys[1].RefTable = PeriodicDescriptionTemplatesTable
 	DescriptionsTable.ForeignKeys[2].RefTable = VideosTable
 	DescriptionChangesTable.ForeignKeys[0].RefTable = DescriptionsTable
+	VideoDisallowRangesTable.ForeignKeys[0].RefTable = VideosTable
+	VideoPlayRangesTable.ForeignKeys[0].RefTable = VideosTable
 	VideoTitleChangesTable.ForeignKeys[0].RefTable = VideosTable
 	VideoChannelTable.ForeignKeys[0].RefTable = VideosTable
 	VideoChannelTable.ForeignKeys[1].RefTable = ChannelsTable
-	VideoVideoPlayRangesTable.ForeignKeys[0].RefTable = VideosTable
-	VideoVideoPlayRangesTable.ForeignKeys[1].RefTable = VideoPlayRangesTable
-	VideoVideoDisallowRangesTable.ForeignKeys[0].RefTable = VideosTable
-	VideoVideoDisallowRangesTable.ForeignKeys[1].RefTable = VideoDisallowRangesTable
 }

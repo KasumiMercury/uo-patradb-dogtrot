@@ -77,19 +77,15 @@ func (vpru *VideoPlayRangeUpdate) ClearEndSeconds() *VideoPlayRangeUpdate {
 	return vpru
 }
 
-// AddVideoIDs adds the "video" edge to the Video entity by IDs.
-func (vpru *VideoPlayRangeUpdate) AddVideoIDs(ids ...pulid.ID) *VideoPlayRangeUpdate {
-	vpru.mutation.AddVideoIDs(ids...)
+// SetVideoID sets the "video" edge to the Video entity by ID.
+func (vpru *VideoPlayRangeUpdate) SetVideoID(id pulid.ID) *VideoPlayRangeUpdate {
+	vpru.mutation.SetVideoID(id)
 	return vpru
 }
 
-// AddVideo adds the "video" edges to the Video entity.
-func (vpru *VideoPlayRangeUpdate) AddVideo(v ...*Video) *VideoPlayRangeUpdate {
-	ids := make([]pulid.ID, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return vpru.AddVideoIDs(ids...)
+// SetVideo sets the "video" edge to the Video entity.
+func (vpru *VideoPlayRangeUpdate) SetVideo(v *Video) *VideoPlayRangeUpdate {
+	return vpru.SetVideoID(v.ID)
 }
 
 // Mutation returns the VideoPlayRangeMutation object of the builder.
@@ -97,25 +93,10 @@ func (vpru *VideoPlayRangeUpdate) Mutation() *VideoPlayRangeMutation {
 	return vpru.mutation
 }
 
-// ClearVideo clears all "video" edges to the Video entity.
+// ClearVideo clears the "video" edge to the Video entity.
 func (vpru *VideoPlayRangeUpdate) ClearVideo() *VideoPlayRangeUpdate {
 	vpru.mutation.ClearVideo()
 	return vpru
-}
-
-// RemoveVideoIDs removes the "video" edge to Video entities by IDs.
-func (vpru *VideoPlayRangeUpdate) RemoveVideoIDs(ids ...pulid.ID) *VideoPlayRangeUpdate {
-	vpru.mutation.RemoveVideoIDs(ids...)
-	return vpru
-}
-
-// RemoveVideo removes "video" edges to Video entities.
-func (vpru *VideoPlayRangeUpdate) RemoveVideo(v ...*Video) *VideoPlayRangeUpdate {
-	ids := make([]pulid.ID, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return vpru.RemoveVideoIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -145,7 +126,18 @@ func (vpru *VideoPlayRangeUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (vpru *VideoPlayRangeUpdate) check() error {
+	if _, ok := vpru.mutation.VideoID(); vpru.mutation.VideoCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Video_play_range.video"`)
+	}
+	return nil
+}
+
 func (vpru *VideoPlayRangeUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := vpru.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(video_play_range.Table, video_play_range.Columns, sqlgraph.NewFieldSpec(video_play_range.FieldID, field.TypeString))
 	if ps := vpru.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -171,39 +163,23 @@ func (vpru *VideoPlayRangeUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if vpru.mutation.VideoCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   video_play_range.VideoTable,
-			Columns: video_play_range.VideoPrimaryKey,
+			Columns: []string{video_play_range.VideoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video.FieldID, field.TypeString),
 			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := vpru.mutation.RemovedVideoIDs(); len(nodes) > 0 && !vpru.mutation.VideoCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   video_play_range.VideoTable,
-			Columns: video_play_range.VideoPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vpru.mutation.VideoIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   video_play_range.VideoTable,
-			Columns: video_play_range.VideoPrimaryKey,
+			Columns: []string{video_play_range.VideoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video.FieldID, field.TypeString),
@@ -282,19 +258,15 @@ func (vpruo *VideoPlayRangeUpdateOne) ClearEndSeconds() *VideoPlayRangeUpdateOne
 	return vpruo
 }
 
-// AddVideoIDs adds the "video" edge to the Video entity by IDs.
-func (vpruo *VideoPlayRangeUpdateOne) AddVideoIDs(ids ...pulid.ID) *VideoPlayRangeUpdateOne {
-	vpruo.mutation.AddVideoIDs(ids...)
+// SetVideoID sets the "video" edge to the Video entity by ID.
+func (vpruo *VideoPlayRangeUpdateOne) SetVideoID(id pulid.ID) *VideoPlayRangeUpdateOne {
+	vpruo.mutation.SetVideoID(id)
 	return vpruo
 }
 
-// AddVideo adds the "video" edges to the Video entity.
-func (vpruo *VideoPlayRangeUpdateOne) AddVideo(v ...*Video) *VideoPlayRangeUpdateOne {
-	ids := make([]pulid.ID, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return vpruo.AddVideoIDs(ids...)
+// SetVideo sets the "video" edge to the Video entity.
+func (vpruo *VideoPlayRangeUpdateOne) SetVideo(v *Video) *VideoPlayRangeUpdateOne {
+	return vpruo.SetVideoID(v.ID)
 }
 
 // Mutation returns the VideoPlayRangeMutation object of the builder.
@@ -302,25 +274,10 @@ func (vpruo *VideoPlayRangeUpdateOne) Mutation() *VideoPlayRangeMutation {
 	return vpruo.mutation
 }
 
-// ClearVideo clears all "video" edges to the Video entity.
+// ClearVideo clears the "video" edge to the Video entity.
 func (vpruo *VideoPlayRangeUpdateOne) ClearVideo() *VideoPlayRangeUpdateOne {
 	vpruo.mutation.ClearVideo()
 	return vpruo
-}
-
-// RemoveVideoIDs removes the "video" edge to Video entities by IDs.
-func (vpruo *VideoPlayRangeUpdateOne) RemoveVideoIDs(ids ...pulid.ID) *VideoPlayRangeUpdateOne {
-	vpruo.mutation.RemoveVideoIDs(ids...)
-	return vpruo
-}
-
-// RemoveVideo removes "video" edges to Video entities.
-func (vpruo *VideoPlayRangeUpdateOne) RemoveVideo(v ...*Video) *VideoPlayRangeUpdateOne {
-	ids := make([]pulid.ID, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return vpruo.RemoveVideoIDs(ids...)
 }
 
 // Where appends a list predicates to the VideoPlayRangeUpdate builder.
@@ -363,7 +320,18 @@ func (vpruo *VideoPlayRangeUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (vpruo *VideoPlayRangeUpdateOne) check() error {
+	if _, ok := vpruo.mutation.VideoID(); vpruo.mutation.VideoCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Video_play_range.video"`)
+	}
+	return nil
+}
+
 func (vpruo *VideoPlayRangeUpdateOne) sqlSave(ctx context.Context) (_node *Video_play_range, err error) {
+	if err := vpruo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(video_play_range.Table, video_play_range.Columns, sqlgraph.NewFieldSpec(video_play_range.FieldID, field.TypeString))
 	id, ok := vpruo.mutation.ID()
 	if !ok {
@@ -406,39 +374,23 @@ func (vpruo *VideoPlayRangeUpdateOne) sqlSave(ctx context.Context) (_node *Video
 	}
 	if vpruo.mutation.VideoCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   video_play_range.VideoTable,
-			Columns: video_play_range.VideoPrimaryKey,
+			Columns: []string{video_play_range.VideoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video.FieldID, field.TypeString),
 			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := vpruo.mutation.RemovedVideoIDs(); len(nodes) > 0 && !vpruo.mutation.VideoCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   video_play_range.VideoTable,
-			Columns: video_play_range.VideoPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := vpruo.mutation.VideoIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   video_play_range.VideoTable,
-			Columns: video_play_range.VideoPrimaryKey,
+			Columns: []string{video_play_range.VideoColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video.FieldID, field.TypeString),

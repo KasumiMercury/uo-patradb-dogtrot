@@ -451,10 +451,10 @@ func (vc *VideoCreate) createSpec() (*Video, *sqlgraph.CreateSpec) {
 	}
 	if nodes := vc.mutation.VideoPlayRangesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   video.VideoPlayRangesTable,
-			Columns: video.VideoPlayRangesPrimaryKey,
+			Columns: []string{video.VideoPlayRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video_play_range.FieldID, field.TypeString),
@@ -467,10 +467,10 @@ func (vc *VideoCreate) createSpec() (*Video, *sqlgraph.CreateSpec) {
 	}
 	if nodes := vc.mutation.VideoDisallowRangesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   video.VideoDisallowRangesTable,
-			Columns: video.VideoDisallowRangesPrimaryKey,
+			Columns: []string{video.VideoDisallowRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video_disallow_range.FieldID, field.TypeString),

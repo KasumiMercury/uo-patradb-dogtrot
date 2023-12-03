@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_play_range"
 )
 
@@ -23,23 +24,28 @@ type Video_play_range struct {
 	EndSeconds int `json:"end_seconds,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the Video_play_rangeQuery when eager-loading is set.
-	Edges        Video_play_rangeEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                   Video_play_rangeEdges `json:"edges"`
+	video_video_play_ranges *pulid.ID
+	selectValues            sql.SelectValues
 }
 
 // Video_play_rangeEdges holds the relations/edges for other nodes in the graph.
 type Video_play_rangeEdges struct {
 	// Video holds the value of the video edge.
-	Video []*Video `json:"video,omitempty"`
+	Video *Video `json:"video,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
 // VideoOrErr returns the Video value or an error if the edge
-// was not loaded in eager-loading.
-func (e Video_play_rangeEdges) VideoOrErr() ([]*Video, error) {
+// was not loaded in eager-loading, or loaded but was not found.
+func (e Video_play_rangeEdges) VideoOrErr() (*Video, error) {
 	if e.loadedTypes[0] {
+		if e.Video == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: video.Label}
+		}
 		return e.Video, nil
 	}
 	return nil, &NotLoadedError{edge: "video"}
@@ -53,6 +59,8 @@ func (*Video_play_range) scanValues(columns []string) ([]any, error) {
 		case video_play_range.FieldStartSeconds, video_play_range.FieldEndSeconds:
 			values[i] = new(sql.NullInt64)
 		case video_play_range.FieldID:
+			values[i] = new(sql.NullString)
+		case video_play_range.ForeignKeys[0]: // video_video_play_ranges
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -86,6 +94,13 @@ func (vpr *Video_play_range) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field end_seconds", values[i])
 			} else if value.Valid {
 				vpr.EndSeconds = int(value.Int64)
+			}
+		case video_play_range.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field video_video_play_ranges", values[i])
+			} else if value.Valid {
+				vpr.video_video_play_ranges = new(pulid.ID)
+				*vpr.video_video_play_ranges = pulid.ID(value.String)
 			}
 		default:
 			vpr.selectValues.Set(columns[i], values[i])

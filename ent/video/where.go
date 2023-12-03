@@ -787,7 +787,7 @@ func HasVideoPlayRanges() predicate.Video {
 	return predicate.Video(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, VideoPlayRangesTable, VideoPlayRangesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, VideoPlayRangesTable, VideoPlayRangesColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
@@ -810,7 +810,7 @@ func HasVideoDisallowRanges() predicate.Video {
 	return predicate.Video(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, VideoDisallowRangesTable, VideoDisallowRangesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, VideoDisallowRangesTable, VideoDisallowRangesColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})

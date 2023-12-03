@@ -24,9 +24,9 @@ type Video_disallow_range struct {
 	EndSeconds int `json:"end_seconds,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the Video_disallow_rangeQuery when eager-loading is set.
-	Edges                       Video_disallow_rangeEdges `json:"edges"`
-	video_video_disallow_ranges *pulid.ID
-	selectValues                sql.SelectValues
+	Edges        Video_disallow_rangeEdges `json:"edges"`
+	video_id     *pulid.ID
+	selectValues sql.SelectValues
 }
 
 // Video_disallow_rangeEdges holds the relations/edges for other nodes in the graph.
@@ -60,7 +60,7 @@ func (*Video_disallow_range) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case video_disallow_range.FieldID:
 			values[i] = new(sql.NullString)
-		case video_disallow_range.ForeignKeys[0]: // video_video_disallow_ranges
+		case video_disallow_range.ForeignKeys[0]: // video_id
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -97,10 +97,10 @@ func (vdr *Video_disallow_range) assignValues(columns []string, values []any) er
 			}
 		case video_disallow_range.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field video_video_disallow_ranges", values[i])
+				return fmt.Errorf("unexpected type %T for field video_id", values[i])
 			} else if value.Valid {
-				vdr.video_video_disallow_ranges = new(pulid.ID)
-				*vdr.video_video_disallow_ranges = pulid.ID(value.String)
+				vdr.video_id = new(pulid.ID)
+				*vdr.video_id = pulid.ID(value.String)
 			}
 		default:
 			vdr.selectValues.Set(columns[i], values[i])

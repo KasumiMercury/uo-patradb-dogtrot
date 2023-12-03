@@ -24,9 +24,9 @@ type Video_play_range struct {
 	EndSeconds int `json:"end_seconds,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the Video_play_rangeQuery when eager-loading is set.
-	Edges                   Video_play_rangeEdges `json:"edges"`
-	video_video_play_ranges *pulid.ID
-	selectValues            sql.SelectValues
+	Edges        Video_play_rangeEdges `json:"edges"`
+	video_id     *pulid.ID
+	selectValues sql.SelectValues
 }
 
 // Video_play_rangeEdges holds the relations/edges for other nodes in the graph.
@@ -60,7 +60,7 @@ func (*Video_play_range) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case video_play_range.FieldID:
 			values[i] = new(sql.NullString)
-		case video_play_range.ForeignKeys[0]: // video_video_play_ranges
+		case video_play_range.ForeignKeys[0]: // video_id
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -97,10 +97,10 @@ func (vpr *Video_play_range) assignValues(columns []string, values []any) error 
 			}
 		case video_play_range.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field video_video_play_ranges", values[i])
+				return fmt.Errorf("unexpected type %T for field video_id", values[i])
 			} else if value.Valid {
-				vpr.video_video_play_ranges = new(pulid.ID)
-				*vpr.video_video_play_ranges = pulid.ID(value.String)
+				vpr.video_id = new(pulid.ID)
+				*vpr.video_id = pulid.ID(value.String)
 			}
 		default:
 			vpr.selectValues.Set(columns[i], values[i])

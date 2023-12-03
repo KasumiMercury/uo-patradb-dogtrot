@@ -413,10 +413,10 @@ func (vdrq *VideoDisallowRangeQuery) loadVideo(ctx context.Context, query *Video
 	ids := make([]pulid.ID, 0, len(nodes))
 	nodeids := make(map[pulid.ID][]*Video_disallow_range)
 	for i := range nodes {
-		if nodes[i].video_video_disallow_ranges == nil {
+		if nodes[i].video_id == nil {
 			continue
 		}
-		fk := *nodes[i].video_video_disallow_ranges
+		fk := *nodes[i].video_id
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -433,7 +433,7 @@ func (vdrq *VideoDisallowRangeQuery) loadVideo(ctx context.Context, query *Video
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "video_video_disallow_ranges" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "video_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

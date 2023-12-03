@@ -137,7 +137,7 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "start_seconds", Type: field.TypeInt},
 		{Name: "end_seconds", Type: field.TypeInt},
-		{Name: "video_video_disallow_ranges", Type: field.TypeString},
+		{Name: "video_id", Type: field.TypeString},
 	}
 	// VideoDisallowRangesTable holds the schema information for the "video_disallow_ranges" table.
 	VideoDisallowRangesTable = &schema.Table{
@@ -158,7 +158,7 @@ var (
 		{Name: "id", Type: field.TypeString},
 		{Name: "start_seconds", Type: field.TypeInt, Default: 0},
 		{Name: "end_seconds", Type: field.TypeInt, Nullable: true},
-		{Name: "video_video_play_ranges", Type: field.TypeString},
+		{Name: "video_id", Type: field.TypeString},
 	}
 	// VideoPlayRangesTable holds the schema information for the "video_play_ranges" table.
 	VideoPlayRangesTable = &schema.Table{

@@ -167,7 +167,7 @@ func (vdrc *VideoDisallowRangeCreate) createSpec() (*Video_disallow_range, *sqlg
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.video_video_disallow_ranges = &nodes[0]
+		_node.video_id = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

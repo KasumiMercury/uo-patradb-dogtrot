@@ -690,13 +690,13 @@ func (vq *VideoQuery) loadVideoPlayRanges(ctx context.Context, query *VideoPlayR
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.video_video_play_ranges
+		fk := n.video_id
 		if fk == nil {
-			return fmt.Errorf(`foreign-key "video_video_play_ranges" is nil for node %v`, n.ID)
+			return fmt.Errorf(`foreign-key "video_id" is nil for node %v`, n.ID)
 		}
 		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "video_video_play_ranges" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "video_id" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -721,13 +721,13 @@ func (vq *VideoQuery) loadVideoDisallowRanges(ctx context.Context, query *VideoD
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.video_video_disallow_ranges
+		fk := n.video_id
 		if fk == nil {
-			return fmt.Errorf(`foreign-key "video_video_disallow_ranges" is nil for node %v`, n.ID)
+			return fmt.Errorf(`foreign-key "video_id" is nil for node %v`, n.ID)
 		}
 		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "video_video_disallow_ranges" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "video_id" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}

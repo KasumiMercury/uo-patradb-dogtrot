@@ -27,7 +27,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "video" package.
 	VideoInverseTable = "videos"
 	// VideoColumn is the table column denoting the video relation/edge.
-	VideoColumn = "video_video_disallow_ranges"
+	VideoColumn = "video_id"
 )
 
 // Columns holds all SQL columns for video_disallow_range fields.
@@ -40,7 +40,7 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "video_disallow_ranges"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"video_video_disallow_ranges",
+	"video_id",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

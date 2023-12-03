@@ -71,14 +71,14 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "video_play_range" package.
 	VideoPlayRangesInverseTable = "video_play_ranges"
 	// VideoPlayRangesColumn is the table column denoting the video_play_ranges relation/edge.
-	VideoPlayRangesColumn = "video_video_play_ranges"
+	VideoPlayRangesColumn = "video_id"
 	// VideoDisallowRangesTable is the table that holds the video_disallow_ranges relation/edge.
 	VideoDisallowRangesTable = "video_disallow_ranges"
 	// VideoDisallowRangesInverseTable is the table name for the Video_disallow_range entity.
 	// It exists in this package in order to avoid circular dependency with the "video_disallow_range" package.
 	VideoDisallowRangesInverseTable = "video_disallow_ranges"
 	// VideoDisallowRangesColumn is the table column denoting the video_disallow_ranges relation/edge.
-	VideoDisallowRangesColumn = "video_video_disallow_ranges"
+	VideoDisallowRangesColumn = "video_id"
 	// VideoTitleChangesTable is the table that holds the video_title_changes relation/edge.
 	VideoTitleChangesTable = "video_title_changes"
 	// VideoTitleChangesInverseTable is the table name for the Video_title_change entity.

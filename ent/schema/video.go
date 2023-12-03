@@ -44,8 +44,8 @@ func (Video) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("descriptions", Description.Type).Unique().StorageKey(edge.Column("video_id")),
 		edge.To("channel", Channel.Type),
-		edge.To("video_play_ranges", Video_play_range.Type),
-		edge.To("video_disallow_ranges", Video_disallow_range.Type),
+		edge.To("video_play_ranges", Video_play_range.Type).StorageKey(edge.Column("video_id")),
+		edge.To("video_disallow_ranges", Video_disallow_range.Type).StorageKey(edge.Column("video_id")),
 		edge.To("video_title_changes", Video_title_change.Type).StorageKey(edge.Column("video_id")),
 	}
 }

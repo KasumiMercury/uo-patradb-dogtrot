@@ -30,6 +30,6 @@ func (Video_play_range) Fields() []ent.Field {
 // Edges of the Video_play_range.
 func (Video_play_range) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("video", Video.Type).Ref("video_play_ranges").Required(),
+		edge.From("video", Video.Type).Ref("video_play_range").Required(),
 	}
 }

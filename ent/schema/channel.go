@@ -2,6 +2,7 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 )
@@ -30,5 +31,7 @@ func (Channel) Fields() []ent.Field {
 
 // Edges of the Channel.
 func (Channel) Edges() []ent.Edge {
-	return nil
+	return []ent.Edge{
+		edge.From("videos", Video.Type).Ref("channel"),
+	}
 }

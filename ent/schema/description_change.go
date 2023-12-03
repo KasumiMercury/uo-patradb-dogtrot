@@ -2,6 +2,7 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 	"time"
@@ -31,5 +32,7 @@ func (Description_change) Fields() []ent.Field {
 
 // Edges of the Description_change.
 func (Description_change) Edges() []ent.Edge {
-	return nil
+	return []ent.Edge{
+		edge.From("description", Description.Type).Ref("description_changes").Unique().Required(),
+	}
 }

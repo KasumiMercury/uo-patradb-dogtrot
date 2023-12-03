@@ -2,6 +2,7 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 	"time"
@@ -40,5 +41,11 @@ func (Video) Fields() []ent.Field {
 
 // Edges of the Video.
 func (Video) Edges() []ent.Edge {
-	return nil
+	return []ent.Edge{
+		edge.To("descriptions", Description.Type).Unique().StorageKey(edge.Column("video_id")),
+		edge.To("channel", Channel.Type),
+		edge.To("video_play_range", Video_play_range.Type).StorageKey(edge.Column("video_id")),
+		edge.To("video_disallow_range", Video_disallow_range.Type).StorageKey(edge.Column("video_id")),
+		edge.To("video_title_change", Video_title_change.Type).StorageKey(edge.Column("video_id")),
+	}
 }

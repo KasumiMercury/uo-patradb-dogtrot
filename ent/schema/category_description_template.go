@@ -2,6 +2,7 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 )
@@ -29,5 +30,7 @@ func (Category_description_template) Fields() []ent.Field {
 
 // Edges of the Category_description_template.
 func (Category_description_template) Edges() []ent.Edge {
-	return nil
+	return []ent.Edge{
+		edge.To("descriptions", Description.Type).StorageKey(edge.Column("category_template_id")),
+	}
 }

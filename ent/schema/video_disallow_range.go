@@ -2,6 +2,7 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 )
@@ -28,5 +29,7 @@ func (Video_disallow_range) Fields() []ent.Field {
 
 // Edges of the Video_disallow_range.
 func (Video_disallow_range) Edges() []ent.Edge {
-	return nil
+	return []ent.Edge{
+		edge.From("video", Video.Type).Ref("video_disallow_ranges").Required(),
+	}
 }

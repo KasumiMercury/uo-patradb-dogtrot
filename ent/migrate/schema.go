@@ -96,6 +96,31 @@ var (
 			},
 		},
 	}
+	// PatChatsColumns holds the columns for the "pat_chats" table.
+	PatChatsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "message", Type: field.TypeString},
+		{Name: "magnitude", Type: field.TypeFloat64},
+		{Name: "score", Type: field.TypeFloat64},
+		{Name: "is_negative", Type: field.TypeBool, Default: false},
+		{Name: "published_at", Type: field.TypeTime},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "video_id", Type: field.TypeString},
+	}
+	// PatChatsTable holds the schema information for the "pat_chats" table.
+	PatChatsTable = &schema.Table{
+		Name:       "pat_chats",
+		Columns:    PatChatsColumns,
+		PrimaryKey: []*schema.Column{PatChatsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "pat_chats_videos_Pat_chats",
+				Columns:    []*schema.Column{PatChatsColumns[7]},
+				RefColumns: []*schema.Column{VideosColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+	}
 	// PeriodicDescriptionTemplatesColumns holds the columns for the "periodic_description_templates" table.
 	PeriodicDescriptionTemplatesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -227,6 +252,7 @@ var (
 		ChannelsTable,
 		DescriptionsTable,
 		DescriptionChangesTable,
+		PatChatsTable,
 		PeriodicDescriptionTemplatesTable,
 		VideosTable,
 		VideoDisallowRangesTable,
@@ -241,6 +267,7 @@ func init() {
 	DescriptionsTable.ForeignKeys[1].RefTable = PeriodicDescriptionTemplatesTable
 	DescriptionsTable.ForeignKeys[2].RefTable = VideosTable
 	DescriptionChangesTable.ForeignKeys[0].RefTable = DescriptionsTable
+	PatChatsTable.ForeignKeys[0].RefTable = VideosTable
 	VideoDisallowRangesTable.ForeignKeys[0].RefTable = VideosTable
 	VideoPlayRangesTable.ForeignKeys[0].RefTable = VideosTable
 	VideoTitleChangesTable.ForeignKeys[0].RefTable = VideosTable

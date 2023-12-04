@@ -63,9 +63,11 @@ type VideoEdges struct {
 	VideoDisallowRanges []*Video_disallow_range `json:"video_disallow_ranges,omitempty"`
 	// VideoTitleChanges holds the value of the video_title_changes edge.
 	VideoTitleChanges []*Video_title_change `json:"video_title_changes,omitempty"`
+	// PatChats holds the value of the Pat_chats edge.
+	PatChats []*Pat_chat `json:"Pat_chats,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 }
 
 // DescriptionsOrErr returns the Descriptions value or an error if the edge
@@ -115,6 +117,15 @@ func (e VideoEdges) VideoTitleChangesOrErr() ([]*Video_title_change, error) {
 		return e.VideoTitleChanges, nil
 	}
 	return nil, &NotLoadedError{edge: "video_title_changes"}
+}
+
+// PatChatsOrErr returns the PatChats value or an error if the edge
+// was not loaded in eager-loading.
+func (e VideoEdges) PatChatsOrErr() ([]*Pat_chat, error) {
+	if e.loadedTypes[5] {
+		return e.PatChats, nil
+	}
+	return nil, &NotLoadedError{edge: "Pat_chats"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -265,6 +276,11 @@ func (v *Video) QueryVideoDisallowRanges() *VideoDisallowRangeQuery {
 // QueryVideoTitleChanges queries the "video_title_changes" edge of the Video entity.
 func (v *Video) QueryVideoTitleChanges() *VideoTitleChangeQuery {
 	return NewVideoClient(v.config).QueryVideoTitleChanges(v)
+}
+
+// QueryPatChats queries the "Pat_chats" edge of the Video entity.
+func (v *Video) QueryPatChats() *PatChatQuery {
+	return NewVideoClient(v.config).QueryPatChats(v)
 }
 
 // Update returns a builder for updating this Video.

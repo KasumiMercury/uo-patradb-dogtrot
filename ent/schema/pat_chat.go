@@ -35,6 +35,6 @@ func (Pat_chat) Fields() []ent.Field {
 // Edges of the Pat_chat.
 func (Pat_chat) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("video", Video.Type).Ref("pat_chats").Unique().Required(),
+		edge.From("video", Video.Type).Ref("Pat_chats").Unique().Required(),
 	}
 }

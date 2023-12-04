@@ -851,6 +851,29 @@ func HasVideoTitleChangesWith(preds ...predicate.Video_title_change) predicate.V
 	})
 }
 
+// HasPatChats applies the HasEdge predicate on the "Pat_chats" edge.
+func HasPatChats() predicate.Video {
+	return predicate.Video(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PatChatsTable, PatChatsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPatChatsWith applies the HasEdge predicate on the "Pat_chats" edge with a given conditions (other predicates).
+func HasPatChatsWith(preds ...predicate.Pat_chat) predicate.Video {
+	return predicate.Video(func(s *sql.Selector) {
+		step := newPatChatsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Video) predicate.Video {
 	return predicate.Video(sql.AndPredicates(predicates...))

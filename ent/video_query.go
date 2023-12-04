@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/pat_chat"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/predicate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
@@ -33,6 +34,7 @@ type VideoQuery struct {
 	withVideoPlayRanges     *VideoPlayRangeQuery
 	withVideoDisallowRanges *VideoDisallowRangeQuery
 	withVideoTitleChanges   *VideoTitleChangeQuery
+	withPatChats            *PatChatQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -172,6 +174,28 @@ func (vq *VideoQuery) QueryVideoTitleChanges() *VideoTitleChangeQuery {
 			sqlgraph.From(video.Table, video.FieldID, selector),
 			sqlgraph.To(video_title_change.Table, video_title_change.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, video.VideoTitleChangesTable, video.VideoTitleChangesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPatChats chains the current query on the "Pat_chats" edge.
+func (vq *VideoQuery) QueryPatChats() *PatChatQuery {
+	query := (&PatChatClient{config: vq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := vq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := vq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(video.Table, video.FieldID, selector),
+			sqlgraph.To(pat_chat.Table, pat_chat.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, video.PatChatsTable, video.PatChatsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
 		return fromU, nil
@@ -376,6 +400,7 @@ func (vq *VideoQuery) Clone() *VideoQuery {
 		withVideoPlayRanges:     vq.withVideoPlayRanges.Clone(),
 		withVideoDisallowRanges: vq.withVideoDisallowRanges.Clone(),
 		withVideoTitleChanges:   vq.withVideoTitleChanges.Clone(),
+		withPatChats:            vq.withPatChats.Clone(),
 		// clone intermediate query.
 		sql:  vq.sql.Clone(),
 		path: vq.path,
@@ -434,6 +459,17 @@ func (vq *VideoQuery) WithVideoTitleChanges(opts ...func(*VideoTitleChangeQuery)
 		opt(query)
 	}
 	vq.withVideoTitleChanges = query
+	return vq
+}
+
+// WithPatChats tells the query-builder to eager-load the nodes that are connected to
+// the "Pat_chats" edge. The optional arguments are used to configure the query builder of the edge.
+func (vq *VideoQuery) WithPatChats(opts ...func(*PatChatQuery)) *VideoQuery {
+	query := (&PatChatClient{config: vq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	vq.withPatChats = query
 	return vq
 }
 
@@ -515,12 +551,13 @@ func (vq *VideoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Video,
 	var (
 		nodes       = []*Video{}
 		_spec       = vq.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [6]bool{
 			vq.withDescriptions != nil,
 			vq.withChannel != nil,
 			vq.withVideoPlayRanges != nil,
 			vq.withVideoDisallowRanges != nil,
 			vq.withVideoTitleChanges != nil,
+			vq.withPatChats != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -576,6 +613,13 @@ func (vq *VideoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Video,
 			func(n *Video, e *Video_title_change) {
 				n.Edges.VideoTitleChanges = append(n.Edges.VideoTitleChanges, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := vq.withPatChats; query != nil {
+		if err := vq.loadPatChats(ctx, query, nodes,
+			func(n *Video) { n.Edges.PatChats = []*Pat_chat{} },
+			func(n *Video, e *Pat_chat) { n.Edges.PatChats = append(n.Edges.PatChats, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -746,6 +790,37 @@ func (vq *VideoQuery) loadVideoTitleChanges(ctx context.Context, query *VideoTit
 	query.withFKs = true
 	query.Where(predicate.Video_title_change(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(video.VideoTitleChangesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.video_id
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "video_id" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "video_id" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (vq *VideoQuery) loadPatChats(ctx context.Context, query *PatChatQuery, nodes []*Video, init func(*Video), assign func(*Video, *Pat_chat)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[pulid.ID]*Video)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Pat_chat(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(video.PatChatsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {

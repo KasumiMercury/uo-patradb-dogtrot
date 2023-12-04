@@ -20,6 +20,8 @@ type Tx struct {
 	Description *DescriptionClient
 	// Description_change is the client for interacting with the Description_change builders.
 	Description_change *DescriptionChangeClient
+	// Pat_chat is the client for interacting with the Pat_chat builders.
+	Pat_chat *PatChatClient
 	// Periodic_description_template is the client for interacting with the Periodic_description_template builders.
 	Periodic_description_template *PeriodicDescriptionTemplateClient
 	// Video is the client for interacting with the Video builders.
@@ -165,6 +167,7 @@ func (tx *Tx) init() {
 	tx.Channel = NewChannelClient(tx.config)
 	tx.Description = NewDescriptionClient(tx.config)
 	tx.Description_change = NewDescriptionChangeClient(tx.config)
+	tx.Pat_chat = NewPatChatClient(tx.config)
 	tx.Periodic_description_template = NewPeriodicDescriptionTemplateClient(tx.config)
 	tx.Video = NewVideoClient(tx.config)
 	tx.Video_disallow_range = NewVideoDisallowRangeClient(tx.config)

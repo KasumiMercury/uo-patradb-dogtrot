@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/pat_chat"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_disallow_range"
@@ -243,6 +244,21 @@ func (vc *VideoCreate) AddVideoTitleChanges(v ...*Video_title_change) *VideoCrea
 		ids[i] = v[i].ID
 	}
 	return vc.AddVideoTitleChangeIDs(ids...)
+}
+
+// AddPatChatIDs adds the "Pat_chats" edge to the Pat_chat entity by IDs.
+func (vc *VideoCreate) AddPatChatIDs(ids ...pulid.ID) *VideoCreate {
+	vc.mutation.AddPatChatIDs(ids...)
+	return vc
+}
+
+// AddPatChats adds the "Pat_chats" edges to the Pat_chat entity.
+func (vc *VideoCreate) AddPatChats(p ...*Pat_chat) *VideoCreate {
+	ids := make([]pulid.ID, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return vc.AddPatChatIDs(ids...)
 }
 
 // Mutation returns the VideoMutation object of the builder.
@@ -490,6 +506,22 @@ func (vc *VideoCreate) createSpec() (*Video, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(video_title_change.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := vc.mutation.PatChatsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   video.PatChatsTable,
+			Columns: []string{video.PatChatsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(pat_chat.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

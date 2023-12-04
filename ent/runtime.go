@@ -9,6 +9,7 @@ import (
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description_change"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/pat_chat"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodic_description_template"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
@@ -72,6 +73,23 @@ func init() {
 	description_changeDescID := description_changeMixinFields0[0].Descriptor()
 	// description_change.DefaultID holds the default value on creation for the id field.
 	description_change.DefaultID = description_changeDescID.Default.(func() pulid.ID)
+	pat_chatMixin := schema.Pat_chat{}.Mixin()
+	pat_chatMixinFields0 := pat_chatMixin[0].Fields()
+	_ = pat_chatMixinFields0
+	pat_chatFields := schema.Pat_chat{}.Fields()
+	_ = pat_chatFields
+	// pat_chatDescIsNegative is the schema descriptor for is_negative field.
+	pat_chatDescIsNegative := pat_chatFields[3].Descriptor()
+	// pat_chat.DefaultIsNegative holds the default value on creation for the is_negative field.
+	pat_chat.DefaultIsNegative = pat_chatDescIsNegative.Default.(bool)
+	// pat_chatDescCreatedAt is the schema descriptor for created_at field.
+	pat_chatDescCreatedAt := pat_chatFields[5].Descriptor()
+	// pat_chat.DefaultCreatedAt holds the default value on creation for the created_at field.
+	pat_chat.DefaultCreatedAt = pat_chatDescCreatedAt.Default.(func() time.Time)
+	// pat_chatDescID is the schema descriptor for id field.
+	pat_chatDescID := pat_chatMixinFields0[0].Descriptor()
+	// pat_chat.DefaultID holds the default value on creation for the id field.
+	pat_chat.DefaultID = pat_chatDescID.Default.(func() pulid.ID)
 	periodic_description_templateMixin := schema.Periodic_description_template{}.Mixin()
 	periodic_description_templateMixinFields0 := periodic_description_templateMixin[0].Fields()
 	_ = periodic_description_templateMixinFields0

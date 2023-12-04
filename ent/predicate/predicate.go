@@ -18,6 +18,9 @@ type Description func(*sql.Selector)
 // Description_change is the predicate function for description_change builders.
 type Description_change func(*sql.Selector)
 
+// Pat_chat is the predicate function for pat_chat builders.
+type Pat_chat func(*sql.Selector)
+
 // Periodic_description_template is the predicate function for periodic_description_template builders.
 type Periodic_description_template func(*sql.Selector)
 

@@ -51,6 +51,8 @@ const (
 	EdgeVideoDisallowRanges = "video_disallow_ranges"
 	// EdgeVideoTitleChanges holds the string denoting the video_title_changes edge name in mutations.
 	EdgeVideoTitleChanges = "video_title_changes"
+	// EdgePatChats holds the string denoting the pat_chats edge name in mutations.
+	EdgePatChats = "Pat_chats"
 	// Table holds the table name of the video in the database.
 	Table = "videos"
 	// DescriptionsTable is the table that holds the descriptions relation/edge.
@@ -86,6 +88,13 @@ const (
 	VideoTitleChangesInverseTable = "video_title_changes"
 	// VideoTitleChangesColumn is the table column denoting the video_title_changes relation/edge.
 	VideoTitleChangesColumn = "video_id"
+	// PatChatsTable is the table that holds the Pat_chats relation/edge.
+	PatChatsTable = "pat_chats"
+	// PatChatsInverseTable is the table name for the Pat_chat entity.
+	// It exists in this package in order to avoid circular dependency with the "pat_chat" package.
+	PatChatsInverseTable = "pat_chats"
+	// PatChatsColumn is the table column denoting the Pat_chats relation/edge.
+	PatChatsColumn = "video_id"
 )
 
 // Columns holds all SQL columns for video fields.
@@ -270,6 +279,20 @@ func ByVideoTitleChanges(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption
 		sqlgraph.OrderByNeighborTerms(s, newVideoTitleChangesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByPatChatsCount orders the results by Pat_chats count.
+func ByPatChatsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPatChatsStep(), opts...)
+	}
+}
+
+// ByPatChats orders the results by Pat_chats terms.
+func ByPatChats(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPatChatsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newDescriptionsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -303,5 +326,12 @@ func newVideoTitleChangesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VideoTitleChangesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, VideoTitleChangesTable, VideoTitleChangesColumn),
+	)
+}
+func newPatChatsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PatChatsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PatChatsTable, PatChatsColumn),
 	)
 }

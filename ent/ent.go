@@ -16,6 +16,7 @@ import (
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description_change"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/pat_chat"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodic_description_template"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_disallow_range"
@@ -85,6 +86,7 @@ func checkColumn(table, column string) error {
 			channel.Table:                       channel.ValidColumn,
 			description.Table:                   description.ValidColumn,
 			description_change.Table:            description_change.ValidColumn,
+			pat_chat.Table:                      pat_chat.ValidColumn,
 			periodic_description_template.Table: periodic_description_template.ValidColumn,
 			video.Table:                         video.ValidColumn,
 			video_disallow_range.Table:          video_disallow_range.ValidColumn,

@@ -57,6 +57,18 @@ func (f Description_changeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DescriptionChangeMutation", m)
 }
 
+// The Pat_chatFunc type is an adapter to allow the use of ordinary
+// function as Pat_chat mutator.
+type Pat_chatFunc func(context.Context, *ent.PatChatMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f Pat_chatFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.PatChatMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PatChatMutation", m)
+}
+
 // The Periodic_description_templateFunc type is an adapter to allow the use of ordinary
 // function as Periodic_description_template mutator.
 type Periodic_description_templateFunc func(context.Context, *ent.PeriodicDescriptionTemplateMutation) (ent.Value, error)

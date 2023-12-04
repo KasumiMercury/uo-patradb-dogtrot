@@ -15,6 +15,7 @@ import (
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description_change"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/pat_chat"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodic_description_template"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/predicate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
@@ -37,6 +38,7 @@ const (
 	TypeChannel                     = "Channel"
 	TypeDescription                 = "Description"
 	TypeDescriptionChange           = "Description_change"
+	TypePatChat                     = "Pat_chat"
 	TypePeriodicDescriptionTemplate = "Periodic_description_template"
 	TypeVideo                       = "Video"
 	TypeVideoDisallowRange          = "Video_disallow_range"
@@ -2666,6 +2668,744 @@ func (m *DescriptionChangeMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Description_change edge %s", name)
 }
 
+// PatChatMutation represents an operation that mutates the Pat_chat nodes in the graph.
+type PatChatMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *pulid.ID
+	message       *string
+	magnitude     *float64
+	addmagnitude  *float64
+	score         *float64
+	addscore      *float64
+	is_negative   *bool
+	published_at  *time.Time
+	created_at    *time.Time
+	clearedFields map[string]struct{}
+	video         *pulid.ID
+	clearedvideo  bool
+	done          bool
+	oldValue      func(context.Context) (*Pat_chat, error)
+	predicates    []predicate.Pat_chat
+}
+
+var _ ent.Mutation = (*PatChatMutation)(nil)
+
+// patChatOption allows management of the mutation configuration using functional options.
+type patChatOption func(*PatChatMutation)
+
+// newPatChatMutation creates new mutation for the Pat_chat entity.
+func newPatChatMutation(c config, op Op, opts ...patChatOption) *PatChatMutation {
+	m := &PatChatMutation{
+		config:        c,
+		op:            op,
+		typ:           TypePatChat,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withPat_chatID sets the ID field of the mutation.
+func withPat_chatID(id pulid.ID) patChatOption {
+	return func(m *PatChatMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Pat_chat
+		)
+		m.oldValue = func(ctx context.Context) (*Pat_chat, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Pat_chat.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withPat_chat sets the old Pat_chat of the mutation.
+func withPat_chat(node *Pat_chat) patChatOption {
+	return func(m *PatChatMutation) {
+		m.oldValue = func(context.Context) (*Pat_chat, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m PatChatMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m PatChatMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Pat_chat entities.
+func (m *PatChatMutation) SetID(id pulid.ID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *PatChatMutation) ID() (id pulid.ID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *PatChatMutation) IDs(ctx context.Context) ([]pulid.ID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []pulid.ID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Pat_chat.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetMessage sets the "message" field.
+func (m *PatChatMutation) SetMessage(s string) {
+	m.message = &s
+}
+
+// Message returns the value of the "message" field in the mutation.
+func (m *PatChatMutation) Message() (r string, exists bool) {
+	v := m.message
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMessage returns the old "message" field's value of the Pat_chat entity.
+// If the Pat_chat object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PatChatMutation) OldMessage(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMessage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMessage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMessage: %w", err)
+	}
+	return oldValue.Message, nil
+}
+
+// ResetMessage resets all changes to the "message" field.
+func (m *PatChatMutation) ResetMessage() {
+	m.message = nil
+}
+
+// SetMagnitude sets the "magnitude" field.
+func (m *PatChatMutation) SetMagnitude(f float64) {
+	m.magnitude = &f
+	m.addmagnitude = nil
+}
+
+// Magnitude returns the value of the "magnitude" field in the mutation.
+func (m *PatChatMutation) Magnitude() (r float64, exists bool) {
+	v := m.magnitude
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMagnitude returns the old "magnitude" field's value of the Pat_chat entity.
+// If the Pat_chat object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PatChatMutation) OldMagnitude(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMagnitude is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMagnitude requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMagnitude: %w", err)
+	}
+	return oldValue.Magnitude, nil
+}
+
+// AddMagnitude adds f to the "magnitude" field.
+func (m *PatChatMutation) AddMagnitude(f float64) {
+	if m.addmagnitude != nil {
+		*m.addmagnitude += f
+	} else {
+		m.addmagnitude = &f
+	}
+}
+
+// AddedMagnitude returns the value that was added to the "magnitude" field in this mutation.
+func (m *PatChatMutation) AddedMagnitude() (r float64, exists bool) {
+	v := m.addmagnitude
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetMagnitude resets all changes to the "magnitude" field.
+func (m *PatChatMutation) ResetMagnitude() {
+	m.magnitude = nil
+	m.addmagnitude = nil
+}
+
+// SetScore sets the "score" field.
+func (m *PatChatMutation) SetScore(f float64) {
+	m.score = &f
+	m.addscore = nil
+}
+
+// Score returns the value of the "score" field in the mutation.
+func (m *PatChatMutation) Score() (r float64, exists bool) {
+	v := m.score
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldScore returns the old "score" field's value of the Pat_chat entity.
+// If the Pat_chat object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PatChatMutation) OldScore(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldScore is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldScore requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldScore: %w", err)
+	}
+	return oldValue.Score, nil
+}
+
+// AddScore adds f to the "score" field.
+func (m *PatChatMutation) AddScore(f float64) {
+	if m.addscore != nil {
+		*m.addscore += f
+	} else {
+		m.addscore = &f
+	}
+}
+
+// AddedScore returns the value that was added to the "score" field in this mutation.
+func (m *PatChatMutation) AddedScore() (r float64, exists bool) {
+	v := m.addscore
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetScore resets all changes to the "score" field.
+func (m *PatChatMutation) ResetScore() {
+	m.score = nil
+	m.addscore = nil
+}
+
+// SetIsNegative sets the "is_negative" field.
+func (m *PatChatMutation) SetIsNegative(b bool) {
+	m.is_negative = &b
+}
+
+// IsNegative returns the value of the "is_negative" field in the mutation.
+func (m *PatChatMutation) IsNegative() (r bool, exists bool) {
+	v := m.is_negative
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsNegative returns the old "is_negative" field's value of the Pat_chat entity.
+// If the Pat_chat object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PatChatMutation) OldIsNegative(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsNegative is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsNegative requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsNegative: %w", err)
+	}
+	return oldValue.IsNegative, nil
+}
+
+// ResetIsNegative resets all changes to the "is_negative" field.
+func (m *PatChatMutation) ResetIsNegative() {
+	m.is_negative = nil
+}
+
+// SetPublishedAt sets the "published_at" field.
+func (m *PatChatMutation) SetPublishedAt(t time.Time) {
+	m.published_at = &t
+}
+
+// PublishedAt returns the value of the "published_at" field in the mutation.
+func (m *PatChatMutation) PublishedAt() (r time.Time, exists bool) {
+	v := m.published_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPublishedAt returns the old "published_at" field's value of the Pat_chat entity.
+// If the Pat_chat object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PatChatMutation) OldPublishedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPublishedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPublishedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPublishedAt: %w", err)
+	}
+	return oldValue.PublishedAt, nil
+}
+
+// ResetPublishedAt resets all changes to the "published_at" field.
+func (m *PatChatMutation) ResetPublishedAt() {
+	m.published_at = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *PatChatMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *PatChatMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Pat_chat entity.
+// If the Pat_chat object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PatChatMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *PatChatMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetVideoID sets the "video" edge to the Video entity by id.
+func (m *PatChatMutation) SetVideoID(id pulid.ID) {
+	m.video = &id
+}
+
+// ClearVideo clears the "video" edge to the Video entity.
+func (m *PatChatMutation) ClearVideo() {
+	m.clearedvideo = true
+}
+
+// VideoCleared reports if the "video" edge to the Video entity was cleared.
+func (m *PatChatMutation) VideoCleared() bool {
+	return m.clearedvideo
+}
+
+// VideoID returns the "video" edge ID in the mutation.
+func (m *PatChatMutation) VideoID() (id pulid.ID, exists bool) {
+	if m.video != nil {
+		return *m.video, true
+	}
+	return
+}
+
+// VideoIDs returns the "video" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// VideoID instead. It exists only for internal usage by the builders.
+func (m *PatChatMutation) VideoIDs() (ids []pulid.ID) {
+	if id := m.video; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetVideo resets all changes to the "video" edge.
+func (m *PatChatMutation) ResetVideo() {
+	m.video = nil
+	m.clearedvideo = false
+}
+
+// Where appends a list predicates to the PatChatMutation builder.
+func (m *PatChatMutation) Where(ps ...predicate.Pat_chat) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the PatChatMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *PatChatMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Pat_chat, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *PatChatMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *PatChatMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Pat_chat).
+func (m *PatChatMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *PatChatMutation) Fields() []string {
+	fields := make([]string, 0, 6)
+	if m.message != nil {
+		fields = append(fields, pat_chat.FieldMessage)
+	}
+	if m.magnitude != nil {
+		fields = append(fields, pat_chat.FieldMagnitude)
+	}
+	if m.score != nil {
+		fields = append(fields, pat_chat.FieldScore)
+	}
+	if m.is_negative != nil {
+		fields = append(fields, pat_chat.FieldIsNegative)
+	}
+	if m.published_at != nil {
+		fields = append(fields, pat_chat.FieldPublishedAt)
+	}
+	if m.created_at != nil {
+		fields = append(fields, pat_chat.FieldCreatedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *PatChatMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case pat_chat.FieldMessage:
+		return m.Message()
+	case pat_chat.FieldMagnitude:
+		return m.Magnitude()
+	case pat_chat.FieldScore:
+		return m.Score()
+	case pat_chat.FieldIsNegative:
+		return m.IsNegative()
+	case pat_chat.FieldPublishedAt:
+		return m.PublishedAt()
+	case pat_chat.FieldCreatedAt:
+		return m.CreatedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *PatChatMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case pat_chat.FieldMessage:
+		return m.OldMessage(ctx)
+	case pat_chat.FieldMagnitude:
+		return m.OldMagnitude(ctx)
+	case pat_chat.FieldScore:
+		return m.OldScore(ctx)
+	case pat_chat.FieldIsNegative:
+		return m.OldIsNegative(ctx)
+	case pat_chat.FieldPublishedAt:
+		return m.OldPublishedAt(ctx)
+	case pat_chat.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown Pat_chat field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PatChatMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case pat_chat.FieldMessage:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMessage(v)
+		return nil
+	case pat_chat.FieldMagnitude:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMagnitude(v)
+		return nil
+	case pat_chat.FieldScore:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetScore(v)
+		return nil
+	case pat_chat.FieldIsNegative:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsNegative(v)
+		return nil
+	case pat_chat.FieldPublishedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPublishedAt(v)
+		return nil
+	case pat_chat.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Pat_chat field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *PatChatMutation) AddedFields() []string {
+	var fields []string
+	if m.addmagnitude != nil {
+		fields = append(fields, pat_chat.FieldMagnitude)
+	}
+	if m.addscore != nil {
+		fields = append(fields, pat_chat.FieldScore)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *PatChatMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case pat_chat.FieldMagnitude:
+		return m.AddedMagnitude()
+	case pat_chat.FieldScore:
+		return m.AddedScore()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PatChatMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case pat_chat.FieldMagnitude:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddMagnitude(v)
+		return nil
+	case pat_chat.FieldScore:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddScore(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Pat_chat numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *PatChatMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *PatChatMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *PatChatMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown Pat_chat nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *PatChatMutation) ResetField(name string) error {
+	switch name {
+	case pat_chat.FieldMessage:
+		m.ResetMessage()
+		return nil
+	case pat_chat.FieldMagnitude:
+		m.ResetMagnitude()
+		return nil
+	case pat_chat.FieldScore:
+		m.ResetScore()
+		return nil
+	case pat_chat.FieldIsNegative:
+		m.ResetIsNegative()
+		return nil
+	case pat_chat.FieldPublishedAt:
+		m.ResetPublishedAt()
+		return nil
+	case pat_chat.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown Pat_chat field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *PatChatMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.video != nil {
+		edges = append(edges, pat_chat.EdgeVideo)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *PatChatMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case pat_chat.EdgeVideo:
+		if id := m.video; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *PatChatMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *PatChatMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *PatChatMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedvideo {
+		edges = append(edges, pat_chat.EdgeVideo)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *PatChatMutation) EdgeCleared(name string) bool {
+	switch name {
+	case pat_chat.EdgeVideo:
+		return m.clearedvideo
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *PatChatMutation) ClearEdge(name string) error {
+	switch name {
+	case pat_chat.EdgeVideo:
+		m.ClearVideo()
+		return nil
+	}
+	return fmt.Errorf("unknown Pat_chat unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *PatChatMutation) ResetEdge(name string) error {
+	switch name {
+	case pat_chat.EdgeVideo:
+		m.ResetVideo()
+		return nil
+	}
+	return fmt.Errorf("unknown Pat_chat edge %s", name)
+}
+
 // PeriodicDescriptionTemplateMutation represents an operation that mutates the Periodic_description_template nodes in the graph.
 type PeriodicDescriptionTemplateMutation struct {
 	config
@@ -3275,6 +4015,9 @@ type VideoMutation struct {
 	video_title_changes          map[pulid.ID]struct{}
 	removedvideo_title_changes   map[pulid.ID]struct{}
 	clearedvideo_title_changes   bool
+	_Pat_chats                   map[pulid.ID]struct{}
+	removed_Pat_chats            map[pulid.ID]struct{}
+	cleared_Pat_chats            bool
 	done                         bool
 	oldValue                     func(context.Context) (*Video, error)
 	predicates                   []predicate.Video
@@ -4166,6 +4909,60 @@ func (m *VideoMutation) ResetVideoTitleChanges() {
 	m.removedvideo_title_changes = nil
 }
 
+// AddPatChatIDs adds the "Pat_chats" edge to the Pat_chat entity by ids.
+func (m *VideoMutation) AddPatChatIDs(ids ...pulid.ID) {
+	if m._Pat_chats == nil {
+		m._Pat_chats = make(map[pulid.ID]struct{})
+	}
+	for i := range ids {
+		m._Pat_chats[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPatChats clears the "Pat_chats" edge to the Pat_chat entity.
+func (m *VideoMutation) ClearPatChats() {
+	m.cleared_Pat_chats = true
+}
+
+// PatChatsCleared reports if the "Pat_chats" edge to the Pat_chat entity was cleared.
+func (m *VideoMutation) PatChatsCleared() bool {
+	return m.cleared_Pat_chats
+}
+
+// RemovePatChatIDs removes the "Pat_chats" edge to the Pat_chat entity by IDs.
+func (m *VideoMutation) RemovePatChatIDs(ids ...pulid.ID) {
+	if m.removed_Pat_chats == nil {
+		m.removed_Pat_chats = make(map[pulid.ID]struct{})
+	}
+	for i := range ids {
+		delete(m._Pat_chats, ids[i])
+		m.removed_Pat_chats[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPatChats returns the removed IDs of the "Pat_chats" edge to the Pat_chat entity.
+func (m *VideoMutation) RemovedPatChatsIDs() (ids []pulid.ID) {
+	for id := range m.removed_Pat_chats {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PatChatsIDs returns the "Pat_chats" edge IDs in the mutation.
+func (m *VideoMutation) PatChatsIDs() (ids []pulid.ID) {
+	for id := range m._Pat_chats {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPatChats resets all changes to the "Pat_chats" edge.
+func (m *VideoMutation) ResetPatChats() {
+	m._Pat_chats = nil
+	m.cleared_Pat_chats = false
+	m.removed_Pat_chats = nil
+}
+
 // Where appends a list predicates to the VideoMutation builder.
 func (m *VideoMutation) Where(ps ...predicate.Video) {
 	m.predicates = append(m.predicates, ps...)
@@ -4539,7 +5336,7 @@ func (m *VideoMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *VideoMutation) AddedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.descriptions != nil {
 		edges = append(edges, video.EdgeDescriptions)
 	}
@@ -4554,6 +5351,9 @@ func (m *VideoMutation) AddedEdges() []string {
 	}
 	if m.video_title_changes != nil {
 		edges = append(edges, video.EdgeVideoTitleChanges)
+	}
+	if m._Pat_chats != nil {
+		edges = append(edges, video.EdgePatChats)
 	}
 	return edges
 }
@@ -4590,13 +5390,19 @@ func (m *VideoMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case video.EdgePatChats:
+		ids := make([]ent.Value, 0, len(m._Pat_chats))
+		for id := range m._Pat_chats {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *VideoMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.removedchannel != nil {
 		edges = append(edges, video.EdgeChannel)
 	}
@@ -4608,6 +5414,9 @@ func (m *VideoMutation) RemovedEdges() []string {
 	}
 	if m.removedvideo_title_changes != nil {
 		edges = append(edges, video.EdgeVideoTitleChanges)
+	}
+	if m.removed_Pat_chats != nil {
+		edges = append(edges, video.EdgePatChats)
 	}
 	return edges
 }
@@ -4640,13 +5449,19 @@ func (m *VideoMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case video.EdgePatChats:
+		ids := make([]ent.Value, 0, len(m.removed_Pat_chats))
+		for id := range m.removed_Pat_chats {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *VideoMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.cleareddescriptions {
 		edges = append(edges, video.EdgeDescriptions)
 	}
@@ -4661,6 +5476,9 @@ func (m *VideoMutation) ClearedEdges() []string {
 	}
 	if m.clearedvideo_title_changes {
 		edges = append(edges, video.EdgeVideoTitleChanges)
+	}
+	if m.cleared_Pat_chats {
+		edges = append(edges, video.EdgePatChats)
 	}
 	return edges
 }
@@ -4679,6 +5497,8 @@ func (m *VideoMutation) EdgeCleared(name string) bool {
 		return m.clearedvideo_disallow_ranges
 	case video.EdgeVideoTitleChanges:
 		return m.clearedvideo_title_changes
+	case video.EdgePatChats:
+		return m.cleared_Pat_chats
 	}
 	return false
 }
@@ -4712,6 +5532,9 @@ func (m *VideoMutation) ResetEdge(name string) error {
 		return nil
 	case video.EdgeVideoTitleChanges:
 		m.ResetVideoTitleChanges()
+		return nil
+	case video.EdgePatChats:
+		m.ResetPatChats()
 		return nil
 	}
 	return fmt.Errorf("unknown Video edge %s", name)

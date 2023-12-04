@@ -20,6 +20,7 @@ import (
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description_change"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/pat_chat"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodic_description_template"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_disallow_range"
@@ -40,6 +41,8 @@ type Client struct {
 	Description *DescriptionClient
 	// Description_change is the client for interacting with the Description_change builders.
 	Description_change *DescriptionChangeClient
+	// Pat_chat is the client for interacting with the Pat_chat builders.
+	Pat_chat *PatChatClient
 	// Periodic_description_template is the client for interacting with the Periodic_description_template builders.
 	Periodic_description_template *PeriodicDescriptionTemplateClient
 	// Video is the client for interacting with the Video builders.
@@ -65,6 +68,7 @@ func (c *Client) init() {
 	c.Channel = NewChannelClient(c.config)
 	c.Description = NewDescriptionClient(c.config)
 	c.Description_change = NewDescriptionChangeClient(c.config)
+	c.Pat_chat = NewPatChatClient(c.config)
 	c.Periodic_description_template = NewPeriodicDescriptionTemplateClient(c.config)
 	c.Video = NewVideoClient(c.config)
 	c.Video_disallow_range = NewVideoDisallowRangeClient(c.config)
@@ -166,6 +170,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Channel:                       NewChannelClient(cfg),
 		Description:                   NewDescriptionClient(cfg),
 		Description_change:            NewDescriptionChangeClient(cfg),
+		Pat_chat:                      NewPatChatClient(cfg),
 		Periodic_description_template: NewPeriodicDescriptionTemplateClient(cfg),
 		Video:                         NewVideoClient(cfg),
 		Video_disallow_range:          NewVideoDisallowRangeClient(cfg),
@@ -194,6 +199,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Channel:                       NewChannelClient(cfg),
 		Description:                   NewDescriptionClient(cfg),
 		Description_change:            NewDescriptionChangeClient(cfg),
+		Pat_chat:                      NewPatChatClient(cfg),
 		Periodic_description_template: NewPeriodicDescriptionTemplateClient(cfg),
 		Video:                         NewVideoClient(cfg),
 		Video_disallow_range:          NewVideoDisallowRangeClient(cfg),
@@ -229,7 +235,7 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Category_description_template, c.Channel, c.Description, c.Description_change,
-		c.Periodic_description_template, c.Video, c.Video_disallow_range,
+		c.Pat_chat, c.Periodic_description_template, c.Video, c.Video_disallow_range,
 		c.Video_play_range, c.Video_title_change,
 	} {
 		n.Use(hooks...)
@@ -241,7 +247,7 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Category_description_template, c.Channel, c.Description, c.Description_change,
-		c.Periodic_description_template, c.Video, c.Video_disallow_range,
+		c.Pat_chat, c.Periodic_description_template, c.Video, c.Video_disallow_range,
 		c.Video_play_range, c.Video_title_change,
 	} {
 		n.Intercept(interceptors...)
@@ -259,6 +265,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Description.mutate(ctx, m)
 	case *DescriptionChangeMutation:
 		return c.Description_change.mutate(ctx, m)
+	case *PatChatMutation:
+		return c.Pat_chat.mutate(ctx, m)
 	case *PeriodicDescriptionTemplateMutation:
 		return c.Periodic_description_template.mutate(ctx, m)
 	case *VideoMutation:
@@ -918,6 +926,155 @@ func (c *DescriptionChangeClient) mutate(ctx context.Context, m *DescriptionChan
 	}
 }
 
+// PatChatClient is a client for the Pat_chat schema.
+type PatChatClient struct {
+	config
+}
+
+// NewPatChatClient returns a client for the Pat_chat from the given config.
+func NewPatChatClient(c config) *PatChatClient {
+	return &PatChatClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `pat_chat.Hooks(f(g(h())))`.
+func (c *PatChatClient) Use(hooks ...Hook) {
+	c.hooks.Pat_chat = append(c.hooks.Pat_chat, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `pat_chat.Intercept(f(g(h())))`.
+func (c *PatChatClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Pat_chat = append(c.inters.Pat_chat, interceptors...)
+}
+
+// Create returns a builder for creating a Pat_chat entity.
+func (c *PatChatClient) Create() *PatChatCreate {
+	mutation := newPatChatMutation(c.config, OpCreate)
+	return &PatChatCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Pat_chat entities.
+func (c *PatChatClient) CreateBulk(builders ...*PatChatCreate) *PatChatCreateBulk {
+	return &PatChatCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PatChatClient) MapCreateBulk(slice any, setFunc func(*PatChatCreate, int)) *PatChatCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PatChatCreateBulk{err: fmt.Errorf("calling to PatChatClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PatChatCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PatChatCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Pat_chat.
+func (c *PatChatClient) Update() *PatChatUpdate {
+	mutation := newPatChatMutation(c.config, OpUpdate)
+	return &PatChatUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PatChatClient) UpdateOne(pc *Pat_chat) *PatChatUpdateOne {
+	mutation := newPatChatMutation(c.config, OpUpdateOne, withPat_chat(pc))
+	return &PatChatUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PatChatClient) UpdateOneID(id pulid.ID) *PatChatUpdateOne {
+	mutation := newPatChatMutation(c.config, OpUpdateOne, withPat_chatID(id))
+	return &PatChatUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Pat_chat.
+func (c *PatChatClient) Delete() *PatChatDelete {
+	mutation := newPatChatMutation(c.config, OpDelete)
+	return &PatChatDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PatChatClient) DeleteOne(pc *Pat_chat) *PatChatDeleteOne {
+	return c.DeleteOneID(pc.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PatChatClient) DeleteOneID(id pulid.ID) *PatChatDeleteOne {
+	builder := c.Delete().Where(pat_chat.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PatChatDeleteOne{builder}
+}
+
+// Query returns a query builder for Pat_chat.
+func (c *PatChatClient) Query() *PatChatQuery {
+	return &PatChatQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePatChat},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Pat_chat entity by its id.
+func (c *PatChatClient) Get(ctx context.Context, id pulid.ID) (*Pat_chat, error) {
+	return c.Query().Where(pat_chat.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PatChatClient) GetX(ctx context.Context, id pulid.ID) *Pat_chat {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryVideo queries the video edge of a Pat_chat.
+func (c *PatChatClient) QueryVideo(pc *Pat_chat) *VideoQuery {
+	query := (&VideoClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(pat_chat.Table, pat_chat.FieldID, id),
+			sqlgraph.To(video.Table, video.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, pat_chat.VideoTable, pat_chat.VideoColumn),
+		)
+		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PatChatClient) Hooks() []Hook {
+	return c.hooks.Pat_chat
+}
+
+// Interceptors returns the client interceptors.
+func (c *PatChatClient) Interceptors() []Interceptor {
+	return c.inters.Pat_chat
+}
+
+func (c *PatChatClient) mutate(ctx context.Context, m *PatChatMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PatChatCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PatChatUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PatChatUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PatChatDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Pat_chat mutation op: %q", m.Op())
+	}
+}
+
 // PeriodicDescriptionTemplateClient is a client for the Periodic_description_template schema.
 type PeriodicDescriptionTemplateClient struct {
 	config
@@ -1248,6 +1405,22 @@ func (c *VideoClient) QueryVideoTitleChanges(v *Video) *VideoTitleChangeQuery {
 			sqlgraph.From(video.Table, video.FieldID, id),
 			sqlgraph.To(video_title_change.Table, video_title_change.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, video.VideoTitleChangesTable, video.VideoTitleChangesColumn),
+		)
+		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPatChats queries the Pat_chats edge of a Video.
+func (c *VideoClient) QueryPatChats(v *Video) *PatChatQuery {
+	query := (&PatChatClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := v.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(video.Table, video.FieldID, id),
+			sqlgraph.To(pat_chat.Table, pat_chat.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, video.PatChatsTable, video.PatChatsColumn),
 		)
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
 		return fromV, nil
@@ -1731,12 +1904,12 @@ func (c *VideoTitleChangeClient) mutate(ctx context.Context, m *VideoTitleChange
 type (
 	hooks struct {
 		Category_description_template, Channel, Description, Description_change,
-		Periodic_description_template, Video, Video_disallow_range, Video_play_range,
-		Video_title_change []ent.Hook
+		Pat_chat, Periodic_description_template, Video, Video_disallow_range,
+		Video_play_range, Video_title_change []ent.Hook
 	}
 	inters struct {
 		Category_description_template, Channel, Description, Description_change,
-		Periodic_description_template, Video, Video_disallow_range, Video_play_range,
-		Video_title_change []ent.Interceptor
+		Pat_chat, Periodic_description_template, Video, Video_disallow_range,
+		Video_play_range, Video_title_change []ent.Interceptor
 	}
 )

@@ -1,7 +1,9 @@
 package schema
 
 import (
+	"entgo.io/contrib/entproto"
 	"entgo.io/ent"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
@@ -23,20 +25,27 @@ func (Description) Mixin() []ent.Mixin {
 // Fields of the Description.
 func (Description) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("raw"),
-		field.String("variable").Optional(),
-		field.String("normalized_variable").Optional(),
-		field.Time("created_at").Default(func() time.Time { return time.Now() }),
-		field.Time("updated_at").Default(func() time.Time { return time.Now() }).UpdateDefault(func() time.Time { return time.Now() }),
+		field.String("raw").Annotations(entproto.Field(2)),
+		field.String("variable").Optional().Annotations(entproto.Field(3)),
+		field.String("normalized_variable").Optional().Annotations(entproto.Skip()),
+		field.Time("created_at").Default(func() time.Time { return time.Now() }).Annotations(entproto.Skip()),
+		field.Time("updated_at").Default(func() time.Time { return time.Now() }).UpdateDefault(func() time.Time { return time.Now() }).Annotations(entproto.Field(4)),
 	}
 }
 
 // Edges of the Description.
 func (Description) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("video", Video.Type).Ref("descriptions").Unique().Required(),
-		edge.From("periodic_description_template", Periodic_description_template.Type).Ref("descriptions").Unique(),
-		edge.From("category_description_template", Category_description_template.Type).Ref("descriptions").Unique(),
-		edge.To("description_changes", Description_change.Type).StorageKey(edge.Column("description_id")),
+		edge.From("video", Video.Type).Ref("descriptions").Unique().Required().Annotations(entproto.Field(5)),
+		edge.From("periodic_description_template", Periodic_description_template.Type).Ref("descriptions").Unique().Annotations(entproto.Field(6)),
+		edge.From("category_description_template", Category_description_template.Type).Ref("descriptions").Unique().Annotations(entproto.Field(7)),
+		edge.To("description_changes", Description_change.Type).StorageKey(edge.Column("description_id")).Annotations(entproto.Skip()),
+	}
+}
+
+// Annotations of the Description.
+func (Description) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entproto.Message(),
 	}
 }

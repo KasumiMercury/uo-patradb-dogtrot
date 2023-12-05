@@ -10,20 +10,20 @@ import (
 	"time"
 )
 
-// Pat_chat holds the schema definition for the Pat_chat entity.
-type Pat_chat struct {
+// PatChat holds the schema definition for the PatChat entity.
+type PatChat struct {
 	ent.Schema
 }
 
-// Mixin of the Pat_chat.
-func (Pat_chat) Mixin() []ent.Mixin {
+// Mixin of the PatChat.
+func (PatChat) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		pulid.MixinWithPrefix("PC"),
 	}
 }
 
-// Fields of the Pat_chat.
-func (Pat_chat) Fields() []ent.Field {
+// Fields of the PatChat.
+func (PatChat) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("message").Annotations(entproto.Field(2)),
 		field.Float("magnitude").Annotations(entproto.Skip()),
@@ -34,16 +34,16 @@ func (Pat_chat) Fields() []ent.Field {
 	}
 }
 
-// Edges of the Pat_chat.
-func (Pat_chat) Edges() []ent.Edge {
-	return []ent.Edge{
-		edge.From("video", Video.Type).Ref("Pat_chats").Unique().Required().Annotations(entproto.Skip()),
+// Annotations of the PatChat.
+func (PatChat) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entproto.Message(),
 	}
 }
 
-// Annotations of the Pat_chat.
-func (Pat_chat) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entproto.Message(),
+// Edges of the PatChat.
+func (PatChat) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.From("video", Video.Type).Ref("Pat_chats").Unique().Required().Annotations(entproto.Skip()),
 	}
 }

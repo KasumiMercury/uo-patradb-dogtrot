@@ -8,20 +8,20 @@ import (
 	"time"
 )
 
-// Description_change holds the schema definition for the Description_change entity.
-type Description_change struct {
+// DescriptionChange holds the schema definition for the DescriptionChange entity.
+type DescriptionChange struct {
 	ent.Schema
 }
 
-// Mixin of the Description_change.
-func (Description_change) Mixin() []ent.Mixin {
+// Mixin of the DescriptionChange.
+func (DescriptionChange) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		pulid.MixinWithPrefix("VDC"),
 	}
 }
 
-// Fields of the Description_change.
-func (Description_change) Fields() []ent.Field {
+// Fields of the DescriptionChange.
+func (DescriptionChange) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("raw"),
 		field.String("variable").Optional(),
@@ -30,8 +30,8 @@ func (Description_change) Fields() []ent.Field {
 	}
 }
 
-// Edges of the Description_change.
-func (Description_change) Edges() []ent.Edge {
+// Edges of the DescriptionChange.
+func (DescriptionChange) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("description", Description.Type).Ref("description_changes").Unique().Required(),
 	}

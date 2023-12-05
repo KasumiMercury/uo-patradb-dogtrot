@@ -33,19 +33,19 @@ func (Description) Fields() []ent.Field {
 	}
 }
 
-// Edges of the Description.
-func (Description) Edges() []ent.Edge {
-	return []ent.Edge{
-		edge.From("video", Video.Type).Ref("descriptions").Unique().Required().Annotations(entproto.Field(5)),
-		edge.From("periodic_description_template", Periodic_description_template.Type).Ref("descriptions").Unique().Annotations(entproto.Skip()),
-		edge.From("category_description_template", Category_description_template.Type).Ref("descriptions").Unique().Annotations(entproto.Skip()),
-		edge.To("description_changes", Description_change.Type).StorageKey(edge.Column("description_id")).Annotations(entproto.Skip()),
-	}
-}
-
 // Annotations of the Description.
 func (Description) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entproto.Message(),
+	}
+}
+
+// Edges of the Description.
+func (Description) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.From("video", Video.Type).Ref("descriptions").Unique().Required().Annotations(entproto.Field(5)),
+		edge.To("periodic_description_template", PeriodicDescriptionTemplate{}.Type).Unique().StorageKey(edge.Column("periodic_id")).Annotations(entproto.Field(6)),
+		edge.To("category_description_template", CategoryDescriptionTemplate{}.Type).Unique().StorageKey(edge.Column("category_id")).Annotations(entproto.Field(7)),
+		edge.To("description_changes", DescriptionChange.Type).StorageKey(edge.Column("description_id")).Annotations(entproto.Skip()),
 	}
 }

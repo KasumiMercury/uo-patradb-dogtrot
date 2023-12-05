@@ -17,6 +17,8 @@ message Category_description_template {
   google.protobuf.Timestamp start_use_at = 3;
 
   google.protobuf.Timestamp last_use_at = 4;
+
+  repeated Description descriptions = 5;
 }
 
 message Channel {

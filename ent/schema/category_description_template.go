@@ -33,7 +33,7 @@ func (Category_description_template) Fields() []ent.Field {
 // Edges of the Category_description_template.
 func (Category_description_template) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("descriptions", Description.Type).StorageKey(edge.Column("category_template_id")).Annotations(entproto.Skip()),
+		edge.To("descriptions", Description.Type).StorageKey(edge.Column("category_template_id")).Annotations(entproto.Field(5)),
 	}
 }
 

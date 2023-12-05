@@ -45,6 +45,7 @@ func (Video) Fields() []ent.Field {
 func (Video) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entproto.Message(),
+		entproto.Service(),
 	}
 }
 

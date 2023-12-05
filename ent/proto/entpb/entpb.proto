@@ -3,6 +3,8 @@ syntax = "proto3";
 
 package entpb;
 
+import "google/protobuf/empty.proto";
+
 import "google/protobuf/timestamp.proto";
 
 import "google/protobuf/wrappers.proto";
@@ -95,6 +97,62 @@ message Video {
   repeated Channel channel = 13;
 }
 
+message CreateVideoRequest {
+  Video video = 1;
+}
+
+message GetVideoRequest {
+  string id = 1;
+
+  View view = 2;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message UpdateVideoRequest {
+  Video video = 1;
+}
+
+message DeleteVideoRequest {
+  string id = 1;
+}
+
+message ListVideoRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+
+  View view = 3;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message ListVideoResponse {
+  repeated Video video_list = 1;
+
+  string next_page_token = 2;
+}
+
+message BatchCreateVideosRequest {
+  repeated CreateVideoRequest requests = 1;
+}
+
+message BatchCreateVideosResponse {
+  repeated Video videos = 1;
+}
+
 message VideoDisallowRange {
   string id = 1;
 
@@ -109,4 +167,18 @@ message VideoPlayRange {
   int64 start_seconds = 2;
 
   google.protobuf.Int64Value end_seconds = 3;
+}
+
+service VideoService {
+  rpc Create ( CreateVideoRequest ) returns ( Video );
+
+  rpc Get ( GetVideoRequest ) returns ( Video );
+
+  rpc Update ( UpdateVideoRequest ) returns ( Video );
+
+  rpc Delete ( DeleteVideoRequest ) returns ( google.protobuf.Empty );
+
+  rpc List ( ListVideoRequest ) returns ( ListVideoResponse );
+
+  rpc BatchCreate ( BatchCreateVideosRequest ) returns ( BatchCreateVideosResponse );
 }

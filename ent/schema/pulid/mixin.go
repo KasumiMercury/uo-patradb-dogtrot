@@ -18,8 +18,6 @@ func MixinWithPrefix(prefix string) Mixin {
 
 func (m Mixin) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("id").
-			GoType(ID("")).
-			DefaultFunc(func() ID { return MustNew(m.prefix) }).Annotations(entproto.Field(1)),
+		field.String("id").DefaultFunc(func() string { return MustNew(m.prefix) }).Annotations(entproto.Field(1)),
 	}
 }

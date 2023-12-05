@@ -27,17 +27,17 @@ func (Video) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("video_id").Unique().Annotations(entproto.Field(2)),
 		field.String("title").Annotations(entproto.Field(3)),
-		field.String("normalized_title"),
-		field.Int("duration_seconds").Annotations(entproto.Field(4)),
-		field.Bool("is_collaboration").Annotations(entproto.Field(5)),
-		field.String("status").Annotations(entproto.Field(6)),
-		field.String("chat_id").Optional(),
-		field.Bool("has_time_range").Default(false).Annotations(entproto.Field(7)),
-		field.Time("scheduled_at").Optional().Annotations(entproto.Field(8)),
-		field.Time("actual_start_at").Optional().Annotations(entproto.Field(9)),
-		field.Time("published_at").Annotations(entproto.Field(10)),
-		field.Time("created_at").Default(func() time.Time { return time.Now() }),
-		field.Time("updated_at").Default(func() time.Time { return time.Now() }).UpdateDefault(func() time.Time { return time.Now() }).Annotations(entproto.Field(11)),
+		field.String("normalized_title").Annotations(entproto.Field(4)),
+		field.Int("duration_seconds").Annotations(entproto.Field(5)),
+		field.Bool("is_collaboration").Annotations(entproto.Field(6)),
+		field.String("status").Annotations(entproto.Field(7)),
+		field.String("chat_id").Optional().Annotations(entproto.Field(8)),
+		field.Bool("has_time_range").Default(false).Annotations(entproto.Field(9)),
+		field.Time("scheduled_at").Optional().Annotations(entproto.Field(10)),
+		field.Time("actual_start_at").Optional().Annotations(entproto.Field(11)),
+		field.Time("published_at").Annotations(entproto.Field(12)),
+		field.Time("created_at").Default(func() time.Time { return time.Now() }).Annotations(entproto.Field(13)),
+		field.Time("updated_at").Default(func() time.Time { return time.Now() }).UpdateDefault(func() time.Time { return time.Now() }).Annotations(entproto.Field(14)),
 	}
 }
 

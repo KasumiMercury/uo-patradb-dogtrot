@@ -13,7 +13,7 @@ func init() {
 	defaultEntropySource = ulid.Monotonic(rand.Reader, 0)
 }
 
-func NewULID() string {
+func MustNew() string {
 	return ulid.MustNew(ulid.Timestamp(time.Now()), defaultEntropySource).String()
 }
 

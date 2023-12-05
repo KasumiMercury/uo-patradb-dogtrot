@@ -18,6 +18,6 @@ type Mixin struct {
 
 func (m Mixin) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("id").DefaultFunc(func() string { return NewULID() }).Annotations(entproto.Field(1)),
+		field.String("id").DefaultFunc(func() string { return MustNew() }).Annotations(entproto.Field(1)),
 	}
 }

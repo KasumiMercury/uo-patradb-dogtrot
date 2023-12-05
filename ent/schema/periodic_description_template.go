@@ -33,7 +33,7 @@ func (Periodic_description_template) Fields() []ent.Field {
 // Edges of the Periodic_description_template.
 func (Periodic_description_template) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("descriptions", Description.Type).StorageKey(edge.Column("periodic_template_id")).Annotations(entproto.Field(5)),
+		edge.To("descriptions", Description.Type).StorageKey(edge.Column("periodic_template_id")).Annotations(entproto.Skip()),
 	}
 }
 

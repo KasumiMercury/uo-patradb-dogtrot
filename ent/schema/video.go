@@ -44,12 +44,12 @@ func (Video) Fields() []ent.Field {
 // Edges of the Video.
 func (Video) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("descriptions", Description.Type).Unique().StorageKey(edge.Column("video_id")).Annotations(entproto.Field(12)),
+		edge.To("descriptions", Description.Type).Unique().StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
 		edge.To("channel", Channel.Type).Annotations(entproto.Field(13)),
-		edge.To("video_play_ranges", Video_play_range.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Field(14)),
-		edge.To("video_disallow_ranges", Video_disallow_range.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Field(15)),
+		edge.To("video_play_ranges", Video_play_range.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
+		edge.To("video_disallow_ranges", Video_disallow_range.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
 		edge.To("video_title_changes", Video_title_change.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
-		edge.To("Pat_chats", Pat_chat.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Field(16)),
+		edge.To("Pat_chats", Pat_chat.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
 	}
 }
 

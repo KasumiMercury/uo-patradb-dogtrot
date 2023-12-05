@@ -8,8 +8,8 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.15.0 // indirect
-	entgo.io/contrib v0.4.5 // indirect
+	ariga.io/atlas v0.15.1-0.20231110144547-3e8e2e192e6b // indirect
+	entgo.io/contrib v0.4.6-0.20231111095018-6ed0397cd307 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect

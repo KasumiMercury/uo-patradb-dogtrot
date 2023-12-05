@@ -37,8 +37,8 @@ func (Description) Fields() []ent.Field {
 func (Description) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("video", Video.Type).Ref("descriptions").Unique().Required().Annotations(entproto.Field(5)),
-		edge.From("periodic_description_template", Periodic_description_template.Type).Ref("descriptions").Unique().Annotations(entproto.Field(6)),
-		edge.From("category_description_template", Category_description_template.Type).Ref("descriptions").Unique().Annotations(entproto.Field(7)),
+		edge.From("periodic_description_template", Periodic_description_template.Type).Ref("descriptions").Unique().Annotations(entproto.Skip()),
+		edge.From("category_description_template", Category_description_template.Type).Ref("descriptions").Unique().Annotations(entproto.Skip()),
 		edge.To("description_changes", Description_change.Type).StorageKey(edge.Column("description_id")).Annotations(entproto.Skip()),
 	}
 }

@@ -34,7 +34,7 @@ func (Channel) Fields() []ent.Field {
 // Edges of the Channel.
 func (Channel) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("videos", Video.Type).Ref("channel").Annotations(entproto.Field(6)),
+		edge.From("videos", Video.Type).Ref("channel").Annotations(entproto.Skip()),
 	}
 }
 

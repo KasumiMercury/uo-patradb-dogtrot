@@ -17,7 +17,7 @@ type PeriodicDescriptionTemplate struct {
 // Mixin of the Periodic_description_template.
 func (PeriodicDescriptionTemplate) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		pulid.MixinWithPrefix("PDT"),
+		pulid.Mixin{},
 	}
 }
 

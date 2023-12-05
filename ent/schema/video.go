@@ -18,7 +18,7 @@ type Video struct {
 // Mixin of the Video.
 func (Video) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		pulid.MixinWithPrefix("VM"),
+		pulid.Mixin{},
 	}
 }
 

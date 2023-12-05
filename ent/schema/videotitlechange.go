@@ -16,7 +16,7 @@ type VideoTitleChange struct {
 // Mixin of the VideoTitleChange.
 func (VideoTitleChange) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		pulid.MixinWithPrefix("VTC"),
+		pulid.Mixin{},
 	}
 }
 

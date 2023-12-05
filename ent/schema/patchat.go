@@ -18,7 +18,7 @@ type PatChat struct {
 // Mixin of the PatChat.
 func (PatChat) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		pulid.MixinWithPrefix("PC"),
+		pulid.Mixin{},
 	}
 }
 

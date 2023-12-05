@@ -17,7 +17,7 @@ type Channel struct {
 // Mixin of the Channel.
 func (Channel) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		pulid.MixinWithPrefix("CH"),
+		pulid.Mixin{},
 	}
 }
 

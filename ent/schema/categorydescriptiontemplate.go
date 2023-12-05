@@ -17,7 +17,7 @@ type CategoryDescriptionTemplate struct {
 // Mixin of the Category_description_template.
 func (CategoryDescriptionTemplate) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		pulid.MixinWithPrefix("CDT"),
+		pulid.Mixin{},
 	}
 }
 

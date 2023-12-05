@@ -12,12 +12,12 @@ type Mixin struct {
 	prefix string
 }
 
-func MixinWithPrefix(prefix string) Mixin {
-	return Mixin{prefix: prefix}
-}
+//func MixinWithPrefix(prefix string) Mixin {
+//	return Mixin{prefix: prefix}
+//}
 
 func (m Mixin) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("id").DefaultFunc(func() string { return MustNew(m.prefix) }).Annotations(entproto.Field(1)),
+		field.String("id").DefaultFunc(func() string { return NewULID() }).Annotations(entproto.Field(1)),
 	}
 }

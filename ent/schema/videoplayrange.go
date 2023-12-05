@@ -17,7 +17,7 @@ type VideoPlayRange struct {
 // Mixin of the VideoPlayRange.
 func (VideoPlayRange) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		pulid.MixinWithPrefix("VPR"),
+		pulid.Mixin{},
 	}
 }
 

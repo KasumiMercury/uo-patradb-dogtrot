@@ -17,7 +17,7 @@ type VideoDisallowRange struct {
 // Mixin of the VideoDisallowRange.
 func (VideoDisallowRange) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		pulid.MixinWithPrefix("VDR"),
+		pulid.Mixin{},
 	}
 }
 

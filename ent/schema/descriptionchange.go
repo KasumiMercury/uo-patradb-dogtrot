@@ -16,7 +16,7 @@ type DescriptionChange struct {
 // Mixin of the DescriptionChange.
 func (DescriptionChange) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		pulid.MixinWithPrefix("VDC"),
+		pulid.Mixin{},
 	}
 }
 

@@ -18,7 +18,7 @@ type Description struct {
 // Mixin of the Description.
 func (Description) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		pulid.MixinWithPrefix("VD"),
+		pulid.Mixin{},
 	}
 }
 

@@ -2,7 +2,6 @@ package pulid
 
 import (
 	"crypto/rand"
-	"fmt"
 	"time"
 
 	"github.com/oklog/ulid/v2"
@@ -14,8 +13,8 @@ func init() {
 	defaultEntropySource = ulid.Monotonic(rand.Reader, 0)
 }
 
-func newULID() string {
+func NewULID() string {
 	return ulid.MustNew(ulid.Timestamp(time.Now()), defaultEntropySource).String()
 }
 
-func MustNew(prefix string) string { return prefix + fmt.Sprint(newULID()) }
+//func MustNew(prefix string) string { return prefix + fmt.Sprint(newULID()) }

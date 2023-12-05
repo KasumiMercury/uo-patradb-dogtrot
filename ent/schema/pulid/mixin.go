@@ -1,6 +1,7 @@
 package pulid
 
 import (
+	"entgo.io/contrib/entproto"
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
@@ -19,6 +20,6 @@ func (m Mixin) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("id").
 			GoType(ID("")).
-			DefaultFunc(func() ID { return MustNew(m.prefix) }),
+			DefaultFunc(func() ID { return MustNew(m.prefix) }).Annotations(entproto.Field(1)),
 	}
 }

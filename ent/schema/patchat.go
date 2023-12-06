@@ -38,6 +38,7 @@ func (PatChat) Fields() []ent.Field {
 func (PatChat) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entproto.Message(),
+		entproto.Service(),
 	}
 }
 

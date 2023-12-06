@@ -34,6 +34,7 @@ func (CategoryDescriptionTemplate) Fields() []ent.Field {
 func (CategoryDescriptionTemplate) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entproto.Message(),
+		entproto.Service(),
 	}
 }
 

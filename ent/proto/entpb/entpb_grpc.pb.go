@@ -19,6 +19,1338 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
+// CategoryDescriptionTemplateServiceClient is the client API for CategoryDescriptionTemplateService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type CategoryDescriptionTemplateServiceClient interface {
+	Create(ctx context.Context, in *CreateCategoryDescriptionTemplateRequest, opts ...grpc.CallOption) (*CategoryDescriptionTemplate, error)
+	Get(ctx context.Context, in *GetCategoryDescriptionTemplateRequest, opts ...grpc.CallOption) (*CategoryDescriptionTemplate, error)
+	Update(ctx context.Context, in *UpdateCategoryDescriptionTemplateRequest, opts ...grpc.CallOption) (*CategoryDescriptionTemplate, error)
+	Delete(ctx context.Context, in *DeleteCategoryDescriptionTemplateRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	List(ctx context.Context, in *ListCategoryDescriptionTemplateRequest, opts ...grpc.CallOption) (*ListCategoryDescriptionTemplateResponse, error)
+	BatchCreate(ctx context.Context, in *BatchCreateCategoryDescriptionTemplatesRequest, opts ...grpc.CallOption) (*BatchCreateCategoryDescriptionTemplatesResponse, error)
+}
+
+type categoryDescriptionTemplateServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewCategoryDescriptionTemplateServiceClient(cc grpc.ClientConnInterface) CategoryDescriptionTemplateServiceClient {
+	return &categoryDescriptionTemplateServiceClient{cc}
+}
+
+func (c *categoryDescriptionTemplateServiceClient) Create(ctx context.Context, in *CreateCategoryDescriptionTemplateRequest, opts ...grpc.CallOption) (*CategoryDescriptionTemplate, error) {
+	out := new(CategoryDescriptionTemplate)
+	err := c.cc.Invoke(ctx, "/entpb.CategoryDescriptionTemplateService/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *categoryDescriptionTemplateServiceClient) Get(ctx context.Context, in *GetCategoryDescriptionTemplateRequest, opts ...grpc.CallOption) (*CategoryDescriptionTemplate, error) {
+	out := new(CategoryDescriptionTemplate)
+	err := c.cc.Invoke(ctx, "/entpb.CategoryDescriptionTemplateService/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *categoryDescriptionTemplateServiceClient) Update(ctx context.Context, in *UpdateCategoryDescriptionTemplateRequest, opts ...grpc.CallOption) (*CategoryDescriptionTemplate, error) {
+	out := new(CategoryDescriptionTemplate)
+	err := c.cc.Invoke(ctx, "/entpb.CategoryDescriptionTemplateService/Update", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *categoryDescriptionTemplateServiceClient) Delete(ctx context.Context, in *DeleteCategoryDescriptionTemplateRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/entpb.CategoryDescriptionTemplateService/Delete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *categoryDescriptionTemplateServiceClient) List(ctx context.Context, in *ListCategoryDescriptionTemplateRequest, opts ...grpc.CallOption) (*ListCategoryDescriptionTemplateResponse, error) {
+	out := new(ListCategoryDescriptionTemplateResponse)
+	err := c.cc.Invoke(ctx, "/entpb.CategoryDescriptionTemplateService/List", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *categoryDescriptionTemplateServiceClient) BatchCreate(ctx context.Context, in *BatchCreateCategoryDescriptionTemplatesRequest, opts ...grpc.CallOption) (*BatchCreateCategoryDescriptionTemplatesResponse, error) {
+	out := new(BatchCreateCategoryDescriptionTemplatesResponse)
+	err := c.cc.Invoke(ctx, "/entpb.CategoryDescriptionTemplateService/BatchCreate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// CategoryDescriptionTemplateServiceServer is the server API for CategoryDescriptionTemplateService service.
+// All implementations must embed UnimplementedCategoryDescriptionTemplateServiceServer
+// for forward compatibility
+type CategoryDescriptionTemplateServiceServer interface {
+	Create(context.Context, *CreateCategoryDescriptionTemplateRequest) (*CategoryDescriptionTemplate, error)
+	Get(context.Context, *GetCategoryDescriptionTemplateRequest) (*CategoryDescriptionTemplate, error)
+	Update(context.Context, *UpdateCategoryDescriptionTemplateRequest) (*CategoryDescriptionTemplate, error)
+	Delete(context.Context, *DeleteCategoryDescriptionTemplateRequest) (*empty.Empty, error)
+	List(context.Context, *ListCategoryDescriptionTemplateRequest) (*ListCategoryDescriptionTemplateResponse, error)
+	BatchCreate(context.Context, *BatchCreateCategoryDescriptionTemplatesRequest) (*BatchCreateCategoryDescriptionTemplatesResponse, error)
+	mustEmbedUnimplementedCategoryDescriptionTemplateServiceServer()
+}
+
+// UnimplementedCategoryDescriptionTemplateServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedCategoryDescriptionTemplateServiceServer struct {
+}
+
+func (UnimplementedCategoryDescriptionTemplateServiceServer) Create(context.Context, *CreateCategoryDescriptionTemplateRequest) (*CategoryDescriptionTemplate, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedCategoryDescriptionTemplateServiceServer) Get(context.Context, *GetCategoryDescriptionTemplateRequest) (*CategoryDescriptionTemplate, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedCategoryDescriptionTemplateServiceServer) Update(context.Context, *UpdateCategoryDescriptionTemplateRequest) (*CategoryDescriptionTemplate, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedCategoryDescriptionTemplateServiceServer) Delete(context.Context, *DeleteCategoryDescriptionTemplateRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedCategoryDescriptionTemplateServiceServer) List(context.Context, *ListCategoryDescriptionTemplateRequest) (*ListCategoryDescriptionTemplateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedCategoryDescriptionTemplateServiceServer) BatchCreate(context.Context, *BatchCreateCategoryDescriptionTemplatesRequest) (*BatchCreateCategoryDescriptionTemplatesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BatchCreate not implemented")
+}
+func (UnimplementedCategoryDescriptionTemplateServiceServer) mustEmbedUnimplementedCategoryDescriptionTemplateServiceServer() {
+}
+
+// UnsafeCategoryDescriptionTemplateServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CategoryDescriptionTemplateServiceServer will
+// result in compilation errors.
+type UnsafeCategoryDescriptionTemplateServiceServer interface {
+	mustEmbedUnimplementedCategoryDescriptionTemplateServiceServer()
+}
+
+func RegisterCategoryDescriptionTemplateServiceServer(s grpc.ServiceRegistrar, srv CategoryDescriptionTemplateServiceServer) {
+	s.RegisterService(&CategoryDescriptionTemplateService_ServiceDesc, srv)
+}
+
+func _CategoryDescriptionTemplateService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateCategoryDescriptionTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CategoryDescriptionTemplateServiceServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.CategoryDescriptionTemplateService/Create",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CategoryDescriptionTemplateServiceServer).Create(ctx, req.(*CreateCategoryDescriptionTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CategoryDescriptionTemplateService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCategoryDescriptionTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CategoryDescriptionTemplateServiceServer).Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.CategoryDescriptionTemplateService/Get",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CategoryDescriptionTemplateServiceServer).Get(ctx, req.(*GetCategoryDescriptionTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CategoryDescriptionTemplateService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCategoryDescriptionTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CategoryDescriptionTemplateServiceServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.CategoryDescriptionTemplateService/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CategoryDescriptionTemplateServiceServer).Update(ctx, req.(*UpdateCategoryDescriptionTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CategoryDescriptionTemplateService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteCategoryDescriptionTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CategoryDescriptionTemplateServiceServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.CategoryDescriptionTemplateService/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CategoryDescriptionTemplateServiceServer).Delete(ctx, req.(*DeleteCategoryDescriptionTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CategoryDescriptionTemplateService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListCategoryDescriptionTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CategoryDescriptionTemplateServiceServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.CategoryDescriptionTemplateService/List",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CategoryDescriptionTemplateServiceServer).List(ctx, req.(*ListCategoryDescriptionTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CategoryDescriptionTemplateService_BatchCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchCreateCategoryDescriptionTemplatesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CategoryDescriptionTemplateServiceServer).BatchCreate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.CategoryDescriptionTemplateService/BatchCreate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CategoryDescriptionTemplateServiceServer).BatchCreate(ctx, req.(*BatchCreateCategoryDescriptionTemplatesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// CategoryDescriptionTemplateService_ServiceDesc is the grpc.ServiceDesc for CategoryDescriptionTemplateService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var CategoryDescriptionTemplateService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "entpb.CategoryDescriptionTemplateService",
+	HandlerType: (*CategoryDescriptionTemplateServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Create",
+			Handler:    _CategoryDescriptionTemplateService_Create_Handler,
+		},
+		{
+			MethodName: "Get",
+			Handler:    _CategoryDescriptionTemplateService_Get_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _CategoryDescriptionTemplateService_Update_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _CategoryDescriptionTemplateService_Delete_Handler,
+		},
+		{
+			MethodName: "List",
+			Handler:    _CategoryDescriptionTemplateService_List_Handler,
+		},
+		{
+			MethodName: "BatchCreate",
+			Handler:    _CategoryDescriptionTemplateService_BatchCreate_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "entpb/entpb.proto",
+}
+
+// ChannelServiceClient is the client API for ChannelService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type ChannelServiceClient interface {
+	Create(ctx context.Context, in *CreateChannelRequest, opts ...grpc.CallOption) (*Channel, error)
+	Get(ctx context.Context, in *GetChannelRequest, opts ...grpc.CallOption) (*Channel, error)
+	Update(ctx context.Context, in *UpdateChannelRequest, opts ...grpc.CallOption) (*Channel, error)
+	Delete(ctx context.Context, in *DeleteChannelRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	List(ctx context.Context, in *ListChannelRequest, opts ...grpc.CallOption) (*ListChannelResponse, error)
+	BatchCreate(ctx context.Context, in *BatchCreateChannelsRequest, opts ...grpc.CallOption) (*BatchCreateChannelsResponse, error)
+}
+
+type channelServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewChannelServiceClient(cc grpc.ClientConnInterface) ChannelServiceClient {
+	return &channelServiceClient{cc}
+}
+
+func (c *channelServiceClient) Create(ctx context.Context, in *CreateChannelRequest, opts ...grpc.CallOption) (*Channel, error) {
+	out := new(Channel)
+	err := c.cc.Invoke(ctx, "/entpb.ChannelService/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *channelServiceClient) Get(ctx context.Context, in *GetChannelRequest, opts ...grpc.CallOption) (*Channel, error) {
+	out := new(Channel)
+	err := c.cc.Invoke(ctx, "/entpb.ChannelService/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *channelServiceClient) Update(ctx context.Context, in *UpdateChannelRequest, opts ...grpc.CallOption) (*Channel, error) {
+	out := new(Channel)
+	err := c.cc.Invoke(ctx, "/entpb.ChannelService/Update", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *channelServiceClient) Delete(ctx context.Context, in *DeleteChannelRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/entpb.ChannelService/Delete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *channelServiceClient) List(ctx context.Context, in *ListChannelRequest, opts ...grpc.CallOption) (*ListChannelResponse, error) {
+	out := new(ListChannelResponse)
+	err := c.cc.Invoke(ctx, "/entpb.ChannelService/List", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *channelServiceClient) BatchCreate(ctx context.Context, in *BatchCreateChannelsRequest, opts ...grpc.CallOption) (*BatchCreateChannelsResponse, error) {
+	out := new(BatchCreateChannelsResponse)
+	err := c.cc.Invoke(ctx, "/entpb.ChannelService/BatchCreate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ChannelServiceServer is the server API for ChannelService service.
+// All implementations must embed UnimplementedChannelServiceServer
+// for forward compatibility
+type ChannelServiceServer interface {
+	Create(context.Context, *CreateChannelRequest) (*Channel, error)
+	Get(context.Context, *GetChannelRequest) (*Channel, error)
+	Update(context.Context, *UpdateChannelRequest) (*Channel, error)
+	Delete(context.Context, *DeleteChannelRequest) (*empty.Empty, error)
+	List(context.Context, *ListChannelRequest) (*ListChannelResponse, error)
+	BatchCreate(context.Context, *BatchCreateChannelsRequest) (*BatchCreateChannelsResponse, error)
+	mustEmbedUnimplementedChannelServiceServer()
+}
+
+// UnimplementedChannelServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedChannelServiceServer struct {
+}
+
+func (UnimplementedChannelServiceServer) Create(context.Context, *CreateChannelRequest) (*Channel, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedChannelServiceServer) Get(context.Context, *GetChannelRequest) (*Channel, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedChannelServiceServer) Update(context.Context, *UpdateChannelRequest) (*Channel, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedChannelServiceServer) Delete(context.Context, *DeleteChannelRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedChannelServiceServer) List(context.Context, *ListChannelRequest) (*ListChannelResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedChannelServiceServer) BatchCreate(context.Context, *BatchCreateChannelsRequest) (*BatchCreateChannelsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BatchCreate not implemented")
+}
+func (UnimplementedChannelServiceServer) mustEmbedUnimplementedChannelServiceServer() {}
+
+// UnsafeChannelServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ChannelServiceServer will
+// result in compilation errors.
+type UnsafeChannelServiceServer interface {
+	mustEmbedUnimplementedChannelServiceServer()
+}
+
+func RegisterChannelServiceServer(s grpc.ServiceRegistrar, srv ChannelServiceServer) {
+	s.RegisterService(&ChannelService_ServiceDesc, srv)
+}
+
+func _ChannelService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateChannelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChannelServiceServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.ChannelService/Create",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChannelServiceServer).Create(ctx, req.(*CreateChannelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ChannelService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetChannelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChannelServiceServer).Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.ChannelService/Get",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChannelServiceServer).Get(ctx, req.(*GetChannelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ChannelService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateChannelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChannelServiceServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.ChannelService/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChannelServiceServer).Update(ctx, req.(*UpdateChannelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ChannelService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteChannelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChannelServiceServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.ChannelService/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChannelServiceServer).Delete(ctx, req.(*DeleteChannelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ChannelService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListChannelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChannelServiceServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.ChannelService/List",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChannelServiceServer).List(ctx, req.(*ListChannelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ChannelService_BatchCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchCreateChannelsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChannelServiceServer).BatchCreate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.ChannelService/BatchCreate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChannelServiceServer).BatchCreate(ctx, req.(*BatchCreateChannelsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// ChannelService_ServiceDesc is the grpc.ServiceDesc for ChannelService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var ChannelService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "entpb.ChannelService",
+	HandlerType: (*ChannelServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Create",
+			Handler:    _ChannelService_Create_Handler,
+		},
+		{
+			MethodName: "Get",
+			Handler:    _ChannelService_Get_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _ChannelService_Update_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _ChannelService_Delete_Handler,
+		},
+		{
+			MethodName: "List",
+			Handler:    _ChannelService_List_Handler,
+		},
+		{
+			MethodName: "BatchCreate",
+			Handler:    _ChannelService_BatchCreate_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "entpb/entpb.proto",
+}
+
+// DescriptionServiceClient is the client API for DescriptionService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type DescriptionServiceClient interface {
+	Create(ctx context.Context, in *CreateDescriptionRequest, opts ...grpc.CallOption) (*Description, error)
+	Get(ctx context.Context, in *GetDescriptionRequest, opts ...grpc.CallOption) (*Description, error)
+	Update(ctx context.Context, in *UpdateDescriptionRequest, opts ...grpc.CallOption) (*Description, error)
+	Delete(ctx context.Context, in *DeleteDescriptionRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	List(ctx context.Context, in *ListDescriptionRequest, opts ...grpc.CallOption) (*ListDescriptionResponse, error)
+	BatchCreate(ctx context.Context, in *BatchCreateDescriptionsRequest, opts ...grpc.CallOption) (*BatchCreateDescriptionsResponse, error)
+}
+
+type descriptionServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewDescriptionServiceClient(cc grpc.ClientConnInterface) DescriptionServiceClient {
+	return &descriptionServiceClient{cc}
+}
+
+func (c *descriptionServiceClient) Create(ctx context.Context, in *CreateDescriptionRequest, opts ...grpc.CallOption) (*Description, error) {
+	out := new(Description)
+	err := c.cc.Invoke(ctx, "/entpb.DescriptionService/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *descriptionServiceClient) Get(ctx context.Context, in *GetDescriptionRequest, opts ...grpc.CallOption) (*Description, error) {
+	out := new(Description)
+	err := c.cc.Invoke(ctx, "/entpb.DescriptionService/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *descriptionServiceClient) Update(ctx context.Context, in *UpdateDescriptionRequest, opts ...grpc.CallOption) (*Description, error) {
+	out := new(Description)
+	err := c.cc.Invoke(ctx, "/entpb.DescriptionService/Update", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *descriptionServiceClient) Delete(ctx context.Context, in *DeleteDescriptionRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/entpb.DescriptionService/Delete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *descriptionServiceClient) List(ctx context.Context, in *ListDescriptionRequest, opts ...grpc.CallOption) (*ListDescriptionResponse, error) {
+	out := new(ListDescriptionResponse)
+	err := c.cc.Invoke(ctx, "/entpb.DescriptionService/List", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *descriptionServiceClient) BatchCreate(ctx context.Context, in *BatchCreateDescriptionsRequest, opts ...grpc.CallOption) (*BatchCreateDescriptionsResponse, error) {
+	out := new(BatchCreateDescriptionsResponse)
+	err := c.cc.Invoke(ctx, "/entpb.DescriptionService/BatchCreate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// DescriptionServiceServer is the server API for DescriptionService service.
+// All implementations must embed UnimplementedDescriptionServiceServer
+// for forward compatibility
+type DescriptionServiceServer interface {
+	Create(context.Context, *CreateDescriptionRequest) (*Description, error)
+	Get(context.Context, *GetDescriptionRequest) (*Description, error)
+	Update(context.Context, *UpdateDescriptionRequest) (*Description, error)
+	Delete(context.Context, *DeleteDescriptionRequest) (*empty.Empty, error)
+	List(context.Context, *ListDescriptionRequest) (*ListDescriptionResponse, error)
+	BatchCreate(context.Context, *BatchCreateDescriptionsRequest) (*BatchCreateDescriptionsResponse, error)
+	mustEmbedUnimplementedDescriptionServiceServer()
+}
+
+// UnimplementedDescriptionServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedDescriptionServiceServer struct {
+}
+
+func (UnimplementedDescriptionServiceServer) Create(context.Context, *CreateDescriptionRequest) (*Description, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedDescriptionServiceServer) Get(context.Context, *GetDescriptionRequest) (*Description, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedDescriptionServiceServer) Update(context.Context, *UpdateDescriptionRequest) (*Description, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedDescriptionServiceServer) Delete(context.Context, *DeleteDescriptionRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedDescriptionServiceServer) List(context.Context, *ListDescriptionRequest) (*ListDescriptionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedDescriptionServiceServer) BatchCreate(context.Context, *BatchCreateDescriptionsRequest) (*BatchCreateDescriptionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BatchCreate not implemented")
+}
+func (UnimplementedDescriptionServiceServer) mustEmbedUnimplementedDescriptionServiceServer() {}
+
+// UnsafeDescriptionServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to DescriptionServiceServer will
+// result in compilation errors.
+type UnsafeDescriptionServiceServer interface {
+	mustEmbedUnimplementedDescriptionServiceServer()
+}
+
+func RegisterDescriptionServiceServer(s grpc.ServiceRegistrar, srv DescriptionServiceServer) {
+	s.RegisterService(&DescriptionService_ServiceDesc, srv)
+}
+
+func _DescriptionService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateDescriptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DescriptionServiceServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.DescriptionService/Create",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DescriptionServiceServer).Create(ctx, req.(*CreateDescriptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DescriptionService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDescriptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DescriptionServiceServer).Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.DescriptionService/Get",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DescriptionServiceServer).Get(ctx, req.(*GetDescriptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DescriptionService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateDescriptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DescriptionServiceServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.DescriptionService/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DescriptionServiceServer).Update(ctx, req.(*UpdateDescriptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DescriptionService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteDescriptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DescriptionServiceServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.DescriptionService/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DescriptionServiceServer).Delete(ctx, req.(*DeleteDescriptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DescriptionService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListDescriptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DescriptionServiceServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.DescriptionService/List",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DescriptionServiceServer).List(ctx, req.(*ListDescriptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DescriptionService_BatchCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchCreateDescriptionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DescriptionServiceServer).BatchCreate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.DescriptionService/BatchCreate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DescriptionServiceServer).BatchCreate(ctx, req.(*BatchCreateDescriptionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// DescriptionService_ServiceDesc is the grpc.ServiceDesc for DescriptionService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var DescriptionService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "entpb.DescriptionService",
+	HandlerType: (*DescriptionServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Create",
+			Handler:    _DescriptionService_Create_Handler,
+		},
+		{
+			MethodName: "Get",
+			Handler:    _DescriptionService_Get_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _DescriptionService_Update_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _DescriptionService_Delete_Handler,
+		},
+		{
+			MethodName: "List",
+			Handler:    _DescriptionService_List_Handler,
+		},
+		{
+			MethodName: "BatchCreate",
+			Handler:    _DescriptionService_BatchCreate_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "entpb/entpb.proto",
+}
+
+// PatChatServiceClient is the client API for PatChatService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type PatChatServiceClient interface {
+	Create(ctx context.Context, in *CreatePatChatRequest, opts ...grpc.CallOption) (*PatChat, error)
+	Get(ctx context.Context, in *GetPatChatRequest, opts ...grpc.CallOption) (*PatChat, error)
+	Update(ctx context.Context, in *UpdatePatChatRequest, opts ...grpc.CallOption) (*PatChat, error)
+	Delete(ctx context.Context, in *DeletePatChatRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	List(ctx context.Context, in *ListPatChatRequest, opts ...grpc.CallOption) (*ListPatChatResponse, error)
+	BatchCreate(ctx context.Context, in *BatchCreatePatChatsRequest, opts ...grpc.CallOption) (*BatchCreatePatChatsResponse, error)
+}
+
+type patChatServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewPatChatServiceClient(cc grpc.ClientConnInterface) PatChatServiceClient {
+	return &patChatServiceClient{cc}
+}
+
+func (c *patChatServiceClient) Create(ctx context.Context, in *CreatePatChatRequest, opts ...grpc.CallOption) (*PatChat, error) {
+	out := new(PatChat)
+	err := c.cc.Invoke(ctx, "/entpb.PatChatService/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *patChatServiceClient) Get(ctx context.Context, in *GetPatChatRequest, opts ...grpc.CallOption) (*PatChat, error) {
+	out := new(PatChat)
+	err := c.cc.Invoke(ctx, "/entpb.PatChatService/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *patChatServiceClient) Update(ctx context.Context, in *UpdatePatChatRequest, opts ...grpc.CallOption) (*PatChat, error) {
+	out := new(PatChat)
+	err := c.cc.Invoke(ctx, "/entpb.PatChatService/Update", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *patChatServiceClient) Delete(ctx context.Context, in *DeletePatChatRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/entpb.PatChatService/Delete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *patChatServiceClient) List(ctx context.Context, in *ListPatChatRequest, opts ...grpc.CallOption) (*ListPatChatResponse, error) {
+	out := new(ListPatChatResponse)
+	err := c.cc.Invoke(ctx, "/entpb.PatChatService/List", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *patChatServiceClient) BatchCreate(ctx context.Context, in *BatchCreatePatChatsRequest, opts ...grpc.CallOption) (*BatchCreatePatChatsResponse, error) {
+	out := new(BatchCreatePatChatsResponse)
+	err := c.cc.Invoke(ctx, "/entpb.PatChatService/BatchCreate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// PatChatServiceServer is the server API for PatChatService service.
+// All implementations must embed UnimplementedPatChatServiceServer
+// for forward compatibility
+type PatChatServiceServer interface {
+	Create(context.Context, *CreatePatChatRequest) (*PatChat, error)
+	Get(context.Context, *GetPatChatRequest) (*PatChat, error)
+	Update(context.Context, *UpdatePatChatRequest) (*PatChat, error)
+	Delete(context.Context, *DeletePatChatRequest) (*empty.Empty, error)
+	List(context.Context, *ListPatChatRequest) (*ListPatChatResponse, error)
+	BatchCreate(context.Context, *BatchCreatePatChatsRequest) (*BatchCreatePatChatsResponse, error)
+	mustEmbedUnimplementedPatChatServiceServer()
+}
+
+// UnimplementedPatChatServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedPatChatServiceServer struct {
+}
+
+func (UnimplementedPatChatServiceServer) Create(context.Context, *CreatePatChatRequest) (*PatChat, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedPatChatServiceServer) Get(context.Context, *GetPatChatRequest) (*PatChat, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedPatChatServiceServer) Update(context.Context, *UpdatePatChatRequest) (*PatChat, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedPatChatServiceServer) Delete(context.Context, *DeletePatChatRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedPatChatServiceServer) List(context.Context, *ListPatChatRequest) (*ListPatChatResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedPatChatServiceServer) BatchCreate(context.Context, *BatchCreatePatChatsRequest) (*BatchCreatePatChatsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BatchCreate not implemented")
+}
+func (UnimplementedPatChatServiceServer) mustEmbedUnimplementedPatChatServiceServer() {}
+
+// UnsafePatChatServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to PatChatServiceServer will
+// result in compilation errors.
+type UnsafePatChatServiceServer interface {
+	mustEmbedUnimplementedPatChatServiceServer()
+}
+
+func RegisterPatChatServiceServer(s grpc.ServiceRegistrar, srv PatChatServiceServer) {
+	s.RegisterService(&PatChatService_ServiceDesc, srv)
+}
+
+func _PatChatService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreatePatChatRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PatChatServiceServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.PatChatService/Create",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PatChatServiceServer).Create(ctx, req.(*CreatePatChatRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PatChatService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPatChatRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PatChatServiceServer).Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.PatChatService/Get",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PatChatServiceServer).Get(ctx, req.(*GetPatChatRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PatChatService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePatChatRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PatChatServiceServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.PatChatService/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PatChatServiceServer).Update(ctx, req.(*UpdatePatChatRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PatChatService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeletePatChatRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PatChatServiceServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.PatChatService/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PatChatServiceServer).Delete(ctx, req.(*DeletePatChatRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PatChatService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListPatChatRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PatChatServiceServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.PatChatService/List",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PatChatServiceServer).List(ctx, req.(*ListPatChatRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PatChatService_BatchCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchCreatePatChatsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PatChatServiceServer).BatchCreate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.PatChatService/BatchCreate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PatChatServiceServer).BatchCreate(ctx, req.(*BatchCreatePatChatsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// PatChatService_ServiceDesc is the grpc.ServiceDesc for PatChatService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var PatChatService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "entpb.PatChatService",
+	HandlerType: (*PatChatServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Create",
+			Handler:    _PatChatService_Create_Handler,
+		},
+		{
+			MethodName: "Get",
+			Handler:    _PatChatService_Get_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _PatChatService_Update_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _PatChatService_Delete_Handler,
+		},
+		{
+			MethodName: "List",
+			Handler:    _PatChatService_List_Handler,
+		},
+		{
+			MethodName: "BatchCreate",
+			Handler:    _PatChatService_BatchCreate_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "entpb/entpb.proto",
+}
+
+// PeriodicDescriptionTemplateServiceClient is the client API for PeriodicDescriptionTemplateService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type PeriodicDescriptionTemplateServiceClient interface {
+	Create(ctx context.Context, in *CreatePeriodicDescriptionTemplateRequest, opts ...grpc.CallOption) (*PeriodicDescriptionTemplate, error)
+	Get(ctx context.Context, in *GetPeriodicDescriptionTemplateRequest, opts ...grpc.CallOption) (*PeriodicDescriptionTemplate, error)
+	Update(ctx context.Context, in *UpdatePeriodicDescriptionTemplateRequest, opts ...grpc.CallOption) (*PeriodicDescriptionTemplate, error)
+	Delete(ctx context.Context, in *DeletePeriodicDescriptionTemplateRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	List(ctx context.Context, in *ListPeriodicDescriptionTemplateRequest, opts ...grpc.CallOption) (*ListPeriodicDescriptionTemplateResponse, error)
+	BatchCreate(ctx context.Context, in *BatchCreatePeriodicDescriptionTemplatesRequest, opts ...grpc.CallOption) (*BatchCreatePeriodicDescriptionTemplatesResponse, error)
+}
+
+type periodicDescriptionTemplateServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewPeriodicDescriptionTemplateServiceClient(cc grpc.ClientConnInterface) PeriodicDescriptionTemplateServiceClient {
+	return &periodicDescriptionTemplateServiceClient{cc}
+}
+
+func (c *periodicDescriptionTemplateServiceClient) Create(ctx context.Context, in *CreatePeriodicDescriptionTemplateRequest, opts ...grpc.CallOption) (*PeriodicDescriptionTemplate, error) {
+	out := new(PeriodicDescriptionTemplate)
+	err := c.cc.Invoke(ctx, "/entpb.PeriodicDescriptionTemplateService/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *periodicDescriptionTemplateServiceClient) Get(ctx context.Context, in *GetPeriodicDescriptionTemplateRequest, opts ...grpc.CallOption) (*PeriodicDescriptionTemplate, error) {
+	out := new(PeriodicDescriptionTemplate)
+	err := c.cc.Invoke(ctx, "/entpb.PeriodicDescriptionTemplateService/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *periodicDescriptionTemplateServiceClient) Update(ctx context.Context, in *UpdatePeriodicDescriptionTemplateRequest, opts ...grpc.CallOption) (*PeriodicDescriptionTemplate, error) {
+	out := new(PeriodicDescriptionTemplate)
+	err := c.cc.Invoke(ctx, "/entpb.PeriodicDescriptionTemplateService/Update", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *periodicDescriptionTemplateServiceClient) Delete(ctx context.Context, in *DeletePeriodicDescriptionTemplateRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/entpb.PeriodicDescriptionTemplateService/Delete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *periodicDescriptionTemplateServiceClient) List(ctx context.Context, in *ListPeriodicDescriptionTemplateRequest, opts ...grpc.CallOption) (*ListPeriodicDescriptionTemplateResponse, error) {
+	out := new(ListPeriodicDescriptionTemplateResponse)
+	err := c.cc.Invoke(ctx, "/entpb.PeriodicDescriptionTemplateService/List", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *periodicDescriptionTemplateServiceClient) BatchCreate(ctx context.Context, in *BatchCreatePeriodicDescriptionTemplatesRequest, opts ...grpc.CallOption) (*BatchCreatePeriodicDescriptionTemplatesResponse, error) {
+	out := new(BatchCreatePeriodicDescriptionTemplatesResponse)
+	err := c.cc.Invoke(ctx, "/entpb.PeriodicDescriptionTemplateService/BatchCreate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// PeriodicDescriptionTemplateServiceServer is the server API for PeriodicDescriptionTemplateService service.
+// All implementations must embed UnimplementedPeriodicDescriptionTemplateServiceServer
+// for forward compatibility
+type PeriodicDescriptionTemplateServiceServer interface {
+	Create(context.Context, *CreatePeriodicDescriptionTemplateRequest) (*PeriodicDescriptionTemplate, error)
+	Get(context.Context, *GetPeriodicDescriptionTemplateRequest) (*PeriodicDescriptionTemplate, error)
+	Update(context.Context, *UpdatePeriodicDescriptionTemplateRequest) (*PeriodicDescriptionTemplate, error)
+	Delete(context.Context, *DeletePeriodicDescriptionTemplateRequest) (*empty.Empty, error)
+	List(context.Context, *ListPeriodicDescriptionTemplateRequest) (*ListPeriodicDescriptionTemplateResponse, error)
+	BatchCreate(context.Context, *BatchCreatePeriodicDescriptionTemplatesRequest) (*BatchCreatePeriodicDescriptionTemplatesResponse, error)
+	mustEmbedUnimplementedPeriodicDescriptionTemplateServiceServer()
+}
+
+// UnimplementedPeriodicDescriptionTemplateServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedPeriodicDescriptionTemplateServiceServer struct {
+}
+
+func (UnimplementedPeriodicDescriptionTemplateServiceServer) Create(context.Context, *CreatePeriodicDescriptionTemplateRequest) (*PeriodicDescriptionTemplate, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedPeriodicDescriptionTemplateServiceServer) Get(context.Context, *GetPeriodicDescriptionTemplateRequest) (*PeriodicDescriptionTemplate, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedPeriodicDescriptionTemplateServiceServer) Update(context.Context, *UpdatePeriodicDescriptionTemplateRequest) (*PeriodicDescriptionTemplate, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedPeriodicDescriptionTemplateServiceServer) Delete(context.Context, *DeletePeriodicDescriptionTemplateRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedPeriodicDescriptionTemplateServiceServer) List(context.Context, *ListPeriodicDescriptionTemplateRequest) (*ListPeriodicDescriptionTemplateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedPeriodicDescriptionTemplateServiceServer) BatchCreate(context.Context, *BatchCreatePeriodicDescriptionTemplatesRequest) (*BatchCreatePeriodicDescriptionTemplatesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BatchCreate not implemented")
+}
+func (UnimplementedPeriodicDescriptionTemplateServiceServer) mustEmbedUnimplementedPeriodicDescriptionTemplateServiceServer() {
+}
+
+// UnsafePeriodicDescriptionTemplateServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to PeriodicDescriptionTemplateServiceServer will
+// result in compilation errors.
+type UnsafePeriodicDescriptionTemplateServiceServer interface {
+	mustEmbedUnimplementedPeriodicDescriptionTemplateServiceServer()
+}
+
+func RegisterPeriodicDescriptionTemplateServiceServer(s grpc.ServiceRegistrar, srv PeriodicDescriptionTemplateServiceServer) {
+	s.RegisterService(&PeriodicDescriptionTemplateService_ServiceDesc, srv)
+}
+
+func _PeriodicDescriptionTemplateService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreatePeriodicDescriptionTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PeriodicDescriptionTemplateServiceServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.PeriodicDescriptionTemplateService/Create",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PeriodicDescriptionTemplateServiceServer).Create(ctx, req.(*CreatePeriodicDescriptionTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PeriodicDescriptionTemplateService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPeriodicDescriptionTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PeriodicDescriptionTemplateServiceServer).Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.PeriodicDescriptionTemplateService/Get",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PeriodicDescriptionTemplateServiceServer).Get(ctx, req.(*GetPeriodicDescriptionTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PeriodicDescriptionTemplateService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePeriodicDescriptionTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PeriodicDescriptionTemplateServiceServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.PeriodicDescriptionTemplateService/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PeriodicDescriptionTemplateServiceServer).Update(ctx, req.(*UpdatePeriodicDescriptionTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PeriodicDescriptionTemplateService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeletePeriodicDescriptionTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PeriodicDescriptionTemplateServiceServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.PeriodicDescriptionTemplateService/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PeriodicDescriptionTemplateServiceServer).Delete(ctx, req.(*DeletePeriodicDescriptionTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PeriodicDescriptionTemplateService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListPeriodicDescriptionTemplateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PeriodicDescriptionTemplateServiceServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.PeriodicDescriptionTemplateService/List",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PeriodicDescriptionTemplateServiceServer).List(ctx, req.(*ListPeriodicDescriptionTemplateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PeriodicDescriptionTemplateService_BatchCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchCreatePeriodicDescriptionTemplatesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PeriodicDescriptionTemplateServiceServer).BatchCreate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.PeriodicDescriptionTemplateService/BatchCreate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PeriodicDescriptionTemplateServiceServer).BatchCreate(ctx, req.(*BatchCreatePeriodicDescriptionTemplatesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// PeriodicDescriptionTemplateService_ServiceDesc is the grpc.ServiceDesc for PeriodicDescriptionTemplateService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var PeriodicDescriptionTemplateService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "entpb.PeriodicDescriptionTemplateService",
+	HandlerType: (*PeriodicDescriptionTemplateServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Create",
+			Handler:    _PeriodicDescriptionTemplateService_Create_Handler,
+		},
+		{
+			MethodName: "Get",
+			Handler:    _PeriodicDescriptionTemplateService_Get_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _PeriodicDescriptionTemplateService_Update_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _PeriodicDescriptionTemplateService_Delete_Handler,
+		},
+		{
+			MethodName: "List",
+			Handler:    _PeriodicDescriptionTemplateService_List_Handler,
+		},
+		{
+			MethodName: "BatchCreate",
+			Handler:    _PeriodicDescriptionTemplateService_BatchCreate_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "entpb/entpb.proto",
+}
+
 // VideoServiceClient is the client API for VideoService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.

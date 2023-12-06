@@ -34,6 +34,7 @@ func (PeriodicDescriptionTemplate) Fields() []ent.Field {
 func (PeriodicDescriptionTemplate) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entproto.Message(),
+		entproto.Service(),
 	}
 }
 

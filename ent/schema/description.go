@@ -37,6 +37,7 @@ func (Description) Fields() []ent.Field {
 func (Description) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entproto.Message(),
+		entproto.Service(),
 	}
 }
 

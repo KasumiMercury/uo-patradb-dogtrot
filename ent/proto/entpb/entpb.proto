@@ -21,6 +21,62 @@ message CategoryDescriptionTemplate {
   google.protobuf.Timestamp last_use_at = 4;
 }
 
+message CreateCategoryDescriptionTemplateRequest {
+  CategoryDescriptionTemplate category_description_template = 1;
+}
+
+message GetCategoryDescriptionTemplateRequest {
+  string id = 1;
+
+  View view = 2;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message UpdateCategoryDescriptionTemplateRequest {
+  CategoryDescriptionTemplate category_description_template = 1;
+}
+
+message DeleteCategoryDescriptionTemplateRequest {
+  string id = 1;
+}
+
+message ListCategoryDescriptionTemplateRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+
+  View view = 3;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message ListCategoryDescriptionTemplateResponse {
+  repeated CategoryDescriptionTemplate category_description_template_list = 1;
+
+  string next_page_token = 2;
+}
+
+message BatchCreateCategoryDescriptionTemplatesRequest {
+  repeated CreateCategoryDescriptionTemplateRequest requests = 1;
+}
+
+message BatchCreateCategoryDescriptionTemplatesResponse {
+  repeated CategoryDescriptionTemplate category_description_templates = 1;
+}
+
 message Channel {
   string id = 1;
 
@@ -33,6 +89,62 @@ message Channel {
   string thumbnail_url = 5;
 
   repeated Video videos = 6;
+}
+
+message CreateChannelRequest {
+  Channel channel = 1;
+}
+
+message GetChannelRequest {
+  string id = 1;
+
+  View view = 2;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message UpdateChannelRequest {
+  Channel channel = 1;
+}
+
+message DeleteChannelRequest {
+  string id = 1;
+}
+
+message ListChannelRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+
+  View view = 3;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message ListChannelResponse {
+  repeated Channel channel_list = 1;
+
+  string next_page_token = 2;
+}
+
+message BatchCreateChannelsRequest {
+  repeated CreateChannelRequest requests = 1;
+}
+
+message BatchCreateChannelsResponse {
+  repeated Channel channels = 1;
 }
 
 message Description {
@@ -51,6 +163,62 @@ message Description {
   CategoryDescriptionTemplate category_description_template = 7;
 }
 
+message CreateDescriptionRequest {
+  Description description = 1;
+}
+
+message GetDescriptionRequest {
+  string id = 1;
+
+  View view = 2;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message UpdateDescriptionRequest {
+  Description description = 1;
+}
+
+message DeleteDescriptionRequest {
+  string id = 1;
+}
+
+message ListDescriptionRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+
+  View view = 3;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message ListDescriptionResponse {
+  repeated Description description_list = 1;
+
+  string next_page_token = 2;
+}
+
+message BatchCreateDescriptionsRequest {
+  repeated CreateDescriptionRequest requests = 1;
+}
+
+message BatchCreateDescriptionsResponse {
+  repeated Description descriptions = 1;
+}
+
 message PatChat {
   string id = 1;
 
@@ -61,6 +229,62 @@ message PatChat {
   google.protobuf.Timestamp published_at = 4;
 }
 
+message CreatePatChatRequest {
+  PatChat pat_chat = 1;
+}
+
+message GetPatChatRequest {
+  string id = 1;
+
+  View view = 2;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message UpdatePatChatRequest {
+  PatChat pat_chat = 1;
+}
+
+message DeletePatChatRequest {
+  string id = 1;
+}
+
+message ListPatChatRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+
+  View view = 3;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message ListPatChatResponse {
+  repeated PatChat pat_chat_list = 1;
+
+  string next_page_token = 2;
+}
+
+message BatchCreatePatChatsRequest {
+  repeated CreatePatChatRequest requests = 1;
+}
+
+message BatchCreatePatChatsResponse {
+  repeated PatChat pat_chats = 1;
+}
+
 message PeriodicDescriptionTemplate {
   string id = 1;
 
@@ -69,6 +293,62 @@ message PeriodicDescriptionTemplate {
   google.protobuf.Timestamp start_use_at = 3;
 
   google.protobuf.Timestamp last_use_at = 4;
+}
+
+message CreatePeriodicDescriptionTemplateRequest {
+  PeriodicDescriptionTemplate periodic_description_template = 1;
+}
+
+message GetPeriodicDescriptionTemplateRequest {
+  string id = 1;
+
+  View view = 2;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message UpdatePeriodicDescriptionTemplateRequest {
+  PeriodicDescriptionTemplate periodic_description_template = 1;
+}
+
+message DeletePeriodicDescriptionTemplateRequest {
+  string id = 1;
+}
+
+message ListPeriodicDescriptionTemplateRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+
+  View view = 3;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message ListPeriodicDescriptionTemplateResponse {
+  repeated PeriodicDescriptionTemplate periodic_description_template_list = 1;
+
+  string next_page_token = 2;
+}
+
+message BatchCreatePeriodicDescriptionTemplatesRequest {
+  repeated CreatePeriodicDescriptionTemplateRequest requests = 1;
+}
+
+message BatchCreatePeriodicDescriptionTemplatesResponse {
+  repeated PeriodicDescriptionTemplate periodic_description_templates = 1;
 }
 
 message Video {
@@ -167,6 +447,76 @@ message VideoPlayRange {
   int64 start_seconds = 2;
 
   google.protobuf.Int64Value end_seconds = 3;
+}
+
+service CategoryDescriptionTemplateService {
+  rpc Create ( CreateCategoryDescriptionTemplateRequest ) returns ( CategoryDescriptionTemplate );
+
+  rpc Get ( GetCategoryDescriptionTemplateRequest ) returns ( CategoryDescriptionTemplate );
+
+  rpc Update ( UpdateCategoryDescriptionTemplateRequest ) returns ( CategoryDescriptionTemplate );
+
+  rpc Delete ( DeleteCategoryDescriptionTemplateRequest ) returns ( google.protobuf.Empty );
+
+  rpc List ( ListCategoryDescriptionTemplateRequest ) returns ( ListCategoryDescriptionTemplateResponse );
+
+  rpc BatchCreate ( BatchCreateCategoryDescriptionTemplatesRequest ) returns ( BatchCreateCategoryDescriptionTemplatesResponse );
+}
+
+service ChannelService {
+  rpc Create ( CreateChannelRequest ) returns ( Channel );
+
+  rpc Get ( GetChannelRequest ) returns ( Channel );
+
+  rpc Update ( UpdateChannelRequest ) returns ( Channel );
+
+  rpc Delete ( DeleteChannelRequest ) returns ( google.protobuf.Empty );
+
+  rpc List ( ListChannelRequest ) returns ( ListChannelResponse );
+
+  rpc BatchCreate ( BatchCreateChannelsRequest ) returns ( BatchCreateChannelsResponse );
+}
+
+service DescriptionService {
+  rpc Create ( CreateDescriptionRequest ) returns ( Description );
+
+  rpc Get ( GetDescriptionRequest ) returns ( Description );
+
+  rpc Update ( UpdateDescriptionRequest ) returns ( Description );
+
+  rpc Delete ( DeleteDescriptionRequest ) returns ( google.protobuf.Empty );
+
+  rpc List ( ListDescriptionRequest ) returns ( ListDescriptionResponse );
+
+  rpc BatchCreate ( BatchCreateDescriptionsRequest ) returns ( BatchCreateDescriptionsResponse );
+}
+
+service PatChatService {
+  rpc Create ( CreatePatChatRequest ) returns ( PatChat );
+
+  rpc Get ( GetPatChatRequest ) returns ( PatChat );
+
+  rpc Update ( UpdatePatChatRequest ) returns ( PatChat );
+
+  rpc Delete ( DeletePatChatRequest ) returns ( google.protobuf.Empty );
+
+  rpc List ( ListPatChatRequest ) returns ( ListPatChatResponse );
+
+  rpc BatchCreate ( BatchCreatePatChatsRequest ) returns ( BatchCreatePatChatsResponse );
+}
+
+service PeriodicDescriptionTemplateService {
+  rpc Create ( CreatePeriodicDescriptionTemplateRequest ) returns ( PeriodicDescriptionTemplate );
+
+  rpc Get ( GetPeriodicDescriptionTemplateRequest ) returns ( PeriodicDescriptionTemplate );
+
+  rpc Update ( UpdatePeriodicDescriptionTemplateRequest ) returns ( PeriodicDescriptionTemplate );
+
+  rpc Delete ( DeletePeriodicDescriptionTemplateRequest ) returns ( google.protobuf.Empty );
+
+  rpc List ( ListPeriodicDescriptionTemplateRequest ) returns ( ListPeriodicDescriptionTemplateResponse );
+
+  rpc BatchCreate ( BatchCreatePeriodicDescriptionTemplatesRequest ) returns ( BatchCreatePeriodicDescriptionTemplatesResponse );
 }
 
 service VideoService {

@@ -35,6 +35,7 @@ func (Channel) Fields() []ent.Field {
 func (Channel) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entproto.Message(),
+		entproto.Service(),
 	}
 }
 

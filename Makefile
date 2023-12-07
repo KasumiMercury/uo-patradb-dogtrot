@@ -36,7 +36,7 @@ integration:
 	cd ent/migrate/migrations/ &&
 	bash integrate_migration.sh
 atlas-push:
-	atlas migrate push $(ARG) \
+	atlas migrate push patradb \
 	  --dir "file://ent/migrate/migrations/integrate" \
 	  --dev-url "docker://mysql/8/dev"
 atlas-lint:

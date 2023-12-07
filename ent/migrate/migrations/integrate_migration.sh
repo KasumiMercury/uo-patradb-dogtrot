@@ -3,10 +3,13 @@
 SOURCE_DIR=("./custom" "./ent")
 TARGET_DIR="./integrate"
 
-mkdir -p $TARGET_DIR
-if [ $? -ne 0 ]; then
-    echo "mkdir $TARGET_DIR failed"
+# Create target directory if not exists
+if [ ! -d "$TARGET_DIR" ]; then
+  mkdir -p "$TARGET_DIR"
+  if [ $? -ne 0 ]; then
+    echo "mkdir -p $TARGET_DIR failed"
     exit 1
+  fi
 fi
 
 for src in "${SOURCE_DIR[@]}"; do

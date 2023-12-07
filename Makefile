@@ -33,7 +33,7 @@ atlas-custom:
 	atlas migrate new $(ARG) \
 	  --dir "file://ent/migrate/migrations/custom"
 integration:
-	bash ./ent/migrate/migarations/integrate-migration.sh
+	bash ent/migrate/migrations/integrate_migration.sh
 
 generate-sql:
 	go run -mod=mod ./cmd/migration/main.go $(ARG)

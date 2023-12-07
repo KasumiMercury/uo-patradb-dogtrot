@@ -130,6 +130,11 @@ func (pdtc *PeriodicDescriptionTemplateCreate) check() error {
 	if _, ok := pdtc.mutation.Text(); !ok {
 		return &ValidationError{Name: "text", err: errors.New(`ent: missing required field "PeriodicDescriptionTemplate.text"`)}
 	}
+	if v, ok := pdtc.mutation.ID(); ok {
+		if err := periodicdescriptiontemplate.IDValidator(v); err != nil {
+			return &ValidationError{Name: "id", err: fmt.Errorf(`ent: validator failed for field "PeriodicDescriptionTemplate.id": %w`, err)}
+		}
+	}
 	return nil
 }
 

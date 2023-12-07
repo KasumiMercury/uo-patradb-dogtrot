@@ -130,6 +130,11 @@ func (cdtc *CategoryDescriptionTemplateCreate) check() error {
 	if _, ok := cdtc.mutation.Text(); !ok {
 		return &ValidationError{Name: "text", err: errors.New(`ent: missing required field "CategoryDescriptionTemplate.text"`)}
 	}
+	if v, ok := cdtc.mutation.ID(); ok {
+		if err := categorydescriptiontemplate.IDValidator(v); err != nil {
+			return &ValidationError{Name: "id", err: fmt.Errorf(`ent: validator failed for field "CategoryDescriptionTemplate.id": %w`, err)}
+		}
+	}
 	return nil
 }
 

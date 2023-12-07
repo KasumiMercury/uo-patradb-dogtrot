@@ -167,6 +167,11 @@ func (pcc *PatChatCreate) check() error {
 	if _, ok := pcc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "PatChat.created_at"`)}
 	}
+	if v, ok := pcc.mutation.ID(); ok {
+		if err := patchat.IDValidator(v); err != nil {
+			return &ValidationError{Name: "id", err: fmt.Errorf(`ent: validator failed for field "PatChat.id": %w`, err)}
+		}
+	}
 	if _, ok := pcc.mutation.VideoID(); !ok {
 		return &ValidationError{Name: "video", err: errors.New(`ent: missing required edge "PatChat.video"`)}
 	}

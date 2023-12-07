@@ -123,6 +123,11 @@ func (vprc *VideoPlayRangeCreate) check() error {
 	if _, ok := vprc.mutation.StartSeconds(); !ok {
 		return &ValidationError{Name: "start_seconds", err: errors.New(`ent: missing required field "VideoPlayRange.start_seconds"`)}
 	}
+	if v, ok := vprc.mutation.ID(); ok {
+		if err := videoplayrange.IDValidator(v); err != nil {
+			return &ValidationError{Name: "id", err: fmt.Errorf(`ent: validator failed for field "VideoPlayRange.id": %w`, err)}
+		}
+	}
 	if _, ok := vprc.mutation.VideoID(); !ok {
 		return &ValidationError{Name: "video", err: errors.New(`ent: missing required edge "VideoPlayRange.video"`)}
 	}

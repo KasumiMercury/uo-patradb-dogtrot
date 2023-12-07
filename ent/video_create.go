@@ -345,6 +345,11 @@ func (vc *VideoCreate) check() error {
 	if _, ok := vc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Video.updated_at"`)}
 	}
+	if v, ok := vc.mutation.ID(); ok {
+		if err := video.IDValidator(v); err != nil {
+			return &ValidationError{Name: "id", err: fmt.Errorf(`ent: validator failed for field "Video.id": %w`, err)}
+		}
+	}
 	return nil
 }
 

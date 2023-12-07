@@ -31,6 +31,8 @@ func init() {
 	categorydescriptiontemplateDescID := categorydescriptiontemplateMixinFields0[0].Descriptor()
 	// categorydescriptiontemplate.DefaultID holds the default value on creation for the id field.
 	categorydescriptiontemplate.DefaultID = categorydescriptiontemplateDescID.Default.(func() string)
+	// categorydescriptiontemplate.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	categorydescriptiontemplate.IDValidator = categorydescriptiontemplateDescID.Validators[0].(func(string) error)
 	channelMixin := schema.Channel{}.Mixin()
 	channelMixinFields0 := channelMixin[0].Fields()
 	_ = channelMixinFields0
@@ -40,6 +42,8 @@ func init() {
 	channelDescID := channelMixinFields0[0].Descriptor()
 	// channel.DefaultID holds the default value on creation for the id field.
 	channel.DefaultID = channelDescID.Default.(func() string)
+	// channel.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	channel.IDValidator = channelDescID.Validators[0].(func(string) error)
 	descriptionMixin := schema.Description{}.Mixin()
 	descriptionMixinFields0 := descriptionMixin[0].Fields()
 	_ = descriptionMixinFields0
@@ -59,6 +63,8 @@ func init() {
 	descriptionDescID := descriptionMixinFields0[0].Descriptor()
 	// description.DefaultID holds the default value on creation for the id field.
 	description.DefaultID = descriptionDescID.Default.(func() string)
+	// description.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	description.IDValidator = descriptionDescID.Validators[0].(func(string) error)
 	descriptionchangeMixin := schema.DescriptionChange{}.Mixin()
 	descriptionchangeMixinFields0 := descriptionchangeMixin[0].Fields()
 	_ = descriptionchangeMixinFields0
@@ -72,6 +78,8 @@ func init() {
 	descriptionchangeDescID := descriptionchangeMixinFields0[0].Descriptor()
 	// descriptionchange.DefaultID holds the default value on creation for the id field.
 	descriptionchange.DefaultID = descriptionchangeDescID.Default.(func() string)
+	// descriptionchange.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	descriptionchange.IDValidator = descriptionchangeDescID.Validators[0].(func(string) error)
 	patchatMixin := schema.PatChat{}.Mixin()
 	patchatMixinFields0 := patchatMixin[0].Fields()
 	_ = patchatMixinFields0
@@ -89,6 +97,8 @@ func init() {
 	patchatDescID := patchatMixinFields0[0].Descriptor()
 	// patchat.DefaultID holds the default value on creation for the id field.
 	patchat.DefaultID = patchatDescID.Default.(func() string)
+	// patchat.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	patchat.IDValidator = patchatDescID.Validators[0].(func(string) error)
 	periodicdescriptiontemplateMixin := schema.PeriodicDescriptionTemplate{}.Mixin()
 	periodicdescriptiontemplateMixinFields0 := periodicdescriptiontemplateMixin[0].Fields()
 	_ = periodicdescriptiontemplateMixinFields0
@@ -98,6 +108,8 @@ func init() {
 	periodicdescriptiontemplateDescID := periodicdescriptiontemplateMixinFields0[0].Descriptor()
 	// periodicdescriptiontemplate.DefaultID holds the default value on creation for the id field.
 	periodicdescriptiontemplate.DefaultID = periodicdescriptiontemplateDescID.Default.(func() string)
+	// periodicdescriptiontemplate.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	periodicdescriptiontemplate.IDValidator = periodicdescriptiontemplateDescID.Validators[0].(func(string) error)
 	videoMixin := schema.Video{}.Mixin()
 	videoMixinFields0 := videoMixin[0].Fields()
 	_ = videoMixinFields0
@@ -121,6 +133,8 @@ func init() {
 	videoDescID := videoMixinFields0[0].Descriptor()
 	// video.DefaultID holds the default value on creation for the id field.
 	video.DefaultID = videoDescID.Default.(func() string)
+	// video.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	video.IDValidator = videoDescID.Validators[0].(func(string) error)
 	videodisallowrangeMixin := schema.VideoDisallowRange{}.Mixin()
 	videodisallowrangeMixinFields0 := videodisallowrangeMixin[0].Fields()
 	_ = videodisallowrangeMixinFields0
@@ -130,6 +144,8 @@ func init() {
 	videodisallowrangeDescID := videodisallowrangeMixinFields0[0].Descriptor()
 	// videodisallowrange.DefaultID holds the default value on creation for the id field.
 	videodisallowrange.DefaultID = videodisallowrangeDescID.Default.(func() string)
+	// videodisallowrange.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	videodisallowrange.IDValidator = videodisallowrangeDescID.Validators[0].(func(string) error)
 	videoplayrangeMixin := schema.VideoPlayRange{}.Mixin()
 	videoplayrangeMixinFields0 := videoplayrangeMixin[0].Fields()
 	_ = videoplayrangeMixinFields0
@@ -143,6 +159,8 @@ func init() {
 	videoplayrangeDescID := videoplayrangeMixinFields0[0].Descriptor()
 	// videoplayrange.DefaultID holds the default value on creation for the id field.
 	videoplayrange.DefaultID = videoplayrangeDescID.Default.(func() string)
+	// videoplayrange.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	videoplayrange.IDValidator = videoplayrangeDescID.Validators[0].(func(string) error)
 	videotitlechangeMixin := schema.VideoTitleChange{}.Mixin()
 	videotitlechangeMixinFields0 := videotitlechangeMixin[0].Fields()
 	_ = videotitlechangeMixinFields0
@@ -156,4 +174,6 @@ func init() {
 	videotitlechangeDescID := videotitlechangeMixinFields0[0].Descriptor()
 	// videotitlechange.DefaultID holds the default value on creation for the id field.
 	videotitlechange.DefaultID = videotitlechangeDescID.Default.(func() string)
+	// videotitlechange.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	videotitlechange.IDValidator = videotitlechangeDescID.Validators[0].(func(string) error)
 }

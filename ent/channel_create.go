@@ -128,6 +128,11 @@ func (cc *ChannelCreate) check() error {
 	if _, ok := cc.mutation.ThumbnailURL(); !ok {
 		return &ValidationError{Name: "thumbnail_url", err: errors.New(`ent: missing required field "Channel.thumbnail_url"`)}
 	}
+	if v, ok := cc.mutation.ID(); ok {
+		if err := channel.IDValidator(v); err != nil {
+			return &ValidationError{Name: "id", err: fmt.Errorf(`ent: validator failed for field "Channel.id": %w`, err)}
+		}
+	}
 	return nil
 }
 

@@ -224,6 +224,11 @@ func (dc *DescriptionCreate) check() error {
 	if _, ok := dc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Description.updated_at"`)}
 	}
+	if v, ok := dc.mutation.ID(); ok {
+		if err := description.IDValidator(v); err != nil {
+			return &ValidationError{Name: "id", err: fmt.Errorf(`ent: validator failed for field "Description.id": %w`, err)}
+		}
+	}
 	if _, ok := dc.mutation.VideoID(); !ok {
 		return &ValidationError{Name: "video", err: errors.New(`ent: missing required edge "Description.video"`)}
 	}

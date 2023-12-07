@@ -128,6 +128,11 @@ func (vtcc *VideoTitleChangeCreate) check() error {
 	if _, ok := vtcc.mutation.ChangedAt(); !ok {
 		return &ValidationError{Name: "changed_at", err: errors.New(`ent: missing required field "VideoTitleChange.changed_at"`)}
 	}
+	if v, ok := vtcc.mutation.ID(); ok {
+		if err := videotitlechange.IDValidator(v); err != nil {
+			return &ValidationError{Name: "id", err: fmt.Errorf(`ent: validator failed for field "VideoTitleChange.id": %w`, err)}
+		}
+	}
 	if _, ok := vtcc.mutation.VideoID(); !ok {
 		return &ValidationError{Name: "video", err: errors.New(`ent: missing required edge "VideoTitleChange.video"`)}
 	}

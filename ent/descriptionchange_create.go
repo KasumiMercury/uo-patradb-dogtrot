@@ -147,6 +147,11 @@ func (dcc *DescriptionChangeCreate) check() error {
 	if _, ok := dcc.mutation.ChangedAt(); !ok {
 		return &ValidationError{Name: "changed_at", err: errors.New(`ent: missing required field "DescriptionChange.changed_at"`)}
 	}
+	if v, ok := dcc.mutation.ID(); ok {
+		if err := descriptionchange.IDValidator(v); err != nil {
+			return &ValidationError{Name: "id", err: fmt.Errorf(`ent: validator failed for field "DescriptionChange.id": %w`, err)}
+		}
+	}
 	if _, ok := dcc.mutation.DescriptionID(); !ok {
 		return &ValidationError{Name: "description", err: errors.New(`ent: missing required edge "DescriptionChange.description"`)}
 	}

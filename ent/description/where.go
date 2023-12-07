@@ -8,52 +8,61 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/predicate"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id pulid.ID) predicate.Description {
+func ID(id string) predicate.Description {
 	return predicate.Description(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id pulid.ID) predicate.Description {
+func IDEQ(id string) predicate.Description {
 	return predicate.Description(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id pulid.ID) predicate.Description {
+func IDNEQ(id string) predicate.Description {
 	return predicate.Description(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...pulid.ID) predicate.Description {
+func IDIn(ids ...string) predicate.Description {
 	return predicate.Description(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...pulid.ID) predicate.Description {
+func IDNotIn(ids ...string) predicate.Description {
 	return predicate.Description(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id pulid.ID) predicate.Description {
+func IDGT(id string) predicate.Description {
 	return predicate.Description(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id pulid.ID) predicate.Description {
+func IDGTE(id string) predicate.Description {
 	return predicate.Description(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id pulid.ID) predicate.Description {
+func IDLT(id string) predicate.Description {
 	return predicate.Description(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id pulid.ID) predicate.Description {
+func IDLTE(id string) predicate.Description {
 	return predicate.Description(sql.FieldLTE(FieldID, id))
+}
+
+// IDEqualFold applies the EqualFold predicate on the ID field.
+func IDEqualFold(id string) predicate.Description {
+	return predicate.Description(sql.FieldEqualFold(FieldID, id))
+}
+
+// IDContainsFold applies the ContainsFold predicate on the ID field.
+func IDContainsFold(id string) predicate.Description {
+	return predicate.Description(sql.FieldContainsFold(FieldID, id))
 }
 
 // Raw applies equality check predicate on the "raw" field. It's identical to RawEQ.
@@ -404,14 +413,14 @@ func HasPeriodicDescriptionTemplate() predicate.Description {
 	return predicate.Description(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, PeriodicDescriptionTemplateTable, PeriodicDescriptionTemplateColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, PeriodicDescriptionTemplateTable, PeriodicDescriptionTemplateColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
 // HasPeriodicDescriptionTemplateWith applies the HasEdge predicate on the "periodic_description_template" edge with a given conditions (other predicates).
-func HasPeriodicDescriptionTemplateWith(preds ...predicate.Periodic_description_template) predicate.Description {
+func HasPeriodicDescriptionTemplateWith(preds ...predicate.PeriodicDescriptionTemplate) predicate.Description {
 	return predicate.Description(func(s *sql.Selector) {
 		step := newPeriodicDescriptionTemplateStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
@@ -427,14 +436,14 @@ func HasCategoryDescriptionTemplate() predicate.Description {
 	return predicate.Description(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, CategoryDescriptionTemplateTable, CategoryDescriptionTemplateColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, CategoryDescriptionTemplateTable, CategoryDescriptionTemplateColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
 // HasCategoryDescriptionTemplateWith applies the HasEdge predicate on the "category_description_template" edge with a given conditions (other predicates).
-func HasCategoryDescriptionTemplateWith(preds ...predicate.Category_description_template) predicate.Description {
+func HasCategoryDescriptionTemplateWith(preds ...predicate.CategoryDescriptionTemplate) predicate.Description {
 	return predicate.Description(func(s *sql.Selector) {
 		step := newCategoryDescriptionTemplateStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
@@ -457,7 +466,7 @@ func HasDescriptionChanges() predicate.Description {
 }
 
 // HasDescriptionChangesWith applies the HasEdge predicate on the "description_changes" edge with a given conditions (other predicates).
-func HasDescriptionChangesWith(preds ...predicate.Description_change) predicate.Description {
+func HasDescriptionChangesWith(preds ...predicate.DescriptionChange) predicate.Description {
 	return predicate.Description(func(s *sql.Selector) {
 		step := newDescriptionChangesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {

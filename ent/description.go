@@ -9,10 +9,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/category_description_template"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/categorydescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodic_description_template"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodicdescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 )
 
@@ -20,7 +19,7 @@ import (
 type Description struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID pulid.ID `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 	// Raw holds the value of the "raw" field.
 	Raw string `json:"raw,omitempty"`
 	// Variable holds the value of the "variable" field.
@@ -33,11 +32,11 @@ type Description struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DescriptionQuery when eager-loading is set.
-	Edges                DescriptionEdges `json:"edges"`
-	category_template_id *pulid.ID
-	periodic_template_id *pulid.ID
-	video_id             *pulid.ID
-	selectValues         sql.SelectValues
+	Edges        DescriptionEdges `json:"edges"`
+	periodic_id  *string
+	category_id  *string
+	video_id     *string
+	selectValues sql.SelectValues
 }
 
 // DescriptionEdges holds the relations/edges for other nodes in the graph.
@@ -45,11 +44,11 @@ type DescriptionEdges struct {
 	// Video holds the value of the video edge.
 	Video *Video `json:"video,omitempty"`
 	// PeriodicDescriptionTemplate holds the value of the periodic_description_template edge.
-	PeriodicDescriptionTemplate *Periodic_description_template `json:"periodic_description_template,omitempty"`
+	PeriodicDescriptionTemplate *PeriodicDescriptionTemplate `json:"periodic_description_template,omitempty"`
 	// CategoryDescriptionTemplate holds the value of the category_description_template edge.
-	CategoryDescriptionTemplate *Category_description_template `json:"category_description_template,omitempty"`
+	CategoryDescriptionTemplate *CategoryDescriptionTemplate `json:"category_description_template,omitempty"`
 	// DescriptionChanges holds the value of the description_changes edge.
-	DescriptionChanges []*Description_change `json:"description_changes,omitempty"`
+	DescriptionChanges []*DescriptionChange `json:"description_changes,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [4]bool
@@ -70,11 +69,11 @@ func (e DescriptionEdges) VideoOrErr() (*Video, error) {
 
 // PeriodicDescriptionTemplateOrErr returns the PeriodicDescriptionTemplate value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e DescriptionEdges) PeriodicDescriptionTemplateOrErr() (*Periodic_description_template, error) {
+func (e DescriptionEdges) PeriodicDescriptionTemplateOrErr() (*PeriodicDescriptionTemplate, error) {
 	if e.loadedTypes[1] {
 		if e.PeriodicDescriptionTemplate == nil {
 			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: periodic_description_template.Label}
+			return nil, &NotFoundError{label: periodicdescriptiontemplate.Label}
 		}
 		return e.PeriodicDescriptionTemplate, nil
 	}
@@ -83,11 +82,11 @@ func (e DescriptionEdges) PeriodicDescriptionTemplateOrErr() (*Periodic_descript
 
 // CategoryDescriptionTemplateOrErr returns the CategoryDescriptionTemplate value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e DescriptionEdges) CategoryDescriptionTemplateOrErr() (*Category_description_template, error) {
+func (e DescriptionEdges) CategoryDescriptionTemplateOrErr() (*CategoryDescriptionTemplate, error) {
 	if e.loadedTypes[2] {
 		if e.CategoryDescriptionTemplate == nil {
 			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: category_description_template.Label}
+			return nil, &NotFoundError{label: categorydescriptiontemplate.Label}
 		}
 		return e.CategoryDescriptionTemplate, nil
 	}
@@ -96,7 +95,7 @@ func (e DescriptionEdges) CategoryDescriptionTemplateOrErr() (*Category_descript
 
 // DescriptionChangesOrErr returns the DescriptionChanges value or an error if the edge
 // was not loaded in eager-loading.
-func (e DescriptionEdges) DescriptionChangesOrErr() ([]*Description_change, error) {
+func (e DescriptionEdges) DescriptionChangesOrErr() ([]*DescriptionChange, error) {
 	if e.loadedTypes[3] {
 		return e.DescriptionChanges, nil
 	}
@@ -112,9 +111,9 @@ func (*Description) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case description.FieldCreatedAt, description.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case description.ForeignKeys[0]: // category_template_id
+		case description.ForeignKeys[0]: // periodic_id
 			values[i] = new(sql.NullString)
-		case description.ForeignKeys[1]: // periodic_template_id
+		case description.ForeignKeys[1]: // category_id
 			values[i] = new(sql.NullString)
 		case description.ForeignKeys[2]: // video_id
 			values[i] = new(sql.NullString)
@@ -137,7 +136,7 @@ func (d *Description) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				d.ID = pulid.ID(value.String)
+				d.ID = value.String
 			}
 		case description.FieldRaw:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -171,24 +170,24 @@ func (d *Description) assignValues(columns []string, values []any) error {
 			}
 		case description.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field category_template_id", values[i])
+				return fmt.Errorf("unexpected type %T for field periodic_id", values[i])
 			} else if value.Valid {
-				d.category_template_id = new(pulid.ID)
-				*d.category_template_id = pulid.ID(value.String)
+				d.periodic_id = new(string)
+				*d.periodic_id = value.String
 			}
 		case description.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field periodic_template_id", values[i])
+				return fmt.Errorf("unexpected type %T for field category_id", values[i])
 			} else if value.Valid {
-				d.periodic_template_id = new(pulid.ID)
-				*d.periodic_template_id = pulid.ID(value.String)
+				d.category_id = new(string)
+				*d.category_id = value.String
 			}
 		case description.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field video_id", values[i])
 			} else if value.Valid {
-				d.video_id = new(pulid.ID)
-				*d.video_id = pulid.ID(value.String)
+				d.video_id = new(string)
+				*d.video_id = value.String
 			}
 		default:
 			d.selectValues.Set(columns[i], values[i])

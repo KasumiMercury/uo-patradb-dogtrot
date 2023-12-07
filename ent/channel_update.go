@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/predicate"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 )
 
@@ -86,14 +85,14 @@ func (cu *ChannelUpdate) SetNillableThumbnailURL(s *string) *ChannelUpdate {
 }
 
 // AddVideoIDs adds the "videos" edge to the Video entity by IDs.
-func (cu *ChannelUpdate) AddVideoIDs(ids ...pulid.ID) *ChannelUpdate {
+func (cu *ChannelUpdate) AddVideoIDs(ids ...string) *ChannelUpdate {
 	cu.mutation.AddVideoIDs(ids...)
 	return cu
 }
 
 // AddVideos adds the "videos" edges to the Video entity.
 func (cu *ChannelUpdate) AddVideos(v ...*Video) *ChannelUpdate {
-	ids := make([]pulid.ID, len(v))
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -112,14 +111,14 @@ func (cu *ChannelUpdate) ClearVideos() *ChannelUpdate {
 }
 
 // RemoveVideoIDs removes the "videos" edge to Video entities by IDs.
-func (cu *ChannelUpdate) RemoveVideoIDs(ids ...pulid.ID) *ChannelUpdate {
+func (cu *ChannelUpdate) RemoveVideoIDs(ids ...string) *ChannelUpdate {
 	cu.mutation.RemoveVideoIDs(ids...)
 	return cu
 }
 
 // RemoveVideos removes "videos" edges to Video entities.
 func (cu *ChannelUpdate) RemoveVideos(v ...*Video) *ChannelUpdate {
-	ids := make([]pulid.ID, len(v))
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -296,14 +295,14 @@ func (cuo *ChannelUpdateOne) SetNillableThumbnailURL(s *string) *ChannelUpdateOn
 }
 
 // AddVideoIDs adds the "videos" edge to the Video entity by IDs.
-func (cuo *ChannelUpdateOne) AddVideoIDs(ids ...pulid.ID) *ChannelUpdateOne {
+func (cuo *ChannelUpdateOne) AddVideoIDs(ids ...string) *ChannelUpdateOne {
 	cuo.mutation.AddVideoIDs(ids...)
 	return cuo
 }
 
 // AddVideos adds the "videos" edges to the Video entity.
 func (cuo *ChannelUpdateOne) AddVideos(v ...*Video) *ChannelUpdateOne {
-	ids := make([]pulid.ID, len(v))
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -322,14 +321,14 @@ func (cuo *ChannelUpdateOne) ClearVideos() *ChannelUpdateOne {
 }
 
 // RemoveVideoIDs removes the "videos" edge to Video entities by IDs.
-func (cuo *ChannelUpdateOne) RemoveVideoIDs(ids ...pulid.ID) *ChannelUpdateOne {
+func (cuo *ChannelUpdateOne) RemoveVideoIDs(ids ...string) *ChannelUpdateOne {
 	cuo.mutation.RemoveVideoIDs(ids...)
 	return cuo
 }
 
 // RemoveVideos removes "videos" edges to Video entities.
 func (cuo *ChannelUpdateOne) RemoveVideos(v ...*Video) *ChannelUpdateOne {
-	ids := make([]pulid.ID, len(v))
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}

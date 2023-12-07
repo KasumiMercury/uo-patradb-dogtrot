@@ -13,13 +13,12 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/pat_chat"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/patchat"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/predicate"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_disallow_range"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_play_range"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_title_change"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotitlechange"
 )
 
 // VideoUpdate is the builder for updating Video entities.
@@ -235,13 +234,13 @@ func (vu *VideoUpdate) SetUpdatedAt(t time.Time) *VideoUpdate {
 }
 
 // SetDescriptionsID sets the "descriptions" edge to the Description entity by ID.
-func (vu *VideoUpdate) SetDescriptionsID(id pulid.ID) *VideoUpdate {
+func (vu *VideoUpdate) SetDescriptionsID(id string) *VideoUpdate {
 	vu.mutation.SetDescriptionsID(id)
 	return vu
 }
 
 // SetNillableDescriptionsID sets the "descriptions" edge to the Description entity by ID if the given value is not nil.
-func (vu *VideoUpdate) SetNillableDescriptionsID(id *pulid.ID) *VideoUpdate {
+func (vu *VideoUpdate) SetNillableDescriptionsID(id *string) *VideoUpdate {
 	if id != nil {
 		vu = vu.SetDescriptionsID(*id)
 	}
@@ -254,74 +253,74 @@ func (vu *VideoUpdate) SetDescriptions(d *Description) *VideoUpdate {
 }
 
 // AddChannelIDs adds the "channel" edge to the Channel entity by IDs.
-func (vu *VideoUpdate) AddChannelIDs(ids ...pulid.ID) *VideoUpdate {
+func (vu *VideoUpdate) AddChannelIDs(ids ...string) *VideoUpdate {
 	vu.mutation.AddChannelIDs(ids...)
 	return vu
 }
 
 // AddChannel adds the "channel" edges to the Channel entity.
 func (vu *VideoUpdate) AddChannel(c ...*Channel) *VideoUpdate {
-	ids := make([]pulid.ID, len(c))
+	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
 	return vu.AddChannelIDs(ids...)
 }
 
-// AddVideoPlayRangeIDs adds the "video_play_ranges" edge to the Video_play_range entity by IDs.
-func (vu *VideoUpdate) AddVideoPlayRangeIDs(ids ...pulid.ID) *VideoUpdate {
+// AddVideoPlayRangeIDs adds the "video_play_ranges" edge to the VideoPlayRange entity by IDs.
+func (vu *VideoUpdate) AddVideoPlayRangeIDs(ids ...string) *VideoUpdate {
 	vu.mutation.AddVideoPlayRangeIDs(ids...)
 	return vu
 }
 
-// AddVideoPlayRanges adds the "video_play_ranges" edges to the Video_play_range entity.
-func (vu *VideoUpdate) AddVideoPlayRanges(v ...*Video_play_range) *VideoUpdate {
-	ids := make([]pulid.ID, len(v))
+// AddVideoPlayRanges adds the "video_play_ranges" edges to the VideoPlayRange entity.
+func (vu *VideoUpdate) AddVideoPlayRanges(v ...*VideoPlayRange) *VideoUpdate {
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
 	return vu.AddVideoPlayRangeIDs(ids...)
 }
 
-// AddVideoDisallowRangeIDs adds the "video_disallow_ranges" edge to the Video_disallow_range entity by IDs.
-func (vu *VideoUpdate) AddVideoDisallowRangeIDs(ids ...pulid.ID) *VideoUpdate {
+// AddVideoDisallowRangeIDs adds the "video_disallow_ranges" edge to the VideoDisallowRange entity by IDs.
+func (vu *VideoUpdate) AddVideoDisallowRangeIDs(ids ...string) *VideoUpdate {
 	vu.mutation.AddVideoDisallowRangeIDs(ids...)
 	return vu
 }
 
-// AddVideoDisallowRanges adds the "video_disallow_ranges" edges to the Video_disallow_range entity.
-func (vu *VideoUpdate) AddVideoDisallowRanges(v ...*Video_disallow_range) *VideoUpdate {
-	ids := make([]pulid.ID, len(v))
+// AddVideoDisallowRanges adds the "video_disallow_ranges" edges to the VideoDisallowRange entity.
+func (vu *VideoUpdate) AddVideoDisallowRanges(v ...*VideoDisallowRange) *VideoUpdate {
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
 	return vu.AddVideoDisallowRangeIDs(ids...)
 }
 
-// AddVideoTitleChangeIDs adds the "video_title_changes" edge to the Video_title_change entity by IDs.
-func (vu *VideoUpdate) AddVideoTitleChangeIDs(ids ...pulid.ID) *VideoUpdate {
+// AddVideoTitleChangeIDs adds the "video_title_changes" edge to the VideoTitleChange entity by IDs.
+func (vu *VideoUpdate) AddVideoTitleChangeIDs(ids ...string) *VideoUpdate {
 	vu.mutation.AddVideoTitleChangeIDs(ids...)
 	return vu
 }
 
-// AddVideoTitleChanges adds the "video_title_changes" edges to the Video_title_change entity.
-func (vu *VideoUpdate) AddVideoTitleChanges(v ...*Video_title_change) *VideoUpdate {
-	ids := make([]pulid.ID, len(v))
+// AddVideoTitleChanges adds the "video_title_changes" edges to the VideoTitleChange entity.
+func (vu *VideoUpdate) AddVideoTitleChanges(v ...*VideoTitleChange) *VideoUpdate {
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
 	return vu.AddVideoTitleChangeIDs(ids...)
 }
 
-// AddPatChatIDs adds the "Pat_chats" edge to the Pat_chat entity by IDs.
-func (vu *VideoUpdate) AddPatChatIDs(ids ...pulid.ID) *VideoUpdate {
+// AddPatChatIDs adds the "Pat_chats" edge to the PatChat entity by IDs.
+func (vu *VideoUpdate) AddPatChatIDs(ids ...string) *VideoUpdate {
 	vu.mutation.AddPatChatIDs(ids...)
 	return vu
 }
 
-// AddPatChats adds the "Pat_chats" edges to the Pat_chat entity.
-func (vu *VideoUpdate) AddPatChats(p ...*Pat_chat) *VideoUpdate {
-	ids := make([]pulid.ID, len(p))
+// AddPatChats adds the "Pat_chats" edges to the PatChat entity.
+func (vu *VideoUpdate) AddPatChats(p ...*PatChat) *VideoUpdate {
+	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
@@ -346,98 +345,98 @@ func (vu *VideoUpdate) ClearChannel() *VideoUpdate {
 }
 
 // RemoveChannelIDs removes the "channel" edge to Channel entities by IDs.
-func (vu *VideoUpdate) RemoveChannelIDs(ids ...pulid.ID) *VideoUpdate {
+func (vu *VideoUpdate) RemoveChannelIDs(ids ...string) *VideoUpdate {
 	vu.mutation.RemoveChannelIDs(ids...)
 	return vu
 }
 
 // RemoveChannel removes "channel" edges to Channel entities.
 func (vu *VideoUpdate) RemoveChannel(c ...*Channel) *VideoUpdate {
-	ids := make([]pulid.ID, len(c))
+	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
 	return vu.RemoveChannelIDs(ids...)
 }
 
-// ClearVideoPlayRanges clears all "video_play_ranges" edges to the Video_play_range entity.
+// ClearVideoPlayRanges clears all "video_play_ranges" edges to the VideoPlayRange entity.
 func (vu *VideoUpdate) ClearVideoPlayRanges() *VideoUpdate {
 	vu.mutation.ClearVideoPlayRanges()
 	return vu
 }
 
-// RemoveVideoPlayRangeIDs removes the "video_play_ranges" edge to Video_play_range entities by IDs.
-func (vu *VideoUpdate) RemoveVideoPlayRangeIDs(ids ...pulid.ID) *VideoUpdate {
+// RemoveVideoPlayRangeIDs removes the "video_play_ranges" edge to VideoPlayRange entities by IDs.
+func (vu *VideoUpdate) RemoveVideoPlayRangeIDs(ids ...string) *VideoUpdate {
 	vu.mutation.RemoveVideoPlayRangeIDs(ids...)
 	return vu
 }
 
-// RemoveVideoPlayRanges removes "video_play_ranges" edges to Video_play_range entities.
-func (vu *VideoUpdate) RemoveVideoPlayRanges(v ...*Video_play_range) *VideoUpdate {
-	ids := make([]pulid.ID, len(v))
+// RemoveVideoPlayRanges removes "video_play_ranges" edges to VideoPlayRange entities.
+func (vu *VideoUpdate) RemoveVideoPlayRanges(v ...*VideoPlayRange) *VideoUpdate {
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
 	return vu.RemoveVideoPlayRangeIDs(ids...)
 }
 
-// ClearVideoDisallowRanges clears all "video_disallow_ranges" edges to the Video_disallow_range entity.
+// ClearVideoDisallowRanges clears all "video_disallow_ranges" edges to the VideoDisallowRange entity.
 func (vu *VideoUpdate) ClearVideoDisallowRanges() *VideoUpdate {
 	vu.mutation.ClearVideoDisallowRanges()
 	return vu
 }
 
-// RemoveVideoDisallowRangeIDs removes the "video_disallow_ranges" edge to Video_disallow_range entities by IDs.
-func (vu *VideoUpdate) RemoveVideoDisallowRangeIDs(ids ...pulid.ID) *VideoUpdate {
+// RemoveVideoDisallowRangeIDs removes the "video_disallow_ranges" edge to VideoDisallowRange entities by IDs.
+func (vu *VideoUpdate) RemoveVideoDisallowRangeIDs(ids ...string) *VideoUpdate {
 	vu.mutation.RemoveVideoDisallowRangeIDs(ids...)
 	return vu
 }
 
-// RemoveVideoDisallowRanges removes "video_disallow_ranges" edges to Video_disallow_range entities.
-func (vu *VideoUpdate) RemoveVideoDisallowRanges(v ...*Video_disallow_range) *VideoUpdate {
-	ids := make([]pulid.ID, len(v))
+// RemoveVideoDisallowRanges removes "video_disallow_ranges" edges to VideoDisallowRange entities.
+func (vu *VideoUpdate) RemoveVideoDisallowRanges(v ...*VideoDisallowRange) *VideoUpdate {
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
 	return vu.RemoveVideoDisallowRangeIDs(ids...)
 }
 
-// ClearVideoTitleChanges clears all "video_title_changes" edges to the Video_title_change entity.
+// ClearVideoTitleChanges clears all "video_title_changes" edges to the VideoTitleChange entity.
 func (vu *VideoUpdate) ClearVideoTitleChanges() *VideoUpdate {
 	vu.mutation.ClearVideoTitleChanges()
 	return vu
 }
 
-// RemoveVideoTitleChangeIDs removes the "video_title_changes" edge to Video_title_change entities by IDs.
-func (vu *VideoUpdate) RemoveVideoTitleChangeIDs(ids ...pulid.ID) *VideoUpdate {
+// RemoveVideoTitleChangeIDs removes the "video_title_changes" edge to VideoTitleChange entities by IDs.
+func (vu *VideoUpdate) RemoveVideoTitleChangeIDs(ids ...string) *VideoUpdate {
 	vu.mutation.RemoveVideoTitleChangeIDs(ids...)
 	return vu
 }
 
-// RemoveVideoTitleChanges removes "video_title_changes" edges to Video_title_change entities.
-func (vu *VideoUpdate) RemoveVideoTitleChanges(v ...*Video_title_change) *VideoUpdate {
-	ids := make([]pulid.ID, len(v))
+// RemoveVideoTitleChanges removes "video_title_changes" edges to VideoTitleChange entities.
+func (vu *VideoUpdate) RemoveVideoTitleChanges(v ...*VideoTitleChange) *VideoUpdate {
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
 	return vu.RemoveVideoTitleChangeIDs(ids...)
 }
 
-// ClearPatChats clears all "Pat_chats" edges to the Pat_chat entity.
+// ClearPatChats clears all "Pat_chats" edges to the PatChat entity.
 func (vu *VideoUpdate) ClearPatChats() *VideoUpdate {
 	vu.mutation.ClearPatChats()
 	return vu
 }
 
-// RemovePatChatIDs removes the "Pat_chats" edge to Pat_chat entities by IDs.
-func (vu *VideoUpdate) RemovePatChatIDs(ids ...pulid.ID) *VideoUpdate {
+// RemovePatChatIDs removes the "Pat_chats" edge to PatChat entities by IDs.
+func (vu *VideoUpdate) RemovePatChatIDs(ids ...string) *VideoUpdate {
 	vu.mutation.RemovePatChatIDs(ids...)
 	return vu
 }
 
-// RemovePatChats removes "Pat_chats" edges to Pat_chat entities.
-func (vu *VideoUpdate) RemovePatChats(p ...*Pat_chat) *VideoUpdate {
-	ids := make([]pulid.ID, len(p))
+// RemovePatChats removes "Pat_chats" edges to PatChat entities.
+func (vu *VideoUpdate) RemovePatChats(p ...*PatChat) *VideoUpdate {
+	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
@@ -622,7 +621,7 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{video.VideoPlayRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_play_range.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videoplayrange.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -635,7 +634,7 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{video.VideoPlayRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_play_range.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videoplayrange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -651,7 +650,7 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{video.VideoPlayRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_play_range.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videoplayrange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -667,7 +666,7 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{video.VideoDisallowRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_disallow_range.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videodisallowrange.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -680,7 +679,7 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{video.VideoDisallowRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_disallow_range.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videodisallowrange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -696,7 +695,7 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{video.VideoDisallowRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_disallow_range.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videodisallowrange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -712,7 +711,7 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{video.VideoTitleChangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_title_change.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videotitlechange.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -725,7 +724,7 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{video.VideoTitleChangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_title_change.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videotitlechange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -741,7 +740,7 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{video.VideoTitleChangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_title_change.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videotitlechange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -757,7 +756,7 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{video.PatChatsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(pat_chat.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(patchat.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -770,7 +769,7 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{video.PatChatsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(pat_chat.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(patchat.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -786,7 +785,7 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{video.PatChatsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(pat_chat.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(patchat.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -1014,13 +1013,13 @@ func (vuo *VideoUpdateOne) SetUpdatedAt(t time.Time) *VideoUpdateOne {
 }
 
 // SetDescriptionsID sets the "descriptions" edge to the Description entity by ID.
-func (vuo *VideoUpdateOne) SetDescriptionsID(id pulid.ID) *VideoUpdateOne {
+func (vuo *VideoUpdateOne) SetDescriptionsID(id string) *VideoUpdateOne {
 	vuo.mutation.SetDescriptionsID(id)
 	return vuo
 }
 
 // SetNillableDescriptionsID sets the "descriptions" edge to the Description entity by ID if the given value is not nil.
-func (vuo *VideoUpdateOne) SetNillableDescriptionsID(id *pulid.ID) *VideoUpdateOne {
+func (vuo *VideoUpdateOne) SetNillableDescriptionsID(id *string) *VideoUpdateOne {
 	if id != nil {
 		vuo = vuo.SetDescriptionsID(*id)
 	}
@@ -1033,74 +1032,74 @@ func (vuo *VideoUpdateOne) SetDescriptions(d *Description) *VideoUpdateOne {
 }
 
 // AddChannelIDs adds the "channel" edge to the Channel entity by IDs.
-func (vuo *VideoUpdateOne) AddChannelIDs(ids ...pulid.ID) *VideoUpdateOne {
+func (vuo *VideoUpdateOne) AddChannelIDs(ids ...string) *VideoUpdateOne {
 	vuo.mutation.AddChannelIDs(ids...)
 	return vuo
 }
 
 // AddChannel adds the "channel" edges to the Channel entity.
 func (vuo *VideoUpdateOne) AddChannel(c ...*Channel) *VideoUpdateOne {
-	ids := make([]pulid.ID, len(c))
+	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
 	return vuo.AddChannelIDs(ids...)
 }
 
-// AddVideoPlayRangeIDs adds the "video_play_ranges" edge to the Video_play_range entity by IDs.
-func (vuo *VideoUpdateOne) AddVideoPlayRangeIDs(ids ...pulid.ID) *VideoUpdateOne {
+// AddVideoPlayRangeIDs adds the "video_play_ranges" edge to the VideoPlayRange entity by IDs.
+func (vuo *VideoUpdateOne) AddVideoPlayRangeIDs(ids ...string) *VideoUpdateOne {
 	vuo.mutation.AddVideoPlayRangeIDs(ids...)
 	return vuo
 }
 
-// AddVideoPlayRanges adds the "video_play_ranges" edges to the Video_play_range entity.
-func (vuo *VideoUpdateOne) AddVideoPlayRanges(v ...*Video_play_range) *VideoUpdateOne {
-	ids := make([]pulid.ID, len(v))
+// AddVideoPlayRanges adds the "video_play_ranges" edges to the VideoPlayRange entity.
+func (vuo *VideoUpdateOne) AddVideoPlayRanges(v ...*VideoPlayRange) *VideoUpdateOne {
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
 	return vuo.AddVideoPlayRangeIDs(ids...)
 }
 
-// AddVideoDisallowRangeIDs adds the "video_disallow_ranges" edge to the Video_disallow_range entity by IDs.
-func (vuo *VideoUpdateOne) AddVideoDisallowRangeIDs(ids ...pulid.ID) *VideoUpdateOne {
+// AddVideoDisallowRangeIDs adds the "video_disallow_ranges" edge to the VideoDisallowRange entity by IDs.
+func (vuo *VideoUpdateOne) AddVideoDisallowRangeIDs(ids ...string) *VideoUpdateOne {
 	vuo.mutation.AddVideoDisallowRangeIDs(ids...)
 	return vuo
 }
 
-// AddVideoDisallowRanges adds the "video_disallow_ranges" edges to the Video_disallow_range entity.
-func (vuo *VideoUpdateOne) AddVideoDisallowRanges(v ...*Video_disallow_range) *VideoUpdateOne {
-	ids := make([]pulid.ID, len(v))
+// AddVideoDisallowRanges adds the "video_disallow_ranges" edges to the VideoDisallowRange entity.
+func (vuo *VideoUpdateOne) AddVideoDisallowRanges(v ...*VideoDisallowRange) *VideoUpdateOne {
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
 	return vuo.AddVideoDisallowRangeIDs(ids...)
 }
 
-// AddVideoTitleChangeIDs adds the "video_title_changes" edge to the Video_title_change entity by IDs.
-func (vuo *VideoUpdateOne) AddVideoTitleChangeIDs(ids ...pulid.ID) *VideoUpdateOne {
+// AddVideoTitleChangeIDs adds the "video_title_changes" edge to the VideoTitleChange entity by IDs.
+func (vuo *VideoUpdateOne) AddVideoTitleChangeIDs(ids ...string) *VideoUpdateOne {
 	vuo.mutation.AddVideoTitleChangeIDs(ids...)
 	return vuo
 }
 
-// AddVideoTitleChanges adds the "video_title_changes" edges to the Video_title_change entity.
-func (vuo *VideoUpdateOne) AddVideoTitleChanges(v ...*Video_title_change) *VideoUpdateOne {
-	ids := make([]pulid.ID, len(v))
+// AddVideoTitleChanges adds the "video_title_changes" edges to the VideoTitleChange entity.
+func (vuo *VideoUpdateOne) AddVideoTitleChanges(v ...*VideoTitleChange) *VideoUpdateOne {
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
 	return vuo.AddVideoTitleChangeIDs(ids...)
 }
 
-// AddPatChatIDs adds the "Pat_chats" edge to the Pat_chat entity by IDs.
-func (vuo *VideoUpdateOne) AddPatChatIDs(ids ...pulid.ID) *VideoUpdateOne {
+// AddPatChatIDs adds the "Pat_chats" edge to the PatChat entity by IDs.
+func (vuo *VideoUpdateOne) AddPatChatIDs(ids ...string) *VideoUpdateOne {
 	vuo.mutation.AddPatChatIDs(ids...)
 	return vuo
 }
 
-// AddPatChats adds the "Pat_chats" edges to the Pat_chat entity.
-func (vuo *VideoUpdateOne) AddPatChats(p ...*Pat_chat) *VideoUpdateOne {
-	ids := make([]pulid.ID, len(p))
+// AddPatChats adds the "Pat_chats" edges to the PatChat entity.
+func (vuo *VideoUpdateOne) AddPatChats(p ...*PatChat) *VideoUpdateOne {
+	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
@@ -1125,98 +1124,98 @@ func (vuo *VideoUpdateOne) ClearChannel() *VideoUpdateOne {
 }
 
 // RemoveChannelIDs removes the "channel" edge to Channel entities by IDs.
-func (vuo *VideoUpdateOne) RemoveChannelIDs(ids ...pulid.ID) *VideoUpdateOne {
+func (vuo *VideoUpdateOne) RemoveChannelIDs(ids ...string) *VideoUpdateOne {
 	vuo.mutation.RemoveChannelIDs(ids...)
 	return vuo
 }
 
 // RemoveChannel removes "channel" edges to Channel entities.
 func (vuo *VideoUpdateOne) RemoveChannel(c ...*Channel) *VideoUpdateOne {
-	ids := make([]pulid.ID, len(c))
+	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
 	return vuo.RemoveChannelIDs(ids...)
 }
 
-// ClearVideoPlayRanges clears all "video_play_ranges" edges to the Video_play_range entity.
+// ClearVideoPlayRanges clears all "video_play_ranges" edges to the VideoPlayRange entity.
 func (vuo *VideoUpdateOne) ClearVideoPlayRanges() *VideoUpdateOne {
 	vuo.mutation.ClearVideoPlayRanges()
 	return vuo
 }
 
-// RemoveVideoPlayRangeIDs removes the "video_play_ranges" edge to Video_play_range entities by IDs.
-func (vuo *VideoUpdateOne) RemoveVideoPlayRangeIDs(ids ...pulid.ID) *VideoUpdateOne {
+// RemoveVideoPlayRangeIDs removes the "video_play_ranges" edge to VideoPlayRange entities by IDs.
+func (vuo *VideoUpdateOne) RemoveVideoPlayRangeIDs(ids ...string) *VideoUpdateOne {
 	vuo.mutation.RemoveVideoPlayRangeIDs(ids...)
 	return vuo
 }
 
-// RemoveVideoPlayRanges removes "video_play_ranges" edges to Video_play_range entities.
-func (vuo *VideoUpdateOne) RemoveVideoPlayRanges(v ...*Video_play_range) *VideoUpdateOne {
-	ids := make([]pulid.ID, len(v))
+// RemoveVideoPlayRanges removes "video_play_ranges" edges to VideoPlayRange entities.
+func (vuo *VideoUpdateOne) RemoveVideoPlayRanges(v ...*VideoPlayRange) *VideoUpdateOne {
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
 	return vuo.RemoveVideoPlayRangeIDs(ids...)
 }
 
-// ClearVideoDisallowRanges clears all "video_disallow_ranges" edges to the Video_disallow_range entity.
+// ClearVideoDisallowRanges clears all "video_disallow_ranges" edges to the VideoDisallowRange entity.
 func (vuo *VideoUpdateOne) ClearVideoDisallowRanges() *VideoUpdateOne {
 	vuo.mutation.ClearVideoDisallowRanges()
 	return vuo
 }
 
-// RemoveVideoDisallowRangeIDs removes the "video_disallow_ranges" edge to Video_disallow_range entities by IDs.
-func (vuo *VideoUpdateOne) RemoveVideoDisallowRangeIDs(ids ...pulid.ID) *VideoUpdateOne {
+// RemoveVideoDisallowRangeIDs removes the "video_disallow_ranges" edge to VideoDisallowRange entities by IDs.
+func (vuo *VideoUpdateOne) RemoveVideoDisallowRangeIDs(ids ...string) *VideoUpdateOne {
 	vuo.mutation.RemoveVideoDisallowRangeIDs(ids...)
 	return vuo
 }
 
-// RemoveVideoDisallowRanges removes "video_disallow_ranges" edges to Video_disallow_range entities.
-func (vuo *VideoUpdateOne) RemoveVideoDisallowRanges(v ...*Video_disallow_range) *VideoUpdateOne {
-	ids := make([]pulid.ID, len(v))
+// RemoveVideoDisallowRanges removes "video_disallow_ranges" edges to VideoDisallowRange entities.
+func (vuo *VideoUpdateOne) RemoveVideoDisallowRanges(v ...*VideoDisallowRange) *VideoUpdateOne {
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
 	return vuo.RemoveVideoDisallowRangeIDs(ids...)
 }
 
-// ClearVideoTitleChanges clears all "video_title_changes" edges to the Video_title_change entity.
+// ClearVideoTitleChanges clears all "video_title_changes" edges to the VideoTitleChange entity.
 func (vuo *VideoUpdateOne) ClearVideoTitleChanges() *VideoUpdateOne {
 	vuo.mutation.ClearVideoTitleChanges()
 	return vuo
 }
 
-// RemoveVideoTitleChangeIDs removes the "video_title_changes" edge to Video_title_change entities by IDs.
-func (vuo *VideoUpdateOne) RemoveVideoTitleChangeIDs(ids ...pulid.ID) *VideoUpdateOne {
+// RemoveVideoTitleChangeIDs removes the "video_title_changes" edge to VideoTitleChange entities by IDs.
+func (vuo *VideoUpdateOne) RemoveVideoTitleChangeIDs(ids ...string) *VideoUpdateOne {
 	vuo.mutation.RemoveVideoTitleChangeIDs(ids...)
 	return vuo
 }
 
-// RemoveVideoTitleChanges removes "video_title_changes" edges to Video_title_change entities.
-func (vuo *VideoUpdateOne) RemoveVideoTitleChanges(v ...*Video_title_change) *VideoUpdateOne {
-	ids := make([]pulid.ID, len(v))
+// RemoveVideoTitleChanges removes "video_title_changes" edges to VideoTitleChange entities.
+func (vuo *VideoUpdateOne) RemoveVideoTitleChanges(v ...*VideoTitleChange) *VideoUpdateOne {
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
 	return vuo.RemoveVideoTitleChangeIDs(ids...)
 }
 
-// ClearPatChats clears all "Pat_chats" edges to the Pat_chat entity.
+// ClearPatChats clears all "Pat_chats" edges to the PatChat entity.
 func (vuo *VideoUpdateOne) ClearPatChats() *VideoUpdateOne {
 	vuo.mutation.ClearPatChats()
 	return vuo
 }
 
-// RemovePatChatIDs removes the "Pat_chats" edge to Pat_chat entities by IDs.
-func (vuo *VideoUpdateOne) RemovePatChatIDs(ids ...pulid.ID) *VideoUpdateOne {
+// RemovePatChatIDs removes the "Pat_chats" edge to PatChat entities by IDs.
+func (vuo *VideoUpdateOne) RemovePatChatIDs(ids ...string) *VideoUpdateOne {
 	vuo.mutation.RemovePatChatIDs(ids...)
 	return vuo
 }
 
-// RemovePatChats removes "Pat_chats" edges to Pat_chat entities.
-func (vuo *VideoUpdateOne) RemovePatChats(p ...*Pat_chat) *VideoUpdateOne {
-	ids := make([]pulid.ID, len(p))
+// RemovePatChats removes "Pat_chats" edges to PatChat entities.
+func (vuo *VideoUpdateOne) RemovePatChats(p ...*PatChat) *VideoUpdateOne {
+	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
@@ -1431,7 +1430,7 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 			Columns: []string{video.VideoPlayRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_play_range.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videoplayrange.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -1444,7 +1443,7 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 			Columns: []string{video.VideoPlayRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_play_range.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videoplayrange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -1460,7 +1459,7 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 			Columns: []string{video.VideoPlayRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_play_range.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videoplayrange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -1476,7 +1475,7 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 			Columns: []string{video.VideoDisallowRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_disallow_range.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videodisallowrange.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -1489,7 +1488,7 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 			Columns: []string{video.VideoDisallowRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_disallow_range.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videodisallowrange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -1505,7 +1504,7 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 			Columns: []string{video.VideoDisallowRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_disallow_range.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videodisallowrange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -1521,7 +1520,7 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 			Columns: []string{video.VideoTitleChangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_title_change.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videotitlechange.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -1534,7 +1533,7 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 			Columns: []string{video.VideoTitleChangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_title_change.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videotitlechange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -1550,7 +1549,7 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 			Columns: []string{video.VideoTitleChangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_title_change.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videotitlechange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -1566,7 +1565,7 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 			Columns: []string{video.PatChatsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(pat_chat.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(patchat.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -1579,7 +1578,7 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 			Columns: []string{video.PatChatsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(pat_chat.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(patchat.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -1595,7 +1594,7 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 			Columns: []string{video.PatChatsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(pat_chat.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(patchat.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

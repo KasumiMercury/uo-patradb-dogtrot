@@ -12,26 +12,26 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
-	// Category_description_template is the client for interacting with the Category_description_template builders.
-	Category_description_template *CategoryDescriptionTemplateClient
+	// CategoryDescriptionTemplate is the client for interacting with the CategoryDescriptionTemplate builders.
+	CategoryDescriptionTemplate *CategoryDescriptionTemplateClient
 	// Channel is the client for interacting with the Channel builders.
 	Channel *ChannelClient
 	// Description is the client for interacting with the Description builders.
 	Description *DescriptionClient
-	// Description_change is the client for interacting with the Description_change builders.
-	Description_change *DescriptionChangeClient
-	// Pat_chat is the client for interacting with the Pat_chat builders.
-	Pat_chat *PatChatClient
-	// Periodic_description_template is the client for interacting with the Periodic_description_template builders.
-	Periodic_description_template *PeriodicDescriptionTemplateClient
+	// DescriptionChange is the client for interacting with the DescriptionChange builders.
+	DescriptionChange *DescriptionChangeClient
+	// PatChat is the client for interacting with the PatChat builders.
+	PatChat *PatChatClient
+	// PeriodicDescriptionTemplate is the client for interacting with the PeriodicDescriptionTemplate builders.
+	PeriodicDescriptionTemplate *PeriodicDescriptionTemplateClient
 	// Video is the client for interacting with the Video builders.
 	Video *VideoClient
-	// Video_disallow_range is the client for interacting with the Video_disallow_range builders.
-	Video_disallow_range *VideoDisallowRangeClient
-	// Video_play_range is the client for interacting with the Video_play_range builders.
-	Video_play_range *VideoPlayRangeClient
-	// Video_title_change is the client for interacting with the Video_title_change builders.
-	Video_title_change *VideoTitleChangeClient
+	// VideoDisallowRange is the client for interacting with the VideoDisallowRange builders.
+	VideoDisallowRange *VideoDisallowRangeClient
+	// VideoPlayRange is the client for interacting with the VideoPlayRange builders.
+	VideoPlayRange *VideoPlayRangeClient
+	// VideoTitleChange is the client for interacting with the VideoTitleChange builders.
+	VideoTitleChange *VideoTitleChangeClient
 
 	// lazily loaded.
 	client     *Client
@@ -163,16 +163,16 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
-	tx.Category_description_template = NewCategoryDescriptionTemplateClient(tx.config)
+	tx.CategoryDescriptionTemplate = NewCategoryDescriptionTemplateClient(tx.config)
 	tx.Channel = NewChannelClient(tx.config)
 	tx.Description = NewDescriptionClient(tx.config)
-	tx.Description_change = NewDescriptionChangeClient(tx.config)
-	tx.Pat_chat = NewPatChatClient(tx.config)
-	tx.Periodic_description_template = NewPeriodicDescriptionTemplateClient(tx.config)
+	tx.DescriptionChange = NewDescriptionChangeClient(tx.config)
+	tx.PatChat = NewPatChatClient(tx.config)
+	tx.PeriodicDescriptionTemplate = NewPeriodicDescriptionTemplateClient(tx.config)
 	tx.Video = NewVideoClient(tx.config)
-	tx.Video_disallow_range = NewVideoDisallowRangeClient(tx.config)
-	tx.Video_play_range = NewVideoPlayRangeClient(tx.config)
-	tx.Video_title_change = NewVideoTitleChangeClient(tx.config)
+	tx.VideoDisallowRange = NewVideoDisallowRangeClient(tx.config)
+	tx.VideoPlayRange = NewVideoPlayRangeClient(tx.config)
+	tx.VideoTitleChange = NewVideoTitleChangeClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.
@@ -182,7 +182,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: Category_description_template.QueryXXX(), the query will be executed
+// applies a query, for example: CategoryDescriptionTemplate.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

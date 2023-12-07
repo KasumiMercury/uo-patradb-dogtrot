@@ -12,12 +12,11 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/pat_chat"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/patchat"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_disallow_range"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_play_range"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_title_change"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotitlechange"
 )
 
 // VideoCreate is the builder for creating a Video entity.
@@ -154,27 +153,27 @@ func (vc *VideoCreate) SetNillableUpdatedAt(t *time.Time) *VideoCreate {
 }
 
 // SetID sets the "id" field.
-func (vc *VideoCreate) SetID(pu pulid.ID) *VideoCreate {
-	vc.mutation.SetID(pu)
+func (vc *VideoCreate) SetID(s string) *VideoCreate {
+	vc.mutation.SetID(s)
 	return vc
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (vc *VideoCreate) SetNillableID(pu *pulid.ID) *VideoCreate {
-	if pu != nil {
-		vc.SetID(*pu)
+func (vc *VideoCreate) SetNillableID(s *string) *VideoCreate {
+	if s != nil {
+		vc.SetID(*s)
 	}
 	return vc
 }
 
 // SetDescriptionsID sets the "descriptions" edge to the Description entity by ID.
-func (vc *VideoCreate) SetDescriptionsID(id pulid.ID) *VideoCreate {
+func (vc *VideoCreate) SetDescriptionsID(id string) *VideoCreate {
 	vc.mutation.SetDescriptionsID(id)
 	return vc
 }
 
 // SetNillableDescriptionsID sets the "descriptions" edge to the Description entity by ID if the given value is not nil.
-func (vc *VideoCreate) SetNillableDescriptionsID(id *pulid.ID) *VideoCreate {
+func (vc *VideoCreate) SetNillableDescriptionsID(id *string) *VideoCreate {
 	if id != nil {
 		vc = vc.SetDescriptionsID(*id)
 	}
@@ -187,74 +186,74 @@ func (vc *VideoCreate) SetDescriptions(d *Description) *VideoCreate {
 }
 
 // AddChannelIDs adds the "channel" edge to the Channel entity by IDs.
-func (vc *VideoCreate) AddChannelIDs(ids ...pulid.ID) *VideoCreate {
+func (vc *VideoCreate) AddChannelIDs(ids ...string) *VideoCreate {
 	vc.mutation.AddChannelIDs(ids...)
 	return vc
 }
 
 // AddChannel adds the "channel" edges to the Channel entity.
 func (vc *VideoCreate) AddChannel(c ...*Channel) *VideoCreate {
-	ids := make([]pulid.ID, len(c))
+	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
 	return vc.AddChannelIDs(ids...)
 }
 
-// AddVideoPlayRangeIDs adds the "video_play_ranges" edge to the Video_play_range entity by IDs.
-func (vc *VideoCreate) AddVideoPlayRangeIDs(ids ...pulid.ID) *VideoCreate {
+// AddVideoPlayRangeIDs adds the "video_play_ranges" edge to the VideoPlayRange entity by IDs.
+func (vc *VideoCreate) AddVideoPlayRangeIDs(ids ...string) *VideoCreate {
 	vc.mutation.AddVideoPlayRangeIDs(ids...)
 	return vc
 }
 
-// AddVideoPlayRanges adds the "video_play_ranges" edges to the Video_play_range entity.
-func (vc *VideoCreate) AddVideoPlayRanges(v ...*Video_play_range) *VideoCreate {
-	ids := make([]pulid.ID, len(v))
+// AddVideoPlayRanges adds the "video_play_ranges" edges to the VideoPlayRange entity.
+func (vc *VideoCreate) AddVideoPlayRanges(v ...*VideoPlayRange) *VideoCreate {
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
 	return vc.AddVideoPlayRangeIDs(ids...)
 }
 
-// AddVideoDisallowRangeIDs adds the "video_disallow_ranges" edge to the Video_disallow_range entity by IDs.
-func (vc *VideoCreate) AddVideoDisallowRangeIDs(ids ...pulid.ID) *VideoCreate {
+// AddVideoDisallowRangeIDs adds the "video_disallow_ranges" edge to the VideoDisallowRange entity by IDs.
+func (vc *VideoCreate) AddVideoDisallowRangeIDs(ids ...string) *VideoCreate {
 	vc.mutation.AddVideoDisallowRangeIDs(ids...)
 	return vc
 }
 
-// AddVideoDisallowRanges adds the "video_disallow_ranges" edges to the Video_disallow_range entity.
-func (vc *VideoCreate) AddVideoDisallowRanges(v ...*Video_disallow_range) *VideoCreate {
-	ids := make([]pulid.ID, len(v))
+// AddVideoDisallowRanges adds the "video_disallow_ranges" edges to the VideoDisallowRange entity.
+func (vc *VideoCreate) AddVideoDisallowRanges(v ...*VideoDisallowRange) *VideoCreate {
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
 	return vc.AddVideoDisallowRangeIDs(ids...)
 }
 
-// AddVideoTitleChangeIDs adds the "video_title_changes" edge to the Video_title_change entity by IDs.
-func (vc *VideoCreate) AddVideoTitleChangeIDs(ids ...pulid.ID) *VideoCreate {
+// AddVideoTitleChangeIDs adds the "video_title_changes" edge to the VideoTitleChange entity by IDs.
+func (vc *VideoCreate) AddVideoTitleChangeIDs(ids ...string) *VideoCreate {
 	vc.mutation.AddVideoTitleChangeIDs(ids...)
 	return vc
 }
 
-// AddVideoTitleChanges adds the "video_title_changes" edges to the Video_title_change entity.
-func (vc *VideoCreate) AddVideoTitleChanges(v ...*Video_title_change) *VideoCreate {
-	ids := make([]pulid.ID, len(v))
+// AddVideoTitleChanges adds the "video_title_changes" edges to the VideoTitleChange entity.
+func (vc *VideoCreate) AddVideoTitleChanges(v ...*VideoTitleChange) *VideoCreate {
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
 	return vc.AddVideoTitleChangeIDs(ids...)
 }
 
-// AddPatChatIDs adds the "Pat_chats" edge to the Pat_chat entity by IDs.
-func (vc *VideoCreate) AddPatChatIDs(ids ...pulid.ID) *VideoCreate {
+// AddPatChatIDs adds the "Pat_chats" edge to the PatChat entity by IDs.
+func (vc *VideoCreate) AddPatChatIDs(ids ...string) *VideoCreate {
 	vc.mutation.AddPatChatIDs(ids...)
 	return vc
 }
 
-// AddPatChats adds the "Pat_chats" edges to the Pat_chat entity.
-func (vc *VideoCreate) AddPatChats(p ...*Pat_chat) *VideoCreate {
-	ids := make([]pulid.ID, len(p))
+// AddPatChats adds the "Pat_chats" edges to the PatChat entity.
+func (vc *VideoCreate) AddPatChats(p ...*PatChat) *VideoCreate {
+	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
@@ -361,7 +360,7 @@ func (vc *VideoCreate) sqlSave(ctx context.Context) (*Video, error) {
 		return nil, err
 	}
 	if _spec.ID.Value != nil {
-		if id, ok := _spec.ID.Value.(pulid.ID); ok {
+		if id, ok := _spec.ID.Value.(string); ok {
 			_node.ID = id
 		} else {
 			return nil, fmt.Errorf("unexpected Video.ID type: %T", _spec.ID.Value)
@@ -473,7 +472,7 @@ func (vc *VideoCreate) createSpec() (*Video, *sqlgraph.CreateSpec) {
 			Columns: []string{video.VideoPlayRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_play_range.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videoplayrange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -489,7 +488,7 @@ func (vc *VideoCreate) createSpec() (*Video, *sqlgraph.CreateSpec) {
 			Columns: []string{video.VideoDisallowRangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_disallow_range.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videodisallowrange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -505,7 +504,7 @@ func (vc *VideoCreate) createSpec() (*Video, *sqlgraph.CreateSpec) {
 			Columns: []string{video.VideoTitleChangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(video_title_change.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(videotitlechange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -521,7 +520,7 @@ func (vc *VideoCreate) createSpec() (*Video, *sqlgraph.CreateSpec) {
 			Columns: []string{video.PatChatsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(pat_chat.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(patchat.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

@@ -43,8 +43,8 @@ var (
 		{Name: "normalized_variable", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "category_template_id", Type: field.TypeString, Nullable: true},
-		{Name: "periodic_template_id", Type: field.TypeString, Nullable: true},
+		{Name: "periodic_id", Type: field.TypeString, Nullable: true},
+		{Name: "category_id", Type: field.TypeString, Nullable: true},
 		{Name: "video_id", Type: field.TypeString, Unique: true},
 	}
 	// DescriptionsTable holds the schema information for the "descriptions" table.
@@ -54,15 +54,15 @@ var (
 		PrimaryKey: []*schema.Column{DescriptionsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "descriptions_category_description_templates_descriptions",
+				Symbol:     "descriptions_periodic_description_templates_periodic_description_template",
 				Columns:    []*schema.Column{DescriptionsColumns[6]},
-				RefColumns: []*schema.Column{CategoryDescriptionTemplatesColumns[0]},
+				RefColumns: []*schema.Column{PeriodicDescriptionTemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "descriptions_periodic_description_templates_descriptions",
+				Symbol:     "descriptions_category_description_templates_category_description_template",
 				Columns:    []*schema.Column{DescriptionsColumns[7]},
-				RefColumns: []*schema.Column{PeriodicDescriptionTemplatesColumns[0]},
+				RefColumns: []*schema.Column{CategoryDescriptionTemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -263,8 +263,8 @@ var (
 )
 
 func init() {
-	DescriptionsTable.ForeignKeys[0].RefTable = CategoryDescriptionTemplatesTable
-	DescriptionsTable.ForeignKeys[1].RefTable = PeriodicDescriptionTemplatesTable
+	DescriptionsTable.ForeignKeys[0].RefTable = PeriodicDescriptionTemplatesTable
+	DescriptionsTable.ForeignKeys[1].RefTable = CategoryDescriptionTemplatesTable
 	DescriptionsTable.ForeignKeys[2].RefTable = VideosTable
 	DescriptionChangesTable.ForeignKeys[0].RefTable = DescriptionsTable
 	PatChatsTable.ForeignKeys[0].RefTable = VideosTable

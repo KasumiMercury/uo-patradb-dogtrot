@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/predicate"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 )
 
@@ -107,8 +106,8 @@ func (cq *ChannelQuery) FirstX(ctx context.Context) *Channel {
 
 // FirstID returns the first Channel ID from the query.
 // Returns a *NotFoundError when no Channel ID was found.
-func (cq *ChannelQuery) FirstID(ctx context.Context) (id pulid.ID, err error) {
-	var ids []pulid.ID
+func (cq *ChannelQuery) FirstID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = cq.Limit(1).IDs(setContextOp(ctx, cq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -120,7 +119,7 @@ func (cq *ChannelQuery) FirstID(ctx context.Context) (id pulid.ID, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (cq *ChannelQuery) FirstIDX(ctx context.Context) pulid.ID {
+func (cq *ChannelQuery) FirstIDX(ctx context.Context) string {
 	id, err := cq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -158,8 +157,8 @@ func (cq *ChannelQuery) OnlyX(ctx context.Context) *Channel {
 // OnlyID is like Only, but returns the only Channel ID in the query.
 // Returns a *NotSingularError when more than one Channel ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (cq *ChannelQuery) OnlyID(ctx context.Context) (id pulid.ID, err error) {
-	var ids []pulid.ID
+func (cq *ChannelQuery) OnlyID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = cq.Limit(2).IDs(setContextOp(ctx, cq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -175,7 +174,7 @@ func (cq *ChannelQuery) OnlyID(ctx context.Context) (id pulid.ID, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (cq *ChannelQuery) OnlyIDX(ctx context.Context) pulid.ID {
+func (cq *ChannelQuery) OnlyIDX(ctx context.Context) string {
 	id, err := cq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -203,7 +202,7 @@ func (cq *ChannelQuery) AllX(ctx context.Context) []*Channel {
 }
 
 // IDs executes the query and returns a list of Channel IDs.
-func (cq *ChannelQuery) IDs(ctx context.Context) (ids []pulid.ID, err error) {
+func (cq *ChannelQuery) IDs(ctx context.Context) (ids []string, err error) {
 	if cq.ctx.Unique == nil && cq.path != nil {
 		cq.Unique(true)
 	}
@@ -215,7 +214,7 @@ func (cq *ChannelQuery) IDs(ctx context.Context) (ids []pulid.ID, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (cq *ChannelQuery) IDsX(ctx context.Context) []pulid.ID {
+func (cq *ChannelQuery) IDsX(ctx context.Context) []string {
 	ids, err := cq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -405,8 +404,8 @@ func (cq *ChannelQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Chan
 
 func (cq *ChannelQuery) loadVideos(ctx context.Context, query *VideoQuery, nodes []*Channel, init func(*Channel), assign func(*Channel, *Video)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[pulid.ID]*Channel)
-	nids := make(map[pulid.ID]map[*Channel]struct{})
+	byID := make(map[string]*Channel)
+	nids := make(map[string]map[*Channel]struct{})
 	for i, node := range nodes {
 		edgeIDs[i] = node.ID
 		byID[node.ID] = node
@@ -438,8 +437,8 @@ func (cq *ChannelQuery) loadVideos(ctx context.Context, query *VideoQuery, nodes
 				return append([]any{new(sql.NullString)}, values...), nil
 			}
 			spec.Assign = func(columns []string, values []any) error {
-				outValue := pulid.ID(values[0].(*sql.NullString).String)
-				inValue := pulid.ID(values[1].(*sql.NullString).String)
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
 				if nids[inValue] == nil {
 					nids[inValue] = map[*Channel]struct{}{byID[outValue]: {}}
 					return assign(columns[1:], values[1:])

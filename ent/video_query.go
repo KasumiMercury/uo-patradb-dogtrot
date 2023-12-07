@@ -13,13 +13,12 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/pat_chat"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/patchat"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/predicate"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_disallow_range"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_play_range"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_title_change"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotitlechange"
 )
 
 // VideoQuery is the builder for querying Video entities.
@@ -128,7 +127,7 @@ func (vq *VideoQuery) QueryVideoPlayRanges() *VideoPlayRangeQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(video.Table, video.FieldID, selector),
-			sqlgraph.To(video_play_range.Table, video_play_range.FieldID),
+			sqlgraph.To(videoplayrange.Table, videoplayrange.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, video.VideoPlayRangesTable, video.VideoPlayRangesColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
@@ -150,7 +149,7 @@ func (vq *VideoQuery) QueryVideoDisallowRanges() *VideoDisallowRangeQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(video.Table, video.FieldID, selector),
-			sqlgraph.To(video_disallow_range.Table, video_disallow_range.FieldID),
+			sqlgraph.To(videodisallowrange.Table, videodisallowrange.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, video.VideoDisallowRangesTable, video.VideoDisallowRangesColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
@@ -172,7 +171,7 @@ func (vq *VideoQuery) QueryVideoTitleChanges() *VideoTitleChangeQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(video.Table, video.FieldID, selector),
-			sqlgraph.To(video_title_change.Table, video_title_change.FieldID),
+			sqlgraph.To(videotitlechange.Table, videotitlechange.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, video.VideoTitleChangesTable, video.VideoTitleChangesColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
@@ -194,7 +193,7 @@ func (vq *VideoQuery) QueryPatChats() *PatChatQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(video.Table, video.FieldID, selector),
-			sqlgraph.To(pat_chat.Table, pat_chat.FieldID),
+			sqlgraph.To(patchat.Table, patchat.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, video.PatChatsTable, video.PatChatsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
@@ -227,8 +226,8 @@ func (vq *VideoQuery) FirstX(ctx context.Context) *Video {
 
 // FirstID returns the first Video ID from the query.
 // Returns a *NotFoundError when no Video ID was found.
-func (vq *VideoQuery) FirstID(ctx context.Context) (id pulid.ID, err error) {
-	var ids []pulid.ID
+func (vq *VideoQuery) FirstID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = vq.Limit(1).IDs(setContextOp(ctx, vq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -240,7 +239,7 @@ func (vq *VideoQuery) FirstID(ctx context.Context) (id pulid.ID, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (vq *VideoQuery) FirstIDX(ctx context.Context) pulid.ID {
+func (vq *VideoQuery) FirstIDX(ctx context.Context) string {
 	id, err := vq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -278,8 +277,8 @@ func (vq *VideoQuery) OnlyX(ctx context.Context) *Video {
 // OnlyID is like Only, but returns the only Video ID in the query.
 // Returns a *NotSingularError when more than one Video ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (vq *VideoQuery) OnlyID(ctx context.Context) (id pulid.ID, err error) {
-	var ids []pulid.ID
+func (vq *VideoQuery) OnlyID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = vq.Limit(2).IDs(setContextOp(ctx, vq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -295,7 +294,7 @@ func (vq *VideoQuery) OnlyID(ctx context.Context) (id pulid.ID, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (vq *VideoQuery) OnlyIDX(ctx context.Context) pulid.ID {
+func (vq *VideoQuery) OnlyIDX(ctx context.Context) string {
 	id, err := vq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -323,7 +322,7 @@ func (vq *VideoQuery) AllX(ctx context.Context) []*Video {
 }
 
 // IDs executes the query and returns a list of Video IDs.
-func (vq *VideoQuery) IDs(ctx context.Context) (ids []pulid.ID, err error) {
+func (vq *VideoQuery) IDs(ctx context.Context) (ids []string, err error) {
 	if vq.ctx.Unique == nil && vq.path != nil {
 		vq.Unique(true)
 	}
@@ -335,7 +334,7 @@ func (vq *VideoQuery) IDs(ctx context.Context) (ids []pulid.ID, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (vq *VideoQuery) IDsX(ctx context.Context) []pulid.ID {
+func (vq *VideoQuery) IDsX(ctx context.Context) []string {
 	ids, err := vq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -593,15 +592,15 @@ func (vq *VideoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Video,
 	}
 	if query := vq.withVideoPlayRanges; query != nil {
 		if err := vq.loadVideoPlayRanges(ctx, query, nodes,
-			func(n *Video) { n.Edges.VideoPlayRanges = []*Video_play_range{} },
-			func(n *Video, e *Video_play_range) { n.Edges.VideoPlayRanges = append(n.Edges.VideoPlayRanges, e) }); err != nil {
+			func(n *Video) { n.Edges.VideoPlayRanges = []*VideoPlayRange{} },
+			func(n *Video, e *VideoPlayRange) { n.Edges.VideoPlayRanges = append(n.Edges.VideoPlayRanges, e) }); err != nil {
 			return nil, err
 		}
 	}
 	if query := vq.withVideoDisallowRanges; query != nil {
 		if err := vq.loadVideoDisallowRanges(ctx, query, nodes,
-			func(n *Video) { n.Edges.VideoDisallowRanges = []*Video_disallow_range{} },
-			func(n *Video, e *Video_disallow_range) {
+			func(n *Video) { n.Edges.VideoDisallowRanges = []*VideoDisallowRange{} },
+			func(n *Video, e *VideoDisallowRange) {
 				n.Edges.VideoDisallowRanges = append(n.Edges.VideoDisallowRanges, e)
 			}); err != nil {
 			return nil, err
@@ -609,17 +608,15 @@ func (vq *VideoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Video,
 	}
 	if query := vq.withVideoTitleChanges; query != nil {
 		if err := vq.loadVideoTitleChanges(ctx, query, nodes,
-			func(n *Video) { n.Edges.VideoTitleChanges = []*Video_title_change{} },
-			func(n *Video, e *Video_title_change) {
-				n.Edges.VideoTitleChanges = append(n.Edges.VideoTitleChanges, e)
-			}); err != nil {
+			func(n *Video) { n.Edges.VideoTitleChanges = []*VideoTitleChange{} },
+			func(n *Video, e *VideoTitleChange) { n.Edges.VideoTitleChanges = append(n.Edges.VideoTitleChanges, e) }); err != nil {
 			return nil, err
 		}
 	}
 	if query := vq.withPatChats; query != nil {
 		if err := vq.loadPatChats(ctx, query, nodes,
-			func(n *Video) { n.Edges.PatChats = []*Pat_chat{} },
-			func(n *Video, e *Pat_chat) { n.Edges.PatChats = append(n.Edges.PatChats, e) }); err != nil {
+			func(n *Video) { n.Edges.PatChats = []*PatChat{} },
+			func(n *Video, e *PatChat) { n.Edges.PatChats = append(n.Edges.PatChats, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -628,7 +625,7 @@ func (vq *VideoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Video,
 
 func (vq *VideoQuery) loadDescriptions(ctx context.Context, query *DescriptionQuery, nodes []*Video, init func(*Video), assign func(*Video, *Description)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[pulid.ID]*Video)
+	nodeids := make(map[string]*Video)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -656,8 +653,8 @@ func (vq *VideoQuery) loadDescriptions(ctx context.Context, query *DescriptionQu
 }
 func (vq *VideoQuery) loadChannel(ctx context.Context, query *ChannelQuery, nodes []*Video, init func(*Video), assign func(*Video, *Channel)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[pulid.ID]*Video)
-	nids := make(map[pulid.ID]map[*Video]struct{})
+	byID := make(map[string]*Video)
+	nids := make(map[string]map[*Video]struct{})
 	for i, node := range nodes {
 		edgeIDs[i] = node.ID
 		byID[node.ID] = node
@@ -689,8 +686,8 @@ func (vq *VideoQuery) loadChannel(ctx context.Context, query *ChannelQuery, node
 				return append([]any{new(sql.NullString)}, values...), nil
 			}
 			spec.Assign = func(columns []string, values []any) error {
-				outValue := pulid.ID(values[0].(*sql.NullString).String)
-				inValue := pulid.ID(values[1].(*sql.NullString).String)
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
 				if nids[inValue] == nil {
 					nids[inValue] = map[*Video]struct{}{byID[outValue]: {}}
 					return assign(columns[1:], values[1:])
@@ -715,9 +712,9 @@ func (vq *VideoQuery) loadChannel(ctx context.Context, query *ChannelQuery, node
 	}
 	return nil
 }
-func (vq *VideoQuery) loadVideoPlayRanges(ctx context.Context, query *VideoPlayRangeQuery, nodes []*Video, init func(*Video), assign func(*Video, *Video_play_range)) error {
+func (vq *VideoQuery) loadVideoPlayRanges(ctx context.Context, query *VideoPlayRangeQuery, nodes []*Video, init func(*Video), assign func(*Video, *VideoPlayRange)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[pulid.ID]*Video)
+	nodeids := make(map[string]*Video)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -726,7 +723,7 @@ func (vq *VideoQuery) loadVideoPlayRanges(ctx context.Context, query *VideoPlayR
 		}
 	}
 	query.withFKs = true
-	query.Where(predicate.Video_play_range(func(s *sql.Selector) {
+	query.Where(predicate.VideoPlayRange(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(video.VideoPlayRangesColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
@@ -746,9 +743,9 @@ func (vq *VideoQuery) loadVideoPlayRanges(ctx context.Context, query *VideoPlayR
 	}
 	return nil
 }
-func (vq *VideoQuery) loadVideoDisallowRanges(ctx context.Context, query *VideoDisallowRangeQuery, nodes []*Video, init func(*Video), assign func(*Video, *Video_disallow_range)) error {
+func (vq *VideoQuery) loadVideoDisallowRanges(ctx context.Context, query *VideoDisallowRangeQuery, nodes []*Video, init func(*Video), assign func(*Video, *VideoDisallowRange)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[pulid.ID]*Video)
+	nodeids := make(map[string]*Video)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -757,7 +754,7 @@ func (vq *VideoQuery) loadVideoDisallowRanges(ctx context.Context, query *VideoD
 		}
 	}
 	query.withFKs = true
-	query.Where(predicate.Video_disallow_range(func(s *sql.Selector) {
+	query.Where(predicate.VideoDisallowRange(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(video.VideoDisallowRangesColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
@@ -777,9 +774,9 @@ func (vq *VideoQuery) loadVideoDisallowRanges(ctx context.Context, query *VideoD
 	}
 	return nil
 }
-func (vq *VideoQuery) loadVideoTitleChanges(ctx context.Context, query *VideoTitleChangeQuery, nodes []*Video, init func(*Video), assign func(*Video, *Video_title_change)) error {
+func (vq *VideoQuery) loadVideoTitleChanges(ctx context.Context, query *VideoTitleChangeQuery, nodes []*Video, init func(*Video), assign func(*Video, *VideoTitleChange)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[pulid.ID]*Video)
+	nodeids := make(map[string]*Video)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -788,7 +785,7 @@ func (vq *VideoQuery) loadVideoTitleChanges(ctx context.Context, query *VideoTit
 		}
 	}
 	query.withFKs = true
-	query.Where(predicate.Video_title_change(func(s *sql.Selector) {
+	query.Where(predicate.VideoTitleChange(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(video.VideoTitleChangesColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
@@ -808,9 +805,9 @@ func (vq *VideoQuery) loadVideoTitleChanges(ctx context.Context, query *VideoTit
 	}
 	return nil
 }
-func (vq *VideoQuery) loadPatChats(ctx context.Context, query *PatChatQuery, nodes []*Video, init func(*Video), assign func(*Video, *Pat_chat)) error {
+func (vq *VideoQuery) loadPatChats(ctx context.Context, query *PatChatQuery, nodes []*Video, init func(*Video), assign func(*Video, *PatChat)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[pulid.ID]*Video)
+	nodeids := make(map[string]*Video)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -819,7 +816,7 @@ func (vq *VideoQuery) loadPatChats(ctx context.Context, query *PatChatQuery, nod
 		}
 	}
 	query.withFKs = true
-	query.Where(predicate.Pat_chat(func(s *sql.Selector) {
+	query.Where(predicate.PatChat(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(video.PatChatsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)

@@ -8,52 +8,61 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/predicate"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id pulid.ID) predicate.Video {
+func ID(id string) predicate.Video {
 	return predicate.Video(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id pulid.ID) predicate.Video {
+func IDEQ(id string) predicate.Video {
 	return predicate.Video(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id pulid.ID) predicate.Video {
+func IDNEQ(id string) predicate.Video {
 	return predicate.Video(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...pulid.ID) predicate.Video {
+func IDIn(ids ...string) predicate.Video {
 	return predicate.Video(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...pulid.ID) predicate.Video {
+func IDNotIn(ids ...string) predicate.Video {
 	return predicate.Video(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id pulid.ID) predicate.Video {
+func IDGT(id string) predicate.Video {
 	return predicate.Video(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id pulid.ID) predicate.Video {
+func IDGTE(id string) predicate.Video {
 	return predicate.Video(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id pulid.ID) predicate.Video {
+func IDLT(id string) predicate.Video {
 	return predicate.Video(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id pulid.ID) predicate.Video {
+func IDLTE(id string) predicate.Video {
 	return predicate.Video(sql.FieldLTE(FieldID, id))
+}
+
+// IDEqualFold applies the EqualFold predicate on the ID field.
+func IDEqualFold(id string) predicate.Video {
+	return predicate.Video(sql.FieldEqualFold(FieldID, id))
+}
+
+// IDContainsFold applies the ContainsFold predicate on the ID field.
+func IDContainsFold(id string) predicate.Video {
+	return predicate.Video(sql.FieldContainsFold(FieldID, id))
 }
 
 // VideoID applies equality check predicate on the "video_id" field. It's identical to VideoIDEQ.
@@ -794,7 +803,7 @@ func HasVideoPlayRanges() predicate.Video {
 }
 
 // HasVideoPlayRangesWith applies the HasEdge predicate on the "video_play_ranges" edge with a given conditions (other predicates).
-func HasVideoPlayRangesWith(preds ...predicate.Video_play_range) predicate.Video {
+func HasVideoPlayRangesWith(preds ...predicate.VideoPlayRange) predicate.Video {
 	return predicate.Video(func(s *sql.Selector) {
 		step := newVideoPlayRangesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
@@ -817,7 +826,7 @@ func HasVideoDisallowRanges() predicate.Video {
 }
 
 // HasVideoDisallowRangesWith applies the HasEdge predicate on the "video_disallow_ranges" edge with a given conditions (other predicates).
-func HasVideoDisallowRangesWith(preds ...predicate.Video_disallow_range) predicate.Video {
+func HasVideoDisallowRangesWith(preds ...predicate.VideoDisallowRange) predicate.Video {
 	return predicate.Video(func(s *sql.Selector) {
 		step := newVideoDisallowRangesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
@@ -840,7 +849,7 @@ func HasVideoTitleChanges() predicate.Video {
 }
 
 // HasVideoTitleChangesWith applies the HasEdge predicate on the "video_title_changes" edge with a given conditions (other predicates).
-func HasVideoTitleChangesWith(preds ...predicate.Video_title_change) predicate.Video {
+func HasVideoTitleChangesWith(preds ...predicate.VideoTitleChange) predicate.Video {
 	return predicate.Video(func(s *sql.Selector) {
 		step := newVideoTitleChangesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
@@ -863,7 +872,7 @@ func HasPatChats() predicate.Video {
 }
 
 // HasPatChatsWith applies the HasEdge predicate on the "Pat_chats" edge with a given conditions (other predicates).
-func HasPatChatsWith(preds ...predicate.Pat_chat) predicate.Video {
+func HasPatChatsWith(preds ...predicate.PatChat) predicate.Video {
 	return predicate.Video(func(s *sql.Selector) {
 		step := newPatChatsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {

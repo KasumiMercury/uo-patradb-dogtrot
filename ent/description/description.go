@@ -7,7 +7,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 )
 
 const (
@@ -44,22 +43,22 @@ const (
 	VideoColumn = "video_id"
 	// PeriodicDescriptionTemplateTable is the table that holds the periodic_description_template relation/edge.
 	PeriodicDescriptionTemplateTable = "descriptions"
-	// PeriodicDescriptionTemplateInverseTable is the table name for the Periodic_description_template entity.
-	// It exists in this package in order to avoid circular dependency with the "periodic_description_template" package.
+	// PeriodicDescriptionTemplateInverseTable is the table name for the PeriodicDescriptionTemplate entity.
+	// It exists in this package in order to avoid circular dependency with the "periodicdescriptiontemplate" package.
 	PeriodicDescriptionTemplateInverseTable = "periodic_description_templates"
 	// PeriodicDescriptionTemplateColumn is the table column denoting the periodic_description_template relation/edge.
-	PeriodicDescriptionTemplateColumn = "periodic_template_id"
+	PeriodicDescriptionTemplateColumn = "periodic_id"
 	// CategoryDescriptionTemplateTable is the table that holds the category_description_template relation/edge.
 	CategoryDescriptionTemplateTable = "descriptions"
-	// CategoryDescriptionTemplateInverseTable is the table name for the Category_description_template entity.
-	// It exists in this package in order to avoid circular dependency with the "category_description_template" package.
+	// CategoryDescriptionTemplateInverseTable is the table name for the CategoryDescriptionTemplate entity.
+	// It exists in this package in order to avoid circular dependency with the "categorydescriptiontemplate" package.
 	CategoryDescriptionTemplateInverseTable = "category_description_templates"
 	// CategoryDescriptionTemplateColumn is the table column denoting the category_description_template relation/edge.
-	CategoryDescriptionTemplateColumn = "category_template_id"
+	CategoryDescriptionTemplateColumn = "category_id"
 	// DescriptionChangesTable is the table that holds the description_changes relation/edge.
 	DescriptionChangesTable = "description_changes"
-	// DescriptionChangesInverseTable is the table name for the Description_change entity.
-	// It exists in this package in order to avoid circular dependency with the "description_change" package.
+	// DescriptionChangesInverseTable is the table name for the DescriptionChange entity.
+	// It exists in this package in order to avoid circular dependency with the "descriptionchange" package.
 	DescriptionChangesInverseTable = "description_changes"
 	// DescriptionChangesColumn is the table column denoting the description_changes relation/edge.
 	DescriptionChangesColumn = "description_id"
@@ -78,8 +77,8 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "descriptions"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"category_template_id",
-	"periodic_template_id",
+	"periodic_id",
+	"category_id",
 	"video_id",
 }
 
@@ -106,7 +105,7 @@ var (
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.
-	DefaultID func() pulid.ID
+	DefaultID func() string
 )
 
 // OrderOption defines the ordering options for the Description queries.
@@ -187,14 +186,14 @@ func newPeriodicDescriptionTemplateStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PeriodicDescriptionTemplateInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, PeriodicDescriptionTemplateTable, PeriodicDescriptionTemplateColumn),
+		sqlgraph.Edge(sqlgraph.M2O, false, PeriodicDescriptionTemplateTable, PeriodicDescriptionTemplateColumn),
 	)
 }
 func newCategoryDescriptionTemplateStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(CategoryDescriptionTemplateInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, CategoryDescriptionTemplateTable, CategoryDescriptionTemplateColumn),
+		sqlgraph.Edge(sqlgraph.M2O, false, CategoryDescriptionTemplateTable, CategoryDescriptionTemplateColumn),
 	)
 }
 func newDescriptionChangesStep() *sqlgraph.Step {

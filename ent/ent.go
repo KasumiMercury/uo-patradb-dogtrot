@@ -12,16 +12,16 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/category_description_template"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/categorydescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description_change"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/pat_chat"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodic_description_template"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/descriptionchange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/patchat"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodicdescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_disallow_range"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_play_range"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_title_change"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotitlechange"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -82,16 +82,16 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			category_description_template.Table: category_description_template.ValidColumn,
-			channel.Table:                       channel.ValidColumn,
-			description.Table:                   description.ValidColumn,
-			description_change.Table:            description_change.ValidColumn,
-			pat_chat.Table:                      pat_chat.ValidColumn,
-			periodic_description_template.Table: periodic_description_template.ValidColumn,
-			video.Table:                         video.ValidColumn,
-			video_disallow_range.Table:          video_disallow_range.ValidColumn,
-			video_play_range.Table:              video_play_range.ValidColumn,
-			video_title_change.Table:            video_title_change.ValidColumn,
+			categorydescriptiontemplate.Table: categorydescriptiontemplate.ValidColumn,
+			channel.Table:                     channel.ValidColumn,
+			description.Table:                 description.ValidColumn,
+			descriptionchange.Table:           descriptionchange.ValidColumn,
+			patchat.Table:                     patchat.ValidColumn,
+			periodicdescriptiontemplate.Table: periodicdescriptiontemplate.ValidColumn,
+			video.Table:                       video.ValidColumn,
+			videodisallowrange.Table:          videodisallowrange.ValidColumn,
+			videoplayrange.Table:              videoplayrange.ValidColumn,
+			videotitlechange.Table:            videotitlechange.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

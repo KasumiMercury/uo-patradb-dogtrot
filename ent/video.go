@@ -10,7 +10,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 )
 
@@ -18,7 +17,7 @@ import (
 type Video struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID pulid.ID `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 	// VideoID holds the value of the "video_id" field.
 	VideoID string `json:"video_id,omitempty"`
 	// Title holds the value of the "title" field.
@@ -58,13 +57,13 @@ type VideoEdges struct {
 	// Channel holds the value of the channel edge.
 	Channel []*Channel `json:"channel,omitempty"`
 	// VideoPlayRanges holds the value of the video_play_ranges edge.
-	VideoPlayRanges []*Video_play_range `json:"video_play_ranges,omitempty"`
+	VideoPlayRanges []*VideoPlayRange `json:"video_play_ranges,omitempty"`
 	// VideoDisallowRanges holds the value of the video_disallow_ranges edge.
-	VideoDisallowRanges []*Video_disallow_range `json:"video_disallow_ranges,omitempty"`
+	VideoDisallowRanges []*VideoDisallowRange `json:"video_disallow_ranges,omitempty"`
 	// VideoTitleChanges holds the value of the video_title_changes edge.
-	VideoTitleChanges []*Video_title_change `json:"video_title_changes,omitempty"`
+	VideoTitleChanges []*VideoTitleChange `json:"video_title_changes,omitempty"`
 	// PatChats holds the value of the Pat_chats edge.
-	PatChats []*Pat_chat `json:"Pat_chats,omitempty"`
+	PatChats []*PatChat `json:"Pat_chats,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [6]bool
@@ -94,7 +93,7 @@ func (e VideoEdges) ChannelOrErr() ([]*Channel, error) {
 
 // VideoPlayRangesOrErr returns the VideoPlayRanges value or an error if the edge
 // was not loaded in eager-loading.
-func (e VideoEdges) VideoPlayRangesOrErr() ([]*Video_play_range, error) {
+func (e VideoEdges) VideoPlayRangesOrErr() ([]*VideoPlayRange, error) {
 	if e.loadedTypes[2] {
 		return e.VideoPlayRanges, nil
 	}
@@ -103,7 +102,7 @@ func (e VideoEdges) VideoPlayRangesOrErr() ([]*Video_play_range, error) {
 
 // VideoDisallowRangesOrErr returns the VideoDisallowRanges value or an error if the edge
 // was not loaded in eager-loading.
-func (e VideoEdges) VideoDisallowRangesOrErr() ([]*Video_disallow_range, error) {
+func (e VideoEdges) VideoDisallowRangesOrErr() ([]*VideoDisallowRange, error) {
 	if e.loadedTypes[3] {
 		return e.VideoDisallowRanges, nil
 	}
@@ -112,7 +111,7 @@ func (e VideoEdges) VideoDisallowRangesOrErr() ([]*Video_disallow_range, error) 
 
 // VideoTitleChangesOrErr returns the VideoTitleChanges value or an error if the edge
 // was not loaded in eager-loading.
-func (e VideoEdges) VideoTitleChangesOrErr() ([]*Video_title_change, error) {
+func (e VideoEdges) VideoTitleChangesOrErr() ([]*VideoTitleChange, error) {
 	if e.loadedTypes[4] {
 		return e.VideoTitleChanges, nil
 	}
@@ -121,7 +120,7 @@ func (e VideoEdges) VideoTitleChangesOrErr() ([]*Video_title_change, error) {
 
 // PatChatsOrErr returns the PatChats value or an error if the edge
 // was not loaded in eager-loading.
-func (e VideoEdges) PatChatsOrErr() ([]*Pat_chat, error) {
+func (e VideoEdges) PatChatsOrErr() ([]*PatChat, error) {
 	if e.loadedTypes[5] {
 		return e.PatChats, nil
 	}
@@ -160,7 +159,7 @@ func (v *Video) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				v.ID = pulid.ID(value.String)
+				v.ID = value.String
 			}
 		case video.FieldVideoID:
 			if value, ok := values[i].(*sql.NullString); !ok {

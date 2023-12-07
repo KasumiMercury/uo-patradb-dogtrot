@@ -5,7 +5,6 @@ package channel
 import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 )
 
 const (
@@ -59,7 +58,7 @@ func ValidColumn(column string) bool {
 
 var (
 	// DefaultID holds the default value on creation for the "id" field.
-	DefaultID func() pulid.ID
+	DefaultID func() string
 )
 
 // OrderOption defines the ordering options for the Channel queries.

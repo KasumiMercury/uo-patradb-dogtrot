@@ -5,33 +5,32 @@ package ent
 import (
 	"time"
 
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/category_description_template"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/categorydescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description_change"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/pat_chat"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodic_description_template"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/descriptionchange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/patchat"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodicdescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_disallow_range"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_play_range"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_title_change"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotitlechange"
 )
 
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
-	category_description_templateMixin := schema.Category_description_template{}.Mixin()
-	category_description_templateMixinFields0 := category_description_templateMixin[0].Fields()
-	_ = category_description_templateMixinFields0
-	category_description_templateFields := schema.Category_description_template{}.Fields()
-	_ = category_description_templateFields
-	// category_description_templateDescID is the schema descriptor for id field.
-	category_description_templateDescID := category_description_templateMixinFields0[0].Descriptor()
-	// category_description_template.DefaultID holds the default value on creation for the id field.
-	category_description_template.DefaultID = category_description_templateDescID.Default.(func() pulid.ID)
+	categorydescriptiontemplateMixin := schema.CategoryDescriptionTemplate{}.Mixin()
+	categorydescriptiontemplateMixinFields0 := categorydescriptiontemplateMixin[0].Fields()
+	_ = categorydescriptiontemplateMixinFields0
+	categorydescriptiontemplateFields := schema.CategoryDescriptionTemplate{}.Fields()
+	_ = categorydescriptiontemplateFields
+	// categorydescriptiontemplateDescID is the schema descriptor for id field.
+	categorydescriptiontemplateDescID := categorydescriptiontemplateMixinFields0[0].Descriptor()
+	// categorydescriptiontemplate.DefaultID holds the default value on creation for the id field.
+	categorydescriptiontemplate.DefaultID = categorydescriptiontemplateDescID.Default.(func() string)
 	channelMixin := schema.Channel{}.Mixin()
 	channelMixinFields0 := channelMixin[0].Fields()
 	_ = channelMixinFields0
@@ -40,7 +39,7 @@ func init() {
 	// channelDescID is the schema descriptor for id field.
 	channelDescID := channelMixinFields0[0].Descriptor()
 	// channel.DefaultID holds the default value on creation for the id field.
-	channel.DefaultID = channelDescID.Default.(func() pulid.ID)
+	channel.DefaultID = channelDescID.Default.(func() string)
 	descriptionMixin := schema.Description{}.Mixin()
 	descriptionMixinFields0 := descriptionMixin[0].Fields()
 	_ = descriptionMixinFields0
@@ -59,46 +58,46 @@ func init() {
 	// descriptionDescID is the schema descriptor for id field.
 	descriptionDescID := descriptionMixinFields0[0].Descriptor()
 	// description.DefaultID holds the default value on creation for the id field.
-	description.DefaultID = descriptionDescID.Default.(func() pulid.ID)
-	description_changeMixin := schema.Description_change{}.Mixin()
-	description_changeMixinFields0 := description_changeMixin[0].Fields()
-	_ = description_changeMixinFields0
-	description_changeFields := schema.Description_change{}.Fields()
-	_ = description_changeFields
-	// description_changeDescChangedAt is the schema descriptor for changed_at field.
-	description_changeDescChangedAt := description_changeFields[3].Descriptor()
-	// description_change.DefaultChangedAt holds the default value on creation for the changed_at field.
-	description_change.DefaultChangedAt = description_changeDescChangedAt.Default.(func() time.Time)
-	// description_changeDescID is the schema descriptor for id field.
-	description_changeDescID := description_changeMixinFields0[0].Descriptor()
-	// description_change.DefaultID holds the default value on creation for the id field.
-	description_change.DefaultID = description_changeDescID.Default.(func() pulid.ID)
-	pat_chatMixin := schema.Pat_chat{}.Mixin()
-	pat_chatMixinFields0 := pat_chatMixin[0].Fields()
-	_ = pat_chatMixinFields0
-	pat_chatFields := schema.Pat_chat{}.Fields()
-	_ = pat_chatFields
-	// pat_chatDescIsNegative is the schema descriptor for is_negative field.
-	pat_chatDescIsNegative := pat_chatFields[3].Descriptor()
-	// pat_chat.DefaultIsNegative holds the default value on creation for the is_negative field.
-	pat_chat.DefaultIsNegative = pat_chatDescIsNegative.Default.(bool)
-	// pat_chatDescCreatedAt is the schema descriptor for created_at field.
-	pat_chatDescCreatedAt := pat_chatFields[5].Descriptor()
-	// pat_chat.DefaultCreatedAt holds the default value on creation for the created_at field.
-	pat_chat.DefaultCreatedAt = pat_chatDescCreatedAt.Default.(func() time.Time)
-	// pat_chatDescID is the schema descriptor for id field.
-	pat_chatDescID := pat_chatMixinFields0[0].Descriptor()
-	// pat_chat.DefaultID holds the default value on creation for the id field.
-	pat_chat.DefaultID = pat_chatDescID.Default.(func() pulid.ID)
-	periodic_description_templateMixin := schema.Periodic_description_template{}.Mixin()
-	periodic_description_templateMixinFields0 := periodic_description_templateMixin[0].Fields()
-	_ = periodic_description_templateMixinFields0
-	periodic_description_templateFields := schema.Periodic_description_template{}.Fields()
-	_ = periodic_description_templateFields
-	// periodic_description_templateDescID is the schema descriptor for id field.
-	periodic_description_templateDescID := periodic_description_templateMixinFields0[0].Descriptor()
-	// periodic_description_template.DefaultID holds the default value on creation for the id field.
-	periodic_description_template.DefaultID = periodic_description_templateDescID.Default.(func() pulid.ID)
+	description.DefaultID = descriptionDescID.Default.(func() string)
+	descriptionchangeMixin := schema.DescriptionChange{}.Mixin()
+	descriptionchangeMixinFields0 := descriptionchangeMixin[0].Fields()
+	_ = descriptionchangeMixinFields0
+	descriptionchangeFields := schema.DescriptionChange{}.Fields()
+	_ = descriptionchangeFields
+	// descriptionchangeDescChangedAt is the schema descriptor for changed_at field.
+	descriptionchangeDescChangedAt := descriptionchangeFields[3].Descriptor()
+	// descriptionchange.DefaultChangedAt holds the default value on creation for the changed_at field.
+	descriptionchange.DefaultChangedAt = descriptionchangeDescChangedAt.Default.(func() time.Time)
+	// descriptionchangeDescID is the schema descriptor for id field.
+	descriptionchangeDescID := descriptionchangeMixinFields0[0].Descriptor()
+	// descriptionchange.DefaultID holds the default value on creation for the id field.
+	descriptionchange.DefaultID = descriptionchangeDescID.Default.(func() string)
+	patchatMixin := schema.PatChat{}.Mixin()
+	patchatMixinFields0 := patchatMixin[0].Fields()
+	_ = patchatMixinFields0
+	patchatFields := schema.PatChat{}.Fields()
+	_ = patchatFields
+	// patchatDescIsNegative is the schema descriptor for is_negative field.
+	patchatDescIsNegative := patchatFields[3].Descriptor()
+	// patchat.DefaultIsNegative holds the default value on creation for the is_negative field.
+	patchat.DefaultIsNegative = patchatDescIsNegative.Default.(bool)
+	// patchatDescCreatedAt is the schema descriptor for created_at field.
+	patchatDescCreatedAt := patchatFields[5].Descriptor()
+	// patchat.DefaultCreatedAt holds the default value on creation for the created_at field.
+	patchat.DefaultCreatedAt = patchatDescCreatedAt.Default.(func() time.Time)
+	// patchatDescID is the schema descriptor for id field.
+	patchatDescID := patchatMixinFields0[0].Descriptor()
+	// patchat.DefaultID holds the default value on creation for the id field.
+	patchat.DefaultID = patchatDescID.Default.(func() string)
+	periodicdescriptiontemplateMixin := schema.PeriodicDescriptionTemplate{}.Mixin()
+	periodicdescriptiontemplateMixinFields0 := periodicdescriptiontemplateMixin[0].Fields()
+	_ = periodicdescriptiontemplateMixinFields0
+	periodicdescriptiontemplateFields := schema.PeriodicDescriptionTemplate{}.Fields()
+	_ = periodicdescriptiontemplateFields
+	// periodicdescriptiontemplateDescID is the schema descriptor for id field.
+	periodicdescriptiontemplateDescID := periodicdescriptiontemplateMixinFields0[0].Descriptor()
+	// periodicdescriptiontemplate.DefaultID holds the default value on creation for the id field.
+	periodicdescriptiontemplate.DefaultID = periodicdescriptiontemplateDescID.Default.(func() string)
 	videoMixin := schema.Video{}.Mixin()
 	videoMixinFields0 := videoMixin[0].Fields()
 	_ = videoMixinFields0
@@ -121,40 +120,40 @@ func init() {
 	// videoDescID is the schema descriptor for id field.
 	videoDescID := videoMixinFields0[0].Descriptor()
 	// video.DefaultID holds the default value on creation for the id field.
-	video.DefaultID = videoDescID.Default.(func() pulid.ID)
-	video_disallow_rangeMixin := schema.Video_disallow_range{}.Mixin()
-	video_disallow_rangeMixinFields0 := video_disallow_rangeMixin[0].Fields()
-	_ = video_disallow_rangeMixinFields0
-	video_disallow_rangeFields := schema.Video_disallow_range{}.Fields()
-	_ = video_disallow_rangeFields
-	// video_disallow_rangeDescID is the schema descriptor for id field.
-	video_disallow_rangeDescID := video_disallow_rangeMixinFields0[0].Descriptor()
-	// video_disallow_range.DefaultID holds the default value on creation for the id field.
-	video_disallow_range.DefaultID = video_disallow_rangeDescID.Default.(func() pulid.ID)
-	video_play_rangeMixin := schema.Video_play_range{}.Mixin()
-	video_play_rangeMixinFields0 := video_play_rangeMixin[0].Fields()
-	_ = video_play_rangeMixinFields0
-	video_play_rangeFields := schema.Video_play_range{}.Fields()
-	_ = video_play_rangeFields
-	// video_play_rangeDescStartSeconds is the schema descriptor for start_seconds field.
-	video_play_rangeDescStartSeconds := video_play_rangeFields[0].Descriptor()
-	// video_play_range.DefaultStartSeconds holds the default value on creation for the start_seconds field.
-	video_play_range.DefaultStartSeconds = video_play_rangeDescStartSeconds.Default.(int)
-	// video_play_rangeDescID is the schema descriptor for id field.
-	video_play_rangeDescID := video_play_rangeMixinFields0[0].Descriptor()
-	// video_play_range.DefaultID holds the default value on creation for the id field.
-	video_play_range.DefaultID = video_play_rangeDescID.Default.(func() pulid.ID)
-	video_title_changeMixin := schema.Video_title_change{}.Mixin()
-	video_title_changeMixinFields0 := video_title_changeMixin[0].Fields()
-	_ = video_title_changeMixinFields0
-	video_title_changeFields := schema.Video_title_change{}.Fields()
-	_ = video_title_changeFields
-	// video_title_changeDescChangedAt is the schema descriptor for changed_at field.
-	video_title_changeDescChangedAt := video_title_changeFields[2].Descriptor()
-	// video_title_change.DefaultChangedAt holds the default value on creation for the changed_at field.
-	video_title_change.DefaultChangedAt = video_title_changeDescChangedAt.Default.(func() time.Time)
-	// video_title_changeDescID is the schema descriptor for id field.
-	video_title_changeDescID := video_title_changeMixinFields0[0].Descriptor()
-	// video_title_change.DefaultID holds the default value on creation for the id field.
-	video_title_change.DefaultID = video_title_changeDescID.Default.(func() pulid.ID)
+	video.DefaultID = videoDescID.Default.(func() string)
+	videodisallowrangeMixin := schema.VideoDisallowRange{}.Mixin()
+	videodisallowrangeMixinFields0 := videodisallowrangeMixin[0].Fields()
+	_ = videodisallowrangeMixinFields0
+	videodisallowrangeFields := schema.VideoDisallowRange{}.Fields()
+	_ = videodisallowrangeFields
+	// videodisallowrangeDescID is the schema descriptor for id field.
+	videodisallowrangeDescID := videodisallowrangeMixinFields0[0].Descriptor()
+	// videodisallowrange.DefaultID holds the default value on creation for the id field.
+	videodisallowrange.DefaultID = videodisallowrangeDescID.Default.(func() string)
+	videoplayrangeMixin := schema.VideoPlayRange{}.Mixin()
+	videoplayrangeMixinFields0 := videoplayrangeMixin[0].Fields()
+	_ = videoplayrangeMixinFields0
+	videoplayrangeFields := schema.VideoPlayRange{}.Fields()
+	_ = videoplayrangeFields
+	// videoplayrangeDescStartSeconds is the schema descriptor for start_seconds field.
+	videoplayrangeDescStartSeconds := videoplayrangeFields[0].Descriptor()
+	// videoplayrange.DefaultStartSeconds holds the default value on creation for the start_seconds field.
+	videoplayrange.DefaultStartSeconds = videoplayrangeDescStartSeconds.Default.(int)
+	// videoplayrangeDescID is the schema descriptor for id field.
+	videoplayrangeDescID := videoplayrangeMixinFields0[0].Descriptor()
+	// videoplayrange.DefaultID holds the default value on creation for the id field.
+	videoplayrange.DefaultID = videoplayrangeDescID.Default.(func() string)
+	videotitlechangeMixin := schema.VideoTitleChange{}.Mixin()
+	videotitlechangeMixinFields0 := videotitlechangeMixin[0].Fields()
+	_ = videotitlechangeMixinFields0
+	videotitlechangeFields := schema.VideoTitleChange{}.Fields()
+	_ = videotitlechangeFields
+	// videotitlechangeDescChangedAt is the schema descriptor for changed_at field.
+	videotitlechangeDescChangedAt := videotitlechangeFields[2].Descriptor()
+	// videotitlechange.DefaultChangedAt holds the default value on creation for the changed_at field.
+	videotitlechange.DefaultChangedAt = videotitlechangeDescChangedAt.Default.(func() time.Time)
+	// videotitlechangeDescID is the schema descriptor for id field.
+	videotitlechangeDescID := videotitlechangeMixinFields0[0].Descriptor()
+	// videotitlechange.DefaultID holds the default value on creation for the id field.
+	videotitlechange.DefaultID = videotitlechangeDescID.Default.(func() string)
 }

@@ -11,18 +11,17 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/category_description_template"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/categorydescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description_change"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/pat_chat"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodic_description_template"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/descriptionchange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/patchat"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodicdescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/predicate"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_disallow_range"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_play_range"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_title_change"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotitlechange"
 )
 
 const (
@@ -34,43 +33,43 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeCategoryDescriptionTemplate = "Category_description_template"
+	TypeCategoryDescriptionTemplate = "CategoryDescriptionTemplate"
 	TypeChannel                     = "Channel"
 	TypeDescription                 = "Description"
-	TypeDescriptionChange           = "Description_change"
-	TypePatChat                     = "Pat_chat"
-	TypePeriodicDescriptionTemplate = "Periodic_description_template"
+	TypeDescriptionChange           = "DescriptionChange"
+	TypePatChat                     = "PatChat"
+	TypePeriodicDescriptionTemplate = "PeriodicDescriptionTemplate"
 	TypeVideo                       = "Video"
-	TypeVideoDisallowRange          = "Video_disallow_range"
-	TypeVideoPlayRange              = "Video_play_range"
-	TypeVideoTitleChange            = "Video_title_change"
+	TypeVideoDisallowRange          = "VideoDisallowRange"
+	TypeVideoPlayRange              = "VideoPlayRange"
+	TypeVideoTitleChange            = "VideoTitleChange"
 )
 
-// CategoryDescriptionTemplateMutation represents an operation that mutates the Category_description_template nodes in the graph.
+// CategoryDescriptionTemplateMutation represents an operation that mutates the CategoryDescriptionTemplate nodes in the graph.
 type CategoryDescriptionTemplateMutation struct {
 	config
 	op                  Op
 	typ                 string
-	id                  *pulid.ID
+	id                  *string
 	text                *string
 	start_use_at        *time.Time
 	last_use_at         *time.Time
 	clearedFields       map[string]struct{}
-	descriptions        map[pulid.ID]struct{}
-	removeddescriptions map[pulid.ID]struct{}
+	descriptions        map[string]struct{}
+	removeddescriptions map[string]struct{}
 	cleareddescriptions bool
 	done                bool
-	oldValue            func(context.Context) (*Category_description_template, error)
-	predicates          []predicate.Category_description_template
+	oldValue            func(context.Context) (*CategoryDescriptionTemplate, error)
+	predicates          []predicate.CategoryDescriptionTemplate
 }
 
 var _ ent.Mutation = (*CategoryDescriptionTemplateMutation)(nil)
 
-// categoryDescriptionTemplateOption allows management of the mutation configuration using functional options.
-type categoryDescriptionTemplateOption func(*CategoryDescriptionTemplateMutation)
+// categorydescriptiontemplateOption allows management of the mutation configuration using functional options.
+type categorydescriptiontemplateOption func(*CategoryDescriptionTemplateMutation)
 
-// newCategoryDescriptionTemplateMutation creates new mutation for the Category_description_template entity.
-func newCategoryDescriptionTemplateMutation(c config, op Op, opts ...categoryDescriptionTemplateOption) *CategoryDescriptionTemplateMutation {
+// newCategoryDescriptionTemplateMutation creates new mutation for the CategoryDescriptionTemplate entity.
+func newCategoryDescriptionTemplateMutation(c config, op Op, opts ...categorydescriptiontemplateOption) *CategoryDescriptionTemplateMutation {
 	m := &CategoryDescriptionTemplateMutation{
 		config:        c,
 		op:            op,
@@ -83,20 +82,20 @@ func newCategoryDescriptionTemplateMutation(c config, op Op, opts ...categoryDes
 	return m
 }
 
-// withCategory_description_templateID sets the ID field of the mutation.
-func withCategory_description_templateID(id pulid.ID) categoryDescriptionTemplateOption {
+// withCategoryDescriptionTemplateID sets the ID field of the mutation.
+func withCategoryDescriptionTemplateID(id string) categorydescriptiontemplateOption {
 	return func(m *CategoryDescriptionTemplateMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *Category_description_template
+			value *CategoryDescriptionTemplate
 		)
-		m.oldValue = func(ctx context.Context) (*Category_description_template, error) {
+		m.oldValue = func(ctx context.Context) (*CategoryDescriptionTemplate, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().Category_description_template.Get(ctx, id)
+					value, err = m.Client().CategoryDescriptionTemplate.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -105,10 +104,10 @@ func withCategory_description_templateID(id pulid.ID) categoryDescriptionTemplat
 	}
 }
 
-// withCategory_description_template sets the old Category_description_template of the mutation.
-func withCategory_description_template(node *Category_description_template) categoryDescriptionTemplateOption {
+// withCategoryDescriptionTemplate sets the old CategoryDescriptionTemplate of the mutation.
+func withCategoryDescriptionTemplate(node *CategoryDescriptionTemplate) categorydescriptiontemplateOption {
 	return func(m *CategoryDescriptionTemplateMutation) {
-		m.oldValue = func(context.Context) (*Category_description_template, error) {
+		m.oldValue = func(context.Context) (*CategoryDescriptionTemplate, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -135,14 +134,14 @@ func (m CategoryDescriptionTemplateMutation) Tx() (*Tx, error) {
 }
 
 // SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of Category_description_template entities.
-func (m *CategoryDescriptionTemplateMutation) SetID(id pulid.ID) {
+// operation is only accepted on creation of CategoryDescriptionTemplate entities.
+func (m *CategoryDescriptionTemplateMutation) SetID(id string) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *CategoryDescriptionTemplateMutation) ID() (id pulid.ID, exists bool) {
+func (m *CategoryDescriptionTemplateMutation) ID() (id string, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -153,16 +152,16 @@ func (m *CategoryDescriptionTemplateMutation) ID() (id pulid.ID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *CategoryDescriptionTemplateMutation) IDs(ctx context.Context) ([]pulid.ID, error) {
+func (m *CategoryDescriptionTemplateMutation) IDs(ctx context.Context) ([]string, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []pulid.ID{id}, nil
+			return []string{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().Category_description_template.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().CategoryDescriptionTemplate.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
@@ -182,8 +181,8 @@ func (m *CategoryDescriptionTemplateMutation) Text() (r string, exists bool) {
 	return *v, true
 }
 
-// OldText returns the old "text" field's value of the Category_description_template entity.
-// If the Category_description_template object wasn't provided to the builder, the object is fetched from the database.
+// OldText returns the old "text" field's value of the CategoryDescriptionTemplate entity.
+// If the CategoryDescriptionTemplate object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *CategoryDescriptionTemplateMutation) OldText(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -218,8 +217,8 @@ func (m *CategoryDescriptionTemplateMutation) StartUseAt() (r time.Time, exists 
 	return *v, true
 }
 
-// OldStartUseAt returns the old "start_use_at" field's value of the Category_description_template entity.
-// If the Category_description_template object wasn't provided to the builder, the object is fetched from the database.
+// OldStartUseAt returns the old "start_use_at" field's value of the CategoryDescriptionTemplate entity.
+// If the CategoryDescriptionTemplate object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *CategoryDescriptionTemplateMutation) OldStartUseAt(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -238,19 +237,19 @@ func (m *CategoryDescriptionTemplateMutation) OldStartUseAt(ctx context.Context)
 // ClearStartUseAt clears the value of the "start_use_at" field.
 func (m *CategoryDescriptionTemplateMutation) ClearStartUseAt() {
 	m.start_use_at = nil
-	m.clearedFields[category_description_template.FieldStartUseAt] = struct{}{}
+	m.clearedFields[categorydescriptiontemplate.FieldStartUseAt] = struct{}{}
 }
 
 // StartUseAtCleared returns if the "start_use_at" field was cleared in this mutation.
 func (m *CategoryDescriptionTemplateMutation) StartUseAtCleared() bool {
-	_, ok := m.clearedFields[category_description_template.FieldStartUseAt]
+	_, ok := m.clearedFields[categorydescriptiontemplate.FieldStartUseAt]
 	return ok
 }
 
 // ResetStartUseAt resets all changes to the "start_use_at" field.
 func (m *CategoryDescriptionTemplateMutation) ResetStartUseAt() {
 	m.start_use_at = nil
-	delete(m.clearedFields, category_description_template.FieldStartUseAt)
+	delete(m.clearedFields, categorydescriptiontemplate.FieldStartUseAt)
 }
 
 // SetLastUseAt sets the "last_use_at" field.
@@ -267,8 +266,8 @@ func (m *CategoryDescriptionTemplateMutation) LastUseAt() (r time.Time, exists b
 	return *v, true
 }
 
-// OldLastUseAt returns the old "last_use_at" field's value of the Category_description_template entity.
-// If the Category_description_template object wasn't provided to the builder, the object is fetched from the database.
+// OldLastUseAt returns the old "last_use_at" field's value of the CategoryDescriptionTemplate entity.
+// If the CategoryDescriptionTemplate object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *CategoryDescriptionTemplateMutation) OldLastUseAt(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -287,25 +286,25 @@ func (m *CategoryDescriptionTemplateMutation) OldLastUseAt(ctx context.Context) 
 // ClearLastUseAt clears the value of the "last_use_at" field.
 func (m *CategoryDescriptionTemplateMutation) ClearLastUseAt() {
 	m.last_use_at = nil
-	m.clearedFields[category_description_template.FieldLastUseAt] = struct{}{}
+	m.clearedFields[categorydescriptiontemplate.FieldLastUseAt] = struct{}{}
 }
 
 // LastUseAtCleared returns if the "last_use_at" field was cleared in this mutation.
 func (m *CategoryDescriptionTemplateMutation) LastUseAtCleared() bool {
-	_, ok := m.clearedFields[category_description_template.FieldLastUseAt]
+	_, ok := m.clearedFields[categorydescriptiontemplate.FieldLastUseAt]
 	return ok
 }
 
 // ResetLastUseAt resets all changes to the "last_use_at" field.
 func (m *CategoryDescriptionTemplateMutation) ResetLastUseAt() {
 	m.last_use_at = nil
-	delete(m.clearedFields, category_description_template.FieldLastUseAt)
+	delete(m.clearedFields, categorydescriptiontemplate.FieldLastUseAt)
 }
 
 // AddDescriptionIDs adds the "descriptions" edge to the Description entity by ids.
-func (m *CategoryDescriptionTemplateMutation) AddDescriptionIDs(ids ...pulid.ID) {
+func (m *CategoryDescriptionTemplateMutation) AddDescriptionIDs(ids ...string) {
 	if m.descriptions == nil {
-		m.descriptions = make(map[pulid.ID]struct{})
+		m.descriptions = make(map[string]struct{})
 	}
 	for i := range ids {
 		m.descriptions[ids[i]] = struct{}{}
@@ -323,9 +322,9 @@ func (m *CategoryDescriptionTemplateMutation) DescriptionsCleared() bool {
 }
 
 // RemoveDescriptionIDs removes the "descriptions" edge to the Description entity by IDs.
-func (m *CategoryDescriptionTemplateMutation) RemoveDescriptionIDs(ids ...pulid.ID) {
+func (m *CategoryDescriptionTemplateMutation) RemoveDescriptionIDs(ids ...string) {
 	if m.removeddescriptions == nil {
-		m.removeddescriptions = make(map[pulid.ID]struct{})
+		m.removeddescriptions = make(map[string]struct{})
 	}
 	for i := range ids {
 		delete(m.descriptions, ids[i])
@@ -334,7 +333,7 @@ func (m *CategoryDescriptionTemplateMutation) RemoveDescriptionIDs(ids ...pulid.
 }
 
 // RemovedDescriptions returns the removed IDs of the "descriptions" edge to the Description entity.
-func (m *CategoryDescriptionTemplateMutation) RemovedDescriptionsIDs() (ids []pulid.ID) {
+func (m *CategoryDescriptionTemplateMutation) RemovedDescriptionsIDs() (ids []string) {
 	for id := range m.removeddescriptions {
 		ids = append(ids, id)
 	}
@@ -342,7 +341,7 @@ func (m *CategoryDescriptionTemplateMutation) RemovedDescriptionsIDs() (ids []pu
 }
 
 // DescriptionsIDs returns the "descriptions" edge IDs in the mutation.
-func (m *CategoryDescriptionTemplateMutation) DescriptionsIDs() (ids []pulid.ID) {
+func (m *CategoryDescriptionTemplateMutation) DescriptionsIDs() (ids []string) {
 	for id := range m.descriptions {
 		ids = append(ids, id)
 	}
@@ -357,14 +356,14 @@ func (m *CategoryDescriptionTemplateMutation) ResetDescriptions() {
 }
 
 // Where appends a list predicates to the CategoryDescriptionTemplateMutation builder.
-func (m *CategoryDescriptionTemplateMutation) Where(ps ...predicate.Category_description_template) {
+func (m *CategoryDescriptionTemplateMutation) Where(ps ...predicate.CategoryDescriptionTemplate) {
 	m.predicates = append(m.predicates, ps...)
 }
 
 // WhereP appends storage-level predicates to the CategoryDescriptionTemplateMutation builder. Using this method,
 // users can use type-assertion to append predicates that do not depend on any generated package.
 func (m *CategoryDescriptionTemplateMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.Category_description_template, len(ps))
+	p := make([]predicate.CategoryDescriptionTemplate, len(ps))
 	for i := range ps {
 		p[i] = ps[i]
 	}
@@ -381,7 +380,7 @@ func (m *CategoryDescriptionTemplateMutation) SetOp(op Op) {
 	m.op = op
 }
 
-// Type returns the node type of this mutation (Category_description_template).
+// Type returns the node type of this mutation (CategoryDescriptionTemplate).
 func (m *CategoryDescriptionTemplateMutation) Type() string {
 	return m.typ
 }
@@ -392,13 +391,13 @@ func (m *CategoryDescriptionTemplateMutation) Type() string {
 func (m *CategoryDescriptionTemplateMutation) Fields() []string {
 	fields := make([]string, 0, 3)
 	if m.text != nil {
-		fields = append(fields, category_description_template.FieldText)
+		fields = append(fields, categorydescriptiontemplate.FieldText)
 	}
 	if m.start_use_at != nil {
-		fields = append(fields, category_description_template.FieldStartUseAt)
+		fields = append(fields, categorydescriptiontemplate.FieldStartUseAt)
 	}
 	if m.last_use_at != nil {
-		fields = append(fields, category_description_template.FieldLastUseAt)
+		fields = append(fields, categorydescriptiontemplate.FieldLastUseAt)
 	}
 	return fields
 }
@@ -408,11 +407,11 @@ func (m *CategoryDescriptionTemplateMutation) Fields() []string {
 // schema.
 func (m *CategoryDescriptionTemplateMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case category_description_template.FieldText:
+	case categorydescriptiontemplate.FieldText:
 		return m.Text()
-	case category_description_template.FieldStartUseAt:
+	case categorydescriptiontemplate.FieldStartUseAt:
 		return m.StartUseAt()
-	case category_description_template.FieldLastUseAt:
+	case categorydescriptiontemplate.FieldLastUseAt:
 		return m.LastUseAt()
 	}
 	return nil, false
@@ -423,14 +422,14 @@ func (m *CategoryDescriptionTemplateMutation) Field(name string) (ent.Value, boo
 // database failed.
 func (m *CategoryDescriptionTemplateMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case category_description_template.FieldText:
+	case categorydescriptiontemplate.FieldText:
 		return m.OldText(ctx)
-	case category_description_template.FieldStartUseAt:
+	case categorydescriptiontemplate.FieldStartUseAt:
 		return m.OldStartUseAt(ctx)
-	case category_description_template.FieldLastUseAt:
+	case categorydescriptiontemplate.FieldLastUseAt:
 		return m.OldLastUseAt(ctx)
 	}
-	return nil, fmt.Errorf("unknown Category_description_template field %s", name)
+	return nil, fmt.Errorf("unknown CategoryDescriptionTemplate field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
@@ -438,21 +437,21 @@ func (m *CategoryDescriptionTemplateMutation) OldField(ctx context.Context, name
 // type.
 func (m *CategoryDescriptionTemplateMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case category_description_template.FieldText:
+	case categorydescriptiontemplate.FieldText:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetText(v)
 		return nil
-	case category_description_template.FieldStartUseAt:
+	case categorydescriptiontemplate.FieldStartUseAt:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStartUseAt(v)
 		return nil
-	case category_description_template.FieldLastUseAt:
+	case categorydescriptiontemplate.FieldLastUseAt:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -460,7 +459,7 @@ func (m *CategoryDescriptionTemplateMutation) SetField(name string, value ent.Va
 		m.SetLastUseAt(v)
 		return nil
 	}
-	return fmt.Errorf("unknown Category_description_template field %s", name)
+	return fmt.Errorf("unknown CategoryDescriptionTemplate field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
@@ -482,18 +481,18 @@ func (m *CategoryDescriptionTemplateMutation) AddedField(name string) (ent.Value
 func (m *CategoryDescriptionTemplateMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	}
-	return fmt.Errorf("unknown Category_description_template numeric field %s", name)
+	return fmt.Errorf("unknown CategoryDescriptionTemplate numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *CategoryDescriptionTemplateMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(category_description_template.FieldStartUseAt) {
-		fields = append(fields, category_description_template.FieldStartUseAt)
+	if m.FieldCleared(categorydescriptiontemplate.FieldStartUseAt) {
+		fields = append(fields, categorydescriptiontemplate.FieldStartUseAt)
 	}
-	if m.FieldCleared(category_description_template.FieldLastUseAt) {
-		fields = append(fields, category_description_template.FieldLastUseAt)
+	if m.FieldCleared(categorydescriptiontemplate.FieldLastUseAt) {
+		fields = append(fields, categorydescriptiontemplate.FieldLastUseAt)
 	}
 	return fields
 }
@@ -509,38 +508,38 @@ func (m *CategoryDescriptionTemplateMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *CategoryDescriptionTemplateMutation) ClearField(name string) error {
 	switch name {
-	case category_description_template.FieldStartUseAt:
+	case categorydescriptiontemplate.FieldStartUseAt:
 		m.ClearStartUseAt()
 		return nil
-	case category_description_template.FieldLastUseAt:
+	case categorydescriptiontemplate.FieldLastUseAt:
 		m.ClearLastUseAt()
 		return nil
 	}
-	return fmt.Errorf("unknown Category_description_template nullable field %s", name)
+	return fmt.Errorf("unknown CategoryDescriptionTemplate nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *CategoryDescriptionTemplateMutation) ResetField(name string) error {
 	switch name {
-	case category_description_template.FieldText:
+	case categorydescriptiontemplate.FieldText:
 		m.ResetText()
 		return nil
-	case category_description_template.FieldStartUseAt:
+	case categorydescriptiontemplate.FieldStartUseAt:
 		m.ResetStartUseAt()
 		return nil
-	case category_description_template.FieldLastUseAt:
+	case categorydescriptiontemplate.FieldLastUseAt:
 		m.ResetLastUseAt()
 		return nil
 	}
-	return fmt.Errorf("unknown Category_description_template field %s", name)
+	return fmt.Errorf("unknown CategoryDescriptionTemplate field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CategoryDescriptionTemplateMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.descriptions != nil {
-		edges = append(edges, category_description_template.EdgeDescriptions)
+		edges = append(edges, categorydescriptiontemplate.EdgeDescriptions)
 	}
 	return edges
 }
@@ -549,7 +548,7 @@ func (m *CategoryDescriptionTemplateMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *CategoryDescriptionTemplateMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case category_description_template.EdgeDescriptions:
+	case categorydescriptiontemplate.EdgeDescriptions:
 		ids := make([]ent.Value, 0, len(m.descriptions))
 		for id := range m.descriptions {
 			ids = append(ids, id)
@@ -563,7 +562,7 @@ func (m *CategoryDescriptionTemplateMutation) AddedIDs(name string) []ent.Value 
 func (m *CategoryDescriptionTemplateMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.removeddescriptions != nil {
-		edges = append(edges, category_description_template.EdgeDescriptions)
+		edges = append(edges, categorydescriptiontemplate.EdgeDescriptions)
 	}
 	return edges
 }
@@ -572,7 +571,7 @@ func (m *CategoryDescriptionTemplateMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *CategoryDescriptionTemplateMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case category_description_template.EdgeDescriptions:
+	case categorydescriptiontemplate.EdgeDescriptions:
 		ids := make([]ent.Value, 0, len(m.removeddescriptions))
 		for id := range m.removeddescriptions {
 			ids = append(ids, id)
@@ -586,7 +585,7 @@ func (m *CategoryDescriptionTemplateMutation) RemovedIDs(name string) []ent.Valu
 func (m *CategoryDescriptionTemplateMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.cleareddescriptions {
-		edges = append(edges, category_description_template.EdgeDescriptions)
+		edges = append(edges, categorydescriptiontemplate.EdgeDescriptions)
 	}
 	return edges
 }
@@ -595,7 +594,7 @@ func (m *CategoryDescriptionTemplateMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *CategoryDescriptionTemplateMutation) EdgeCleared(name string) bool {
 	switch name {
-	case category_description_template.EdgeDescriptions:
+	case categorydescriptiontemplate.EdgeDescriptions:
 		return m.cleareddescriptions
 	}
 	return false
@@ -606,18 +605,18 @@ func (m *CategoryDescriptionTemplateMutation) EdgeCleared(name string) bool {
 func (m *CategoryDescriptionTemplateMutation) ClearEdge(name string) error {
 	switch name {
 	}
-	return fmt.Errorf("unknown Category_description_template unique edge %s", name)
+	return fmt.Errorf("unknown CategoryDescriptionTemplate unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *CategoryDescriptionTemplateMutation) ResetEdge(name string) error {
 	switch name {
-	case category_description_template.EdgeDescriptions:
+	case categorydescriptiontemplate.EdgeDescriptions:
 		m.ResetDescriptions()
 		return nil
 	}
-	return fmt.Errorf("unknown Category_description_template edge %s", name)
+	return fmt.Errorf("unknown CategoryDescriptionTemplate edge %s", name)
 }
 
 // ChannelMutation represents an operation that mutates the Channel nodes in the graph.
@@ -625,14 +624,14 @@ type ChannelMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *pulid.ID
+	id            *string
 	display_name  *string
 	channel_id    *string
 	handle        *string
 	thumbnail_url *string
 	clearedFields map[string]struct{}
-	videos        map[pulid.ID]struct{}
-	removedvideos map[pulid.ID]struct{}
+	videos        map[string]struct{}
+	removedvideos map[string]struct{}
 	clearedvideos bool
 	done          bool
 	oldValue      func(context.Context) (*Channel, error)
@@ -659,7 +658,7 @@ func newChannelMutation(c config, op Op, opts ...channelOption) *ChannelMutation
 }
 
 // withChannelID sets the ID field of the mutation.
-func withChannelID(id pulid.ID) channelOption {
+func withChannelID(id string) channelOption {
 	return func(m *ChannelMutation) {
 		var (
 			err   error
@@ -711,13 +710,13 @@ func (m ChannelMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of Channel entities.
-func (m *ChannelMutation) SetID(id pulid.ID) {
+func (m *ChannelMutation) SetID(id string) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ChannelMutation) ID() (id pulid.ID, exists bool) {
+func (m *ChannelMutation) ID() (id string, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -728,12 +727,12 @@ func (m *ChannelMutation) ID() (id pulid.ID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ChannelMutation) IDs(ctx context.Context) ([]pulid.ID, error) {
+func (m *ChannelMutation) IDs(ctx context.Context) ([]string, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []pulid.ID{id}, nil
+			return []string{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -888,9 +887,9 @@ func (m *ChannelMutation) ResetThumbnailURL() {
 }
 
 // AddVideoIDs adds the "videos" edge to the Video entity by ids.
-func (m *ChannelMutation) AddVideoIDs(ids ...pulid.ID) {
+func (m *ChannelMutation) AddVideoIDs(ids ...string) {
 	if m.videos == nil {
-		m.videos = make(map[pulid.ID]struct{})
+		m.videos = make(map[string]struct{})
 	}
 	for i := range ids {
 		m.videos[ids[i]] = struct{}{}
@@ -908,9 +907,9 @@ func (m *ChannelMutation) VideosCleared() bool {
 }
 
 // RemoveVideoIDs removes the "videos" edge to the Video entity by IDs.
-func (m *ChannelMutation) RemoveVideoIDs(ids ...pulid.ID) {
+func (m *ChannelMutation) RemoveVideoIDs(ids ...string) {
 	if m.removedvideos == nil {
-		m.removedvideos = make(map[pulid.ID]struct{})
+		m.removedvideos = make(map[string]struct{})
 	}
 	for i := range ids {
 		delete(m.videos, ids[i])
@@ -919,7 +918,7 @@ func (m *ChannelMutation) RemoveVideoIDs(ids ...pulid.ID) {
 }
 
 // RemovedVideos returns the removed IDs of the "videos" edge to the Video entity.
-func (m *ChannelMutation) RemovedVideosIDs() (ids []pulid.ID) {
+func (m *ChannelMutation) RemovedVideosIDs() (ids []string) {
 	for id := range m.removedvideos {
 		ids = append(ids, id)
 	}
@@ -927,7 +926,7 @@ func (m *ChannelMutation) RemovedVideosIDs() (ids []pulid.ID) {
 }
 
 // VideosIDs returns the "videos" edge IDs in the mutation.
-func (m *ChannelMutation) VideosIDs() (ids []pulid.ID) {
+func (m *ChannelMutation) VideosIDs() (ids []string) {
 	for id := range m.videos {
 		ids = append(ids, id)
 	}
@@ -1212,21 +1211,21 @@ type DescriptionMutation struct {
 	config
 	op                                   Op
 	typ                                  string
-	id                                   *pulid.ID
+	id                                   *string
 	raw                                  *string
 	variable                             *string
 	normalized_variable                  *string
 	created_at                           *time.Time
 	updated_at                           *time.Time
 	clearedFields                        map[string]struct{}
-	video                                *pulid.ID
+	video                                *string
 	clearedvideo                         bool
-	periodic_description_template        *pulid.ID
+	periodic_description_template        *string
 	clearedperiodic_description_template bool
-	category_description_template        *pulid.ID
+	category_description_template        *string
 	clearedcategory_description_template bool
-	description_changes                  map[pulid.ID]struct{}
-	removeddescription_changes           map[pulid.ID]struct{}
+	description_changes                  map[string]struct{}
+	removeddescription_changes           map[string]struct{}
 	cleareddescription_changes           bool
 	done                                 bool
 	oldValue                             func(context.Context) (*Description, error)
@@ -1253,7 +1252,7 @@ func newDescriptionMutation(c config, op Op, opts ...descriptionOption) *Descrip
 }
 
 // withDescriptionID sets the ID field of the mutation.
-func withDescriptionID(id pulid.ID) descriptionOption {
+func withDescriptionID(id string) descriptionOption {
 	return func(m *DescriptionMutation) {
 		var (
 			err   error
@@ -1305,13 +1304,13 @@ func (m DescriptionMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of Description entities.
-func (m *DescriptionMutation) SetID(id pulid.ID) {
+func (m *DescriptionMutation) SetID(id string) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *DescriptionMutation) ID() (id pulid.ID, exists bool) {
+func (m *DescriptionMutation) ID() (id string, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -1322,12 +1321,12 @@ func (m *DescriptionMutation) ID() (id pulid.ID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *DescriptionMutation) IDs(ctx context.Context) ([]pulid.ID, error) {
+func (m *DescriptionMutation) IDs(ctx context.Context) ([]string, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []pulid.ID{id}, nil
+			return []string{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -1544,7 +1543,7 @@ func (m *DescriptionMutation) ResetUpdatedAt() {
 }
 
 // SetVideoID sets the "video" edge to the Video entity by id.
-func (m *DescriptionMutation) SetVideoID(id pulid.ID) {
+func (m *DescriptionMutation) SetVideoID(id string) {
 	m.video = &id
 }
 
@@ -1559,7 +1558,7 @@ func (m *DescriptionMutation) VideoCleared() bool {
 }
 
 // VideoID returns the "video" edge ID in the mutation.
-func (m *DescriptionMutation) VideoID() (id pulid.ID, exists bool) {
+func (m *DescriptionMutation) VideoID() (id string, exists bool) {
 	if m.video != nil {
 		return *m.video, true
 	}
@@ -1569,7 +1568,7 @@ func (m *DescriptionMutation) VideoID() (id pulid.ID, exists bool) {
 // VideoIDs returns the "video" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // VideoID instead. It exists only for internal usage by the builders.
-func (m *DescriptionMutation) VideoIDs() (ids []pulid.ID) {
+func (m *DescriptionMutation) VideoIDs() (ids []string) {
 	if id := m.video; id != nil {
 		ids = append(ids, *id)
 	}
@@ -1582,23 +1581,23 @@ func (m *DescriptionMutation) ResetVideo() {
 	m.clearedvideo = false
 }
 
-// SetPeriodicDescriptionTemplateID sets the "periodic_description_template" edge to the Periodic_description_template entity by id.
-func (m *DescriptionMutation) SetPeriodicDescriptionTemplateID(id pulid.ID) {
+// SetPeriodicDescriptionTemplateID sets the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity by id.
+func (m *DescriptionMutation) SetPeriodicDescriptionTemplateID(id string) {
 	m.periodic_description_template = &id
 }
 
-// ClearPeriodicDescriptionTemplate clears the "periodic_description_template" edge to the Periodic_description_template entity.
+// ClearPeriodicDescriptionTemplate clears the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity.
 func (m *DescriptionMutation) ClearPeriodicDescriptionTemplate() {
 	m.clearedperiodic_description_template = true
 }
 
-// PeriodicDescriptionTemplateCleared reports if the "periodic_description_template" edge to the Periodic_description_template entity was cleared.
+// PeriodicDescriptionTemplateCleared reports if the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity was cleared.
 func (m *DescriptionMutation) PeriodicDescriptionTemplateCleared() bool {
 	return m.clearedperiodic_description_template
 }
 
 // PeriodicDescriptionTemplateID returns the "periodic_description_template" edge ID in the mutation.
-func (m *DescriptionMutation) PeriodicDescriptionTemplateID() (id pulid.ID, exists bool) {
+func (m *DescriptionMutation) PeriodicDescriptionTemplateID() (id string, exists bool) {
 	if m.periodic_description_template != nil {
 		return *m.periodic_description_template, true
 	}
@@ -1608,7 +1607,7 @@ func (m *DescriptionMutation) PeriodicDescriptionTemplateID() (id pulid.ID, exis
 // PeriodicDescriptionTemplateIDs returns the "periodic_description_template" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // PeriodicDescriptionTemplateID instead. It exists only for internal usage by the builders.
-func (m *DescriptionMutation) PeriodicDescriptionTemplateIDs() (ids []pulid.ID) {
+func (m *DescriptionMutation) PeriodicDescriptionTemplateIDs() (ids []string) {
 	if id := m.periodic_description_template; id != nil {
 		ids = append(ids, *id)
 	}
@@ -1621,23 +1620,23 @@ func (m *DescriptionMutation) ResetPeriodicDescriptionTemplate() {
 	m.clearedperiodic_description_template = false
 }
 
-// SetCategoryDescriptionTemplateID sets the "category_description_template" edge to the Category_description_template entity by id.
-func (m *DescriptionMutation) SetCategoryDescriptionTemplateID(id pulid.ID) {
+// SetCategoryDescriptionTemplateID sets the "category_description_template" edge to the CategoryDescriptionTemplate entity by id.
+func (m *DescriptionMutation) SetCategoryDescriptionTemplateID(id string) {
 	m.category_description_template = &id
 }
 
-// ClearCategoryDescriptionTemplate clears the "category_description_template" edge to the Category_description_template entity.
+// ClearCategoryDescriptionTemplate clears the "category_description_template" edge to the CategoryDescriptionTemplate entity.
 func (m *DescriptionMutation) ClearCategoryDescriptionTemplate() {
 	m.clearedcategory_description_template = true
 }
 
-// CategoryDescriptionTemplateCleared reports if the "category_description_template" edge to the Category_description_template entity was cleared.
+// CategoryDescriptionTemplateCleared reports if the "category_description_template" edge to the CategoryDescriptionTemplate entity was cleared.
 func (m *DescriptionMutation) CategoryDescriptionTemplateCleared() bool {
 	return m.clearedcategory_description_template
 }
 
 // CategoryDescriptionTemplateID returns the "category_description_template" edge ID in the mutation.
-func (m *DescriptionMutation) CategoryDescriptionTemplateID() (id pulid.ID, exists bool) {
+func (m *DescriptionMutation) CategoryDescriptionTemplateID() (id string, exists bool) {
 	if m.category_description_template != nil {
 		return *m.category_description_template, true
 	}
@@ -1647,7 +1646,7 @@ func (m *DescriptionMutation) CategoryDescriptionTemplateID() (id pulid.ID, exis
 // CategoryDescriptionTemplateIDs returns the "category_description_template" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // CategoryDescriptionTemplateID instead. It exists only for internal usage by the builders.
-func (m *DescriptionMutation) CategoryDescriptionTemplateIDs() (ids []pulid.ID) {
+func (m *DescriptionMutation) CategoryDescriptionTemplateIDs() (ids []string) {
 	if id := m.category_description_template; id != nil {
 		ids = append(ids, *id)
 	}
@@ -1660,30 +1659,30 @@ func (m *DescriptionMutation) ResetCategoryDescriptionTemplate() {
 	m.clearedcategory_description_template = false
 }
 
-// AddDescriptionChangeIDs adds the "description_changes" edge to the Description_change entity by ids.
-func (m *DescriptionMutation) AddDescriptionChangeIDs(ids ...pulid.ID) {
+// AddDescriptionChangeIDs adds the "description_changes" edge to the DescriptionChange entity by ids.
+func (m *DescriptionMutation) AddDescriptionChangeIDs(ids ...string) {
 	if m.description_changes == nil {
-		m.description_changes = make(map[pulid.ID]struct{})
+		m.description_changes = make(map[string]struct{})
 	}
 	for i := range ids {
 		m.description_changes[ids[i]] = struct{}{}
 	}
 }
 
-// ClearDescriptionChanges clears the "description_changes" edge to the Description_change entity.
+// ClearDescriptionChanges clears the "description_changes" edge to the DescriptionChange entity.
 func (m *DescriptionMutation) ClearDescriptionChanges() {
 	m.cleareddescription_changes = true
 }
 
-// DescriptionChangesCleared reports if the "description_changes" edge to the Description_change entity was cleared.
+// DescriptionChangesCleared reports if the "description_changes" edge to the DescriptionChange entity was cleared.
 func (m *DescriptionMutation) DescriptionChangesCleared() bool {
 	return m.cleareddescription_changes
 }
 
-// RemoveDescriptionChangeIDs removes the "description_changes" edge to the Description_change entity by IDs.
-func (m *DescriptionMutation) RemoveDescriptionChangeIDs(ids ...pulid.ID) {
+// RemoveDescriptionChangeIDs removes the "description_changes" edge to the DescriptionChange entity by IDs.
+func (m *DescriptionMutation) RemoveDescriptionChangeIDs(ids ...string) {
 	if m.removeddescription_changes == nil {
-		m.removeddescription_changes = make(map[pulid.ID]struct{})
+		m.removeddescription_changes = make(map[string]struct{})
 	}
 	for i := range ids {
 		delete(m.description_changes, ids[i])
@@ -1691,8 +1690,8 @@ func (m *DescriptionMutation) RemoveDescriptionChangeIDs(ids ...pulid.ID) {
 	}
 }
 
-// RemovedDescriptionChanges returns the removed IDs of the "description_changes" edge to the Description_change entity.
-func (m *DescriptionMutation) RemovedDescriptionChangesIDs() (ids []pulid.ID) {
+// RemovedDescriptionChanges returns the removed IDs of the "description_changes" edge to the DescriptionChange entity.
+func (m *DescriptionMutation) RemovedDescriptionChangesIDs() (ids []string) {
 	for id := range m.removeddescription_changes {
 		ids = append(ids, id)
 	}
@@ -1700,7 +1699,7 @@ func (m *DescriptionMutation) RemovedDescriptionChangesIDs() (ids []pulid.ID) {
 }
 
 // DescriptionChangesIDs returns the "description_changes" edge IDs in the mutation.
-func (m *DescriptionMutation) DescriptionChangesIDs() (ids []pulid.ID) {
+func (m *DescriptionMutation) DescriptionChangesIDs() (ids []string) {
 	for id := range m.description_changes {
 		ids = append(ids, id)
 	}
@@ -2066,31 +2065,31 @@ func (m *DescriptionMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Description edge %s", name)
 }
 
-// DescriptionChangeMutation represents an operation that mutates the Description_change nodes in the graph.
+// DescriptionChangeMutation represents an operation that mutates the DescriptionChange nodes in the graph.
 type DescriptionChangeMutation struct {
 	config
 	op                  Op
 	typ                 string
-	id                  *pulid.ID
+	id                  *string
 	raw                 *string
 	variable            *string
 	normalized_variable *string
 	changed_at          *time.Time
 	clearedFields       map[string]struct{}
-	description         *pulid.ID
+	description         *string
 	cleareddescription  bool
 	done                bool
-	oldValue            func(context.Context) (*Description_change, error)
-	predicates          []predicate.Description_change
+	oldValue            func(context.Context) (*DescriptionChange, error)
+	predicates          []predicate.DescriptionChange
 }
 
 var _ ent.Mutation = (*DescriptionChangeMutation)(nil)
 
-// descriptionChangeOption allows management of the mutation configuration using functional options.
-type descriptionChangeOption func(*DescriptionChangeMutation)
+// descriptionchangeOption allows management of the mutation configuration using functional options.
+type descriptionchangeOption func(*DescriptionChangeMutation)
 
-// newDescriptionChangeMutation creates new mutation for the Description_change entity.
-func newDescriptionChangeMutation(c config, op Op, opts ...descriptionChangeOption) *DescriptionChangeMutation {
+// newDescriptionChangeMutation creates new mutation for the DescriptionChange entity.
+func newDescriptionChangeMutation(c config, op Op, opts ...descriptionchangeOption) *DescriptionChangeMutation {
 	m := &DescriptionChangeMutation{
 		config:        c,
 		op:            op,
@@ -2103,20 +2102,20 @@ func newDescriptionChangeMutation(c config, op Op, opts ...descriptionChangeOpti
 	return m
 }
 
-// withDescription_changeID sets the ID field of the mutation.
-func withDescription_changeID(id pulid.ID) descriptionChangeOption {
+// withDescriptionChangeID sets the ID field of the mutation.
+func withDescriptionChangeID(id string) descriptionchangeOption {
 	return func(m *DescriptionChangeMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *Description_change
+			value *DescriptionChange
 		)
-		m.oldValue = func(ctx context.Context) (*Description_change, error) {
+		m.oldValue = func(ctx context.Context) (*DescriptionChange, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().Description_change.Get(ctx, id)
+					value, err = m.Client().DescriptionChange.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -2125,10 +2124,10 @@ func withDescription_changeID(id pulid.ID) descriptionChangeOption {
 	}
 }
 
-// withDescription_change sets the old Description_change of the mutation.
-func withDescription_change(node *Description_change) descriptionChangeOption {
+// withDescriptionChange sets the old DescriptionChange of the mutation.
+func withDescriptionChange(node *DescriptionChange) descriptionchangeOption {
 	return func(m *DescriptionChangeMutation) {
-		m.oldValue = func(context.Context) (*Description_change, error) {
+		m.oldValue = func(context.Context) (*DescriptionChange, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -2155,14 +2154,14 @@ func (m DescriptionChangeMutation) Tx() (*Tx, error) {
 }
 
 // SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of Description_change entities.
-func (m *DescriptionChangeMutation) SetID(id pulid.ID) {
+// operation is only accepted on creation of DescriptionChange entities.
+func (m *DescriptionChangeMutation) SetID(id string) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *DescriptionChangeMutation) ID() (id pulid.ID, exists bool) {
+func (m *DescriptionChangeMutation) ID() (id string, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -2173,16 +2172,16 @@ func (m *DescriptionChangeMutation) ID() (id pulid.ID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *DescriptionChangeMutation) IDs(ctx context.Context) ([]pulid.ID, error) {
+func (m *DescriptionChangeMutation) IDs(ctx context.Context) ([]string, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []pulid.ID{id}, nil
+			return []string{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().Description_change.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().DescriptionChange.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
@@ -2202,8 +2201,8 @@ func (m *DescriptionChangeMutation) Raw() (r string, exists bool) {
 	return *v, true
 }
 
-// OldRaw returns the old "raw" field's value of the Description_change entity.
-// If the Description_change object wasn't provided to the builder, the object is fetched from the database.
+// OldRaw returns the old "raw" field's value of the DescriptionChange entity.
+// If the DescriptionChange object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *DescriptionChangeMutation) OldRaw(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -2238,8 +2237,8 @@ func (m *DescriptionChangeMutation) Variable() (r string, exists bool) {
 	return *v, true
 }
 
-// OldVariable returns the old "variable" field's value of the Description_change entity.
-// If the Description_change object wasn't provided to the builder, the object is fetched from the database.
+// OldVariable returns the old "variable" field's value of the DescriptionChange entity.
+// If the DescriptionChange object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *DescriptionChangeMutation) OldVariable(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -2258,19 +2257,19 @@ func (m *DescriptionChangeMutation) OldVariable(ctx context.Context) (v string, 
 // ClearVariable clears the value of the "variable" field.
 func (m *DescriptionChangeMutation) ClearVariable() {
 	m.variable = nil
-	m.clearedFields[description_change.FieldVariable] = struct{}{}
+	m.clearedFields[descriptionchange.FieldVariable] = struct{}{}
 }
 
 // VariableCleared returns if the "variable" field was cleared in this mutation.
 func (m *DescriptionChangeMutation) VariableCleared() bool {
-	_, ok := m.clearedFields[description_change.FieldVariable]
+	_, ok := m.clearedFields[descriptionchange.FieldVariable]
 	return ok
 }
 
 // ResetVariable resets all changes to the "variable" field.
 func (m *DescriptionChangeMutation) ResetVariable() {
 	m.variable = nil
-	delete(m.clearedFields, description_change.FieldVariable)
+	delete(m.clearedFields, descriptionchange.FieldVariable)
 }
 
 // SetNormalizedVariable sets the "normalized_variable" field.
@@ -2287,8 +2286,8 @@ func (m *DescriptionChangeMutation) NormalizedVariable() (r string, exists bool)
 	return *v, true
 }
 
-// OldNormalizedVariable returns the old "normalized_variable" field's value of the Description_change entity.
-// If the Description_change object wasn't provided to the builder, the object is fetched from the database.
+// OldNormalizedVariable returns the old "normalized_variable" field's value of the DescriptionChange entity.
+// If the DescriptionChange object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *DescriptionChangeMutation) OldNormalizedVariable(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -2307,19 +2306,19 @@ func (m *DescriptionChangeMutation) OldNormalizedVariable(ctx context.Context) (
 // ClearNormalizedVariable clears the value of the "normalized_variable" field.
 func (m *DescriptionChangeMutation) ClearNormalizedVariable() {
 	m.normalized_variable = nil
-	m.clearedFields[description_change.FieldNormalizedVariable] = struct{}{}
+	m.clearedFields[descriptionchange.FieldNormalizedVariable] = struct{}{}
 }
 
 // NormalizedVariableCleared returns if the "normalized_variable" field was cleared in this mutation.
 func (m *DescriptionChangeMutation) NormalizedVariableCleared() bool {
-	_, ok := m.clearedFields[description_change.FieldNormalizedVariable]
+	_, ok := m.clearedFields[descriptionchange.FieldNormalizedVariable]
 	return ok
 }
 
 // ResetNormalizedVariable resets all changes to the "normalized_variable" field.
 func (m *DescriptionChangeMutation) ResetNormalizedVariable() {
 	m.normalized_variable = nil
-	delete(m.clearedFields, description_change.FieldNormalizedVariable)
+	delete(m.clearedFields, descriptionchange.FieldNormalizedVariable)
 }
 
 // SetChangedAt sets the "changed_at" field.
@@ -2336,8 +2335,8 @@ func (m *DescriptionChangeMutation) ChangedAt() (r time.Time, exists bool) {
 	return *v, true
 }
 
-// OldChangedAt returns the old "changed_at" field's value of the Description_change entity.
-// If the Description_change object wasn't provided to the builder, the object is fetched from the database.
+// OldChangedAt returns the old "changed_at" field's value of the DescriptionChange entity.
+// If the DescriptionChange object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *DescriptionChangeMutation) OldChangedAt(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -2359,7 +2358,7 @@ func (m *DescriptionChangeMutation) ResetChangedAt() {
 }
 
 // SetDescriptionID sets the "description" edge to the Description entity by id.
-func (m *DescriptionChangeMutation) SetDescriptionID(id pulid.ID) {
+func (m *DescriptionChangeMutation) SetDescriptionID(id string) {
 	m.description = &id
 }
 
@@ -2374,7 +2373,7 @@ func (m *DescriptionChangeMutation) DescriptionCleared() bool {
 }
 
 // DescriptionID returns the "description" edge ID in the mutation.
-func (m *DescriptionChangeMutation) DescriptionID() (id pulid.ID, exists bool) {
+func (m *DescriptionChangeMutation) DescriptionID() (id string, exists bool) {
 	if m.description != nil {
 		return *m.description, true
 	}
@@ -2384,7 +2383,7 @@ func (m *DescriptionChangeMutation) DescriptionID() (id pulid.ID, exists bool) {
 // DescriptionIDs returns the "description" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // DescriptionID instead. It exists only for internal usage by the builders.
-func (m *DescriptionChangeMutation) DescriptionIDs() (ids []pulid.ID) {
+func (m *DescriptionChangeMutation) DescriptionIDs() (ids []string) {
 	if id := m.description; id != nil {
 		ids = append(ids, *id)
 	}
@@ -2398,14 +2397,14 @@ func (m *DescriptionChangeMutation) ResetDescription() {
 }
 
 // Where appends a list predicates to the DescriptionChangeMutation builder.
-func (m *DescriptionChangeMutation) Where(ps ...predicate.Description_change) {
+func (m *DescriptionChangeMutation) Where(ps ...predicate.DescriptionChange) {
 	m.predicates = append(m.predicates, ps...)
 }
 
 // WhereP appends storage-level predicates to the DescriptionChangeMutation builder. Using this method,
 // users can use type-assertion to append predicates that do not depend on any generated package.
 func (m *DescriptionChangeMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.Description_change, len(ps))
+	p := make([]predicate.DescriptionChange, len(ps))
 	for i := range ps {
 		p[i] = ps[i]
 	}
@@ -2422,7 +2421,7 @@ func (m *DescriptionChangeMutation) SetOp(op Op) {
 	m.op = op
 }
 
-// Type returns the node type of this mutation (Description_change).
+// Type returns the node type of this mutation (DescriptionChange).
 func (m *DescriptionChangeMutation) Type() string {
 	return m.typ
 }
@@ -2433,16 +2432,16 @@ func (m *DescriptionChangeMutation) Type() string {
 func (m *DescriptionChangeMutation) Fields() []string {
 	fields := make([]string, 0, 4)
 	if m.raw != nil {
-		fields = append(fields, description_change.FieldRaw)
+		fields = append(fields, descriptionchange.FieldRaw)
 	}
 	if m.variable != nil {
-		fields = append(fields, description_change.FieldVariable)
+		fields = append(fields, descriptionchange.FieldVariable)
 	}
 	if m.normalized_variable != nil {
-		fields = append(fields, description_change.FieldNormalizedVariable)
+		fields = append(fields, descriptionchange.FieldNormalizedVariable)
 	}
 	if m.changed_at != nil {
-		fields = append(fields, description_change.FieldChangedAt)
+		fields = append(fields, descriptionchange.FieldChangedAt)
 	}
 	return fields
 }
@@ -2452,13 +2451,13 @@ func (m *DescriptionChangeMutation) Fields() []string {
 // schema.
 func (m *DescriptionChangeMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case description_change.FieldRaw:
+	case descriptionchange.FieldRaw:
 		return m.Raw()
-	case description_change.FieldVariable:
+	case descriptionchange.FieldVariable:
 		return m.Variable()
-	case description_change.FieldNormalizedVariable:
+	case descriptionchange.FieldNormalizedVariable:
 		return m.NormalizedVariable()
-	case description_change.FieldChangedAt:
+	case descriptionchange.FieldChangedAt:
 		return m.ChangedAt()
 	}
 	return nil, false
@@ -2469,16 +2468,16 @@ func (m *DescriptionChangeMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *DescriptionChangeMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case description_change.FieldRaw:
+	case descriptionchange.FieldRaw:
 		return m.OldRaw(ctx)
-	case description_change.FieldVariable:
+	case descriptionchange.FieldVariable:
 		return m.OldVariable(ctx)
-	case description_change.FieldNormalizedVariable:
+	case descriptionchange.FieldNormalizedVariable:
 		return m.OldNormalizedVariable(ctx)
-	case description_change.FieldChangedAt:
+	case descriptionchange.FieldChangedAt:
 		return m.OldChangedAt(ctx)
 	}
-	return nil, fmt.Errorf("unknown Description_change field %s", name)
+	return nil, fmt.Errorf("unknown DescriptionChange field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
@@ -2486,28 +2485,28 @@ func (m *DescriptionChangeMutation) OldField(ctx context.Context, name string) (
 // type.
 func (m *DescriptionChangeMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case description_change.FieldRaw:
+	case descriptionchange.FieldRaw:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetRaw(v)
 		return nil
-	case description_change.FieldVariable:
+	case descriptionchange.FieldVariable:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetVariable(v)
 		return nil
-	case description_change.FieldNormalizedVariable:
+	case descriptionchange.FieldNormalizedVariable:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetNormalizedVariable(v)
 		return nil
-	case description_change.FieldChangedAt:
+	case descriptionchange.FieldChangedAt:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -2515,7 +2514,7 @@ func (m *DescriptionChangeMutation) SetField(name string, value ent.Value) error
 		m.SetChangedAt(v)
 		return nil
 	}
-	return fmt.Errorf("unknown Description_change field %s", name)
+	return fmt.Errorf("unknown DescriptionChange field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
@@ -2537,18 +2536,18 @@ func (m *DescriptionChangeMutation) AddedField(name string) (ent.Value, bool) {
 func (m *DescriptionChangeMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	}
-	return fmt.Errorf("unknown Description_change numeric field %s", name)
+	return fmt.Errorf("unknown DescriptionChange numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *DescriptionChangeMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(description_change.FieldVariable) {
-		fields = append(fields, description_change.FieldVariable)
+	if m.FieldCleared(descriptionchange.FieldVariable) {
+		fields = append(fields, descriptionchange.FieldVariable)
 	}
-	if m.FieldCleared(description_change.FieldNormalizedVariable) {
-		fields = append(fields, description_change.FieldNormalizedVariable)
+	if m.FieldCleared(descriptionchange.FieldNormalizedVariable) {
+		fields = append(fields, descriptionchange.FieldNormalizedVariable)
 	}
 	return fields
 }
@@ -2564,41 +2563,41 @@ func (m *DescriptionChangeMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *DescriptionChangeMutation) ClearField(name string) error {
 	switch name {
-	case description_change.FieldVariable:
+	case descriptionchange.FieldVariable:
 		m.ClearVariable()
 		return nil
-	case description_change.FieldNormalizedVariable:
+	case descriptionchange.FieldNormalizedVariable:
 		m.ClearNormalizedVariable()
 		return nil
 	}
-	return fmt.Errorf("unknown Description_change nullable field %s", name)
+	return fmt.Errorf("unknown DescriptionChange nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *DescriptionChangeMutation) ResetField(name string) error {
 	switch name {
-	case description_change.FieldRaw:
+	case descriptionchange.FieldRaw:
 		m.ResetRaw()
 		return nil
-	case description_change.FieldVariable:
+	case descriptionchange.FieldVariable:
 		m.ResetVariable()
 		return nil
-	case description_change.FieldNormalizedVariable:
+	case descriptionchange.FieldNormalizedVariable:
 		m.ResetNormalizedVariable()
 		return nil
-	case description_change.FieldChangedAt:
+	case descriptionchange.FieldChangedAt:
 		m.ResetChangedAt()
 		return nil
 	}
-	return fmt.Errorf("unknown Description_change field %s", name)
+	return fmt.Errorf("unknown DescriptionChange field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *DescriptionChangeMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.description != nil {
-		edges = append(edges, description_change.EdgeDescription)
+		edges = append(edges, descriptionchange.EdgeDescription)
 	}
 	return edges
 }
@@ -2607,7 +2606,7 @@ func (m *DescriptionChangeMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *DescriptionChangeMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case description_change.EdgeDescription:
+	case descriptionchange.EdgeDescription:
 		if id := m.description; id != nil {
 			return []ent.Value{*id}
 		}
@@ -2631,7 +2630,7 @@ func (m *DescriptionChangeMutation) RemovedIDs(name string) []ent.Value {
 func (m *DescriptionChangeMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.cleareddescription {
-		edges = append(edges, description_change.EdgeDescription)
+		edges = append(edges, descriptionchange.EdgeDescription)
 	}
 	return edges
 }
@@ -2640,7 +2639,7 @@ func (m *DescriptionChangeMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *DescriptionChangeMutation) EdgeCleared(name string) bool {
 	switch name {
-	case description_change.EdgeDescription:
+	case descriptionchange.EdgeDescription:
 		return m.cleareddescription
 	}
 	return false
@@ -2650,30 +2649,30 @@ func (m *DescriptionChangeMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *DescriptionChangeMutation) ClearEdge(name string) error {
 	switch name {
-	case description_change.EdgeDescription:
+	case descriptionchange.EdgeDescription:
 		m.ClearDescription()
 		return nil
 	}
-	return fmt.Errorf("unknown Description_change unique edge %s", name)
+	return fmt.Errorf("unknown DescriptionChange unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *DescriptionChangeMutation) ResetEdge(name string) error {
 	switch name {
-	case description_change.EdgeDescription:
+	case descriptionchange.EdgeDescription:
 		m.ResetDescription()
 		return nil
 	}
-	return fmt.Errorf("unknown Description_change edge %s", name)
+	return fmt.Errorf("unknown DescriptionChange edge %s", name)
 }
 
-// PatChatMutation represents an operation that mutates the Pat_chat nodes in the graph.
+// PatChatMutation represents an operation that mutates the PatChat nodes in the graph.
 type PatChatMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *pulid.ID
+	id            *string
 	message       *string
 	magnitude     *float64
 	addmagnitude  *float64
@@ -2683,20 +2682,20 @@ type PatChatMutation struct {
 	published_at  *time.Time
 	created_at    *time.Time
 	clearedFields map[string]struct{}
-	video         *pulid.ID
+	video         *string
 	clearedvideo  bool
 	done          bool
-	oldValue      func(context.Context) (*Pat_chat, error)
-	predicates    []predicate.Pat_chat
+	oldValue      func(context.Context) (*PatChat, error)
+	predicates    []predicate.PatChat
 }
 
 var _ ent.Mutation = (*PatChatMutation)(nil)
 
-// patChatOption allows management of the mutation configuration using functional options.
-type patChatOption func(*PatChatMutation)
+// patchatOption allows management of the mutation configuration using functional options.
+type patchatOption func(*PatChatMutation)
 
-// newPatChatMutation creates new mutation for the Pat_chat entity.
-func newPatChatMutation(c config, op Op, opts ...patChatOption) *PatChatMutation {
+// newPatChatMutation creates new mutation for the PatChat entity.
+func newPatChatMutation(c config, op Op, opts ...patchatOption) *PatChatMutation {
 	m := &PatChatMutation{
 		config:        c,
 		op:            op,
@@ -2709,20 +2708,20 @@ func newPatChatMutation(c config, op Op, opts ...patChatOption) *PatChatMutation
 	return m
 }
 
-// withPat_chatID sets the ID field of the mutation.
-func withPat_chatID(id pulid.ID) patChatOption {
+// withPatChatID sets the ID field of the mutation.
+func withPatChatID(id string) patchatOption {
 	return func(m *PatChatMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *Pat_chat
+			value *PatChat
 		)
-		m.oldValue = func(ctx context.Context) (*Pat_chat, error) {
+		m.oldValue = func(ctx context.Context) (*PatChat, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().Pat_chat.Get(ctx, id)
+					value, err = m.Client().PatChat.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -2731,10 +2730,10 @@ func withPat_chatID(id pulid.ID) patChatOption {
 	}
 }
 
-// withPat_chat sets the old Pat_chat of the mutation.
-func withPat_chat(node *Pat_chat) patChatOption {
+// withPatChat sets the old PatChat of the mutation.
+func withPatChat(node *PatChat) patchatOption {
 	return func(m *PatChatMutation) {
-		m.oldValue = func(context.Context) (*Pat_chat, error) {
+		m.oldValue = func(context.Context) (*PatChat, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -2761,14 +2760,14 @@ func (m PatChatMutation) Tx() (*Tx, error) {
 }
 
 // SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of Pat_chat entities.
-func (m *PatChatMutation) SetID(id pulid.ID) {
+// operation is only accepted on creation of PatChat entities.
+func (m *PatChatMutation) SetID(id string) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *PatChatMutation) ID() (id pulid.ID, exists bool) {
+func (m *PatChatMutation) ID() (id string, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -2779,16 +2778,16 @@ func (m *PatChatMutation) ID() (id pulid.ID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *PatChatMutation) IDs(ctx context.Context) ([]pulid.ID, error) {
+func (m *PatChatMutation) IDs(ctx context.Context) ([]string, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []pulid.ID{id}, nil
+			return []string{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().Pat_chat.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().PatChat.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
@@ -2808,8 +2807,8 @@ func (m *PatChatMutation) Message() (r string, exists bool) {
 	return *v, true
 }
 
-// OldMessage returns the old "message" field's value of the Pat_chat entity.
-// If the Pat_chat object wasn't provided to the builder, the object is fetched from the database.
+// OldMessage returns the old "message" field's value of the PatChat entity.
+// If the PatChat object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *PatChatMutation) OldMessage(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -2845,8 +2844,8 @@ func (m *PatChatMutation) Magnitude() (r float64, exists bool) {
 	return *v, true
 }
 
-// OldMagnitude returns the old "magnitude" field's value of the Pat_chat entity.
-// If the Pat_chat object wasn't provided to the builder, the object is fetched from the database.
+// OldMagnitude returns the old "magnitude" field's value of the PatChat entity.
+// If the PatChat object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *PatChatMutation) OldMagnitude(ctx context.Context) (v float64, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -2901,8 +2900,8 @@ func (m *PatChatMutation) Score() (r float64, exists bool) {
 	return *v, true
 }
 
-// OldScore returns the old "score" field's value of the Pat_chat entity.
-// If the Pat_chat object wasn't provided to the builder, the object is fetched from the database.
+// OldScore returns the old "score" field's value of the PatChat entity.
+// If the PatChat object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *PatChatMutation) OldScore(ctx context.Context) (v float64, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -2956,8 +2955,8 @@ func (m *PatChatMutation) IsNegative() (r bool, exists bool) {
 	return *v, true
 }
 
-// OldIsNegative returns the old "is_negative" field's value of the Pat_chat entity.
-// If the Pat_chat object wasn't provided to the builder, the object is fetched from the database.
+// OldIsNegative returns the old "is_negative" field's value of the PatChat entity.
+// If the PatChat object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *PatChatMutation) OldIsNegative(ctx context.Context) (v bool, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -2992,8 +2991,8 @@ func (m *PatChatMutation) PublishedAt() (r time.Time, exists bool) {
 	return *v, true
 }
 
-// OldPublishedAt returns the old "published_at" field's value of the Pat_chat entity.
-// If the Pat_chat object wasn't provided to the builder, the object is fetched from the database.
+// OldPublishedAt returns the old "published_at" field's value of the PatChat entity.
+// If the PatChat object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *PatChatMutation) OldPublishedAt(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -3028,8 +3027,8 @@ func (m *PatChatMutation) CreatedAt() (r time.Time, exists bool) {
 	return *v, true
 }
 
-// OldCreatedAt returns the old "created_at" field's value of the Pat_chat entity.
-// If the Pat_chat object wasn't provided to the builder, the object is fetched from the database.
+// OldCreatedAt returns the old "created_at" field's value of the PatChat entity.
+// If the PatChat object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *PatChatMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -3051,7 +3050,7 @@ func (m *PatChatMutation) ResetCreatedAt() {
 }
 
 // SetVideoID sets the "video" edge to the Video entity by id.
-func (m *PatChatMutation) SetVideoID(id pulid.ID) {
+func (m *PatChatMutation) SetVideoID(id string) {
 	m.video = &id
 }
 
@@ -3066,7 +3065,7 @@ func (m *PatChatMutation) VideoCleared() bool {
 }
 
 // VideoID returns the "video" edge ID in the mutation.
-func (m *PatChatMutation) VideoID() (id pulid.ID, exists bool) {
+func (m *PatChatMutation) VideoID() (id string, exists bool) {
 	if m.video != nil {
 		return *m.video, true
 	}
@@ -3076,7 +3075,7 @@ func (m *PatChatMutation) VideoID() (id pulid.ID, exists bool) {
 // VideoIDs returns the "video" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // VideoID instead. It exists only for internal usage by the builders.
-func (m *PatChatMutation) VideoIDs() (ids []pulid.ID) {
+func (m *PatChatMutation) VideoIDs() (ids []string) {
 	if id := m.video; id != nil {
 		ids = append(ids, *id)
 	}
@@ -3090,14 +3089,14 @@ func (m *PatChatMutation) ResetVideo() {
 }
 
 // Where appends a list predicates to the PatChatMutation builder.
-func (m *PatChatMutation) Where(ps ...predicate.Pat_chat) {
+func (m *PatChatMutation) Where(ps ...predicate.PatChat) {
 	m.predicates = append(m.predicates, ps...)
 }
 
 // WhereP appends storage-level predicates to the PatChatMutation builder. Using this method,
 // users can use type-assertion to append predicates that do not depend on any generated package.
 func (m *PatChatMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.Pat_chat, len(ps))
+	p := make([]predicate.PatChat, len(ps))
 	for i := range ps {
 		p[i] = ps[i]
 	}
@@ -3114,7 +3113,7 @@ func (m *PatChatMutation) SetOp(op Op) {
 	m.op = op
 }
 
-// Type returns the node type of this mutation (Pat_chat).
+// Type returns the node type of this mutation (PatChat).
 func (m *PatChatMutation) Type() string {
 	return m.typ
 }
@@ -3125,22 +3124,22 @@ func (m *PatChatMutation) Type() string {
 func (m *PatChatMutation) Fields() []string {
 	fields := make([]string, 0, 6)
 	if m.message != nil {
-		fields = append(fields, pat_chat.FieldMessage)
+		fields = append(fields, patchat.FieldMessage)
 	}
 	if m.magnitude != nil {
-		fields = append(fields, pat_chat.FieldMagnitude)
+		fields = append(fields, patchat.FieldMagnitude)
 	}
 	if m.score != nil {
-		fields = append(fields, pat_chat.FieldScore)
+		fields = append(fields, patchat.FieldScore)
 	}
 	if m.is_negative != nil {
-		fields = append(fields, pat_chat.FieldIsNegative)
+		fields = append(fields, patchat.FieldIsNegative)
 	}
 	if m.published_at != nil {
-		fields = append(fields, pat_chat.FieldPublishedAt)
+		fields = append(fields, patchat.FieldPublishedAt)
 	}
 	if m.created_at != nil {
-		fields = append(fields, pat_chat.FieldCreatedAt)
+		fields = append(fields, patchat.FieldCreatedAt)
 	}
 	return fields
 }
@@ -3150,17 +3149,17 @@ func (m *PatChatMutation) Fields() []string {
 // schema.
 func (m *PatChatMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case pat_chat.FieldMessage:
+	case patchat.FieldMessage:
 		return m.Message()
-	case pat_chat.FieldMagnitude:
+	case patchat.FieldMagnitude:
 		return m.Magnitude()
-	case pat_chat.FieldScore:
+	case patchat.FieldScore:
 		return m.Score()
-	case pat_chat.FieldIsNegative:
+	case patchat.FieldIsNegative:
 		return m.IsNegative()
-	case pat_chat.FieldPublishedAt:
+	case patchat.FieldPublishedAt:
 		return m.PublishedAt()
-	case pat_chat.FieldCreatedAt:
+	case patchat.FieldCreatedAt:
 		return m.CreatedAt()
 	}
 	return nil, false
@@ -3171,20 +3170,20 @@ func (m *PatChatMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *PatChatMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case pat_chat.FieldMessage:
+	case patchat.FieldMessage:
 		return m.OldMessage(ctx)
-	case pat_chat.FieldMagnitude:
+	case patchat.FieldMagnitude:
 		return m.OldMagnitude(ctx)
-	case pat_chat.FieldScore:
+	case patchat.FieldScore:
 		return m.OldScore(ctx)
-	case pat_chat.FieldIsNegative:
+	case patchat.FieldIsNegative:
 		return m.OldIsNegative(ctx)
-	case pat_chat.FieldPublishedAt:
+	case patchat.FieldPublishedAt:
 		return m.OldPublishedAt(ctx)
-	case pat_chat.FieldCreatedAt:
+	case patchat.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	}
-	return nil, fmt.Errorf("unknown Pat_chat field %s", name)
+	return nil, fmt.Errorf("unknown PatChat field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
@@ -3192,42 +3191,42 @@ func (m *PatChatMutation) OldField(ctx context.Context, name string) (ent.Value,
 // type.
 func (m *PatChatMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case pat_chat.FieldMessage:
+	case patchat.FieldMessage:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetMessage(v)
 		return nil
-	case pat_chat.FieldMagnitude:
+	case patchat.FieldMagnitude:
 		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetMagnitude(v)
 		return nil
-	case pat_chat.FieldScore:
+	case patchat.FieldScore:
 		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetScore(v)
 		return nil
-	case pat_chat.FieldIsNegative:
+	case patchat.FieldIsNegative:
 		v, ok := value.(bool)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIsNegative(v)
 		return nil
-	case pat_chat.FieldPublishedAt:
+	case patchat.FieldPublishedAt:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPublishedAt(v)
 		return nil
-	case pat_chat.FieldCreatedAt:
+	case patchat.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -3235,7 +3234,7 @@ func (m *PatChatMutation) SetField(name string, value ent.Value) error {
 		m.SetCreatedAt(v)
 		return nil
 	}
-	return fmt.Errorf("unknown Pat_chat field %s", name)
+	return fmt.Errorf("unknown PatChat field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
@@ -3243,10 +3242,10 @@ func (m *PatChatMutation) SetField(name string, value ent.Value) error {
 func (m *PatChatMutation) AddedFields() []string {
 	var fields []string
 	if m.addmagnitude != nil {
-		fields = append(fields, pat_chat.FieldMagnitude)
+		fields = append(fields, patchat.FieldMagnitude)
 	}
 	if m.addscore != nil {
-		fields = append(fields, pat_chat.FieldScore)
+		fields = append(fields, patchat.FieldScore)
 	}
 	return fields
 }
@@ -3256,9 +3255,9 @@ func (m *PatChatMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *PatChatMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case pat_chat.FieldMagnitude:
+	case patchat.FieldMagnitude:
 		return m.AddedMagnitude()
-	case pat_chat.FieldScore:
+	case patchat.FieldScore:
 		return m.AddedScore()
 	}
 	return nil, false
@@ -3269,14 +3268,14 @@ func (m *PatChatMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *PatChatMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case pat_chat.FieldMagnitude:
+	case patchat.FieldMagnitude:
 		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddMagnitude(v)
 		return nil
-	case pat_chat.FieldScore:
+	case patchat.FieldScore:
 		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -3284,7 +3283,7 @@ func (m *PatChatMutation) AddField(name string, value ent.Value) error {
 		m.AddScore(v)
 		return nil
 	}
-	return fmt.Errorf("unknown Pat_chat numeric field %s", name)
+	return fmt.Errorf("unknown PatChat numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
@@ -3303,40 +3302,40 @@ func (m *PatChatMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *PatChatMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown Pat_chat nullable field %s", name)
+	return fmt.Errorf("unknown PatChat nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *PatChatMutation) ResetField(name string) error {
 	switch name {
-	case pat_chat.FieldMessage:
+	case patchat.FieldMessage:
 		m.ResetMessage()
 		return nil
-	case pat_chat.FieldMagnitude:
+	case patchat.FieldMagnitude:
 		m.ResetMagnitude()
 		return nil
-	case pat_chat.FieldScore:
+	case patchat.FieldScore:
 		m.ResetScore()
 		return nil
-	case pat_chat.FieldIsNegative:
+	case patchat.FieldIsNegative:
 		m.ResetIsNegative()
 		return nil
-	case pat_chat.FieldPublishedAt:
+	case patchat.FieldPublishedAt:
 		m.ResetPublishedAt()
 		return nil
-	case pat_chat.FieldCreatedAt:
+	case patchat.FieldCreatedAt:
 		m.ResetCreatedAt()
 		return nil
 	}
-	return fmt.Errorf("unknown Pat_chat field %s", name)
+	return fmt.Errorf("unknown PatChat field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PatChatMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.video != nil {
-		edges = append(edges, pat_chat.EdgeVideo)
+		edges = append(edges, patchat.EdgeVideo)
 	}
 	return edges
 }
@@ -3345,7 +3344,7 @@ func (m *PatChatMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *PatChatMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case pat_chat.EdgeVideo:
+	case patchat.EdgeVideo:
 		if id := m.video; id != nil {
 			return []ent.Value{*id}
 		}
@@ -3369,7 +3368,7 @@ func (m *PatChatMutation) RemovedIDs(name string) []ent.Value {
 func (m *PatChatMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.clearedvideo {
-		edges = append(edges, pat_chat.EdgeVideo)
+		edges = append(edges, patchat.EdgeVideo)
 	}
 	return edges
 }
@@ -3378,7 +3377,7 @@ func (m *PatChatMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *PatChatMutation) EdgeCleared(name string) bool {
 	switch name {
-	case pat_chat.EdgeVideo:
+	case patchat.EdgeVideo:
 		return m.clearedvideo
 	}
 	return false
@@ -3388,49 +3387,49 @@ func (m *PatChatMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *PatChatMutation) ClearEdge(name string) error {
 	switch name {
-	case pat_chat.EdgeVideo:
+	case patchat.EdgeVideo:
 		m.ClearVideo()
 		return nil
 	}
-	return fmt.Errorf("unknown Pat_chat unique edge %s", name)
+	return fmt.Errorf("unknown PatChat unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *PatChatMutation) ResetEdge(name string) error {
 	switch name {
-	case pat_chat.EdgeVideo:
+	case patchat.EdgeVideo:
 		m.ResetVideo()
 		return nil
 	}
-	return fmt.Errorf("unknown Pat_chat edge %s", name)
+	return fmt.Errorf("unknown PatChat edge %s", name)
 }
 
-// PeriodicDescriptionTemplateMutation represents an operation that mutates the Periodic_description_template nodes in the graph.
+// PeriodicDescriptionTemplateMutation represents an operation that mutates the PeriodicDescriptionTemplate nodes in the graph.
 type PeriodicDescriptionTemplateMutation struct {
 	config
 	op                  Op
 	typ                 string
-	id                  *pulid.ID
+	id                  *string
 	text                *string
 	start_use_at        *time.Time
 	last_use_at         *time.Time
 	clearedFields       map[string]struct{}
-	descriptions        map[pulid.ID]struct{}
-	removeddescriptions map[pulid.ID]struct{}
+	descriptions        map[string]struct{}
+	removeddescriptions map[string]struct{}
 	cleareddescriptions bool
 	done                bool
-	oldValue            func(context.Context) (*Periodic_description_template, error)
-	predicates          []predicate.Periodic_description_template
+	oldValue            func(context.Context) (*PeriodicDescriptionTemplate, error)
+	predicates          []predicate.PeriodicDescriptionTemplate
 }
 
 var _ ent.Mutation = (*PeriodicDescriptionTemplateMutation)(nil)
 
-// periodicDescriptionTemplateOption allows management of the mutation configuration using functional options.
-type periodicDescriptionTemplateOption func(*PeriodicDescriptionTemplateMutation)
+// periodicdescriptiontemplateOption allows management of the mutation configuration using functional options.
+type periodicdescriptiontemplateOption func(*PeriodicDescriptionTemplateMutation)
 
-// newPeriodicDescriptionTemplateMutation creates new mutation for the Periodic_description_template entity.
-func newPeriodicDescriptionTemplateMutation(c config, op Op, opts ...periodicDescriptionTemplateOption) *PeriodicDescriptionTemplateMutation {
+// newPeriodicDescriptionTemplateMutation creates new mutation for the PeriodicDescriptionTemplate entity.
+func newPeriodicDescriptionTemplateMutation(c config, op Op, opts ...periodicdescriptiontemplateOption) *PeriodicDescriptionTemplateMutation {
 	m := &PeriodicDescriptionTemplateMutation{
 		config:        c,
 		op:            op,
@@ -3443,20 +3442,20 @@ func newPeriodicDescriptionTemplateMutation(c config, op Op, opts ...periodicDes
 	return m
 }
 
-// withPeriodic_description_templateID sets the ID field of the mutation.
-func withPeriodic_description_templateID(id pulid.ID) periodicDescriptionTemplateOption {
+// withPeriodicDescriptionTemplateID sets the ID field of the mutation.
+func withPeriodicDescriptionTemplateID(id string) periodicdescriptiontemplateOption {
 	return func(m *PeriodicDescriptionTemplateMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *Periodic_description_template
+			value *PeriodicDescriptionTemplate
 		)
-		m.oldValue = func(ctx context.Context) (*Periodic_description_template, error) {
+		m.oldValue = func(ctx context.Context) (*PeriodicDescriptionTemplate, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().Periodic_description_template.Get(ctx, id)
+					value, err = m.Client().PeriodicDescriptionTemplate.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -3465,10 +3464,10 @@ func withPeriodic_description_templateID(id pulid.ID) periodicDescriptionTemplat
 	}
 }
 
-// withPeriodic_description_template sets the old Periodic_description_template of the mutation.
-func withPeriodic_description_template(node *Periodic_description_template) periodicDescriptionTemplateOption {
+// withPeriodicDescriptionTemplate sets the old PeriodicDescriptionTemplate of the mutation.
+func withPeriodicDescriptionTemplate(node *PeriodicDescriptionTemplate) periodicdescriptiontemplateOption {
 	return func(m *PeriodicDescriptionTemplateMutation) {
-		m.oldValue = func(context.Context) (*Periodic_description_template, error) {
+		m.oldValue = func(context.Context) (*PeriodicDescriptionTemplate, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -3495,14 +3494,14 @@ func (m PeriodicDescriptionTemplateMutation) Tx() (*Tx, error) {
 }
 
 // SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of Periodic_description_template entities.
-func (m *PeriodicDescriptionTemplateMutation) SetID(id pulid.ID) {
+// operation is only accepted on creation of PeriodicDescriptionTemplate entities.
+func (m *PeriodicDescriptionTemplateMutation) SetID(id string) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *PeriodicDescriptionTemplateMutation) ID() (id pulid.ID, exists bool) {
+func (m *PeriodicDescriptionTemplateMutation) ID() (id string, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -3513,16 +3512,16 @@ func (m *PeriodicDescriptionTemplateMutation) ID() (id pulid.ID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *PeriodicDescriptionTemplateMutation) IDs(ctx context.Context) ([]pulid.ID, error) {
+func (m *PeriodicDescriptionTemplateMutation) IDs(ctx context.Context) ([]string, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []pulid.ID{id}, nil
+			return []string{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().Periodic_description_template.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().PeriodicDescriptionTemplate.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
@@ -3542,8 +3541,8 @@ func (m *PeriodicDescriptionTemplateMutation) Text() (r string, exists bool) {
 	return *v, true
 }
 
-// OldText returns the old "text" field's value of the Periodic_description_template entity.
-// If the Periodic_description_template object wasn't provided to the builder, the object is fetched from the database.
+// OldText returns the old "text" field's value of the PeriodicDescriptionTemplate entity.
+// If the PeriodicDescriptionTemplate object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *PeriodicDescriptionTemplateMutation) OldText(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -3578,8 +3577,8 @@ func (m *PeriodicDescriptionTemplateMutation) StartUseAt() (r time.Time, exists 
 	return *v, true
 }
 
-// OldStartUseAt returns the old "start_use_at" field's value of the Periodic_description_template entity.
-// If the Periodic_description_template object wasn't provided to the builder, the object is fetched from the database.
+// OldStartUseAt returns the old "start_use_at" field's value of the PeriodicDescriptionTemplate entity.
+// If the PeriodicDescriptionTemplate object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *PeriodicDescriptionTemplateMutation) OldStartUseAt(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -3598,19 +3597,19 @@ func (m *PeriodicDescriptionTemplateMutation) OldStartUseAt(ctx context.Context)
 // ClearStartUseAt clears the value of the "start_use_at" field.
 func (m *PeriodicDescriptionTemplateMutation) ClearStartUseAt() {
 	m.start_use_at = nil
-	m.clearedFields[periodic_description_template.FieldStartUseAt] = struct{}{}
+	m.clearedFields[periodicdescriptiontemplate.FieldStartUseAt] = struct{}{}
 }
 
 // StartUseAtCleared returns if the "start_use_at" field was cleared in this mutation.
 func (m *PeriodicDescriptionTemplateMutation) StartUseAtCleared() bool {
-	_, ok := m.clearedFields[periodic_description_template.FieldStartUseAt]
+	_, ok := m.clearedFields[periodicdescriptiontemplate.FieldStartUseAt]
 	return ok
 }
 
 // ResetStartUseAt resets all changes to the "start_use_at" field.
 func (m *PeriodicDescriptionTemplateMutation) ResetStartUseAt() {
 	m.start_use_at = nil
-	delete(m.clearedFields, periodic_description_template.FieldStartUseAt)
+	delete(m.clearedFields, periodicdescriptiontemplate.FieldStartUseAt)
 }
 
 // SetLastUseAt sets the "last_use_at" field.
@@ -3627,8 +3626,8 @@ func (m *PeriodicDescriptionTemplateMutation) LastUseAt() (r time.Time, exists b
 	return *v, true
 }
 
-// OldLastUseAt returns the old "last_use_at" field's value of the Periodic_description_template entity.
-// If the Periodic_description_template object wasn't provided to the builder, the object is fetched from the database.
+// OldLastUseAt returns the old "last_use_at" field's value of the PeriodicDescriptionTemplate entity.
+// If the PeriodicDescriptionTemplate object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *PeriodicDescriptionTemplateMutation) OldLastUseAt(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -3647,25 +3646,25 @@ func (m *PeriodicDescriptionTemplateMutation) OldLastUseAt(ctx context.Context) 
 // ClearLastUseAt clears the value of the "last_use_at" field.
 func (m *PeriodicDescriptionTemplateMutation) ClearLastUseAt() {
 	m.last_use_at = nil
-	m.clearedFields[periodic_description_template.FieldLastUseAt] = struct{}{}
+	m.clearedFields[periodicdescriptiontemplate.FieldLastUseAt] = struct{}{}
 }
 
 // LastUseAtCleared returns if the "last_use_at" field was cleared in this mutation.
 func (m *PeriodicDescriptionTemplateMutation) LastUseAtCleared() bool {
-	_, ok := m.clearedFields[periodic_description_template.FieldLastUseAt]
+	_, ok := m.clearedFields[periodicdescriptiontemplate.FieldLastUseAt]
 	return ok
 }
 
 // ResetLastUseAt resets all changes to the "last_use_at" field.
 func (m *PeriodicDescriptionTemplateMutation) ResetLastUseAt() {
 	m.last_use_at = nil
-	delete(m.clearedFields, periodic_description_template.FieldLastUseAt)
+	delete(m.clearedFields, periodicdescriptiontemplate.FieldLastUseAt)
 }
 
 // AddDescriptionIDs adds the "descriptions" edge to the Description entity by ids.
-func (m *PeriodicDescriptionTemplateMutation) AddDescriptionIDs(ids ...pulid.ID) {
+func (m *PeriodicDescriptionTemplateMutation) AddDescriptionIDs(ids ...string) {
 	if m.descriptions == nil {
-		m.descriptions = make(map[pulid.ID]struct{})
+		m.descriptions = make(map[string]struct{})
 	}
 	for i := range ids {
 		m.descriptions[ids[i]] = struct{}{}
@@ -3683,9 +3682,9 @@ func (m *PeriodicDescriptionTemplateMutation) DescriptionsCleared() bool {
 }
 
 // RemoveDescriptionIDs removes the "descriptions" edge to the Description entity by IDs.
-func (m *PeriodicDescriptionTemplateMutation) RemoveDescriptionIDs(ids ...pulid.ID) {
+func (m *PeriodicDescriptionTemplateMutation) RemoveDescriptionIDs(ids ...string) {
 	if m.removeddescriptions == nil {
-		m.removeddescriptions = make(map[pulid.ID]struct{})
+		m.removeddescriptions = make(map[string]struct{})
 	}
 	for i := range ids {
 		delete(m.descriptions, ids[i])
@@ -3694,7 +3693,7 @@ func (m *PeriodicDescriptionTemplateMutation) RemoveDescriptionIDs(ids ...pulid.
 }
 
 // RemovedDescriptions returns the removed IDs of the "descriptions" edge to the Description entity.
-func (m *PeriodicDescriptionTemplateMutation) RemovedDescriptionsIDs() (ids []pulid.ID) {
+func (m *PeriodicDescriptionTemplateMutation) RemovedDescriptionsIDs() (ids []string) {
 	for id := range m.removeddescriptions {
 		ids = append(ids, id)
 	}
@@ -3702,7 +3701,7 @@ func (m *PeriodicDescriptionTemplateMutation) RemovedDescriptionsIDs() (ids []pu
 }
 
 // DescriptionsIDs returns the "descriptions" edge IDs in the mutation.
-func (m *PeriodicDescriptionTemplateMutation) DescriptionsIDs() (ids []pulid.ID) {
+func (m *PeriodicDescriptionTemplateMutation) DescriptionsIDs() (ids []string) {
 	for id := range m.descriptions {
 		ids = append(ids, id)
 	}
@@ -3717,14 +3716,14 @@ func (m *PeriodicDescriptionTemplateMutation) ResetDescriptions() {
 }
 
 // Where appends a list predicates to the PeriodicDescriptionTemplateMutation builder.
-func (m *PeriodicDescriptionTemplateMutation) Where(ps ...predicate.Periodic_description_template) {
+func (m *PeriodicDescriptionTemplateMutation) Where(ps ...predicate.PeriodicDescriptionTemplate) {
 	m.predicates = append(m.predicates, ps...)
 }
 
 // WhereP appends storage-level predicates to the PeriodicDescriptionTemplateMutation builder. Using this method,
 // users can use type-assertion to append predicates that do not depend on any generated package.
 func (m *PeriodicDescriptionTemplateMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.Periodic_description_template, len(ps))
+	p := make([]predicate.PeriodicDescriptionTemplate, len(ps))
 	for i := range ps {
 		p[i] = ps[i]
 	}
@@ -3741,7 +3740,7 @@ func (m *PeriodicDescriptionTemplateMutation) SetOp(op Op) {
 	m.op = op
 }
 
-// Type returns the node type of this mutation (Periodic_description_template).
+// Type returns the node type of this mutation (PeriodicDescriptionTemplate).
 func (m *PeriodicDescriptionTemplateMutation) Type() string {
 	return m.typ
 }
@@ -3752,13 +3751,13 @@ func (m *PeriodicDescriptionTemplateMutation) Type() string {
 func (m *PeriodicDescriptionTemplateMutation) Fields() []string {
 	fields := make([]string, 0, 3)
 	if m.text != nil {
-		fields = append(fields, periodic_description_template.FieldText)
+		fields = append(fields, periodicdescriptiontemplate.FieldText)
 	}
 	if m.start_use_at != nil {
-		fields = append(fields, periodic_description_template.FieldStartUseAt)
+		fields = append(fields, periodicdescriptiontemplate.FieldStartUseAt)
 	}
 	if m.last_use_at != nil {
-		fields = append(fields, periodic_description_template.FieldLastUseAt)
+		fields = append(fields, periodicdescriptiontemplate.FieldLastUseAt)
 	}
 	return fields
 }
@@ -3768,11 +3767,11 @@ func (m *PeriodicDescriptionTemplateMutation) Fields() []string {
 // schema.
 func (m *PeriodicDescriptionTemplateMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case periodic_description_template.FieldText:
+	case periodicdescriptiontemplate.FieldText:
 		return m.Text()
-	case periodic_description_template.FieldStartUseAt:
+	case periodicdescriptiontemplate.FieldStartUseAt:
 		return m.StartUseAt()
-	case periodic_description_template.FieldLastUseAt:
+	case periodicdescriptiontemplate.FieldLastUseAt:
 		return m.LastUseAt()
 	}
 	return nil, false
@@ -3783,14 +3782,14 @@ func (m *PeriodicDescriptionTemplateMutation) Field(name string) (ent.Value, boo
 // database failed.
 func (m *PeriodicDescriptionTemplateMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case periodic_description_template.FieldText:
+	case periodicdescriptiontemplate.FieldText:
 		return m.OldText(ctx)
-	case periodic_description_template.FieldStartUseAt:
+	case periodicdescriptiontemplate.FieldStartUseAt:
 		return m.OldStartUseAt(ctx)
-	case periodic_description_template.FieldLastUseAt:
+	case periodicdescriptiontemplate.FieldLastUseAt:
 		return m.OldLastUseAt(ctx)
 	}
-	return nil, fmt.Errorf("unknown Periodic_description_template field %s", name)
+	return nil, fmt.Errorf("unknown PeriodicDescriptionTemplate field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
@@ -3798,21 +3797,21 @@ func (m *PeriodicDescriptionTemplateMutation) OldField(ctx context.Context, name
 // type.
 func (m *PeriodicDescriptionTemplateMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case periodic_description_template.FieldText:
+	case periodicdescriptiontemplate.FieldText:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetText(v)
 		return nil
-	case periodic_description_template.FieldStartUseAt:
+	case periodicdescriptiontemplate.FieldStartUseAt:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStartUseAt(v)
 		return nil
-	case periodic_description_template.FieldLastUseAt:
+	case periodicdescriptiontemplate.FieldLastUseAt:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -3820,7 +3819,7 @@ func (m *PeriodicDescriptionTemplateMutation) SetField(name string, value ent.Va
 		m.SetLastUseAt(v)
 		return nil
 	}
-	return fmt.Errorf("unknown Periodic_description_template field %s", name)
+	return fmt.Errorf("unknown PeriodicDescriptionTemplate field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
@@ -3842,18 +3841,18 @@ func (m *PeriodicDescriptionTemplateMutation) AddedField(name string) (ent.Value
 func (m *PeriodicDescriptionTemplateMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	}
-	return fmt.Errorf("unknown Periodic_description_template numeric field %s", name)
+	return fmt.Errorf("unknown PeriodicDescriptionTemplate numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *PeriodicDescriptionTemplateMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(periodic_description_template.FieldStartUseAt) {
-		fields = append(fields, periodic_description_template.FieldStartUseAt)
+	if m.FieldCleared(periodicdescriptiontemplate.FieldStartUseAt) {
+		fields = append(fields, periodicdescriptiontemplate.FieldStartUseAt)
 	}
-	if m.FieldCleared(periodic_description_template.FieldLastUseAt) {
-		fields = append(fields, periodic_description_template.FieldLastUseAt)
+	if m.FieldCleared(periodicdescriptiontemplate.FieldLastUseAt) {
+		fields = append(fields, periodicdescriptiontemplate.FieldLastUseAt)
 	}
 	return fields
 }
@@ -3869,38 +3868,38 @@ func (m *PeriodicDescriptionTemplateMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *PeriodicDescriptionTemplateMutation) ClearField(name string) error {
 	switch name {
-	case periodic_description_template.FieldStartUseAt:
+	case periodicdescriptiontemplate.FieldStartUseAt:
 		m.ClearStartUseAt()
 		return nil
-	case periodic_description_template.FieldLastUseAt:
+	case periodicdescriptiontemplate.FieldLastUseAt:
 		m.ClearLastUseAt()
 		return nil
 	}
-	return fmt.Errorf("unknown Periodic_description_template nullable field %s", name)
+	return fmt.Errorf("unknown PeriodicDescriptionTemplate nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *PeriodicDescriptionTemplateMutation) ResetField(name string) error {
 	switch name {
-	case periodic_description_template.FieldText:
+	case periodicdescriptiontemplate.FieldText:
 		m.ResetText()
 		return nil
-	case periodic_description_template.FieldStartUseAt:
+	case periodicdescriptiontemplate.FieldStartUseAt:
 		m.ResetStartUseAt()
 		return nil
-	case periodic_description_template.FieldLastUseAt:
+	case periodicdescriptiontemplate.FieldLastUseAt:
 		m.ResetLastUseAt()
 		return nil
 	}
-	return fmt.Errorf("unknown Periodic_description_template field %s", name)
+	return fmt.Errorf("unknown PeriodicDescriptionTemplate field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PeriodicDescriptionTemplateMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.descriptions != nil {
-		edges = append(edges, periodic_description_template.EdgeDescriptions)
+		edges = append(edges, periodicdescriptiontemplate.EdgeDescriptions)
 	}
 	return edges
 }
@@ -3909,7 +3908,7 @@ func (m *PeriodicDescriptionTemplateMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *PeriodicDescriptionTemplateMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case periodic_description_template.EdgeDescriptions:
+	case periodicdescriptiontemplate.EdgeDescriptions:
 		ids := make([]ent.Value, 0, len(m.descriptions))
 		for id := range m.descriptions {
 			ids = append(ids, id)
@@ -3923,7 +3922,7 @@ func (m *PeriodicDescriptionTemplateMutation) AddedIDs(name string) []ent.Value 
 func (m *PeriodicDescriptionTemplateMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.removeddescriptions != nil {
-		edges = append(edges, periodic_description_template.EdgeDescriptions)
+		edges = append(edges, periodicdescriptiontemplate.EdgeDescriptions)
 	}
 	return edges
 }
@@ -3932,7 +3931,7 @@ func (m *PeriodicDescriptionTemplateMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *PeriodicDescriptionTemplateMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case periodic_description_template.EdgeDescriptions:
+	case periodicdescriptiontemplate.EdgeDescriptions:
 		ids := make([]ent.Value, 0, len(m.removeddescriptions))
 		for id := range m.removeddescriptions {
 			ids = append(ids, id)
@@ -3946,7 +3945,7 @@ func (m *PeriodicDescriptionTemplateMutation) RemovedIDs(name string) []ent.Valu
 func (m *PeriodicDescriptionTemplateMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.cleareddescriptions {
-		edges = append(edges, periodic_description_template.EdgeDescriptions)
+		edges = append(edges, periodicdescriptiontemplate.EdgeDescriptions)
 	}
 	return edges
 }
@@ -3955,7 +3954,7 @@ func (m *PeriodicDescriptionTemplateMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *PeriodicDescriptionTemplateMutation) EdgeCleared(name string) bool {
 	switch name {
-	case periodic_description_template.EdgeDescriptions:
+	case periodicdescriptiontemplate.EdgeDescriptions:
 		return m.cleareddescriptions
 	}
 	return false
@@ -3966,18 +3965,18 @@ func (m *PeriodicDescriptionTemplateMutation) EdgeCleared(name string) bool {
 func (m *PeriodicDescriptionTemplateMutation) ClearEdge(name string) error {
 	switch name {
 	}
-	return fmt.Errorf("unknown Periodic_description_template unique edge %s", name)
+	return fmt.Errorf("unknown PeriodicDescriptionTemplate unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *PeriodicDescriptionTemplateMutation) ResetEdge(name string) error {
 	switch name {
-	case periodic_description_template.EdgeDescriptions:
+	case periodicdescriptiontemplate.EdgeDescriptions:
 		m.ResetDescriptions()
 		return nil
 	}
-	return fmt.Errorf("unknown Periodic_description_template edge %s", name)
+	return fmt.Errorf("unknown PeriodicDescriptionTemplate edge %s", name)
 }
 
 // VideoMutation represents an operation that mutates the Video nodes in the graph.
@@ -3985,7 +3984,7 @@ type VideoMutation struct {
 	config
 	op                           Op
 	typ                          string
-	id                           *pulid.ID
+	id                           *string
 	video_id                     *string
 	title                        *string
 	normalized_title             *string
@@ -4001,22 +4000,22 @@ type VideoMutation struct {
 	created_at                   *time.Time
 	updated_at                   *time.Time
 	clearedFields                map[string]struct{}
-	descriptions                 *pulid.ID
+	descriptions                 *string
 	cleareddescriptions          bool
-	channel                      map[pulid.ID]struct{}
-	removedchannel               map[pulid.ID]struct{}
+	channel                      map[string]struct{}
+	removedchannel               map[string]struct{}
 	clearedchannel               bool
-	video_play_ranges            map[pulid.ID]struct{}
-	removedvideo_play_ranges     map[pulid.ID]struct{}
+	video_play_ranges            map[string]struct{}
+	removedvideo_play_ranges     map[string]struct{}
 	clearedvideo_play_ranges     bool
-	video_disallow_ranges        map[pulid.ID]struct{}
-	removedvideo_disallow_ranges map[pulid.ID]struct{}
+	video_disallow_ranges        map[string]struct{}
+	removedvideo_disallow_ranges map[string]struct{}
 	clearedvideo_disallow_ranges bool
-	video_title_changes          map[pulid.ID]struct{}
-	removedvideo_title_changes   map[pulid.ID]struct{}
+	video_title_changes          map[string]struct{}
+	removedvideo_title_changes   map[string]struct{}
 	clearedvideo_title_changes   bool
-	_Pat_chats                   map[pulid.ID]struct{}
-	removed_Pat_chats            map[pulid.ID]struct{}
+	_Pat_chats                   map[string]struct{}
+	removed_Pat_chats            map[string]struct{}
 	cleared_Pat_chats            bool
 	done                         bool
 	oldValue                     func(context.Context) (*Video, error)
@@ -4043,7 +4042,7 @@ func newVideoMutation(c config, op Op, opts ...videoOption) *VideoMutation {
 }
 
 // withVideoID sets the ID field of the mutation.
-func withVideoID(id pulid.ID) videoOption {
+func withVideoID(id string) videoOption {
 	return func(m *VideoMutation) {
 		var (
 			err   error
@@ -4095,13 +4094,13 @@ func (m VideoMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of Video entities.
-func (m *VideoMutation) SetID(id pulid.ID) {
+func (m *VideoMutation) SetID(id string) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *VideoMutation) ID() (id pulid.ID, exists bool) {
+func (m *VideoMutation) ID() (id string, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -4112,12 +4111,12 @@ func (m *VideoMutation) ID() (id pulid.ID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *VideoMutation) IDs(ctx context.Context) ([]pulid.ID, error) {
+func (m *VideoMutation) IDs(ctx context.Context) ([]string, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []pulid.ID{id}, nil
+			return []string{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -4655,7 +4654,7 @@ func (m *VideoMutation) ResetUpdatedAt() {
 }
 
 // SetDescriptionsID sets the "descriptions" edge to the Description entity by id.
-func (m *VideoMutation) SetDescriptionsID(id pulid.ID) {
+func (m *VideoMutation) SetDescriptionsID(id string) {
 	m.descriptions = &id
 }
 
@@ -4670,7 +4669,7 @@ func (m *VideoMutation) DescriptionsCleared() bool {
 }
 
 // DescriptionsID returns the "descriptions" edge ID in the mutation.
-func (m *VideoMutation) DescriptionsID() (id pulid.ID, exists bool) {
+func (m *VideoMutation) DescriptionsID() (id string, exists bool) {
 	if m.descriptions != nil {
 		return *m.descriptions, true
 	}
@@ -4680,7 +4679,7 @@ func (m *VideoMutation) DescriptionsID() (id pulid.ID, exists bool) {
 // DescriptionsIDs returns the "descriptions" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // DescriptionsID instead. It exists only for internal usage by the builders.
-func (m *VideoMutation) DescriptionsIDs() (ids []pulid.ID) {
+func (m *VideoMutation) DescriptionsIDs() (ids []string) {
 	if id := m.descriptions; id != nil {
 		ids = append(ids, *id)
 	}
@@ -4694,9 +4693,9 @@ func (m *VideoMutation) ResetDescriptions() {
 }
 
 // AddChannelIDs adds the "channel" edge to the Channel entity by ids.
-func (m *VideoMutation) AddChannelIDs(ids ...pulid.ID) {
+func (m *VideoMutation) AddChannelIDs(ids ...string) {
 	if m.channel == nil {
-		m.channel = make(map[pulid.ID]struct{})
+		m.channel = make(map[string]struct{})
 	}
 	for i := range ids {
 		m.channel[ids[i]] = struct{}{}
@@ -4714,9 +4713,9 @@ func (m *VideoMutation) ChannelCleared() bool {
 }
 
 // RemoveChannelIDs removes the "channel" edge to the Channel entity by IDs.
-func (m *VideoMutation) RemoveChannelIDs(ids ...pulid.ID) {
+func (m *VideoMutation) RemoveChannelIDs(ids ...string) {
 	if m.removedchannel == nil {
-		m.removedchannel = make(map[pulid.ID]struct{})
+		m.removedchannel = make(map[string]struct{})
 	}
 	for i := range ids {
 		delete(m.channel, ids[i])
@@ -4725,7 +4724,7 @@ func (m *VideoMutation) RemoveChannelIDs(ids ...pulid.ID) {
 }
 
 // RemovedChannel returns the removed IDs of the "channel" edge to the Channel entity.
-func (m *VideoMutation) RemovedChannelIDs() (ids []pulid.ID) {
+func (m *VideoMutation) RemovedChannelIDs() (ids []string) {
 	for id := range m.removedchannel {
 		ids = append(ids, id)
 	}
@@ -4733,7 +4732,7 @@ func (m *VideoMutation) RemovedChannelIDs() (ids []pulid.ID) {
 }
 
 // ChannelIDs returns the "channel" edge IDs in the mutation.
-func (m *VideoMutation) ChannelIDs() (ids []pulid.ID) {
+func (m *VideoMutation) ChannelIDs() (ids []string) {
 	for id := range m.channel {
 		ids = append(ids, id)
 	}
@@ -4747,30 +4746,30 @@ func (m *VideoMutation) ResetChannel() {
 	m.removedchannel = nil
 }
 
-// AddVideoPlayRangeIDs adds the "video_play_ranges" edge to the Video_play_range entity by ids.
-func (m *VideoMutation) AddVideoPlayRangeIDs(ids ...pulid.ID) {
+// AddVideoPlayRangeIDs adds the "video_play_ranges" edge to the VideoPlayRange entity by ids.
+func (m *VideoMutation) AddVideoPlayRangeIDs(ids ...string) {
 	if m.video_play_ranges == nil {
-		m.video_play_ranges = make(map[pulid.ID]struct{})
+		m.video_play_ranges = make(map[string]struct{})
 	}
 	for i := range ids {
 		m.video_play_ranges[ids[i]] = struct{}{}
 	}
 }
 
-// ClearVideoPlayRanges clears the "video_play_ranges" edge to the Video_play_range entity.
+// ClearVideoPlayRanges clears the "video_play_ranges" edge to the VideoPlayRange entity.
 func (m *VideoMutation) ClearVideoPlayRanges() {
 	m.clearedvideo_play_ranges = true
 }
 
-// VideoPlayRangesCleared reports if the "video_play_ranges" edge to the Video_play_range entity was cleared.
+// VideoPlayRangesCleared reports if the "video_play_ranges" edge to the VideoPlayRange entity was cleared.
 func (m *VideoMutation) VideoPlayRangesCleared() bool {
 	return m.clearedvideo_play_ranges
 }
 
-// RemoveVideoPlayRangeIDs removes the "video_play_ranges" edge to the Video_play_range entity by IDs.
-func (m *VideoMutation) RemoveVideoPlayRangeIDs(ids ...pulid.ID) {
+// RemoveVideoPlayRangeIDs removes the "video_play_ranges" edge to the VideoPlayRange entity by IDs.
+func (m *VideoMutation) RemoveVideoPlayRangeIDs(ids ...string) {
 	if m.removedvideo_play_ranges == nil {
-		m.removedvideo_play_ranges = make(map[pulid.ID]struct{})
+		m.removedvideo_play_ranges = make(map[string]struct{})
 	}
 	for i := range ids {
 		delete(m.video_play_ranges, ids[i])
@@ -4778,8 +4777,8 @@ func (m *VideoMutation) RemoveVideoPlayRangeIDs(ids ...pulid.ID) {
 	}
 }
 
-// RemovedVideoPlayRanges returns the removed IDs of the "video_play_ranges" edge to the Video_play_range entity.
-func (m *VideoMutation) RemovedVideoPlayRangesIDs() (ids []pulid.ID) {
+// RemovedVideoPlayRanges returns the removed IDs of the "video_play_ranges" edge to the VideoPlayRange entity.
+func (m *VideoMutation) RemovedVideoPlayRangesIDs() (ids []string) {
 	for id := range m.removedvideo_play_ranges {
 		ids = append(ids, id)
 	}
@@ -4787,7 +4786,7 @@ func (m *VideoMutation) RemovedVideoPlayRangesIDs() (ids []pulid.ID) {
 }
 
 // VideoPlayRangesIDs returns the "video_play_ranges" edge IDs in the mutation.
-func (m *VideoMutation) VideoPlayRangesIDs() (ids []pulid.ID) {
+func (m *VideoMutation) VideoPlayRangesIDs() (ids []string) {
 	for id := range m.video_play_ranges {
 		ids = append(ids, id)
 	}
@@ -4801,30 +4800,30 @@ func (m *VideoMutation) ResetVideoPlayRanges() {
 	m.removedvideo_play_ranges = nil
 }
 
-// AddVideoDisallowRangeIDs adds the "video_disallow_ranges" edge to the Video_disallow_range entity by ids.
-func (m *VideoMutation) AddVideoDisallowRangeIDs(ids ...pulid.ID) {
+// AddVideoDisallowRangeIDs adds the "video_disallow_ranges" edge to the VideoDisallowRange entity by ids.
+func (m *VideoMutation) AddVideoDisallowRangeIDs(ids ...string) {
 	if m.video_disallow_ranges == nil {
-		m.video_disallow_ranges = make(map[pulid.ID]struct{})
+		m.video_disallow_ranges = make(map[string]struct{})
 	}
 	for i := range ids {
 		m.video_disallow_ranges[ids[i]] = struct{}{}
 	}
 }
 
-// ClearVideoDisallowRanges clears the "video_disallow_ranges" edge to the Video_disallow_range entity.
+// ClearVideoDisallowRanges clears the "video_disallow_ranges" edge to the VideoDisallowRange entity.
 func (m *VideoMutation) ClearVideoDisallowRanges() {
 	m.clearedvideo_disallow_ranges = true
 }
 
-// VideoDisallowRangesCleared reports if the "video_disallow_ranges" edge to the Video_disallow_range entity was cleared.
+// VideoDisallowRangesCleared reports if the "video_disallow_ranges" edge to the VideoDisallowRange entity was cleared.
 func (m *VideoMutation) VideoDisallowRangesCleared() bool {
 	return m.clearedvideo_disallow_ranges
 }
 
-// RemoveVideoDisallowRangeIDs removes the "video_disallow_ranges" edge to the Video_disallow_range entity by IDs.
-func (m *VideoMutation) RemoveVideoDisallowRangeIDs(ids ...pulid.ID) {
+// RemoveVideoDisallowRangeIDs removes the "video_disallow_ranges" edge to the VideoDisallowRange entity by IDs.
+func (m *VideoMutation) RemoveVideoDisallowRangeIDs(ids ...string) {
 	if m.removedvideo_disallow_ranges == nil {
-		m.removedvideo_disallow_ranges = make(map[pulid.ID]struct{})
+		m.removedvideo_disallow_ranges = make(map[string]struct{})
 	}
 	for i := range ids {
 		delete(m.video_disallow_ranges, ids[i])
@@ -4832,8 +4831,8 @@ func (m *VideoMutation) RemoveVideoDisallowRangeIDs(ids ...pulid.ID) {
 	}
 }
 
-// RemovedVideoDisallowRanges returns the removed IDs of the "video_disallow_ranges" edge to the Video_disallow_range entity.
-func (m *VideoMutation) RemovedVideoDisallowRangesIDs() (ids []pulid.ID) {
+// RemovedVideoDisallowRanges returns the removed IDs of the "video_disallow_ranges" edge to the VideoDisallowRange entity.
+func (m *VideoMutation) RemovedVideoDisallowRangesIDs() (ids []string) {
 	for id := range m.removedvideo_disallow_ranges {
 		ids = append(ids, id)
 	}
@@ -4841,7 +4840,7 @@ func (m *VideoMutation) RemovedVideoDisallowRangesIDs() (ids []pulid.ID) {
 }
 
 // VideoDisallowRangesIDs returns the "video_disallow_ranges" edge IDs in the mutation.
-func (m *VideoMutation) VideoDisallowRangesIDs() (ids []pulid.ID) {
+func (m *VideoMutation) VideoDisallowRangesIDs() (ids []string) {
 	for id := range m.video_disallow_ranges {
 		ids = append(ids, id)
 	}
@@ -4855,30 +4854,30 @@ func (m *VideoMutation) ResetVideoDisallowRanges() {
 	m.removedvideo_disallow_ranges = nil
 }
 
-// AddVideoTitleChangeIDs adds the "video_title_changes" edge to the Video_title_change entity by ids.
-func (m *VideoMutation) AddVideoTitleChangeIDs(ids ...pulid.ID) {
+// AddVideoTitleChangeIDs adds the "video_title_changes" edge to the VideoTitleChange entity by ids.
+func (m *VideoMutation) AddVideoTitleChangeIDs(ids ...string) {
 	if m.video_title_changes == nil {
-		m.video_title_changes = make(map[pulid.ID]struct{})
+		m.video_title_changes = make(map[string]struct{})
 	}
 	for i := range ids {
 		m.video_title_changes[ids[i]] = struct{}{}
 	}
 }
 
-// ClearVideoTitleChanges clears the "video_title_changes" edge to the Video_title_change entity.
+// ClearVideoTitleChanges clears the "video_title_changes" edge to the VideoTitleChange entity.
 func (m *VideoMutation) ClearVideoTitleChanges() {
 	m.clearedvideo_title_changes = true
 }
 
-// VideoTitleChangesCleared reports if the "video_title_changes" edge to the Video_title_change entity was cleared.
+// VideoTitleChangesCleared reports if the "video_title_changes" edge to the VideoTitleChange entity was cleared.
 func (m *VideoMutation) VideoTitleChangesCleared() bool {
 	return m.clearedvideo_title_changes
 }
 
-// RemoveVideoTitleChangeIDs removes the "video_title_changes" edge to the Video_title_change entity by IDs.
-func (m *VideoMutation) RemoveVideoTitleChangeIDs(ids ...pulid.ID) {
+// RemoveVideoTitleChangeIDs removes the "video_title_changes" edge to the VideoTitleChange entity by IDs.
+func (m *VideoMutation) RemoveVideoTitleChangeIDs(ids ...string) {
 	if m.removedvideo_title_changes == nil {
-		m.removedvideo_title_changes = make(map[pulid.ID]struct{})
+		m.removedvideo_title_changes = make(map[string]struct{})
 	}
 	for i := range ids {
 		delete(m.video_title_changes, ids[i])
@@ -4886,8 +4885,8 @@ func (m *VideoMutation) RemoveVideoTitleChangeIDs(ids ...pulid.ID) {
 	}
 }
 
-// RemovedVideoTitleChanges returns the removed IDs of the "video_title_changes" edge to the Video_title_change entity.
-func (m *VideoMutation) RemovedVideoTitleChangesIDs() (ids []pulid.ID) {
+// RemovedVideoTitleChanges returns the removed IDs of the "video_title_changes" edge to the VideoTitleChange entity.
+func (m *VideoMutation) RemovedVideoTitleChangesIDs() (ids []string) {
 	for id := range m.removedvideo_title_changes {
 		ids = append(ids, id)
 	}
@@ -4895,7 +4894,7 @@ func (m *VideoMutation) RemovedVideoTitleChangesIDs() (ids []pulid.ID) {
 }
 
 // VideoTitleChangesIDs returns the "video_title_changes" edge IDs in the mutation.
-func (m *VideoMutation) VideoTitleChangesIDs() (ids []pulid.ID) {
+func (m *VideoMutation) VideoTitleChangesIDs() (ids []string) {
 	for id := range m.video_title_changes {
 		ids = append(ids, id)
 	}
@@ -4909,30 +4908,30 @@ func (m *VideoMutation) ResetVideoTitleChanges() {
 	m.removedvideo_title_changes = nil
 }
 
-// AddPatChatIDs adds the "Pat_chats" edge to the Pat_chat entity by ids.
-func (m *VideoMutation) AddPatChatIDs(ids ...pulid.ID) {
+// AddPatChatIDs adds the "Pat_chats" edge to the PatChat entity by ids.
+func (m *VideoMutation) AddPatChatIDs(ids ...string) {
 	if m._Pat_chats == nil {
-		m._Pat_chats = make(map[pulid.ID]struct{})
+		m._Pat_chats = make(map[string]struct{})
 	}
 	for i := range ids {
 		m._Pat_chats[ids[i]] = struct{}{}
 	}
 }
 
-// ClearPatChats clears the "Pat_chats" edge to the Pat_chat entity.
+// ClearPatChats clears the "Pat_chats" edge to the PatChat entity.
 func (m *VideoMutation) ClearPatChats() {
 	m.cleared_Pat_chats = true
 }
 
-// PatChatsCleared reports if the "Pat_chats" edge to the Pat_chat entity was cleared.
+// PatChatsCleared reports if the "Pat_chats" edge to the PatChat entity was cleared.
 func (m *VideoMutation) PatChatsCleared() bool {
 	return m.cleared_Pat_chats
 }
 
-// RemovePatChatIDs removes the "Pat_chats" edge to the Pat_chat entity by IDs.
-func (m *VideoMutation) RemovePatChatIDs(ids ...pulid.ID) {
+// RemovePatChatIDs removes the "Pat_chats" edge to the PatChat entity by IDs.
+func (m *VideoMutation) RemovePatChatIDs(ids ...string) {
 	if m.removed_Pat_chats == nil {
-		m.removed_Pat_chats = make(map[pulid.ID]struct{})
+		m.removed_Pat_chats = make(map[string]struct{})
 	}
 	for i := range ids {
 		delete(m._Pat_chats, ids[i])
@@ -4940,8 +4939,8 @@ func (m *VideoMutation) RemovePatChatIDs(ids ...pulid.ID) {
 	}
 }
 
-// RemovedPatChats returns the removed IDs of the "Pat_chats" edge to the Pat_chat entity.
-func (m *VideoMutation) RemovedPatChatsIDs() (ids []pulid.ID) {
+// RemovedPatChats returns the removed IDs of the "Pat_chats" edge to the PatChat entity.
+func (m *VideoMutation) RemovedPatChatsIDs() (ids []string) {
 	for id := range m.removed_Pat_chats {
 		ids = append(ids, id)
 	}
@@ -4949,7 +4948,7 @@ func (m *VideoMutation) RemovedPatChatsIDs() (ids []pulid.ID) {
 }
 
 // PatChatsIDs returns the "Pat_chats" edge IDs in the mutation.
-func (m *VideoMutation) PatChatsIDs() (ids []pulid.ID) {
+func (m *VideoMutation) PatChatsIDs() (ids []string) {
 	for id := range m._Pat_chats {
 		ids = append(ids, id)
 	}
@@ -5540,31 +5539,31 @@ func (m *VideoMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Video edge %s", name)
 }
 
-// VideoDisallowRangeMutation represents an operation that mutates the Video_disallow_range nodes in the graph.
+// VideoDisallowRangeMutation represents an operation that mutates the VideoDisallowRange nodes in the graph.
 type VideoDisallowRangeMutation struct {
 	config
 	op               Op
 	typ              string
-	id               *pulid.ID
+	id               *string
 	start_seconds    *int
 	addstart_seconds *int
 	end_seconds      *int
 	addend_seconds   *int
 	clearedFields    map[string]struct{}
-	video            *pulid.ID
+	video            *string
 	clearedvideo     bool
 	done             bool
-	oldValue         func(context.Context) (*Video_disallow_range, error)
-	predicates       []predicate.Video_disallow_range
+	oldValue         func(context.Context) (*VideoDisallowRange, error)
+	predicates       []predicate.VideoDisallowRange
 }
 
 var _ ent.Mutation = (*VideoDisallowRangeMutation)(nil)
 
-// videoDisallowRangeOption allows management of the mutation configuration using functional options.
-type videoDisallowRangeOption func(*VideoDisallowRangeMutation)
+// videodisallowrangeOption allows management of the mutation configuration using functional options.
+type videodisallowrangeOption func(*VideoDisallowRangeMutation)
 
-// newVideoDisallowRangeMutation creates new mutation for the Video_disallow_range entity.
-func newVideoDisallowRangeMutation(c config, op Op, opts ...videoDisallowRangeOption) *VideoDisallowRangeMutation {
+// newVideoDisallowRangeMutation creates new mutation for the VideoDisallowRange entity.
+func newVideoDisallowRangeMutation(c config, op Op, opts ...videodisallowrangeOption) *VideoDisallowRangeMutation {
 	m := &VideoDisallowRangeMutation{
 		config:        c,
 		op:            op,
@@ -5577,20 +5576,20 @@ func newVideoDisallowRangeMutation(c config, op Op, opts ...videoDisallowRangeOp
 	return m
 }
 
-// withVideo_disallow_rangeID sets the ID field of the mutation.
-func withVideo_disallow_rangeID(id pulid.ID) videoDisallowRangeOption {
+// withVideoDisallowRangeID sets the ID field of the mutation.
+func withVideoDisallowRangeID(id string) videodisallowrangeOption {
 	return func(m *VideoDisallowRangeMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *Video_disallow_range
+			value *VideoDisallowRange
 		)
-		m.oldValue = func(ctx context.Context) (*Video_disallow_range, error) {
+		m.oldValue = func(ctx context.Context) (*VideoDisallowRange, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().Video_disallow_range.Get(ctx, id)
+					value, err = m.Client().VideoDisallowRange.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -5599,10 +5598,10 @@ func withVideo_disallow_rangeID(id pulid.ID) videoDisallowRangeOption {
 	}
 }
 
-// withVideo_disallow_range sets the old Video_disallow_range of the mutation.
-func withVideo_disallow_range(node *Video_disallow_range) videoDisallowRangeOption {
+// withVideoDisallowRange sets the old VideoDisallowRange of the mutation.
+func withVideoDisallowRange(node *VideoDisallowRange) videodisallowrangeOption {
 	return func(m *VideoDisallowRangeMutation) {
-		m.oldValue = func(context.Context) (*Video_disallow_range, error) {
+		m.oldValue = func(context.Context) (*VideoDisallowRange, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -5629,14 +5628,14 @@ func (m VideoDisallowRangeMutation) Tx() (*Tx, error) {
 }
 
 // SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of Video_disallow_range entities.
-func (m *VideoDisallowRangeMutation) SetID(id pulid.ID) {
+// operation is only accepted on creation of VideoDisallowRange entities.
+func (m *VideoDisallowRangeMutation) SetID(id string) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *VideoDisallowRangeMutation) ID() (id pulid.ID, exists bool) {
+func (m *VideoDisallowRangeMutation) ID() (id string, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -5647,16 +5646,16 @@ func (m *VideoDisallowRangeMutation) ID() (id pulid.ID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *VideoDisallowRangeMutation) IDs(ctx context.Context) ([]pulid.ID, error) {
+func (m *VideoDisallowRangeMutation) IDs(ctx context.Context) ([]string, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []pulid.ID{id}, nil
+			return []string{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().Video_disallow_range.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().VideoDisallowRange.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
@@ -5677,8 +5676,8 @@ func (m *VideoDisallowRangeMutation) StartSeconds() (r int, exists bool) {
 	return *v, true
 }
 
-// OldStartSeconds returns the old "start_seconds" field's value of the Video_disallow_range entity.
-// If the Video_disallow_range object wasn't provided to the builder, the object is fetched from the database.
+// OldStartSeconds returns the old "start_seconds" field's value of the VideoDisallowRange entity.
+// If the VideoDisallowRange object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *VideoDisallowRangeMutation) OldStartSeconds(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -5733,8 +5732,8 @@ func (m *VideoDisallowRangeMutation) EndSeconds() (r int, exists bool) {
 	return *v, true
 }
 
-// OldEndSeconds returns the old "end_seconds" field's value of the Video_disallow_range entity.
-// If the Video_disallow_range object wasn't provided to the builder, the object is fetched from the database.
+// OldEndSeconds returns the old "end_seconds" field's value of the VideoDisallowRange entity.
+// If the VideoDisallowRange object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *VideoDisallowRangeMutation) OldEndSeconds(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -5775,7 +5774,7 @@ func (m *VideoDisallowRangeMutation) ResetEndSeconds() {
 }
 
 // SetVideoID sets the "video" edge to the Video entity by id.
-func (m *VideoDisallowRangeMutation) SetVideoID(id pulid.ID) {
+func (m *VideoDisallowRangeMutation) SetVideoID(id string) {
 	m.video = &id
 }
 
@@ -5790,7 +5789,7 @@ func (m *VideoDisallowRangeMutation) VideoCleared() bool {
 }
 
 // VideoID returns the "video" edge ID in the mutation.
-func (m *VideoDisallowRangeMutation) VideoID() (id pulid.ID, exists bool) {
+func (m *VideoDisallowRangeMutation) VideoID() (id string, exists bool) {
 	if m.video != nil {
 		return *m.video, true
 	}
@@ -5800,7 +5799,7 @@ func (m *VideoDisallowRangeMutation) VideoID() (id pulid.ID, exists bool) {
 // VideoIDs returns the "video" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // VideoID instead. It exists only for internal usage by the builders.
-func (m *VideoDisallowRangeMutation) VideoIDs() (ids []pulid.ID) {
+func (m *VideoDisallowRangeMutation) VideoIDs() (ids []string) {
 	if id := m.video; id != nil {
 		ids = append(ids, *id)
 	}
@@ -5814,14 +5813,14 @@ func (m *VideoDisallowRangeMutation) ResetVideo() {
 }
 
 // Where appends a list predicates to the VideoDisallowRangeMutation builder.
-func (m *VideoDisallowRangeMutation) Where(ps ...predicate.Video_disallow_range) {
+func (m *VideoDisallowRangeMutation) Where(ps ...predicate.VideoDisallowRange) {
 	m.predicates = append(m.predicates, ps...)
 }
 
 // WhereP appends storage-level predicates to the VideoDisallowRangeMutation builder. Using this method,
 // users can use type-assertion to append predicates that do not depend on any generated package.
 func (m *VideoDisallowRangeMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.Video_disallow_range, len(ps))
+	p := make([]predicate.VideoDisallowRange, len(ps))
 	for i := range ps {
 		p[i] = ps[i]
 	}
@@ -5838,7 +5837,7 @@ func (m *VideoDisallowRangeMutation) SetOp(op Op) {
 	m.op = op
 }
 
-// Type returns the node type of this mutation (Video_disallow_range).
+// Type returns the node type of this mutation (VideoDisallowRange).
 func (m *VideoDisallowRangeMutation) Type() string {
 	return m.typ
 }
@@ -5849,10 +5848,10 @@ func (m *VideoDisallowRangeMutation) Type() string {
 func (m *VideoDisallowRangeMutation) Fields() []string {
 	fields := make([]string, 0, 2)
 	if m.start_seconds != nil {
-		fields = append(fields, video_disallow_range.FieldStartSeconds)
+		fields = append(fields, videodisallowrange.FieldStartSeconds)
 	}
 	if m.end_seconds != nil {
-		fields = append(fields, video_disallow_range.FieldEndSeconds)
+		fields = append(fields, videodisallowrange.FieldEndSeconds)
 	}
 	return fields
 }
@@ -5862,9 +5861,9 @@ func (m *VideoDisallowRangeMutation) Fields() []string {
 // schema.
 func (m *VideoDisallowRangeMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case video_disallow_range.FieldStartSeconds:
+	case videodisallowrange.FieldStartSeconds:
 		return m.StartSeconds()
-	case video_disallow_range.FieldEndSeconds:
+	case videodisallowrange.FieldEndSeconds:
 		return m.EndSeconds()
 	}
 	return nil, false
@@ -5875,12 +5874,12 @@ func (m *VideoDisallowRangeMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *VideoDisallowRangeMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case video_disallow_range.FieldStartSeconds:
+	case videodisallowrange.FieldStartSeconds:
 		return m.OldStartSeconds(ctx)
-	case video_disallow_range.FieldEndSeconds:
+	case videodisallowrange.FieldEndSeconds:
 		return m.OldEndSeconds(ctx)
 	}
-	return nil, fmt.Errorf("unknown Video_disallow_range field %s", name)
+	return nil, fmt.Errorf("unknown VideoDisallowRange field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
@@ -5888,14 +5887,14 @@ func (m *VideoDisallowRangeMutation) OldField(ctx context.Context, name string) 
 // type.
 func (m *VideoDisallowRangeMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case video_disallow_range.FieldStartSeconds:
+	case videodisallowrange.FieldStartSeconds:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStartSeconds(v)
 		return nil
-	case video_disallow_range.FieldEndSeconds:
+	case videodisallowrange.FieldEndSeconds:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -5903,7 +5902,7 @@ func (m *VideoDisallowRangeMutation) SetField(name string, value ent.Value) erro
 		m.SetEndSeconds(v)
 		return nil
 	}
-	return fmt.Errorf("unknown Video_disallow_range field %s", name)
+	return fmt.Errorf("unknown VideoDisallowRange field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
@@ -5911,10 +5910,10 @@ func (m *VideoDisallowRangeMutation) SetField(name string, value ent.Value) erro
 func (m *VideoDisallowRangeMutation) AddedFields() []string {
 	var fields []string
 	if m.addstart_seconds != nil {
-		fields = append(fields, video_disallow_range.FieldStartSeconds)
+		fields = append(fields, videodisallowrange.FieldStartSeconds)
 	}
 	if m.addend_seconds != nil {
-		fields = append(fields, video_disallow_range.FieldEndSeconds)
+		fields = append(fields, videodisallowrange.FieldEndSeconds)
 	}
 	return fields
 }
@@ -5924,9 +5923,9 @@ func (m *VideoDisallowRangeMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *VideoDisallowRangeMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case video_disallow_range.FieldStartSeconds:
+	case videodisallowrange.FieldStartSeconds:
 		return m.AddedStartSeconds()
-	case video_disallow_range.FieldEndSeconds:
+	case videodisallowrange.FieldEndSeconds:
 		return m.AddedEndSeconds()
 	}
 	return nil, false
@@ -5937,14 +5936,14 @@ func (m *VideoDisallowRangeMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *VideoDisallowRangeMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case video_disallow_range.FieldStartSeconds:
+	case videodisallowrange.FieldStartSeconds:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddStartSeconds(v)
 		return nil
-	case video_disallow_range.FieldEndSeconds:
+	case videodisallowrange.FieldEndSeconds:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -5952,7 +5951,7 @@ func (m *VideoDisallowRangeMutation) AddField(name string, value ent.Value) erro
 		m.AddEndSeconds(v)
 		return nil
 	}
-	return fmt.Errorf("unknown Video_disallow_range numeric field %s", name)
+	return fmt.Errorf("unknown VideoDisallowRange numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
@@ -5971,28 +5970,28 @@ func (m *VideoDisallowRangeMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *VideoDisallowRangeMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown Video_disallow_range nullable field %s", name)
+	return fmt.Errorf("unknown VideoDisallowRange nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *VideoDisallowRangeMutation) ResetField(name string) error {
 	switch name {
-	case video_disallow_range.FieldStartSeconds:
+	case videodisallowrange.FieldStartSeconds:
 		m.ResetStartSeconds()
 		return nil
-	case video_disallow_range.FieldEndSeconds:
+	case videodisallowrange.FieldEndSeconds:
 		m.ResetEndSeconds()
 		return nil
 	}
-	return fmt.Errorf("unknown Video_disallow_range field %s", name)
+	return fmt.Errorf("unknown VideoDisallowRange field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *VideoDisallowRangeMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.video != nil {
-		edges = append(edges, video_disallow_range.EdgeVideo)
+		edges = append(edges, videodisallowrange.EdgeVideo)
 	}
 	return edges
 }
@@ -6001,7 +6000,7 @@ func (m *VideoDisallowRangeMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *VideoDisallowRangeMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case video_disallow_range.EdgeVideo:
+	case videodisallowrange.EdgeVideo:
 		if id := m.video; id != nil {
 			return []ent.Value{*id}
 		}
@@ -6025,7 +6024,7 @@ func (m *VideoDisallowRangeMutation) RemovedIDs(name string) []ent.Value {
 func (m *VideoDisallowRangeMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.clearedvideo {
-		edges = append(edges, video_disallow_range.EdgeVideo)
+		edges = append(edges, videodisallowrange.EdgeVideo)
 	}
 	return edges
 }
@@ -6034,7 +6033,7 @@ func (m *VideoDisallowRangeMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *VideoDisallowRangeMutation) EdgeCleared(name string) bool {
 	switch name {
-	case video_disallow_range.EdgeVideo:
+	case videodisallowrange.EdgeVideo:
 		return m.clearedvideo
 	}
 	return false
@@ -6044,49 +6043,49 @@ func (m *VideoDisallowRangeMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *VideoDisallowRangeMutation) ClearEdge(name string) error {
 	switch name {
-	case video_disallow_range.EdgeVideo:
+	case videodisallowrange.EdgeVideo:
 		m.ClearVideo()
 		return nil
 	}
-	return fmt.Errorf("unknown Video_disallow_range unique edge %s", name)
+	return fmt.Errorf("unknown VideoDisallowRange unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *VideoDisallowRangeMutation) ResetEdge(name string) error {
 	switch name {
-	case video_disallow_range.EdgeVideo:
+	case videodisallowrange.EdgeVideo:
 		m.ResetVideo()
 		return nil
 	}
-	return fmt.Errorf("unknown Video_disallow_range edge %s", name)
+	return fmt.Errorf("unknown VideoDisallowRange edge %s", name)
 }
 
-// VideoPlayRangeMutation represents an operation that mutates the Video_play_range nodes in the graph.
+// VideoPlayRangeMutation represents an operation that mutates the VideoPlayRange nodes in the graph.
 type VideoPlayRangeMutation struct {
 	config
 	op               Op
 	typ              string
-	id               *pulid.ID
+	id               *string
 	start_seconds    *int
 	addstart_seconds *int
 	end_seconds      *int
 	addend_seconds   *int
 	clearedFields    map[string]struct{}
-	video            *pulid.ID
+	video            *string
 	clearedvideo     bool
 	done             bool
-	oldValue         func(context.Context) (*Video_play_range, error)
-	predicates       []predicate.Video_play_range
+	oldValue         func(context.Context) (*VideoPlayRange, error)
+	predicates       []predicate.VideoPlayRange
 }
 
 var _ ent.Mutation = (*VideoPlayRangeMutation)(nil)
 
-// videoPlayRangeOption allows management of the mutation configuration using functional options.
-type videoPlayRangeOption func(*VideoPlayRangeMutation)
+// videoplayrangeOption allows management of the mutation configuration using functional options.
+type videoplayrangeOption func(*VideoPlayRangeMutation)
 
-// newVideoPlayRangeMutation creates new mutation for the Video_play_range entity.
-func newVideoPlayRangeMutation(c config, op Op, opts ...videoPlayRangeOption) *VideoPlayRangeMutation {
+// newVideoPlayRangeMutation creates new mutation for the VideoPlayRange entity.
+func newVideoPlayRangeMutation(c config, op Op, opts ...videoplayrangeOption) *VideoPlayRangeMutation {
 	m := &VideoPlayRangeMutation{
 		config:        c,
 		op:            op,
@@ -6099,20 +6098,20 @@ func newVideoPlayRangeMutation(c config, op Op, opts ...videoPlayRangeOption) *V
 	return m
 }
 
-// withVideo_play_rangeID sets the ID field of the mutation.
-func withVideo_play_rangeID(id pulid.ID) videoPlayRangeOption {
+// withVideoPlayRangeID sets the ID field of the mutation.
+func withVideoPlayRangeID(id string) videoplayrangeOption {
 	return func(m *VideoPlayRangeMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *Video_play_range
+			value *VideoPlayRange
 		)
-		m.oldValue = func(ctx context.Context) (*Video_play_range, error) {
+		m.oldValue = func(ctx context.Context) (*VideoPlayRange, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().Video_play_range.Get(ctx, id)
+					value, err = m.Client().VideoPlayRange.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -6121,10 +6120,10 @@ func withVideo_play_rangeID(id pulid.ID) videoPlayRangeOption {
 	}
 }
 
-// withVideo_play_range sets the old Video_play_range of the mutation.
-func withVideo_play_range(node *Video_play_range) videoPlayRangeOption {
+// withVideoPlayRange sets the old VideoPlayRange of the mutation.
+func withVideoPlayRange(node *VideoPlayRange) videoplayrangeOption {
 	return func(m *VideoPlayRangeMutation) {
-		m.oldValue = func(context.Context) (*Video_play_range, error) {
+		m.oldValue = func(context.Context) (*VideoPlayRange, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -6151,14 +6150,14 @@ func (m VideoPlayRangeMutation) Tx() (*Tx, error) {
 }
 
 // SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of Video_play_range entities.
-func (m *VideoPlayRangeMutation) SetID(id pulid.ID) {
+// operation is only accepted on creation of VideoPlayRange entities.
+func (m *VideoPlayRangeMutation) SetID(id string) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *VideoPlayRangeMutation) ID() (id pulid.ID, exists bool) {
+func (m *VideoPlayRangeMutation) ID() (id string, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -6169,16 +6168,16 @@ func (m *VideoPlayRangeMutation) ID() (id pulid.ID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *VideoPlayRangeMutation) IDs(ctx context.Context) ([]pulid.ID, error) {
+func (m *VideoPlayRangeMutation) IDs(ctx context.Context) ([]string, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []pulid.ID{id}, nil
+			return []string{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().Video_play_range.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().VideoPlayRange.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
@@ -6199,8 +6198,8 @@ func (m *VideoPlayRangeMutation) StartSeconds() (r int, exists bool) {
 	return *v, true
 }
 
-// OldStartSeconds returns the old "start_seconds" field's value of the Video_play_range entity.
-// If the Video_play_range object wasn't provided to the builder, the object is fetched from the database.
+// OldStartSeconds returns the old "start_seconds" field's value of the VideoPlayRange entity.
+// If the VideoPlayRange object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *VideoPlayRangeMutation) OldStartSeconds(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -6255,8 +6254,8 @@ func (m *VideoPlayRangeMutation) EndSeconds() (r int, exists bool) {
 	return *v, true
 }
 
-// OldEndSeconds returns the old "end_seconds" field's value of the Video_play_range entity.
-// If the Video_play_range object wasn't provided to the builder, the object is fetched from the database.
+// OldEndSeconds returns the old "end_seconds" field's value of the VideoPlayRange entity.
+// If the VideoPlayRange object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *VideoPlayRangeMutation) OldEndSeconds(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -6294,12 +6293,12 @@ func (m *VideoPlayRangeMutation) AddedEndSeconds() (r int, exists bool) {
 func (m *VideoPlayRangeMutation) ClearEndSeconds() {
 	m.end_seconds = nil
 	m.addend_seconds = nil
-	m.clearedFields[video_play_range.FieldEndSeconds] = struct{}{}
+	m.clearedFields[videoplayrange.FieldEndSeconds] = struct{}{}
 }
 
 // EndSecondsCleared returns if the "end_seconds" field was cleared in this mutation.
 func (m *VideoPlayRangeMutation) EndSecondsCleared() bool {
-	_, ok := m.clearedFields[video_play_range.FieldEndSeconds]
+	_, ok := m.clearedFields[videoplayrange.FieldEndSeconds]
 	return ok
 }
 
@@ -6307,11 +6306,11 @@ func (m *VideoPlayRangeMutation) EndSecondsCleared() bool {
 func (m *VideoPlayRangeMutation) ResetEndSeconds() {
 	m.end_seconds = nil
 	m.addend_seconds = nil
-	delete(m.clearedFields, video_play_range.FieldEndSeconds)
+	delete(m.clearedFields, videoplayrange.FieldEndSeconds)
 }
 
 // SetVideoID sets the "video" edge to the Video entity by id.
-func (m *VideoPlayRangeMutation) SetVideoID(id pulid.ID) {
+func (m *VideoPlayRangeMutation) SetVideoID(id string) {
 	m.video = &id
 }
 
@@ -6326,7 +6325,7 @@ func (m *VideoPlayRangeMutation) VideoCleared() bool {
 }
 
 // VideoID returns the "video" edge ID in the mutation.
-func (m *VideoPlayRangeMutation) VideoID() (id pulid.ID, exists bool) {
+func (m *VideoPlayRangeMutation) VideoID() (id string, exists bool) {
 	if m.video != nil {
 		return *m.video, true
 	}
@@ -6336,7 +6335,7 @@ func (m *VideoPlayRangeMutation) VideoID() (id pulid.ID, exists bool) {
 // VideoIDs returns the "video" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // VideoID instead. It exists only for internal usage by the builders.
-func (m *VideoPlayRangeMutation) VideoIDs() (ids []pulid.ID) {
+func (m *VideoPlayRangeMutation) VideoIDs() (ids []string) {
 	if id := m.video; id != nil {
 		ids = append(ids, *id)
 	}
@@ -6350,14 +6349,14 @@ func (m *VideoPlayRangeMutation) ResetVideo() {
 }
 
 // Where appends a list predicates to the VideoPlayRangeMutation builder.
-func (m *VideoPlayRangeMutation) Where(ps ...predicate.Video_play_range) {
+func (m *VideoPlayRangeMutation) Where(ps ...predicate.VideoPlayRange) {
 	m.predicates = append(m.predicates, ps...)
 }
 
 // WhereP appends storage-level predicates to the VideoPlayRangeMutation builder. Using this method,
 // users can use type-assertion to append predicates that do not depend on any generated package.
 func (m *VideoPlayRangeMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.Video_play_range, len(ps))
+	p := make([]predicate.VideoPlayRange, len(ps))
 	for i := range ps {
 		p[i] = ps[i]
 	}
@@ -6374,7 +6373,7 @@ func (m *VideoPlayRangeMutation) SetOp(op Op) {
 	m.op = op
 }
 
-// Type returns the node type of this mutation (Video_play_range).
+// Type returns the node type of this mutation (VideoPlayRange).
 func (m *VideoPlayRangeMutation) Type() string {
 	return m.typ
 }
@@ -6385,10 +6384,10 @@ func (m *VideoPlayRangeMutation) Type() string {
 func (m *VideoPlayRangeMutation) Fields() []string {
 	fields := make([]string, 0, 2)
 	if m.start_seconds != nil {
-		fields = append(fields, video_play_range.FieldStartSeconds)
+		fields = append(fields, videoplayrange.FieldStartSeconds)
 	}
 	if m.end_seconds != nil {
-		fields = append(fields, video_play_range.FieldEndSeconds)
+		fields = append(fields, videoplayrange.FieldEndSeconds)
 	}
 	return fields
 }
@@ -6398,9 +6397,9 @@ func (m *VideoPlayRangeMutation) Fields() []string {
 // schema.
 func (m *VideoPlayRangeMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case video_play_range.FieldStartSeconds:
+	case videoplayrange.FieldStartSeconds:
 		return m.StartSeconds()
-	case video_play_range.FieldEndSeconds:
+	case videoplayrange.FieldEndSeconds:
 		return m.EndSeconds()
 	}
 	return nil, false
@@ -6411,12 +6410,12 @@ func (m *VideoPlayRangeMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *VideoPlayRangeMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case video_play_range.FieldStartSeconds:
+	case videoplayrange.FieldStartSeconds:
 		return m.OldStartSeconds(ctx)
-	case video_play_range.FieldEndSeconds:
+	case videoplayrange.FieldEndSeconds:
 		return m.OldEndSeconds(ctx)
 	}
-	return nil, fmt.Errorf("unknown Video_play_range field %s", name)
+	return nil, fmt.Errorf("unknown VideoPlayRange field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
@@ -6424,14 +6423,14 @@ func (m *VideoPlayRangeMutation) OldField(ctx context.Context, name string) (ent
 // type.
 func (m *VideoPlayRangeMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case video_play_range.FieldStartSeconds:
+	case videoplayrange.FieldStartSeconds:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStartSeconds(v)
 		return nil
-	case video_play_range.FieldEndSeconds:
+	case videoplayrange.FieldEndSeconds:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -6439,7 +6438,7 @@ func (m *VideoPlayRangeMutation) SetField(name string, value ent.Value) error {
 		m.SetEndSeconds(v)
 		return nil
 	}
-	return fmt.Errorf("unknown Video_play_range field %s", name)
+	return fmt.Errorf("unknown VideoPlayRange field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
@@ -6447,10 +6446,10 @@ func (m *VideoPlayRangeMutation) SetField(name string, value ent.Value) error {
 func (m *VideoPlayRangeMutation) AddedFields() []string {
 	var fields []string
 	if m.addstart_seconds != nil {
-		fields = append(fields, video_play_range.FieldStartSeconds)
+		fields = append(fields, videoplayrange.FieldStartSeconds)
 	}
 	if m.addend_seconds != nil {
-		fields = append(fields, video_play_range.FieldEndSeconds)
+		fields = append(fields, videoplayrange.FieldEndSeconds)
 	}
 	return fields
 }
@@ -6460,9 +6459,9 @@ func (m *VideoPlayRangeMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *VideoPlayRangeMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case video_play_range.FieldStartSeconds:
+	case videoplayrange.FieldStartSeconds:
 		return m.AddedStartSeconds()
-	case video_play_range.FieldEndSeconds:
+	case videoplayrange.FieldEndSeconds:
 		return m.AddedEndSeconds()
 	}
 	return nil, false
@@ -6473,14 +6472,14 @@ func (m *VideoPlayRangeMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *VideoPlayRangeMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case video_play_range.FieldStartSeconds:
+	case videoplayrange.FieldStartSeconds:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddStartSeconds(v)
 		return nil
-	case video_play_range.FieldEndSeconds:
+	case videoplayrange.FieldEndSeconds:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -6488,15 +6487,15 @@ func (m *VideoPlayRangeMutation) AddField(name string, value ent.Value) error {
 		m.AddEndSeconds(v)
 		return nil
 	}
-	return fmt.Errorf("unknown Video_play_range numeric field %s", name)
+	return fmt.Errorf("unknown VideoPlayRange numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *VideoPlayRangeMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(video_play_range.FieldEndSeconds) {
-		fields = append(fields, video_play_range.FieldEndSeconds)
+	if m.FieldCleared(videoplayrange.FieldEndSeconds) {
+		fields = append(fields, videoplayrange.FieldEndSeconds)
 	}
 	return fields
 }
@@ -6512,32 +6511,32 @@ func (m *VideoPlayRangeMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *VideoPlayRangeMutation) ClearField(name string) error {
 	switch name {
-	case video_play_range.FieldEndSeconds:
+	case videoplayrange.FieldEndSeconds:
 		m.ClearEndSeconds()
 		return nil
 	}
-	return fmt.Errorf("unknown Video_play_range nullable field %s", name)
+	return fmt.Errorf("unknown VideoPlayRange nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *VideoPlayRangeMutation) ResetField(name string) error {
 	switch name {
-	case video_play_range.FieldStartSeconds:
+	case videoplayrange.FieldStartSeconds:
 		m.ResetStartSeconds()
 		return nil
-	case video_play_range.FieldEndSeconds:
+	case videoplayrange.FieldEndSeconds:
 		m.ResetEndSeconds()
 		return nil
 	}
-	return fmt.Errorf("unknown Video_play_range field %s", name)
+	return fmt.Errorf("unknown VideoPlayRange field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *VideoPlayRangeMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.video != nil {
-		edges = append(edges, video_play_range.EdgeVideo)
+		edges = append(edges, videoplayrange.EdgeVideo)
 	}
 	return edges
 }
@@ -6546,7 +6545,7 @@ func (m *VideoPlayRangeMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *VideoPlayRangeMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case video_play_range.EdgeVideo:
+	case videoplayrange.EdgeVideo:
 		if id := m.video; id != nil {
 			return []ent.Value{*id}
 		}
@@ -6570,7 +6569,7 @@ func (m *VideoPlayRangeMutation) RemovedIDs(name string) []ent.Value {
 func (m *VideoPlayRangeMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.clearedvideo {
-		edges = append(edges, video_play_range.EdgeVideo)
+		edges = append(edges, videoplayrange.EdgeVideo)
 	}
 	return edges
 }
@@ -6579,7 +6578,7 @@ func (m *VideoPlayRangeMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *VideoPlayRangeMutation) EdgeCleared(name string) bool {
 	switch name {
-	case video_play_range.EdgeVideo:
+	case videoplayrange.EdgeVideo:
 		return m.clearedvideo
 	}
 	return false
@@ -6589,48 +6588,48 @@ func (m *VideoPlayRangeMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *VideoPlayRangeMutation) ClearEdge(name string) error {
 	switch name {
-	case video_play_range.EdgeVideo:
+	case videoplayrange.EdgeVideo:
 		m.ClearVideo()
 		return nil
 	}
-	return fmt.Errorf("unknown Video_play_range unique edge %s", name)
+	return fmt.Errorf("unknown VideoPlayRange unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *VideoPlayRangeMutation) ResetEdge(name string) error {
 	switch name {
-	case video_play_range.EdgeVideo:
+	case videoplayrange.EdgeVideo:
 		m.ResetVideo()
 		return nil
 	}
-	return fmt.Errorf("unknown Video_play_range edge %s", name)
+	return fmt.Errorf("unknown VideoPlayRange edge %s", name)
 }
 
-// VideoTitleChangeMutation represents an operation that mutates the Video_title_change nodes in the graph.
+// VideoTitleChangeMutation represents an operation that mutates the VideoTitleChange nodes in the graph.
 type VideoTitleChangeMutation struct {
 	config
 	op               Op
 	typ              string
-	id               *pulid.ID
+	id               *string
 	title            *string
 	normalized_title *string
 	changed_at       *time.Time
 	clearedFields    map[string]struct{}
-	video            *pulid.ID
+	video            *string
 	clearedvideo     bool
 	done             bool
-	oldValue         func(context.Context) (*Video_title_change, error)
-	predicates       []predicate.Video_title_change
+	oldValue         func(context.Context) (*VideoTitleChange, error)
+	predicates       []predicate.VideoTitleChange
 }
 
 var _ ent.Mutation = (*VideoTitleChangeMutation)(nil)
 
-// videoTitleChangeOption allows management of the mutation configuration using functional options.
-type videoTitleChangeOption func(*VideoTitleChangeMutation)
+// videotitlechangeOption allows management of the mutation configuration using functional options.
+type videotitlechangeOption func(*VideoTitleChangeMutation)
 
-// newVideoTitleChangeMutation creates new mutation for the Video_title_change entity.
-func newVideoTitleChangeMutation(c config, op Op, opts ...videoTitleChangeOption) *VideoTitleChangeMutation {
+// newVideoTitleChangeMutation creates new mutation for the VideoTitleChange entity.
+func newVideoTitleChangeMutation(c config, op Op, opts ...videotitlechangeOption) *VideoTitleChangeMutation {
 	m := &VideoTitleChangeMutation{
 		config:        c,
 		op:            op,
@@ -6643,20 +6642,20 @@ func newVideoTitleChangeMutation(c config, op Op, opts ...videoTitleChangeOption
 	return m
 }
 
-// withVideo_title_changeID sets the ID field of the mutation.
-func withVideo_title_changeID(id pulid.ID) videoTitleChangeOption {
+// withVideoTitleChangeID sets the ID field of the mutation.
+func withVideoTitleChangeID(id string) videotitlechangeOption {
 	return func(m *VideoTitleChangeMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *Video_title_change
+			value *VideoTitleChange
 		)
-		m.oldValue = func(ctx context.Context) (*Video_title_change, error) {
+		m.oldValue = func(ctx context.Context) (*VideoTitleChange, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().Video_title_change.Get(ctx, id)
+					value, err = m.Client().VideoTitleChange.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -6665,10 +6664,10 @@ func withVideo_title_changeID(id pulid.ID) videoTitleChangeOption {
 	}
 }
 
-// withVideo_title_change sets the old Video_title_change of the mutation.
-func withVideo_title_change(node *Video_title_change) videoTitleChangeOption {
+// withVideoTitleChange sets the old VideoTitleChange of the mutation.
+func withVideoTitleChange(node *VideoTitleChange) videotitlechangeOption {
 	return func(m *VideoTitleChangeMutation) {
-		m.oldValue = func(context.Context) (*Video_title_change, error) {
+		m.oldValue = func(context.Context) (*VideoTitleChange, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -6695,14 +6694,14 @@ func (m VideoTitleChangeMutation) Tx() (*Tx, error) {
 }
 
 // SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of Video_title_change entities.
-func (m *VideoTitleChangeMutation) SetID(id pulid.ID) {
+// operation is only accepted on creation of VideoTitleChange entities.
+func (m *VideoTitleChangeMutation) SetID(id string) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *VideoTitleChangeMutation) ID() (id pulid.ID, exists bool) {
+func (m *VideoTitleChangeMutation) ID() (id string, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -6713,16 +6712,16 @@ func (m *VideoTitleChangeMutation) ID() (id pulid.ID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *VideoTitleChangeMutation) IDs(ctx context.Context) ([]pulid.ID, error) {
+func (m *VideoTitleChangeMutation) IDs(ctx context.Context) ([]string, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []pulid.ID{id}, nil
+			return []string{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().Video_title_change.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().VideoTitleChange.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
@@ -6742,8 +6741,8 @@ func (m *VideoTitleChangeMutation) Title() (r string, exists bool) {
 	return *v, true
 }
 
-// OldTitle returns the old "title" field's value of the Video_title_change entity.
-// If the Video_title_change object wasn't provided to the builder, the object is fetched from the database.
+// OldTitle returns the old "title" field's value of the VideoTitleChange entity.
+// If the VideoTitleChange object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *VideoTitleChangeMutation) OldTitle(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -6778,8 +6777,8 @@ func (m *VideoTitleChangeMutation) NormalizedTitle() (r string, exists bool) {
 	return *v, true
 }
 
-// OldNormalizedTitle returns the old "normalized_title" field's value of the Video_title_change entity.
-// If the Video_title_change object wasn't provided to the builder, the object is fetched from the database.
+// OldNormalizedTitle returns the old "normalized_title" field's value of the VideoTitleChange entity.
+// If the VideoTitleChange object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *VideoTitleChangeMutation) OldNormalizedTitle(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -6814,8 +6813,8 @@ func (m *VideoTitleChangeMutation) ChangedAt() (r time.Time, exists bool) {
 	return *v, true
 }
 
-// OldChangedAt returns the old "changed_at" field's value of the Video_title_change entity.
-// If the Video_title_change object wasn't provided to the builder, the object is fetched from the database.
+// OldChangedAt returns the old "changed_at" field's value of the VideoTitleChange entity.
+// If the VideoTitleChange object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *VideoTitleChangeMutation) OldChangedAt(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
@@ -6837,7 +6836,7 @@ func (m *VideoTitleChangeMutation) ResetChangedAt() {
 }
 
 // SetVideoID sets the "video" edge to the Video entity by id.
-func (m *VideoTitleChangeMutation) SetVideoID(id pulid.ID) {
+func (m *VideoTitleChangeMutation) SetVideoID(id string) {
 	m.video = &id
 }
 
@@ -6852,7 +6851,7 @@ func (m *VideoTitleChangeMutation) VideoCleared() bool {
 }
 
 // VideoID returns the "video" edge ID in the mutation.
-func (m *VideoTitleChangeMutation) VideoID() (id pulid.ID, exists bool) {
+func (m *VideoTitleChangeMutation) VideoID() (id string, exists bool) {
 	if m.video != nil {
 		return *m.video, true
 	}
@@ -6862,7 +6861,7 @@ func (m *VideoTitleChangeMutation) VideoID() (id pulid.ID, exists bool) {
 // VideoIDs returns the "video" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // VideoID instead. It exists only for internal usage by the builders.
-func (m *VideoTitleChangeMutation) VideoIDs() (ids []pulid.ID) {
+func (m *VideoTitleChangeMutation) VideoIDs() (ids []string) {
 	if id := m.video; id != nil {
 		ids = append(ids, *id)
 	}
@@ -6876,14 +6875,14 @@ func (m *VideoTitleChangeMutation) ResetVideo() {
 }
 
 // Where appends a list predicates to the VideoTitleChangeMutation builder.
-func (m *VideoTitleChangeMutation) Where(ps ...predicate.Video_title_change) {
+func (m *VideoTitleChangeMutation) Where(ps ...predicate.VideoTitleChange) {
 	m.predicates = append(m.predicates, ps...)
 }
 
 // WhereP appends storage-level predicates to the VideoTitleChangeMutation builder. Using this method,
 // users can use type-assertion to append predicates that do not depend on any generated package.
 func (m *VideoTitleChangeMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.Video_title_change, len(ps))
+	p := make([]predicate.VideoTitleChange, len(ps))
 	for i := range ps {
 		p[i] = ps[i]
 	}
@@ -6900,7 +6899,7 @@ func (m *VideoTitleChangeMutation) SetOp(op Op) {
 	m.op = op
 }
 
-// Type returns the node type of this mutation (Video_title_change).
+// Type returns the node type of this mutation (VideoTitleChange).
 func (m *VideoTitleChangeMutation) Type() string {
 	return m.typ
 }
@@ -6911,13 +6910,13 @@ func (m *VideoTitleChangeMutation) Type() string {
 func (m *VideoTitleChangeMutation) Fields() []string {
 	fields := make([]string, 0, 3)
 	if m.title != nil {
-		fields = append(fields, video_title_change.FieldTitle)
+		fields = append(fields, videotitlechange.FieldTitle)
 	}
 	if m.normalized_title != nil {
-		fields = append(fields, video_title_change.FieldNormalizedTitle)
+		fields = append(fields, videotitlechange.FieldNormalizedTitle)
 	}
 	if m.changed_at != nil {
-		fields = append(fields, video_title_change.FieldChangedAt)
+		fields = append(fields, videotitlechange.FieldChangedAt)
 	}
 	return fields
 }
@@ -6927,11 +6926,11 @@ func (m *VideoTitleChangeMutation) Fields() []string {
 // schema.
 func (m *VideoTitleChangeMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case video_title_change.FieldTitle:
+	case videotitlechange.FieldTitle:
 		return m.Title()
-	case video_title_change.FieldNormalizedTitle:
+	case videotitlechange.FieldNormalizedTitle:
 		return m.NormalizedTitle()
-	case video_title_change.FieldChangedAt:
+	case videotitlechange.FieldChangedAt:
 		return m.ChangedAt()
 	}
 	return nil, false
@@ -6942,14 +6941,14 @@ func (m *VideoTitleChangeMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *VideoTitleChangeMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case video_title_change.FieldTitle:
+	case videotitlechange.FieldTitle:
 		return m.OldTitle(ctx)
-	case video_title_change.FieldNormalizedTitle:
+	case videotitlechange.FieldNormalizedTitle:
 		return m.OldNormalizedTitle(ctx)
-	case video_title_change.FieldChangedAt:
+	case videotitlechange.FieldChangedAt:
 		return m.OldChangedAt(ctx)
 	}
-	return nil, fmt.Errorf("unknown Video_title_change field %s", name)
+	return nil, fmt.Errorf("unknown VideoTitleChange field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
@@ -6957,21 +6956,21 @@ func (m *VideoTitleChangeMutation) OldField(ctx context.Context, name string) (e
 // type.
 func (m *VideoTitleChangeMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case video_title_change.FieldTitle:
+	case videotitlechange.FieldTitle:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTitle(v)
 		return nil
-	case video_title_change.FieldNormalizedTitle:
+	case videotitlechange.FieldNormalizedTitle:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetNormalizedTitle(v)
 		return nil
-	case video_title_change.FieldChangedAt:
+	case videotitlechange.FieldChangedAt:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -6979,7 +6978,7 @@ func (m *VideoTitleChangeMutation) SetField(name string, value ent.Value) error 
 		m.SetChangedAt(v)
 		return nil
 	}
-	return fmt.Errorf("unknown Video_title_change field %s", name)
+	return fmt.Errorf("unknown VideoTitleChange field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
@@ -7001,7 +7000,7 @@ func (m *VideoTitleChangeMutation) AddedField(name string) (ent.Value, bool) {
 func (m *VideoTitleChangeMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	}
-	return fmt.Errorf("unknown Video_title_change numeric field %s", name)
+	return fmt.Errorf("unknown VideoTitleChange numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
@@ -7020,31 +7019,31 @@ func (m *VideoTitleChangeMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *VideoTitleChangeMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown Video_title_change nullable field %s", name)
+	return fmt.Errorf("unknown VideoTitleChange nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
 func (m *VideoTitleChangeMutation) ResetField(name string) error {
 	switch name {
-	case video_title_change.FieldTitle:
+	case videotitlechange.FieldTitle:
 		m.ResetTitle()
 		return nil
-	case video_title_change.FieldNormalizedTitle:
+	case videotitlechange.FieldNormalizedTitle:
 		m.ResetNormalizedTitle()
 		return nil
-	case video_title_change.FieldChangedAt:
+	case videotitlechange.FieldChangedAt:
 		m.ResetChangedAt()
 		return nil
 	}
-	return fmt.Errorf("unknown Video_title_change field %s", name)
+	return fmt.Errorf("unknown VideoTitleChange field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *VideoTitleChangeMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.video != nil {
-		edges = append(edges, video_title_change.EdgeVideo)
+		edges = append(edges, videotitlechange.EdgeVideo)
 	}
 	return edges
 }
@@ -7053,7 +7052,7 @@ func (m *VideoTitleChangeMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *VideoTitleChangeMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case video_title_change.EdgeVideo:
+	case videotitlechange.EdgeVideo:
 		if id := m.video; id != nil {
 			return []ent.Value{*id}
 		}
@@ -7077,7 +7076,7 @@ func (m *VideoTitleChangeMutation) RemovedIDs(name string) []ent.Value {
 func (m *VideoTitleChangeMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
 	if m.clearedvideo {
-		edges = append(edges, video_title_change.EdgeVideo)
+		edges = append(edges, videotitlechange.EdgeVideo)
 	}
 	return edges
 }
@@ -7086,7 +7085,7 @@ func (m *VideoTitleChangeMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *VideoTitleChangeMutation) EdgeCleared(name string) bool {
 	switch name {
-	case video_title_change.EdgeVideo:
+	case videotitlechange.EdgeVideo:
 		return m.clearedvideo
 	}
 	return false
@@ -7096,20 +7095,20 @@ func (m *VideoTitleChangeMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *VideoTitleChangeMutation) ClearEdge(name string) error {
 	switch name {
-	case video_title_change.EdgeVideo:
+	case videotitlechange.EdgeVideo:
 		m.ClearVideo()
 		return nil
 	}
-	return fmt.Errorf("unknown Video_title_change unique edge %s", name)
+	return fmt.Errorf("unknown VideoTitleChange unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *VideoTitleChangeMutation) ResetEdge(name string) error {
 	switch name {
-	case video_title_change.EdgeVideo:
+	case videotitlechange.EdgeVideo:
 		m.ResetVideo()
 		return nil
 	}
-	return fmt.Errorf("unknown Video_title_change edge %s", name)
+	return fmt.Errorf("unknown VideoTitleChange edge %s", name)
 }

@@ -9,14 +9,13 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 )
 
 // Channel is the model entity for the Channel schema.
 type Channel struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID pulid.ID `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// ChannelID holds the value of the "channel_id" field.
@@ -75,7 +74,7 @@ func (c *Channel) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				c.ID = pulid.ID(value.String)
+				c.ID = value.String
 			}
 		case channel.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {

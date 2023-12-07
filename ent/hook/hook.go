@@ -9,12 +9,12 @@ import (
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent"
 )
 
-// The Category_description_templateFunc type is an adapter to allow the use of ordinary
-// function as Category_description_template mutator.
-type Category_description_templateFunc func(context.Context, *ent.CategoryDescriptionTemplateMutation) (ent.Value, error)
+// The CategoryDescriptionTemplateFunc type is an adapter to allow the use of ordinary
+// function as CategoryDescriptionTemplate mutator.
+type CategoryDescriptionTemplateFunc func(context.Context, *ent.CategoryDescriptionTemplateMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f Category_description_templateFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+func (f CategoryDescriptionTemplateFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 	if mv, ok := m.(*ent.CategoryDescriptionTemplateMutation); ok {
 		return f(ctx, mv)
 	}
@@ -45,36 +45,36 @@ func (f DescriptionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value,
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DescriptionMutation", m)
 }
 
-// The Description_changeFunc type is an adapter to allow the use of ordinary
-// function as Description_change mutator.
-type Description_changeFunc func(context.Context, *ent.DescriptionChangeMutation) (ent.Value, error)
+// The DescriptionChangeFunc type is an adapter to allow the use of ordinary
+// function as DescriptionChange mutator.
+type DescriptionChangeFunc func(context.Context, *ent.DescriptionChangeMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f Description_changeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+func (f DescriptionChangeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 	if mv, ok := m.(*ent.DescriptionChangeMutation); ok {
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DescriptionChangeMutation", m)
 }
 
-// The Pat_chatFunc type is an adapter to allow the use of ordinary
-// function as Pat_chat mutator.
-type Pat_chatFunc func(context.Context, *ent.PatChatMutation) (ent.Value, error)
+// The PatChatFunc type is an adapter to allow the use of ordinary
+// function as PatChat mutator.
+type PatChatFunc func(context.Context, *ent.PatChatMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f Pat_chatFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+func (f PatChatFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 	if mv, ok := m.(*ent.PatChatMutation); ok {
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PatChatMutation", m)
 }
 
-// The Periodic_description_templateFunc type is an adapter to allow the use of ordinary
-// function as Periodic_description_template mutator.
-type Periodic_description_templateFunc func(context.Context, *ent.PeriodicDescriptionTemplateMutation) (ent.Value, error)
+// The PeriodicDescriptionTemplateFunc type is an adapter to allow the use of ordinary
+// function as PeriodicDescriptionTemplate mutator.
+type PeriodicDescriptionTemplateFunc func(context.Context, *ent.PeriodicDescriptionTemplateMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f Periodic_description_templateFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+func (f PeriodicDescriptionTemplateFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 	if mv, ok := m.(*ent.PeriodicDescriptionTemplateMutation); ok {
 		return f(ctx, mv)
 	}
@@ -93,36 +93,36 @@ func (f VideoFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.VideoMutation", m)
 }
 
-// The Video_disallow_rangeFunc type is an adapter to allow the use of ordinary
-// function as Video_disallow_range mutator.
-type Video_disallow_rangeFunc func(context.Context, *ent.VideoDisallowRangeMutation) (ent.Value, error)
+// The VideoDisallowRangeFunc type is an adapter to allow the use of ordinary
+// function as VideoDisallowRange mutator.
+type VideoDisallowRangeFunc func(context.Context, *ent.VideoDisallowRangeMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f Video_disallow_rangeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+func (f VideoDisallowRangeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 	if mv, ok := m.(*ent.VideoDisallowRangeMutation); ok {
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.VideoDisallowRangeMutation", m)
 }
 
-// The Video_play_rangeFunc type is an adapter to allow the use of ordinary
-// function as Video_play_range mutator.
-type Video_play_rangeFunc func(context.Context, *ent.VideoPlayRangeMutation) (ent.Value, error)
+// The VideoPlayRangeFunc type is an adapter to allow the use of ordinary
+// function as VideoPlayRange mutator.
+type VideoPlayRangeFunc func(context.Context, *ent.VideoPlayRangeMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f Video_play_rangeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+func (f VideoPlayRangeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 	if mv, ok := m.(*ent.VideoPlayRangeMutation); ok {
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.VideoPlayRangeMutation", m)
 }
 
-// The Video_title_changeFunc type is an adapter to allow the use of ordinary
-// function as Video_title_change mutator.
-type Video_title_changeFunc func(context.Context, *ent.VideoTitleChangeMutation) (ent.Value, error)
+// The VideoTitleChangeFunc type is an adapter to allow the use of ordinary
+// function as VideoTitleChange mutator.
+type VideoTitleChangeFunc func(context.Context, *ent.VideoTitleChangeMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f Video_title_changeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+func (f VideoTitleChangeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 	if mv, ok := m.(*ent.VideoTitleChangeMutation); ok {
 		return f(ctx, mv)
 	}

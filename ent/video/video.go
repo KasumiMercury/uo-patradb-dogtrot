@@ -7,7 +7,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 )
 
 const (
@@ -69,29 +68,29 @@ const (
 	ChannelInverseTable = "channels"
 	// VideoPlayRangesTable is the table that holds the video_play_ranges relation/edge.
 	VideoPlayRangesTable = "video_play_ranges"
-	// VideoPlayRangesInverseTable is the table name for the Video_play_range entity.
-	// It exists in this package in order to avoid circular dependency with the "video_play_range" package.
+	// VideoPlayRangesInverseTable is the table name for the VideoPlayRange entity.
+	// It exists in this package in order to avoid circular dependency with the "videoplayrange" package.
 	VideoPlayRangesInverseTable = "video_play_ranges"
 	// VideoPlayRangesColumn is the table column denoting the video_play_ranges relation/edge.
 	VideoPlayRangesColumn = "video_id"
 	// VideoDisallowRangesTable is the table that holds the video_disallow_ranges relation/edge.
 	VideoDisallowRangesTable = "video_disallow_ranges"
-	// VideoDisallowRangesInverseTable is the table name for the Video_disallow_range entity.
-	// It exists in this package in order to avoid circular dependency with the "video_disallow_range" package.
+	// VideoDisallowRangesInverseTable is the table name for the VideoDisallowRange entity.
+	// It exists in this package in order to avoid circular dependency with the "videodisallowrange" package.
 	VideoDisallowRangesInverseTable = "video_disallow_ranges"
 	// VideoDisallowRangesColumn is the table column denoting the video_disallow_ranges relation/edge.
 	VideoDisallowRangesColumn = "video_id"
 	// VideoTitleChangesTable is the table that holds the video_title_changes relation/edge.
 	VideoTitleChangesTable = "video_title_changes"
-	// VideoTitleChangesInverseTable is the table name for the Video_title_change entity.
-	// It exists in this package in order to avoid circular dependency with the "video_title_change" package.
+	// VideoTitleChangesInverseTable is the table name for the VideoTitleChange entity.
+	// It exists in this package in order to avoid circular dependency with the "videotitlechange" package.
 	VideoTitleChangesInverseTable = "video_title_changes"
 	// VideoTitleChangesColumn is the table column denoting the video_title_changes relation/edge.
 	VideoTitleChangesColumn = "video_id"
 	// PatChatsTable is the table that holds the Pat_chats relation/edge.
 	PatChatsTable = "pat_chats"
-	// PatChatsInverseTable is the table name for the Pat_chat entity.
-	// It exists in this package in order to avoid circular dependency with the "pat_chat" package.
+	// PatChatsInverseTable is the table name for the PatChat entity.
+	// It exists in this package in order to avoid circular dependency with the "patchat" package.
 	PatChatsInverseTable = "pat_chats"
 	// PatChatsColumn is the table column denoting the Pat_chats relation/edge.
 	PatChatsColumn = "video_id"
@@ -141,7 +140,7 @@ var (
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.
-	DefaultID func() pulid.ID
+	DefaultID func() string
 )
 
 // OrderOption defines the ordering options for the Video queries.

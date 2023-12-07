@@ -10,22 +10,21 @@ import (
 	"reflect"
 
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/migrate"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/category_description_template"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/categorydescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description_change"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/pat_chat"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodic_description_template"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/descriptionchange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/patchat"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodicdescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_disallow_range"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_play_range"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video_title_change"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotitlechange"
 )
 
 // Client is the client that holds all ent builders.
@@ -33,26 +32,26 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
-	// Category_description_template is the client for interacting with the Category_description_template builders.
-	Category_description_template *CategoryDescriptionTemplateClient
+	// CategoryDescriptionTemplate is the client for interacting with the CategoryDescriptionTemplate builders.
+	CategoryDescriptionTemplate *CategoryDescriptionTemplateClient
 	// Channel is the client for interacting with the Channel builders.
 	Channel *ChannelClient
 	// Description is the client for interacting with the Description builders.
 	Description *DescriptionClient
-	// Description_change is the client for interacting with the Description_change builders.
-	Description_change *DescriptionChangeClient
-	// Pat_chat is the client for interacting with the Pat_chat builders.
-	Pat_chat *PatChatClient
-	// Periodic_description_template is the client for interacting with the Periodic_description_template builders.
-	Periodic_description_template *PeriodicDescriptionTemplateClient
+	// DescriptionChange is the client for interacting with the DescriptionChange builders.
+	DescriptionChange *DescriptionChangeClient
+	// PatChat is the client for interacting with the PatChat builders.
+	PatChat *PatChatClient
+	// PeriodicDescriptionTemplate is the client for interacting with the PeriodicDescriptionTemplate builders.
+	PeriodicDescriptionTemplate *PeriodicDescriptionTemplateClient
 	// Video is the client for interacting with the Video builders.
 	Video *VideoClient
-	// Video_disallow_range is the client for interacting with the Video_disallow_range builders.
-	Video_disallow_range *VideoDisallowRangeClient
-	// Video_play_range is the client for interacting with the Video_play_range builders.
-	Video_play_range *VideoPlayRangeClient
-	// Video_title_change is the client for interacting with the Video_title_change builders.
-	Video_title_change *VideoTitleChangeClient
+	// VideoDisallowRange is the client for interacting with the VideoDisallowRange builders.
+	VideoDisallowRange *VideoDisallowRangeClient
+	// VideoPlayRange is the client for interacting with the VideoPlayRange builders.
+	VideoPlayRange *VideoPlayRangeClient
+	// VideoTitleChange is the client for interacting with the VideoTitleChange builders.
+	VideoTitleChange *VideoTitleChangeClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -64,16 +63,16 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
-	c.Category_description_template = NewCategoryDescriptionTemplateClient(c.config)
+	c.CategoryDescriptionTemplate = NewCategoryDescriptionTemplateClient(c.config)
 	c.Channel = NewChannelClient(c.config)
 	c.Description = NewDescriptionClient(c.config)
-	c.Description_change = NewDescriptionChangeClient(c.config)
-	c.Pat_chat = NewPatChatClient(c.config)
-	c.Periodic_description_template = NewPeriodicDescriptionTemplateClient(c.config)
+	c.DescriptionChange = NewDescriptionChangeClient(c.config)
+	c.PatChat = NewPatChatClient(c.config)
+	c.PeriodicDescriptionTemplate = NewPeriodicDescriptionTemplateClient(c.config)
 	c.Video = NewVideoClient(c.config)
-	c.Video_disallow_range = NewVideoDisallowRangeClient(c.config)
-	c.Video_play_range = NewVideoPlayRangeClient(c.config)
-	c.Video_title_change = NewVideoTitleChangeClient(c.config)
+	c.VideoDisallowRange = NewVideoDisallowRangeClient(c.config)
+	c.VideoPlayRange = NewVideoPlayRangeClient(c.config)
+	c.VideoTitleChange = NewVideoTitleChangeClient(c.config)
 }
 
 type (
@@ -164,18 +163,18 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:                           ctx,
-		config:                        cfg,
-		Category_description_template: NewCategoryDescriptionTemplateClient(cfg),
-		Channel:                       NewChannelClient(cfg),
-		Description:                   NewDescriptionClient(cfg),
-		Description_change:            NewDescriptionChangeClient(cfg),
-		Pat_chat:                      NewPatChatClient(cfg),
-		Periodic_description_template: NewPeriodicDescriptionTemplateClient(cfg),
-		Video:                         NewVideoClient(cfg),
-		Video_disallow_range:          NewVideoDisallowRangeClient(cfg),
-		Video_play_range:              NewVideoPlayRangeClient(cfg),
-		Video_title_change:            NewVideoTitleChangeClient(cfg),
+		ctx:                         ctx,
+		config:                      cfg,
+		CategoryDescriptionTemplate: NewCategoryDescriptionTemplateClient(cfg),
+		Channel:                     NewChannelClient(cfg),
+		Description:                 NewDescriptionClient(cfg),
+		DescriptionChange:           NewDescriptionChangeClient(cfg),
+		PatChat:                     NewPatChatClient(cfg),
+		PeriodicDescriptionTemplate: NewPeriodicDescriptionTemplateClient(cfg),
+		Video:                       NewVideoClient(cfg),
+		VideoDisallowRange:          NewVideoDisallowRangeClient(cfg),
+		VideoPlayRange:              NewVideoPlayRangeClient(cfg),
+		VideoTitleChange:            NewVideoTitleChangeClient(cfg),
 	}, nil
 }
 
@@ -193,25 +192,25 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:                           ctx,
-		config:                        cfg,
-		Category_description_template: NewCategoryDescriptionTemplateClient(cfg),
-		Channel:                       NewChannelClient(cfg),
-		Description:                   NewDescriptionClient(cfg),
-		Description_change:            NewDescriptionChangeClient(cfg),
-		Pat_chat:                      NewPatChatClient(cfg),
-		Periodic_description_template: NewPeriodicDescriptionTemplateClient(cfg),
-		Video:                         NewVideoClient(cfg),
-		Video_disallow_range:          NewVideoDisallowRangeClient(cfg),
-		Video_play_range:              NewVideoPlayRangeClient(cfg),
-		Video_title_change:            NewVideoTitleChangeClient(cfg),
+		ctx:                         ctx,
+		config:                      cfg,
+		CategoryDescriptionTemplate: NewCategoryDescriptionTemplateClient(cfg),
+		Channel:                     NewChannelClient(cfg),
+		Description:                 NewDescriptionClient(cfg),
+		DescriptionChange:           NewDescriptionChangeClient(cfg),
+		PatChat:                     NewPatChatClient(cfg),
+		PeriodicDescriptionTemplate: NewPeriodicDescriptionTemplateClient(cfg),
+		Video:                       NewVideoClient(cfg),
+		VideoDisallowRange:          NewVideoDisallowRangeClient(cfg),
+		VideoPlayRange:              NewVideoPlayRangeClient(cfg),
+		VideoTitleChange:            NewVideoTitleChangeClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		Category_description_template.
+//		CategoryDescriptionTemplate.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -234,9 +233,9 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Category_description_template, c.Channel, c.Description, c.Description_change,
-		c.Pat_chat, c.Periodic_description_template, c.Video, c.Video_disallow_range,
-		c.Video_play_range, c.Video_title_change,
+		c.CategoryDescriptionTemplate, c.Channel, c.Description, c.DescriptionChange,
+		c.PatChat, c.PeriodicDescriptionTemplate, c.Video, c.VideoDisallowRange,
+		c.VideoPlayRange, c.VideoTitleChange,
 	} {
 		n.Use(hooks...)
 	}
@@ -246,9 +245,9 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Category_description_template, c.Channel, c.Description, c.Description_change,
-		c.Pat_chat, c.Periodic_description_template, c.Video, c.Video_disallow_range,
-		c.Video_play_range, c.Video_title_change,
+		c.CategoryDescriptionTemplate, c.Channel, c.Description, c.DescriptionChange,
+		c.PatChat, c.PeriodicDescriptionTemplate, c.Video, c.VideoDisallowRange,
+		c.VideoPlayRange, c.VideoTitleChange,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -258,59 +257,59 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *CategoryDescriptionTemplateMutation:
-		return c.Category_description_template.mutate(ctx, m)
+		return c.CategoryDescriptionTemplate.mutate(ctx, m)
 	case *ChannelMutation:
 		return c.Channel.mutate(ctx, m)
 	case *DescriptionMutation:
 		return c.Description.mutate(ctx, m)
 	case *DescriptionChangeMutation:
-		return c.Description_change.mutate(ctx, m)
+		return c.DescriptionChange.mutate(ctx, m)
 	case *PatChatMutation:
-		return c.Pat_chat.mutate(ctx, m)
+		return c.PatChat.mutate(ctx, m)
 	case *PeriodicDescriptionTemplateMutation:
-		return c.Periodic_description_template.mutate(ctx, m)
+		return c.PeriodicDescriptionTemplate.mutate(ctx, m)
 	case *VideoMutation:
 		return c.Video.mutate(ctx, m)
 	case *VideoDisallowRangeMutation:
-		return c.Video_disallow_range.mutate(ctx, m)
+		return c.VideoDisallowRange.mutate(ctx, m)
 	case *VideoPlayRangeMutation:
-		return c.Video_play_range.mutate(ctx, m)
+		return c.VideoPlayRange.mutate(ctx, m)
 	case *VideoTitleChangeMutation:
-		return c.Video_title_change.mutate(ctx, m)
+		return c.VideoTitleChange.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
 	}
 }
 
-// CategoryDescriptionTemplateClient is a client for the Category_description_template schema.
+// CategoryDescriptionTemplateClient is a client for the CategoryDescriptionTemplate schema.
 type CategoryDescriptionTemplateClient struct {
 	config
 }
 
-// NewCategoryDescriptionTemplateClient returns a client for the Category_description_template from the given config.
+// NewCategoryDescriptionTemplateClient returns a client for the CategoryDescriptionTemplate from the given config.
 func NewCategoryDescriptionTemplateClient(c config) *CategoryDescriptionTemplateClient {
 	return &CategoryDescriptionTemplateClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `category_description_template.Hooks(f(g(h())))`.
+// A call to `Use(f, g, h)` equals to `categorydescriptiontemplate.Hooks(f(g(h())))`.
 func (c *CategoryDescriptionTemplateClient) Use(hooks ...Hook) {
-	c.hooks.Category_description_template = append(c.hooks.Category_description_template, hooks...)
+	c.hooks.CategoryDescriptionTemplate = append(c.hooks.CategoryDescriptionTemplate, hooks...)
 }
 
 // Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `category_description_template.Intercept(f(g(h())))`.
+// A call to `Intercept(f, g, h)` equals to `categorydescriptiontemplate.Intercept(f(g(h())))`.
 func (c *CategoryDescriptionTemplateClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Category_description_template = append(c.inters.Category_description_template, interceptors...)
+	c.inters.CategoryDescriptionTemplate = append(c.inters.CategoryDescriptionTemplate, interceptors...)
 }
 
-// Create returns a builder for creating a Category_description_template entity.
+// Create returns a builder for creating a CategoryDescriptionTemplate entity.
 func (c *CategoryDescriptionTemplateClient) Create() *CategoryDescriptionTemplateCreate {
 	mutation := newCategoryDescriptionTemplateMutation(c.config, OpCreate)
 	return &CategoryDescriptionTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of Category_description_template entities.
+// CreateBulk returns a builder for creating a bulk of CategoryDescriptionTemplate entities.
 func (c *CategoryDescriptionTemplateClient) CreateBulk(builders ...*CategoryDescriptionTemplateCreate) *CategoryDescriptionTemplateCreateBulk {
 	return &CategoryDescriptionTemplateCreateBulk{config: c.config, builders: builders}
 }
@@ -330,44 +329,44 @@ func (c *CategoryDescriptionTemplateClient) MapCreateBulk(slice any, setFunc fun
 	return &CategoryDescriptionTemplateCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for Category_description_template.
+// Update returns an update builder for CategoryDescriptionTemplate.
 func (c *CategoryDescriptionTemplateClient) Update() *CategoryDescriptionTemplateUpdate {
 	mutation := newCategoryDescriptionTemplateMutation(c.config, OpUpdate)
 	return &CategoryDescriptionTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *CategoryDescriptionTemplateClient) UpdateOne(cdt *Category_description_template) *CategoryDescriptionTemplateUpdateOne {
-	mutation := newCategoryDescriptionTemplateMutation(c.config, OpUpdateOne, withCategory_description_template(cdt))
+func (c *CategoryDescriptionTemplateClient) UpdateOne(cdt *CategoryDescriptionTemplate) *CategoryDescriptionTemplateUpdateOne {
+	mutation := newCategoryDescriptionTemplateMutation(c.config, OpUpdateOne, withCategoryDescriptionTemplate(cdt))
 	return &CategoryDescriptionTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *CategoryDescriptionTemplateClient) UpdateOneID(id pulid.ID) *CategoryDescriptionTemplateUpdateOne {
-	mutation := newCategoryDescriptionTemplateMutation(c.config, OpUpdateOne, withCategory_description_templateID(id))
+func (c *CategoryDescriptionTemplateClient) UpdateOneID(id string) *CategoryDescriptionTemplateUpdateOne {
+	mutation := newCategoryDescriptionTemplateMutation(c.config, OpUpdateOne, withCategoryDescriptionTemplateID(id))
 	return &CategoryDescriptionTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for Category_description_template.
+// Delete returns a delete builder for CategoryDescriptionTemplate.
 func (c *CategoryDescriptionTemplateClient) Delete() *CategoryDescriptionTemplateDelete {
 	mutation := newCategoryDescriptionTemplateMutation(c.config, OpDelete)
 	return &CategoryDescriptionTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *CategoryDescriptionTemplateClient) DeleteOne(cdt *Category_description_template) *CategoryDescriptionTemplateDeleteOne {
+func (c *CategoryDescriptionTemplateClient) DeleteOne(cdt *CategoryDescriptionTemplate) *CategoryDescriptionTemplateDeleteOne {
 	return c.DeleteOneID(cdt.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *CategoryDescriptionTemplateClient) DeleteOneID(id pulid.ID) *CategoryDescriptionTemplateDeleteOne {
-	builder := c.Delete().Where(category_description_template.ID(id))
+func (c *CategoryDescriptionTemplateClient) DeleteOneID(id string) *CategoryDescriptionTemplateDeleteOne {
+	builder := c.Delete().Where(categorydescriptiontemplate.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
 	return &CategoryDescriptionTemplateDeleteOne{builder}
 }
 
-// Query returns a query builder for Category_description_template.
+// Query returns a query builder for CategoryDescriptionTemplate.
 func (c *CategoryDescriptionTemplateClient) Query() *CategoryDescriptionTemplateQuery {
 	return &CategoryDescriptionTemplateQuery{
 		config: c.config,
@@ -376,13 +375,13 @@ func (c *CategoryDescriptionTemplateClient) Query() *CategoryDescriptionTemplate
 	}
 }
 
-// Get returns a Category_description_template entity by its id.
-func (c *CategoryDescriptionTemplateClient) Get(ctx context.Context, id pulid.ID) (*Category_description_template, error) {
-	return c.Query().Where(category_description_template.ID(id)).Only(ctx)
+// Get returns a CategoryDescriptionTemplate entity by its id.
+func (c *CategoryDescriptionTemplateClient) Get(ctx context.Context, id string) (*CategoryDescriptionTemplate, error) {
+	return c.Query().Where(categorydescriptiontemplate.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *CategoryDescriptionTemplateClient) GetX(ctx context.Context, id pulid.ID) *Category_description_template {
+func (c *CategoryDescriptionTemplateClient) GetX(ctx context.Context, id string) *CategoryDescriptionTemplate {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -390,15 +389,15 @@ func (c *CategoryDescriptionTemplateClient) GetX(ctx context.Context, id pulid.I
 	return obj
 }
 
-// QueryDescriptions queries the descriptions edge of a Category_description_template.
-func (c *CategoryDescriptionTemplateClient) QueryDescriptions(cdt *Category_description_template) *DescriptionQuery {
+// QueryDescriptions queries the descriptions edge of a CategoryDescriptionTemplate.
+func (c *CategoryDescriptionTemplateClient) QueryDescriptions(cdt *CategoryDescriptionTemplate) *DescriptionQuery {
 	query := (&DescriptionClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := cdt.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(category_description_template.Table, category_description_template.FieldID, id),
+			sqlgraph.From(categorydescriptiontemplate.Table, categorydescriptiontemplate.FieldID, id),
 			sqlgraph.To(description.Table, description.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, category_description_template.DescriptionsTable, category_description_template.DescriptionsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, categorydescriptiontemplate.DescriptionsTable, categorydescriptiontemplate.DescriptionsColumn),
 		)
 		fromV = sqlgraph.Neighbors(cdt.driver.Dialect(), step)
 		return fromV, nil
@@ -408,12 +407,12 @@ func (c *CategoryDescriptionTemplateClient) QueryDescriptions(cdt *Category_desc
 
 // Hooks returns the client hooks.
 func (c *CategoryDescriptionTemplateClient) Hooks() []Hook {
-	return c.hooks.Category_description_template
+	return c.hooks.CategoryDescriptionTemplate
 }
 
 // Interceptors returns the client interceptors.
 func (c *CategoryDescriptionTemplateClient) Interceptors() []Interceptor {
-	return c.inters.Category_description_template
+	return c.inters.CategoryDescriptionTemplate
 }
 
 func (c *CategoryDescriptionTemplateClient) mutate(ctx context.Context, m *CategoryDescriptionTemplateMutation) (Value, error) {
@@ -427,7 +426,7 @@ func (c *CategoryDescriptionTemplateClient) mutate(ctx context.Context, m *Categ
 	case OpDelete, OpDeleteOne:
 		return (&CategoryDescriptionTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
-		return nil, fmt.Errorf("ent: unknown Category_description_template mutation op: %q", m.Op())
+		return nil, fmt.Errorf("ent: unknown CategoryDescriptionTemplate mutation op: %q", m.Op())
 	}
 }
 
@@ -492,7 +491,7 @@ func (c *ChannelClient) UpdateOne(ch *Channel) *ChannelUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ChannelClient) UpdateOneID(id pulid.ID) *ChannelUpdateOne {
+func (c *ChannelClient) UpdateOneID(id string) *ChannelUpdateOne {
 	mutation := newChannelMutation(c.config, OpUpdateOne, withChannelID(id))
 	return &ChannelUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -509,7 +508,7 @@ func (c *ChannelClient) DeleteOne(ch *Channel) *ChannelDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ChannelClient) DeleteOneID(id pulid.ID) *ChannelDeleteOne {
+func (c *ChannelClient) DeleteOneID(id string) *ChannelDeleteOne {
 	builder := c.Delete().Where(channel.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -526,12 +525,12 @@ func (c *ChannelClient) Query() *ChannelQuery {
 }
 
 // Get returns a Channel entity by its id.
-func (c *ChannelClient) Get(ctx context.Context, id pulid.ID) (*Channel, error) {
+func (c *ChannelClient) Get(ctx context.Context, id string) (*Channel, error) {
 	return c.Query().Where(channel.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ChannelClient) GetX(ctx context.Context, id pulid.ID) *Channel {
+func (c *ChannelClient) GetX(ctx context.Context, id string) *Channel {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -641,7 +640,7 @@ func (c *DescriptionClient) UpdateOne(d *Description) *DescriptionUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *DescriptionClient) UpdateOneID(id pulid.ID) *DescriptionUpdateOne {
+func (c *DescriptionClient) UpdateOneID(id string) *DescriptionUpdateOne {
 	mutation := newDescriptionMutation(c.config, OpUpdateOne, withDescriptionID(id))
 	return &DescriptionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -658,7 +657,7 @@ func (c *DescriptionClient) DeleteOne(d *Description) *DescriptionDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *DescriptionClient) DeleteOneID(id pulid.ID) *DescriptionDeleteOne {
+func (c *DescriptionClient) DeleteOneID(id string) *DescriptionDeleteOne {
 	builder := c.Delete().Where(description.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -675,12 +674,12 @@ func (c *DescriptionClient) Query() *DescriptionQuery {
 }
 
 // Get returns a Description entity by its id.
-func (c *DescriptionClient) Get(ctx context.Context, id pulid.ID) (*Description, error) {
+func (c *DescriptionClient) Get(ctx context.Context, id string) (*Description, error) {
 	return c.Query().Where(description.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *DescriptionClient) GetX(ctx context.Context, id pulid.ID) *Description {
+func (c *DescriptionClient) GetX(ctx context.Context, id string) *Description {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -711,8 +710,8 @@ func (c *DescriptionClient) QueryPeriodicDescriptionTemplate(d *Description) *Pe
 		id := d.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(description.Table, description.FieldID, id),
-			sqlgraph.To(periodic_description_template.Table, periodic_description_template.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, description.PeriodicDescriptionTemplateTable, description.PeriodicDescriptionTemplateColumn),
+			sqlgraph.To(periodicdescriptiontemplate.Table, periodicdescriptiontemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, description.PeriodicDescriptionTemplateTable, description.PeriodicDescriptionTemplateColumn),
 		)
 		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
 		return fromV, nil
@@ -727,8 +726,8 @@ func (c *DescriptionClient) QueryCategoryDescriptionTemplate(d *Description) *Ca
 		id := d.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(description.Table, description.FieldID, id),
-			sqlgraph.To(category_description_template.Table, category_description_template.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, description.CategoryDescriptionTemplateTable, description.CategoryDescriptionTemplateColumn),
+			sqlgraph.To(categorydescriptiontemplate.Table, categorydescriptiontemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, description.CategoryDescriptionTemplateTable, description.CategoryDescriptionTemplateColumn),
 		)
 		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
 		return fromV, nil
@@ -743,7 +742,7 @@ func (c *DescriptionClient) QueryDescriptionChanges(d *Description) *Description
 		id := d.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(description.Table, description.FieldID, id),
-			sqlgraph.To(description_change.Table, description_change.FieldID),
+			sqlgraph.To(descriptionchange.Table, descriptionchange.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, description.DescriptionChangesTable, description.DescriptionChangesColumn),
 		)
 		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
@@ -777,35 +776,35 @@ func (c *DescriptionClient) mutate(ctx context.Context, m *DescriptionMutation) 
 	}
 }
 
-// DescriptionChangeClient is a client for the Description_change schema.
+// DescriptionChangeClient is a client for the DescriptionChange schema.
 type DescriptionChangeClient struct {
 	config
 }
 
-// NewDescriptionChangeClient returns a client for the Description_change from the given config.
+// NewDescriptionChangeClient returns a client for the DescriptionChange from the given config.
 func NewDescriptionChangeClient(c config) *DescriptionChangeClient {
 	return &DescriptionChangeClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `description_change.Hooks(f(g(h())))`.
+// A call to `Use(f, g, h)` equals to `descriptionchange.Hooks(f(g(h())))`.
 func (c *DescriptionChangeClient) Use(hooks ...Hook) {
-	c.hooks.Description_change = append(c.hooks.Description_change, hooks...)
+	c.hooks.DescriptionChange = append(c.hooks.DescriptionChange, hooks...)
 }
 
 // Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `description_change.Intercept(f(g(h())))`.
+// A call to `Intercept(f, g, h)` equals to `descriptionchange.Intercept(f(g(h())))`.
 func (c *DescriptionChangeClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Description_change = append(c.inters.Description_change, interceptors...)
+	c.inters.DescriptionChange = append(c.inters.DescriptionChange, interceptors...)
 }
 
-// Create returns a builder for creating a Description_change entity.
+// Create returns a builder for creating a DescriptionChange entity.
 func (c *DescriptionChangeClient) Create() *DescriptionChangeCreate {
 	mutation := newDescriptionChangeMutation(c.config, OpCreate)
 	return &DescriptionChangeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of Description_change entities.
+// CreateBulk returns a builder for creating a bulk of DescriptionChange entities.
 func (c *DescriptionChangeClient) CreateBulk(builders ...*DescriptionChangeCreate) *DescriptionChangeCreateBulk {
 	return &DescriptionChangeCreateBulk{config: c.config, builders: builders}
 }
@@ -825,44 +824,44 @@ func (c *DescriptionChangeClient) MapCreateBulk(slice any, setFunc func(*Descrip
 	return &DescriptionChangeCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for Description_change.
+// Update returns an update builder for DescriptionChange.
 func (c *DescriptionChangeClient) Update() *DescriptionChangeUpdate {
 	mutation := newDescriptionChangeMutation(c.config, OpUpdate)
 	return &DescriptionChangeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *DescriptionChangeClient) UpdateOne(dc *Description_change) *DescriptionChangeUpdateOne {
-	mutation := newDescriptionChangeMutation(c.config, OpUpdateOne, withDescription_change(dc))
+func (c *DescriptionChangeClient) UpdateOne(dc *DescriptionChange) *DescriptionChangeUpdateOne {
+	mutation := newDescriptionChangeMutation(c.config, OpUpdateOne, withDescriptionChange(dc))
 	return &DescriptionChangeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *DescriptionChangeClient) UpdateOneID(id pulid.ID) *DescriptionChangeUpdateOne {
-	mutation := newDescriptionChangeMutation(c.config, OpUpdateOne, withDescription_changeID(id))
+func (c *DescriptionChangeClient) UpdateOneID(id string) *DescriptionChangeUpdateOne {
+	mutation := newDescriptionChangeMutation(c.config, OpUpdateOne, withDescriptionChangeID(id))
 	return &DescriptionChangeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for Description_change.
+// Delete returns a delete builder for DescriptionChange.
 func (c *DescriptionChangeClient) Delete() *DescriptionChangeDelete {
 	mutation := newDescriptionChangeMutation(c.config, OpDelete)
 	return &DescriptionChangeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *DescriptionChangeClient) DeleteOne(dc *Description_change) *DescriptionChangeDeleteOne {
+func (c *DescriptionChangeClient) DeleteOne(dc *DescriptionChange) *DescriptionChangeDeleteOne {
 	return c.DeleteOneID(dc.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *DescriptionChangeClient) DeleteOneID(id pulid.ID) *DescriptionChangeDeleteOne {
-	builder := c.Delete().Where(description_change.ID(id))
+func (c *DescriptionChangeClient) DeleteOneID(id string) *DescriptionChangeDeleteOne {
+	builder := c.Delete().Where(descriptionchange.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
 	return &DescriptionChangeDeleteOne{builder}
 }
 
-// Query returns a query builder for Description_change.
+// Query returns a query builder for DescriptionChange.
 func (c *DescriptionChangeClient) Query() *DescriptionChangeQuery {
 	return &DescriptionChangeQuery{
 		config: c.config,
@@ -871,13 +870,13 @@ func (c *DescriptionChangeClient) Query() *DescriptionChangeQuery {
 	}
 }
 
-// Get returns a Description_change entity by its id.
-func (c *DescriptionChangeClient) Get(ctx context.Context, id pulid.ID) (*Description_change, error) {
-	return c.Query().Where(description_change.ID(id)).Only(ctx)
+// Get returns a DescriptionChange entity by its id.
+func (c *DescriptionChangeClient) Get(ctx context.Context, id string) (*DescriptionChange, error) {
+	return c.Query().Where(descriptionchange.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *DescriptionChangeClient) GetX(ctx context.Context, id pulid.ID) *Description_change {
+func (c *DescriptionChangeClient) GetX(ctx context.Context, id string) *DescriptionChange {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -885,15 +884,15 @@ func (c *DescriptionChangeClient) GetX(ctx context.Context, id pulid.ID) *Descri
 	return obj
 }
 
-// QueryDescription queries the description edge of a Description_change.
-func (c *DescriptionChangeClient) QueryDescription(dc *Description_change) *DescriptionQuery {
+// QueryDescription queries the description edge of a DescriptionChange.
+func (c *DescriptionChangeClient) QueryDescription(dc *DescriptionChange) *DescriptionQuery {
 	query := (&DescriptionClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := dc.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(description_change.Table, description_change.FieldID, id),
+			sqlgraph.From(descriptionchange.Table, descriptionchange.FieldID, id),
 			sqlgraph.To(description.Table, description.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, description_change.DescriptionTable, description_change.DescriptionColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, descriptionchange.DescriptionTable, descriptionchange.DescriptionColumn),
 		)
 		fromV = sqlgraph.Neighbors(dc.driver.Dialect(), step)
 		return fromV, nil
@@ -903,12 +902,12 @@ func (c *DescriptionChangeClient) QueryDescription(dc *Description_change) *Desc
 
 // Hooks returns the client hooks.
 func (c *DescriptionChangeClient) Hooks() []Hook {
-	return c.hooks.Description_change
+	return c.hooks.DescriptionChange
 }
 
 // Interceptors returns the client interceptors.
 func (c *DescriptionChangeClient) Interceptors() []Interceptor {
-	return c.inters.Description_change
+	return c.inters.DescriptionChange
 }
 
 func (c *DescriptionChangeClient) mutate(ctx context.Context, m *DescriptionChangeMutation) (Value, error) {
@@ -922,39 +921,39 @@ func (c *DescriptionChangeClient) mutate(ctx context.Context, m *DescriptionChan
 	case OpDelete, OpDeleteOne:
 		return (&DescriptionChangeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
-		return nil, fmt.Errorf("ent: unknown Description_change mutation op: %q", m.Op())
+		return nil, fmt.Errorf("ent: unknown DescriptionChange mutation op: %q", m.Op())
 	}
 }
 
-// PatChatClient is a client for the Pat_chat schema.
+// PatChatClient is a client for the PatChat schema.
 type PatChatClient struct {
 	config
 }
 
-// NewPatChatClient returns a client for the Pat_chat from the given config.
+// NewPatChatClient returns a client for the PatChat from the given config.
 func NewPatChatClient(c config) *PatChatClient {
 	return &PatChatClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `pat_chat.Hooks(f(g(h())))`.
+// A call to `Use(f, g, h)` equals to `patchat.Hooks(f(g(h())))`.
 func (c *PatChatClient) Use(hooks ...Hook) {
-	c.hooks.Pat_chat = append(c.hooks.Pat_chat, hooks...)
+	c.hooks.PatChat = append(c.hooks.PatChat, hooks...)
 }
 
 // Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `pat_chat.Intercept(f(g(h())))`.
+// A call to `Intercept(f, g, h)` equals to `patchat.Intercept(f(g(h())))`.
 func (c *PatChatClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Pat_chat = append(c.inters.Pat_chat, interceptors...)
+	c.inters.PatChat = append(c.inters.PatChat, interceptors...)
 }
 
-// Create returns a builder for creating a Pat_chat entity.
+// Create returns a builder for creating a PatChat entity.
 func (c *PatChatClient) Create() *PatChatCreate {
 	mutation := newPatChatMutation(c.config, OpCreate)
 	return &PatChatCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of Pat_chat entities.
+// CreateBulk returns a builder for creating a bulk of PatChat entities.
 func (c *PatChatClient) CreateBulk(builders ...*PatChatCreate) *PatChatCreateBulk {
 	return &PatChatCreateBulk{config: c.config, builders: builders}
 }
@@ -974,44 +973,44 @@ func (c *PatChatClient) MapCreateBulk(slice any, setFunc func(*PatChatCreate, in
 	return &PatChatCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for Pat_chat.
+// Update returns an update builder for PatChat.
 func (c *PatChatClient) Update() *PatChatUpdate {
 	mutation := newPatChatMutation(c.config, OpUpdate)
 	return &PatChatUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *PatChatClient) UpdateOne(pc *Pat_chat) *PatChatUpdateOne {
-	mutation := newPatChatMutation(c.config, OpUpdateOne, withPat_chat(pc))
+func (c *PatChatClient) UpdateOne(pc *PatChat) *PatChatUpdateOne {
+	mutation := newPatChatMutation(c.config, OpUpdateOne, withPatChat(pc))
 	return &PatChatUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *PatChatClient) UpdateOneID(id pulid.ID) *PatChatUpdateOne {
-	mutation := newPatChatMutation(c.config, OpUpdateOne, withPat_chatID(id))
+func (c *PatChatClient) UpdateOneID(id string) *PatChatUpdateOne {
+	mutation := newPatChatMutation(c.config, OpUpdateOne, withPatChatID(id))
 	return &PatChatUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for Pat_chat.
+// Delete returns a delete builder for PatChat.
 func (c *PatChatClient) Delete() *PatChatDelete {
 	mutation := newPatChatMutation(c.config, OpDelete)
 	return &PatChatDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *PatChatClient) DeleteOne(pc *Pat_chat) *PatChatDeleteOne {
+func (c *PatChatClient) DeleteOne(pc *PatChat) *PatChatDeleteOne {
 	return c.DeleteOneID(pc.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *PatChatClient) DeleteOneID(id pulid.ID) *PatChatDeleteOne {
-	builder := c.Delete().Where(pat_chat.ID(id))
+func (c *PatChatClient) DeleteOneID(id string) *PatChatDeleteOne {
+	builder := c.Delete().Where(patchat.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
 	return &PatChatDeleteOne{builder}
 }
 
-// Query returns a query builder for Pat_chat.
+// Query returns a query builder for PatChat.
 func (c *PatChatClient) Query() *PatChatQuery {
 	return &PatChatQuery{
 		config: c.config,
@@ -1020,13 +1019,13 @@ func (c *PatChatClient) Query() *PatChatQuery {
 	}
 }
 
-// Get returns a Pat_chat entity by its id.
-func (c *PatChatClient) Get(ctx context.Context, id pulid.ID) (*Pat_chat, error) {
-	return c.Query().Where(pat_chat.ID(id)).Only(ctx)
+// Get returns a PatChat entity by its id.
+func (c *PatChatClient) Get(ctx context.Context, id string) (*PatChat, error) {
+	return c.Query().Where(patchat.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *PatChatClient) GetX(ctx context.Context, id pulid.ID) *Pat_chat {
+func (c *PatChatClient) GetX(ctx context.Context, id string) *PatChat {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -1034,15 +1033,15 @@ func (c *PatChatClient) GetX(ctx context.Context, id pulid.ID) *Pat_chat {
 	return obj
 }
 
-// QueryVideo queries the video edge of a Pat_chat.
-func (c *PatChatClient) QueryVideo(pc *Pat_chat) *VideoQuery {
+// QueryVideo queries the video edge of a PatChat.
+func (c *PatChatClient) QueryVideo(pc *PatChat) *VideoQuery {
 	query := (&VideoClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pc.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(pat_chat.Table, pat_chat.FieldID, id),
+			sqlgraph.From(patchat.Table, patchat.FieldID, id),
 			sqlgraph.To(video.Table, video.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, pat_chat.VideoTable, pat_chat.VideoColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, patchat.VideoTable, patchat.VideoColumn),
 		)
 		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
 		return fromV, nil
@@ -1052,12 +1051,12 @@ func (c *PatChatClient) QueryVideo(pc *Pat_chat) *VideoQuery {
 
 // Hooks returns the client hooks.
 func (c *PatChatClient) Hooks() []Hook {
-	return c.hooks.Pat_chat
+	return c.hooks.PatChat
 }
 
 // Interceptors returns the client interceptors.
 func (c *PatChatClient) Interceptors() []Interceptor {
-	return c.inters.Pat_chat
+	return c.inters.PatChat
 }
 
 func (c *PatChatClient) mutate(ctx context.Context, m *PatChatMutation) (Value, error) {
@@ -1071,39 +1070,39 @@ func (c *PatChatClient) mutate(ctx context.Context, m *PatChatMutation) (Value, 
 	case OpDelete, OpDeleteOne:
 		return (&PatChatDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
-		return nil, fmt.Errorf("ent: unknown Pat_chat mutation op: %q", m.Op())
+		return nil, fmt.Errorf("ent: unknown PatChat mutation op: %q", m.Op())
 	}
 }
 
-// PeriodicDescriptionTemplateClient is a client for the Periodic_description_template schema.
+// PeriodicDescriptionTemplateClient is a client for the PeriodicDescriptionTemplate schema.
 type PeriodicDescriptionTemplateClient struct {
 	config
 }
 
-// NewPeriodicDescriptionTemplateClient returns a client for the Periodic_description_template from the given config.
+// NewPeriodicDescriptionTemplateClient returns a client for the PeriodicDescriptionTemplate from the given config.
 func NewPeriodicDescriptionTemplateClient(c config) *PeriodicDescriptionTemplateClient {
 	return &PeriodicDescriptionTemplateClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `periodic_description_template.Hooks(f(g(h())))`.
+// A call to `Use(f, g, h)` equals to `periodicdescriptiontemplate.Hooks(f(g(h())))`.
 func (c *PeriodicDescriptionTemplateClient) Use(hooks ...Hook) {
-	c.hooks.Periodic_description_template = append(c.hooks.Periodic_description_template, hooks...)
+	c.hooks.PeriodicDescriptionTemplate = append(c.hooks.PeriodicDescriptionTemplate, hooks...)
 }
 
 // Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `periodic_description_template.Intercept(f(g(h())))`.
+// A call to `Intercept(f, g, h)` equals to `periodicdescriptiontemplate.Intercept(f(g(h())))`.
 func (c *PeriodicDescriptionTemplateClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Periodic_description_template = append(c.inters.Periodic_description_template, interceptors...)
+	c.inters.PeriodicDescriptionTemplate = append(c.inters.PeriodicDescriptionTemplate, interceptors...)
 }
 
-// Create returns a builder for creating a Periodic_description_template entity.
+// Create returns a builder for creating a PeriodicDescriptionTemplate entity.
 func (c *PeriodicDescriptionTemplateClient) Create() *PeriodicDescriptionTemplateCreate {
 	mutation := newPeriodicDescriptionTemplateMutation(c.config, OpCreate)
 	return &PeriodicDescriptionTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of Periodic_description_template entities.
+// CreateBulk returns a builder for creating a bulk of PeriodicDescriptionTemplate entities.
 func (c *PeriodicDescriptionTemplateClient) CreateBulk(builders ...*PeriodicDescriptionTemplateCreate) *PeriodicDescriptionTemplateCreateBulk {
 	return &PeriodicDescriptionTemplateCreateBulk{config: c.config, builders: builders}
 }
@@ -1123,44 +1122,44 @@ func (c *PeriodicDescriptionTemplateClient) MapCreateBulk(slice any, setFunc fun
 	return &PeriodicDescriptionTemplateCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for Periodic_description_template.
+// Update returns an update builder for PeriodicDescriptionTemplate.
 func (c *PeriodicDescriptionTemplateClient) Update() *PeriodicDescriptionTemplateUpdate {
 	mutation := newPeriodicDescriptionTemplateMutation(c.config, OpUpdate)
 	return &PeriodicDescriptionTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *PeriodicDescriptionTemplateClient) UpdateOne(pdt *Periodic_description_template) *PeriodicDescriptionTemplateUpdateOne {
-	mutation := newPeriodicDescriptionTemplateMutation(c.config, OpUpdateOne, withPeriodic_description_template(pdt))
+func (c *PeriodicDescriptionTemplateClient) UpdateOne(pdt *PeriodicDescriptionTemplate) *PeriodicDescriptionTemplateUpdateOne {
+	mutation := newPeriodicDescriptionTemplateMutation(c.config, OpUpdateOne, withPeriodicDescriptionTemplate(pdt))
 	return &PeriodicDescriptionTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *PeriodicDescriptionTemplateClient) UpdateOneID(id pulid.ID) *PeriodicDescriptionTemplateUpdateOne {
-	mutation := newPeriodicDescriptionTemplateMutation(c.config, OpUpdateOne, withPeriodic_description_templateID(id))
+func (c *PeriodicDescriptionTemplateClient) UpdateOneID(id string) *PeriodicDescriptionTemplateUpdateOne {
+	mutation := newPeriodicDescriptionTemplateMutation(c.config, OpUpdateOne, withPeriodicDescriptionTemplateID(id))
 	return &PeriodicDescriptionTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for Periodic_description_template.
+// Delete returns a delete builder for PeriodicDescriptionTemplate.
 func (c *PeriodicDescriptionTemplateClient) Delete() *PeriodicDescriptionTemplateDelete {
 	mutation := newPeriodicDescriptionTemplateMutation(c.config, OpDelete)
 	return &PeriodicDescriptionTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *PeriodicDescriptionTemplateClient) DeleteOne(pdt *Periodic_description_template) *PeriodicDescriptionTemplateDeleteOne {
+func (c *PeriodicDescriptionTemplateClient) DeleteOne(pdt *PeriodicDescriptionTemplate) *PeriodicDescriptionTemplateDeleteOne {
 	return c.DeleteOneID(pdt.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *PeriodicDescriptionTemplateClient) DeleteOneID(id pulid.ID) *PeriodicDescriptionTemplateDeleteOne {
-	builder := c.Delete().Where(periodic_description_template.ID(id))
+func (c *PeriodicDescriptionTemplateClient) DeleteOneID(id string) *PeriodicDescriptionTemplateDeleteOne {
+	builder := c.Delete().Where(periodicdescriptiontemplate.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
 	return &PeriodicDescriptionTemplateDeleteOne{builder}
 }
 
-// Query returns a query builder for Periodic_description_template.
+// Query returns a query builder for PeriodicDescriptionTemplate.
 func (c *PeriodicDescriptionTemplateClient) Query() *PeriodicDescriptionTemplateQuery {
 	return &PeriodicDescriptionTemplateQuery{
 		config: c.config,
@@ -1169,13 +1168,13 @@ func (c *PeriodicDescriptionTemplateClient) Query() *PeriodicDescriptionTemplate
 	}
 }
 
-// Get returns a Periodic_description_template entity by its id.
-func (c *PeriodicDescriptionTemplateClient) Get(ctx context.Context, id pulid.ID) (*Periodic_description_template, error) {
-	return c.Query().Where(periodic_description_template.ID(id)).Only(ctx)
+// Get returns a PeriodicDescriptionTemplate entity by its id.
+func (c *PeriodicDescriptionTemplateClient) Get(ctx context.Context, id string) (*PeriodicDescriptionTemplate, error) {
+	return c.Query().Where(periodicdescriptiontemplate.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *PeriodicDescriptionTemplateClient) GetX(ctx context.Context, id pulid.ID) *Periodic_description_template {
+func (c *PeriodicDescriptionTemplateClient) GetX(ctx context.Context, id string) *PeriodicDescriptionTemplate {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -1183,15 +1182,15 @@ func (c *PeriodicDescriptionTemplateClient) GetX(ctx context.Context, id pulid.I
 	return obj
 }
 
-// QueryDescriptions queries the descriptions edge of a Periodic_description_template.
-func (c *PeriodicDescriptionTemplateClient) QueryDescriptions(pdt *Periodic_description_template) *DescriptionQuery {
+// QueryDescriptions queries the descriptions edge of a PeriodicDescriptionTemplate.
+func (c *PeriodicDescriptionTemplateClient) QueryDescriptions(pdt *PeriodicDescriptionTemplate) *DescriptionQuery {
 	query := (&DescriptionClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pdt.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(periodic_description_template.Table, periodic_description_template.FieldID, id),
+			sqlgraph.From(periodicdescriptiontemplate.Table, periodicdescriptiontemplate.FieldID, id),
 			sqlgraph.To(description.Table, description.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, periodic_description_template.DescriptionsTable, periodic_description_template.DescriptionsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, periodicdescriptiontemplate.DescriptionsTable, periodicdescriptiontemplate.DescriptionsColumn),
 		)
 		fromV = sqlgraph.Neighbors(pdt.driver.Dialect(), step)
 		return fromV, nil
@@ -1201,12 +1200,12 @@ func (c *PeriodicDescriptionTemplateClient) QueryDescriptions(pdt *Periodic_desc
 
 // Hooks returns the client hooks.
 func (c *PeriodicDescriptionTemplateClient) Hooks() []Hook {
-	return c.hooks.Periodic_description_template
+	return c.hooks.PeriodicDescriptionTemplate
 }
 
 // Interceptors returns the client interceptors.
 func (c *PeriodicDescriptionTemplateClient) Interceptors() []Interceptor {
-	return c.inters.Periodic_description_template
+	return c.inters.PeriodicDescriptionTemplate
 }
 
 func (c *PeriodicDescriptionTemplateClient) mutate(ctx context.Context, m *PeriodicDescriptionTemplateMutation) (Value, error) {
@@ -1220,7 +1219,7 @@ func (c *PeriodicDescriptionTemplateClient) mutate(ctx context.Context, m *Perio
 	case OpDelete, OpDeleteOne:
 		return (&PeriodicDescriptionTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
-		return nil, fmt.Errorf("ent: unknown Periodic_description_template mutation op: %q", m.Op())
+		return nil, fmt.Errorf("ent: unknown PeriodicDescriptionTemplate mutation op: %q", m.Op())
 	}
 }
 
@@ -1285,7 +1284,7 @@ func (c *VideoClient) UpdateOne(v *Video) *VideoUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *VideoClient) UpdateOneID(id pulid.ID) *VideoUpdateOne {
+func (c *VideoClient) UpdateOneID(id string) *VideoUpdateOne {
 	mutation := newVideoMutation(c.config, OpUpdateOne, withVideoID(id))
 	return &VideoUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -1302,7 +1301,7 @@ func (c *VideoClient) DeleteOne(v *Video) *VideoDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *VideoClient) DeleteOneID(id pulid.ID) *VideoDeleteOne {
+func (c *VideoClient) DeleteOneID(id string) *VideoDeleteOne {
 	builder := c.Delete().Where(video.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -1319,12 +1318,12 @@ func (c *VideoClient) Query() *VideoQuery {
 }
 
 // Get returns a Video entity by its id.
-func (c *VideoClient) Get(ctx context.Context, id pulid.ID) (*Video, error) {
+func (c *VideoClient) Get(ctx context.Context, id string) (*Video, error) {
 	return c.Query().Where(video.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *VideoClient) GetX(ctx context.Context, id pulid.ID) *Video {
+func (c *VideoClient) GetX(ctx context.Context, id string) *Video {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -1371,7 +1370,7 @@ func (c *VideoClient) QueryVideoPlayRanges(v *Video) *VideoPlayRangeQuery {
 		id := v.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(video.Table, video.FieldID, id),
-			sqlgraph.To(video_play_range.Table, video_play_range.FieldID),
+			sqlgraph.To(videoplayrange.Table, videoplayrange.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, video.VideoPlayRangesTable, video.VideoPlayRangesColumn),
 		)
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
@@ -1387,7 +1386,7 @@ func (c *VideoClient) QueryVideoDisallowRanges(v *Video) *VideoDisallowRangeQuer
 		id := v.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(video.Table, video.FieldID, id),
-			sqlgraph.To(video_disallow_range.Table, video_disallow_range.FieldID),
+			sqlgraph.To(videodisallowrange.Table, videodisallowrange.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, video.VideoDisallowRangesTable, video.VideoDisallowRangesColumn),
 		)
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
@@ -1403,7 +1402,7 @@ func (c *VideoClient) QueryVideoTitleChanges(v *Video) *VideoTitleChangeQuery {
 		id := v.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(video.Table, video.FieldID, id),
-			sqlgraph.To(video_title_change.Table, video_title_change.FieldID),
+			sqlgraph.To(videotitlechange.Table, videotitlechange.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, video.VideoTitleChangesTable, video.VideoTitleChangesColumn),
 		)
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
@@ -1419,7 +1418,7 @@ func (c *VideoClient) QueryPatChats(v *Video) *PatChatQuery {
 		id := v.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(video.Table, video.FieldID, id),
-			sqlgraph.To(pat_chat.Table, pat_chat.FieldID),
+			sqlgraph.To(patchat.Table, patchat.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, video.PatChatsTable, video.PatChatsColumn),
 		)
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
@@ -1453,35 +1452,35 @@ func (c *VideoClient) mutate(ctx context.Context, m *VideoMutation) (Value, erro
 	}
 }
 
-// VideoDisallowRangeClient is a client for the Video_disallow_range schema.
+// VideoDisallowRangeClient is a client for the VideoDisallowRange schema.
 type VideoDisallowRangeClient struct {
 	config
 }
 
-// NewVideoDisallowRangeClient returns a client for the Video_disallow_range from the given config.
+// NewVideoDisallowRangeClient returns a client for the VideoDisallowRange from the given config.
 func NewVideoDisallowRangeClient(c config) *VideoDisallowRangeClient {
 	return &VideoDisallowRangeClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `video_disallow_range.Hooks(f(g(h())))`.
+// A call to `Use(f, g, h)` equals to `videodisallowrange.Hooks(f(g(h())))`.
 func (c *VideoDisallowRangeClient) Use(hooks ...Hook) {
-	c.hooks.Video_disallow_range = append(c.hooks.Video_disallow_range, hooks...)
+	c.hooks.VideoDisallowRange = append(c.hooks.VideoDisallowRange, hooks...)
 }
 
 // Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `video_disallow_range.Intercept(f(g(h())))`.
+// A call to `Intercept(f, g, h)` equals to `videodisallowrange.Intercept(f(g(h())))`.
 func (c *VideoDisallowRangeClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Video_disallow_range = append(c.inters.Video_disallow_range, interceptors...)
+	c.inters.VideoDisallowRange = append(c.inters.VideoDisallowRange, interceptors...)
 }
 
-// Create returns a builder for creating a Video_disallow_range entity.
+// Create returns a builder for creating a VideoDisallowRange entity.
 func (c *VideoDisallowRangeClient) Create() *VideoDisallowRangeCreate {
 	mutation := newVideoDisallowRangeMutation(c.config, OpCreate)
 	return &VideoDisallowRangeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of Video_disallow_range entities.
+// CreateBulk returns a builder for creating a bulk of VideoDisallowRange entities.
 func (c *VideoDisallowRangeClient) CreateBulk(builders ...*VideoDisallowRangeCreate) *VideoDisallowRangeCreateBulk {
 	return &VideoDisallowRangeCreateBulk{config: c.config, builders: builders}
 }
@@ -1501,44 +1500,44 @@ func (c *VideoDisallowRangeClient) MapCreateBulk(slice any, setFunc func(*VideoD
 	return &VideoDisallowRangeCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for Video_disallow_range.
+// Update returns an update builder for VideoDisallowRange.
 func (c *VideoDisallowRangeClient) Update() *VideoDisallowRangeUpdate {
 	mutation := newVideoDisallowRangeMutation(c.config, OpUpdate)
 	return &VideoDisallowRangeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *VideoDisallowRangeClient) UpdateOne(vdr *Video_disallow_range) *VideoDisallowRangeUpdateOne {
-	mutation := newVideoDisallowRangeMutation(c.config, OpUpdateOne, withVideo_disallow_range(vdr))
+func (c *VideoDisallowRangeClient) UpdateOne(vdr *VideoDisallowRange) *VideoDisallowRangeUpdateOne {
+	mutation := newVideoDisallowRangeMutation(c.config, OpUpdateOne, withVideoDisallowRange(vdr))
 	return &VideoDisallowRangeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *VideoDisallowRangeClient) UpdateOneID(id pulid.ID) *VideoDisallowRangeUpdateOne {
-	mutation := newVideoDisallowRangeMutation(c.config, OpUpdateOne, withVideo_disallow_rangeID(id))
+func (c *VideoDisallowRangeClient) UpdateOneID(id string) *VideoDisallowRangeUpdateOne {
+	mutation := newVideoDisallowRangeMutation(c.config, OpUpdateOne, withVideoDisallowRangeID(id))
 	return &VideoDisallowRangeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for Video_disallow_range.
+// Delete returns a delete builder for VideoDisallowRange.
 func (c *VideoDisallowRangeClient) Delete() *VideoDisallowRangeDelete {
 	mutation := newVideoDisallowRangeMutation(c.config, OpDelete)
 	return &VideoDisallowRangeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *VideoDisallowRangeClient) DeleteOne(vdr *Video_disallow_range) *VideoDisallowRangeDeleteOne {
+func (c *VideoDisallowRangeClient) DeleteOne(vdr *VideoDisallowRange) *VideoDisallowRangeDeleteOne {
 	return c.DeleteOneID(vdr.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *VideoDisallowRangeClient) DeleteOneID(id pulid.ID) *VideoDisallowRangeDeleteOne {
-	builder := c.Delete().Where(video_disallow_range.ID(id))
+func (c *VideoDisallowRangeClient) DeleteOneID(id string) *VideoDisallowRangeDeleteOne {
+	builder := c.Delete().Where(videodisallowrange.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
 	return &VideoDisallowRangeDeleteOne{builder}
 }
 
-// Query returns a query builder for Video_disallow_range.
+// Query returns a query builder for VideoDisallowRange.
 func (c *VideoDisallowRangeClient) Query() *VideoDisallowRangeQuery {
 	return &VideoDisallowRangeQuery{
 		config: c.config,
@@ -1547,13 +1546,13 @@ func (c *VideoDisallowRangeClient) Query() *VideoDisallowRangeQuery {
 	}
 }
 
-// Get returns a Video_disallow_range entity by its id.
-func (c *VideoDisallowRangeClient) Get(ctx context.Context, id pulid.ID) (*Video_disallow_range, error) {
-	return c.Query().Where(video_disallow_range.ID(id)).Only(ctx)
+// Get returns a VideoDisallowRange entity by its id.
+func (c *VideoDisallowRangeClient) Get(ctx context.Context, id string) (*VideoDisallowRange, error) {
+	return c.Query().Where(videodisallowrange.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *VideoDisallowRangeClient) GetX(ctx context.Context, id pulid.ID) *Video_disallow_range {
+func (c *VideoDisallowRangeClient) GetX(ctx context.Context, id string) *VideoDisallowRange {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -1561,15 +1560,15 @@ func (c *VideoDisallowRangeClient) GetX(ctx context.Context, id pulid.ID) *Video
 	return obj
 }
 
-// QueryVideo queries the video edge of a Video_disallow_range.
-func (c *VideoDisallowRangeClient) QueryVideo(vdr *Video_disallow_range) *VideoQuery {
+// QueryVideo queries the video edge of a VideoDisallowRange.
+func (c *VideoDisallowRangeClient) QueryVideo(vdr *VideoDisallowRange) *VideoQuery {
 	query := (&VideoClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := vdr.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(video_disallow_range.Table, video_disallow_range.FieldID, id),
+			sqlgraph.From(videodisallowrange.Table, videodisallowrange.FieldID, id),
 			sqlgraph.To(video.Table, video.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, video_disallow_range.VideoTable, video_disallow_range.VideoColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, videodisallowrange.VideoTable, videodisallowrange.VideoColumn),
 		)
 		fromV = sqlgraph.Neighbors(vdr.driver.Dialect(), step)
 		return fromV, nil
@@ -1579,12 +1578,12 @@ func (c *VideoDisallowRangeClient) QueryVideo(vdr *Video_disallow_range) *VideoQ
 
 // Hooks returns the client hooks.
 func (c *VideoDisallowRangeClient) Hooks() []Hook {
-	return c.hooks.Video_disallow_range
+	return c.hooks.VideoDisallowRange
 }
 
 // Interceptors returns the client interceptors.
 func (c *VideoDisallowRangeClient) Interceptors() []Interceptor {
-	return c.inters.Video_disallow_range
+	return c.inters.VideoDisallowRange
 }
 
 func (c *VideoDisallowRangeClient) mutate(ctx context.Context, m *VideoDisallowRangeMutation) (Value, error) {
@@ -1598,39 +1597,39 @@ func (c *VideoDisallowRangeClient) mutate(ctx context.Context, m *VideoDisallowR
 	case OpDelete, OpDeleteOne:
 		return (&VideoDisallowRangeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
-		return nil, fmt.Errorf("ent: unknown Video_disallow_range mutation op: %q", m.Op())
+		return nil, fmt.Errorf("ent: unknown VideoDisallowRange mutation op: %q", m.Op())
 	}
 }
 
-// VideoPlayRangeClient is a client for the Video_play_range schema.
+// VideoPlayRangeClient is a client for the VideoPlayRange schema.
 type VideoPlayRangeClient struct {
 	config
 }
 
-// NewVideoPlayRangeClient returns a client for the Video_play_range from the given config.
+// NewVideoPlayRangeClient returns a client for the VideoPlayRange from the given config.
 func NewVideoPlayRangeClient(c config) *VideoPlayRangeClient {
 	return &VideoPlayRangeClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `video_play_range.Hooks(f(g(h())))`.
+// A call to `Use(f, g, h)` equals to `videoplayrange.Hooks(f(g(h())))`.
 func (c *VideoPlayRangeClient) Use(hooks ...Hook) {
-	c.hooks.Video_play_range = append(c.hooks.Video_play_range, hooks...)
+	c.hooks.VideoPlayRange = append(c.hooks.VideoPlayRange, hooks...)
 }
 
 // Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `video_play_range.Intercept(f(g(h())))`.
+// A call to `Intercept(f, g, h)` equals to `videoplayrange.Intercept(f(g(h())))`.
 func (c *VideoPlayRangeClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Video_play_range = append(c.inters.Video_play_range, interceptors...)
+	c.inters.VideoPlayRange = append(c.inters.VideoPlayRange, interceptors...)
 }
 
-// Create returns a builder for creating a Video_play_range entity.
+// Create returns a builder for creating a VideoPlayRange entity.
 func (c *VideoPlayRangeClient) Create() *VideoPlayRangeCreate {
 	mutation := newVideoPlayRangeMutation(c.config, OpCreate)
 	return &VideoPlayRangeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of Video_play_range entities.
+// CreateBulk returns a builder for creating a bulk of VideoPlayRange entities.
 func (c *VideoPlayRangeClient) CreateBulk(builders ...*VideoPlayRangeCreate) *VideoPlayRangeCreateBulk {
 	return &VideoPlayRangeCreateBulk{config: c.config, builders: builders}
 }
@@ -1650,44 +1649,44 @@ func (c *VideoPlayRangeClient) MapCreateBulk(slice any, setFunc func(*VideoPlayR
 	return &VideoPlayRangeCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for Video_play_range.
+// Update returns an update builder for VideoPlayRange.
 func (c *VideoPlayRangeClient) Update() *VideoPlayRangeUpdate {
 	mutation := newVideoPlayRangeMutation(c.config, OpUpdate)
 	return &VideoPlayRangeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *VideoPlayRangeClient) UpdateOne(vpr *Video_play_range) *VideoPlayRangeUpdateOne {
-	mutation := newVideoPlayRangeMutation(c.config, OpUpdateOne, withVideo_play_range(vpr))
+func (c *VideoPlayRangeClient) UpdateOne(vpr *VideoPlayRange) *VideoPlayRangeUpdateOne {
+	mutation := newVideoPlayRangeMutation(c.config, OpUpdateOne, withVideoPlayRange(vpr))
 	return &VideoPlayRangeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *VideoPlayRangeClient) UpdateOneID(id pulid.ID) *VideoPlayRangeUpdateOne {
-	mutation := newVideoPlayRangeMutation(c.config, OpUpdateOne, withVideo_play_rangeID(id))
+func (c *VideoPlayRangeClient) UpdateOneID(id string) *VideoPlayRangeUpdateOne {
+	mutation := newVideoPlayRangeMutation(c.config, OpUpdateOne, withVideoPlayRangeID(id))
 	return &VideoPlayRangeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for Video_play_range.
+// Delete returns a delete builder for VideoPlayRange.
 func (c *VideoPlayRangeClient) Delete() *VideoPlayRangeDelete {
 	mutation := newVideoPlayRangeMutation(c.config, OpDelete)
 	return &VideoPlayRangeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *VideoPlayRangeClient) DeleteOne(vpr *Video_play_range) *VideoPlayRangeDeleteOne {
+func (c *VideoPlayRangeClient) DeleteOne(vpr *VideoPlayRange) *VideoPlayRangeDeleteOne {
 	return c.DeleteOneID(vpr.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *VideoPlayRangeClient) DeleteOneID(id pulid.ID) *VideoPlayRangeDeleteOne {
-	builder := c.Delete().Where(video_play_range.ID(id))
+func (c *VideoPlayRangeClient) DeleteOneID(id string) *VideoPlayRangeDeleteOne {
+	builder := c.Delete().Where(videoplayrange.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
 	return &VideoPlayRangeDeleteOne{builder}
 }
 
-// Query returns a query builder for Video_play_range.
+// Query returns a query builder for VideoPlayRange.
 func (c *VideoPlayRangeClient) Query() *VideoPlayRangeQuery {
 	return &VideoPlayRangeQuery{
 		config: c.config,
@@ -1696,13 +1695,13 @@ func (c *VideoPlayRangeClient) Query() *VideoPlayRangeQuery {
 	}
 }
 
-// Get returns a Video_play_range entity by its id.
-func (c *VideoPlayRangeClient) Get(ctx context.Context, id pulid.ID) (*Video_play_range, error) {
-	return c.Query().Where(video_play_range.ID(id)).Only(ctx)
+// Get returns a VideoPlayRange entity by its id.
+func (c *VideoPlayRangeClient) Get(ctx context.Context, id string) (*VideoPlayRange, error) {
+	return c.Query().Where(videoplayrange.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *VideoPlayRangeClient) GetX(ctx context.Context, id pulid.ID) *Video_play_range {
+func (c *VideoPlayRangeClient) GetX(ctx context.Context, id string) *VideoPlayRange {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -1710,15 +1709,15 @@ func (c *VideoPlayRangeClient) GetX(ctx context.Context, id pulid.ID) *Video_pla
 	return obj
 }
 
-// QueryVideo queries the video edge of a Video_play_range.
-func (c *VideoPlayRangeClient) QueryVideo(vpr *Video_play_range) *VideoQuery {
+// QueryVideo queries the video edge of a VideoPlayRange.
+func (c *VideoPlayRangeClient) QueryVideo(vpr *VideoPlayRange) *VideoQuery {
 	query := (&VideoClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := vpr.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(video_play_range.Table, video_play_range.FieldID, id),
+			sqlgraph.From(videoplayrange.Table, videoplayrange.FieldID, id),
 			sqlgraph.To(video.Table, video.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, video_play_range.VideoTable, video_play_range.VideoColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, videoplayrange.VideoTable, videoplayrange.VideoColumn),
 		)
 		fromV = sqlgraph.Neighbors(vpr.driver.Dialect(), step)
 		return fromV, nil
@@ -1728,12 +1727,12 @@ func (c *VideoPlayRangeClient) QueryVideo(vpr *Video_play_range) *VideoQuery {
 
 // Hooks returns the client hooks.
 func (c *VideoPlayRangeClient) Hooks() []Hook {
-	return c.hooks.Video_play_range
+	return c.hooks.VideoPlayRange
 }
 
 // Interceptors returns the client interceptors.
 func (c *VideoPlayRangeClient) Interceptors() []Interceptor {
-	return c.inters.Video_play_range
+	return c.inters.VideoPlayRange
 }
 
 func (c *VideoPlayRangeClient) mutate(ctx context.Context, m *VideoPlayRangeMutation) (Value, error) {
@@ -1747,39 +1746,39 @@ func (c *VideoPlayRangeClient) mutate(ctx context.Context, m *VideoPlayRangeMuta
 	case OpDelete, OpDeleteOne:
 		return (&VideoPlayRangeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
-		return nil, fmt.Errorf("ent: unknown Video_play_range mutation op: %q", m.Op())
+		return nil, fmt.Errorf("ent: unknown VideoPlayRange mutation op: %q", m.Op())
 	}
 }
 
-// VideoTitleChangeClient is a client for the Video_title_change schema.
+// VideoTitleChangeClient is a client for the VideoTitleChange schema.
 type VideoTitleChangeClient struct {
 	config
 }
 
-// NewVideoTitleChangeClient returns a client for the Video_title_change from the given config.
+// NewVideoTitleChangeClient returns a client for the VideoTitleChange from the given config.
 func NewVideoTitleChangeClient(c config) *VideoTitleChangeClient {
 	return &VideoTitleChangeClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `video_title_change.Hooks(f(g(h())))`.
+// A call to `Use(f, g, h)` equals to `videotitlechange.Hooks(f(g(h())))`.
 func (c *VideoTitleChangeClient) Use(hooks ...Hook) {
-	c.hooks.Video_title_change = append(c.hooks.Video_title_change, hooks...)
+	c.hooks.VideoTitleChange = append(c.hooks.VideoTitleChange, hooks...)
 }
 
 // Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `video_title_change.Intercept(f(g(h())))`.
+// A call to `Intercept(f, g, h)` equals to `videotitlechange.Intercept(f(g(h())))`.
 func (c *VideoTitleChangeClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Video_title_change = append(c.inters.Video_title_change, interceptors...)
+	c.inters.VideoTitleChange = append(c.inters.VideoTitleChange, interceptors...)
 }
 
-// Create returns a builder for creating a Video_title_change entity.
+// Create returns a builder for creating a VideoTitleChange entity.
 func (c *VideoTitleChangeClient) Create() *VideoTitleChangeCreate {
 	mutation := newVideoTitleChangeMutation(c.config, OpCreate)
 	return &VideoTitleChangeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of Video_title_change entities.
+// CreateBulk returns a builder for creating a bulk of VideoTitleChange entities.
 func (c *VideoTitleChangeClient) CreateBulk(builders ...*VideoTitleChangeCreate) *VideoTitleChangeCreateBulk {
 	return &VideoTitleChangeCreateBulk{config: c.config, builders: builders}
 }
@@ -1799,44 +1798,44 @@ func (c *VideoTitleChangeClient) MapCreateBulk(slice any, setFunc func(*VideoTit
 	return &VideoTitleChangeCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for Video_title_change.
+// Update returns an update builder for VideoTitleChange.
 func (c *VideoTitleChangeClient) Update() *VideoTitleChangeUpdate {
 	mutation := newVideoTitleChangeMutation(c.config, OpUpdate)
 	return &VideoTitleChangeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *VideoTitleChangeClient) UpdateOne(vtc *Video_title_change) *VideoTitleChangeUpdateOne {
-	mutation := newVideoTitleChangeMutation(c.config, OpUpdateOne, withVideo_title_change(vtc))
+func (c *VideoTitleChangeClient) UpdateOne(vtc *VideoTitleChange) *VideoTitleChangeUpdateOne {
+	mutation := newVideoTitleChangeMutation(c.config, OpUpdateOne, withVideoTitleChange(vtc))
 	return &VideoTitleChangeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *VideoTitleChangeClient) UpdateOneID(id pulid.ID) *VideoTitleChangeUpdateOne {
-	mutation := newVideoTitleChangeMutation(c.config, OpUpdateOne, withVideo_title_changeID(id))
+func (c *VideoTitleChangeClient) UpdateOneID(id string) *VideoTitleChangeUpdateOne {
+	mutation := newVideoTitleChangeMutation(c.config, OpUpdateOne, withVideoTitleChangeID(id))
 	return &VideoTitleChangeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for Video_title_change.
+// Delete returns a delete builder for VideoTitleChange.
 func (c *VideoTitleChangeClient) Delete() *VideoTitleChangeDelete {
 	mutation := newVideoTitleChangeMutation(c.config, OpDelete)
 	return &VideoTitleChangeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *VideoTitleChangeClient) DeleteOne(vtc *Video_title_change) *VideoTitleChangeDeleteOne {
+func (c *VideoTitleChangeClient) DeleteOne(vtc *VideoTitleChange) *VideoTitleChangeDeleteOne {
 	return c.DeleteOneID(vtc.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *VideoTitleChangeClient) DeleteOneID(id pulid.ID) *VideoTitleChangeDeleteOne {
-	builder := c.Delete().Where(video_title_change.ID(id))
+func (c *VideoTitleChangeClient) DeleteOneID(id string) *VideoTitleChangeDeleteOne {
+	builder := c.Delete().Where(videotitlechange.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
 	return &VideoTitleChangeDeleteOne{builder}
 }
 
-// Query returns a query builder for Video_title_change.
+// Query returns a query builder for VideoTitleChange.
 func (c *VideoTitleChangeClient) Query() *VideoTitleChangeQuery {
 	return &VideoTitleChangeQuery{
 		config: c.config,
@@ -1845,13 +1844,13 @@ func (c *VideoTitleChangeClient) Query() *VideoTitleChangeQuery {
 	}
 }
 
-// Get returns a Video_title_change entity by its id.
-func (c *VideoTitleChangeClient) Get(ctx context.Context, id pulid.ID) (*Video_title_change, error) {
-	return c.Query().Where(video_title_change.ID(id)).Only(ctx)
+// Get returns a VideoTitleChange entity by its id.
+func (c *VideoTitleChangeClient) Get(ctx context.Context, id string) (*VideoTitleChange, error) {
+	return c.Query().Where(videotitlechange.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *VideoTitleChangeClient) GetX(ctx context.Context, id pulid.ID) *Video_title_change {
+func (c *VideoTitleChangeClient) GetX(ctx context.Context, id string) *VideoTitleChange {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -1859,15 +1858,15 @@ func (c *VideoTitleChangeClient) GetX(ctx context.Context, id pulid.ID) *Video_t
 	return obj
 }
 
-// QueryVideo queries the video edge of a Video_title_change.
-func (c *VideoTitleChangeClient) QueryVideo(vtc *Video_title_change) *VideoQuery {
+// QueryVideo queries the video edge of a VideoTitleChange.
+func (c *VideoTitleChangeClient) QueryVideo(vtc *VideoTitleChange) *VideoQuery {
 	query := (&VideoClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := vtc.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(video_title_change.Table, video_title_change.FieldID, id),
+			sqlgraph.From(videotitlechange.Table, videotitlechange.FieldID, id),
 			sqlgraph.To(video.Table, video.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, video_title_change.VideoTable, video_title_change.VideoColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, videotitlechange.VideoTable, videotitlechange.VideoColumn),
 		)
 		fromV = sqlgraph.Neighbors(vtc.driver.Dialect(), step)
 		return fromV, nil
@@ -1877,12 +1876,12 @@ func (c *VideoTitleChangeClient) QueryVideo(vtc *Video_title_change) *VideoQuery
 
 // Hooks returns the client hooks.
 func (c *VideoTitleChangeClient) Hooks() []Hook {
-	return c.hooks.Video_title_change
+	return c.hooks.VideoTitleChange
 }
 
 // Interceptors returns the client interceptors.
 func (c *VideoTitleChangeClient) Interceptors() []Interceptor {
-	return c.inters.Video_title_change
+	return c.inters.VideoTitleChange
 }
 
 func (c *VideoTitleChangeClient) mutate(ctx context.Context, m *VideoTitleChangeMutation) (Value, error) {
@@ -1896,20 +1895,20 @@ func (c *VideoTitleChangeClient) mutate(ctx context.Context, m *VideoTitleChange
 	case OpDelete, OpDeleteOne:
 		return (&VideoTitleChangeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
-		return nil, fmt.Errorf("ent: unknown Video_title_change mutation op: %q", m.Op())
+		return nil, fmt.Errorf("ent: unknown VideoTitleChange mutation op: %q", m.Op())
 	}
 }
 
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Category_description_template, Channel, Description, Description_change,
-		Pat_chat, Periodic_description_template, Video, Video_disallow_range,
-		Video_play_range, Video_title_change []ent.Hook
+		CategoryDescriptionTemplate, Channel, Description, DescriptionChange, PatChat,
+		PeriodicDescriptionTemplate, Video, VideoDisallowRange, VideoPlayRange,
+		VideoTitleChange []ent.Hook
 	}
 	inters struct {
-		Category_description_template, Channel, Description, Description_change,
-		Pat_chat, Periodic_description_template, Video, Video_disallow_range,
-		Video_play_range, Video_title_change []ent.Interceptor
+		CategoryDescriptionTemplate, Channel, Description, DescriptionChange, PatChat,
+		PeriodicDescriptionTemplate, Video, VideoDisallowRange, VideoPlayRange,
+		VideoTitleChange []ent.Interceptor
 	}
 )

@@ -10,7 +10,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 )
 
@@ -46,28 +45,28 @@ func (cc *ChannelCreate) SetThumbnailURL(s string) *ChannelCreate {
 }
 
 // SetID sets the "id" field.
-func (cc *ChannelCreate) SetID(pu pulid.ID) *ChannelCreate {
-	cc.mutation.SetID(pu)
+func (cc *ChannelCreate) SetID(s string) *ChannelCreate {
+	cc.mutation.SetID(s)
 	return cc
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (cc *ChannelCreate) SetNillableID(pu *pulid.ID) *ChannelCreate {
-	if pu != nil {
-		cc.SetID(*pu)
+func (cc *ChannelCreate) SetNillableID(s *string) *ChannelCreate {
+	if s != nil {
+		cc.SetID(*s)
 	}
 	return cc
 }
 
 // AddVideoIDs adds the "videos" edge to the Video entity by IDs.
-func (cc *ChannelCreate) AddVideoIDs(ids ...pulid.ID) *ChannelCreate {
+func (cc *ChannelCreate) AddVideoIDs(ids ...string) *ChannelCreate {
 	cc.mutation.AddVideoIDs(ids...)
 	return cc
 }
 
 // AddVideos adds the "videos" edges to the Video entity.
 func (cc *ChannelCreate) AddVideos(v ...*Video) *ChannelCreate {
-	ids := make([]pulid.ID, len(v))
+	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -144,7 +143,7 @@ func (cc *ChannelCreate) sqlSave(ctx context.Context) (*Channel, error) {
 		return nil, err
 	}
 	if _spec.ID.Value != nil {
-		if id, ok := _spec.ID.Value.(pulid.ID); ok {
+		if id, ok := _spec.ID.Value.(string); ok {
 			_node.ID = id
 		} else {
 			return nil, fmt.Errorf("unexpected Channel.ID type: %T", _spec.ID.Value)

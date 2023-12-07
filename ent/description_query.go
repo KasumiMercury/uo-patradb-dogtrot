@@ -11,12 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/category_description_template"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/categorydescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description_change"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodic_description_template"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/descriptionchange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodicdescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/predicate"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 )
 
@@ -103,8 +102,8 @@ func (dq *DescriptionQuery) QueryPeriodicDescriptionTemplate() *PeriodicDescript
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(description.Table, description.FieldID, selector),
-			sqlgraph.To(periodic_description_template.Table, periodic_description_template.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, description.PeriodicDescriptionTemplateTable, description.PeriodicDescriptionTemplateColumn),
+			sqlgraph.To(periodicdescriptiontemplate.Table, periodicdescriptiontemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, description.PeriodicDescriptionTemplateTable, description.PeriodicDescriptionTemplateColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
 		return fromU, nil
@@ -125,8 +124,8 @@ func (dq *DescriptionQuery) QueryCategoryDescriptionTemplate() *CategoryDescript
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(description.Table, description.FieldID, selector),
-			sqlgraph.To(category_description_template.Table, category_description_template.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, description.CategoryDescriptionTemplateTable, description.CategoryDescriptionTemplateColumn),
+			sqlgraph.To(categorydescriptiontemplate.Table, categorydescriptiontemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, description.CategoryDescriptionTemplateTable, description.CategoryDescriptionTemplateColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
 		return fromU, nil
@@ -147,7 +146,7 @@ func (dq *DescriptionQuery) QueryDescriptionChanges() *DescriptionChangeQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(description.Table, description.FieldID, selector),
-			sqlgraph.To(description_change.Table, description_change.FieldID),
+			sqlgraph.To(descriptionchange.Table, descriptionchange.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, description.DescriptionChangesTable, description.DescriptionChangesColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
@@ -180,8 +179,8 @@ func (dq *DescriptionQuery) FirstX(ctx context.Context) *Description {
 
 // FirstID returns the first Description ID from the query.
 // Returns a *NotFoundError when no Description ID was found.
-func (dq *DescriptionQuery) FirstID(ctx context.Context) (id pulid.ID, err error) {
-	var ids []pulid.ID
+func (dq *DescriptionQuery) FirstID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = dq.Limit(1).IDs(setContextOp(ctx, dq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -193,7 +192,7 @@ func (dq *DescriptionQuery) FirstID(ctx context.Context) (id pulid.ID, err error
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (dq *DescriptionQuery) FirstIDX(ctx context.Context) pulid.ID {
+func (dq *DescriptionQuery) FirstIDX(ctx context.Context) string {
 	id, err := dq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -231,8 +230,8 @@ func (dq *DescriptionQuery) OnlyX(ctx context.Context) *Description {
 // OnlyID is like Only, but returns the only Description ID in the query.
 // Returns a *NotSingularError when more than one Description ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (dq *DescriptionQuery) OnlyID(ctx context.Context) (id pulid.ID, err error) {
-	var ids []pulid.ID
+func (dq *DescriptionQuery) OnlyID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = dq.Limit(2).IDs(setContextOp(ctx, dq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -248,7 +247,7 @@ func (dq *DescriptionQuery) OnlyID(ctx context.Context) (id pulid.ID, err error)
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (dq *DescriptionQuery) OnlyIDX(ctx context.Context) pulid.ID {
+func (dq *DescriptionQuery) OnlyIDX(ctx context.Context) string {
 	id, err := dq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -276,7 +275,7 @@ func (dq *DescriptionQuery) AllX(ctx context.Context) []*Description {
 }
 
 // IDs executes the query and returns a list of Description IDs.
-func (dq *DescriptionQuery) IDs(ctx context.Context) (ids []pulid.ID, err error) {
+func (dq *DescriptionQuery) IDs(ctx context.Context) (ids []string, err error) {
 	if dq.ctx.Unique == nil && dq.path != nil {
 		dq.Unique(true)
 	}
@@ -288,7 +287,7 @@ func (dq *DescriptionQuery) IDs(ctx context.Context) (ids []pulid.ID, err error)
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (dq *DescriptionQuery) IDsX(ctx context.Context) []pulid.ID {
+func (dq *DescriptionQuery) IDsX(ctx context.Context) []string {
 	ids, err := dq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -520,20 +519,20 @@ func (dq *DescriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	}
 	if query := dq.withPeriodicDescriptionTemplate; query != nil {
 		if err := dq.loadPeriodicDescriptionTemplate(ctx, query, nodes, nil,
-			func(n *Description, e *Periodic_description_template) { n.Edges.PeriodicDescriptionTemplate = e }); err != nil {
+			func(n *Description, e *PeriodicDescriptionTemplate) { n.Edges.PeriodicDescriptionTemplate = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := dq.withCategoryDescriptionTemplate; query != nil {
 		if err := dq.loadCategoryDescriptionTemplate(ctx, query, nodes, nil,
-			func(n *Description, e *Category_description_template) { n.Edges.CategoryDescriptionTemplate = e }); err != nil {
+			func(n *Description, e *CategoryDescriptionTemplate) { n.Edges.CategoryDescriptionTemplate = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := dq.withDescriptionChanges; query != nil {
 		if err := dq.loadDescriptionChanges(ctx, query, nodes,
-			func(n *Description) { n.Edges.DescriptionChanges = []*Description_change{} },
-			func(n *Description, e *Description_change) {
+			func(n *Description) { n.Edges.DescriptionChanges = []*DescriptionChange{} },
+			func(n *Description, e *DescriptionChange) {
 				n.Edges.DescriptionChanges = append(n.Edges.DescriptionChanges, e)
 			}); err != nil {
 			return nil, err
@@ -543,8 +542,8 @@ func (dq *DescriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 }
 
 func (dq *DescriptionQuery) loadVideo(ctx context.Context, query *VideoQuery, nodes []*Description, init func(*Description), assign func(*Description, *Video)) error {
-	ids := make([]pulid.ID, 0, len(nodes))
-	nodeids := make(map[pulid.ID][]*Description)
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Description)
 	for i := range nodes {
 		if nodes[i].video_id == nil {
 			continue
@@ -574,14 +573,14 @@ func (dq *DescriptionQuery) loadVideo(ctx context.Context, query *VideoQuery, no
 	}
 	return nil
 }
-func (dq *DescriptionQuery) loadPeriodicDescriptionTemplate(ctx context.Context, query *PeriodicDescriptionTemplateQuery, nodes []*Description, init func(*Description), assign func(*Description, *Periodic_description_template)) error {
-	ids := make([]pulid.ID, 0, len(nodes))
-	nodeids := make(map[pulid.ID][]*Description)
+func (dq *DescriptionQuery) loadPeriodicDescriptionTemplate(ctx context.Context, query *PeriodicDescriptionTemplateQuery, nodes []*Description, init func(*Description), assign func(*Description, *PeriodicDescriptionTemplate)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Description)
 	for i := range nodes {
-		if nodes[i].periodic_template_id == nil {
+		if nodes[i].periodic_id == nil {
 			continue
 		}
-		fk := *nodes[i].periodic_template_id
+		fk := *nodes[i].periodic_id
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -590,7 +589,7 @@ func (dq *DescriptionQuery) loadPeriodicDescriptionTemplate(ctx context.Context,
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(periodic_description_template.IDIn(ids...))
+	query.Where(periodicdescriptiontemplate.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -598,7 +597,7 @@ func (dq *DescriptionQuery) loadPeriodicDescriptionTemplate(ctx context.Context,
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "periodic_template_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "periodic_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -606,14 +605,14 @@ func (dq *DescriptionQuery) loadPeriodicDescriptionTemplate(ctx context.Context,
 	}
 	return nil
 }
-func (dq *DescriptionQuery) loadCategoryDescriptionTemplate(ctx context.Context, query *CategoryDescriptionTemplateQuery, nodes []*Description, init func(*Description), assign func(*Description, *Category_description_template)) error {
-	ids := make([]pulid.ID, 0, len(nodes))
-	nodeids := make(map[pulid.ID][]*Description)
+func (dq *DescriptionQuery) loadCategoryDescriptionTemplate(ctx context.Context, query *CategoryDescriptionTemplateQuery, nodes []*Description, init func(*Description), assign func(*Description, *CategoryDescriptionTemplate)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Description)
 	for i := range nodes {
-		if nodes[i].category_template_id == nil {
+		if nodes[i].category_id == nil {
 			continue
 		}
-		fk := *nodes[i].category_template_id
+		fk := *nodes[i].category_id
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -622,7 +621,7 @@ func (dq *DescriptionQuery) loadCategoryDescriptionTemplate(ctx context.Context,
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(category_description_template.IDIn(ids...))
+	query.Where(categorydescriptiontemplate.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -630,7 +629,7 @@ func (dq *DescriptionQuery) loadCategoryDescriptionTemplate(ctx context.Context,
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "category_template_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "category_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -638,9 +637,9 @@ func (dq *DescriptionQuery) loadCategoryDescriptionTemplate(ctx context.Context,
 	}
 	return nil
 }
-func (dq *DescriptionQuery) loadDescriptionChanges(ctx context.Context, query *DescriptionChangeQuery, nodes []*Description, init func(*Description), assign func(*Description, *Description_change)) error {
+func (dq *DescriptionQuery) loadDescriptionChanges(ctx context.Context, query *DescriptionChangeQuery, nodes []*Description, init func(*Description), assign func(*Description, *DescriptionChange)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[pulid.ID]*Description)
+	nodeids := make(map[string]*Description)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -649,7 +648,7 @@ func (dq *DescriptionQuery) loadDescriptionChanges(ctx context.Context, query *D
 		}
 	}
 	query.withFKs = true
-	query.Where(predicate.Description_change(func(s *sql.Selector) {
+	query.Where(predicate.DescriptionChange(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(description.DescriptionChangesColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)

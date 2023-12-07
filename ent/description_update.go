@@ -11,12 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/category_description_template"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/categorydescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description_change"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodic_description_template"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/descriptionchange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodicdescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/predicate"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 )
 
@@ -108,7 +107,7 @@ func (du *DescriptionUpdate) SetUpdatedAt(t time.Time) *DescriptionUpdate {
 }
 
 // SetVideoID sets the "video" edge to the Video entity by ID.
-func (du *DescriptionUpdate) SetVideoID(id pulid.ID) *DescriptionUpdate {
+func (du *DescriptionUpdate) SetVideoID(id string) *DescriptionUpdate {
 	du.mutation.SetVideoID(id)
 	return du
 }
@@ -118,53 +117,53 @@ func (du *DescriptionUpdate) SetVideo(v *Video) *DescriptionUpdate {
 	return du.SetVideoID(v.ID)
 }
 
-// SetPeriodicDescriptionTemplateID sets the "periodic_description_template" edge to the Periodic_description_template entity by ID.
-func (du *DescriptionUpdate) SetPeriodicDescriptionTemplateID(id pulid.ID) *DescriptionUpdate {
+// SetPeriodicDescriptionTemplateID sets the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity by ID.
+func (du *DescriptionUpdate) SetPeriodicDescriptionTemplateID(id string) *DescriptionUpdate {
 	du.mutation.SetPeriodicDescriptionTemplateID(id)
 	return du
 }
 
-// SetNillablePeriodicDescriptionTemplateID sets the "periodic_description_template" edge to the Periodic_description_template entity by ID if the given value is not nil.
-func (du *DescriptionUpdate) SetNillablePeriodicDescriptionTemplateID(id *pulid.ID) *DescriptionUpdate {
+// SetNillablePeriodicDescriptionTemplateID sets the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity by ID if the given value is not nil.
+func (du *DescriptionUpdate) SetNillablePeriodicDescriptionTemplateID(id *string) *DescriptionUpdate {
 	if id != nil {
 		du = du.SetPeriodicDescriptionTemplateID(*id)
 	}
 	return du
 }
 
-// SetPeriodicDescriptionTemplate sets the "periodic_description_template" edge to the Periodic_description_template entity.
-func (du *DescriptionUpdate) SetPeriodicDescriptionTemplate(p *Periodic_description_template) *DescriptionUpdate {
+// SetPeriodicDescriptionTemplate sets the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity.
+func (du *DescriptionUpdate) SetPeriodicDescriptionTemplate(p *PeriodicDescriptionTemplate) *DescriptionUpdate {
 	return du.SetPeriodicDescriptionTemplateID(p.ID)
 }
 
-// SetCategoryDescriptionTemplateID sets the "category_description_template" edge to the Category_description_template entity by ID.
-func (du *DescriptionUpdate) SetCategoryDescriptionTemplateID(id pulid.ID) *DescriptionUpdate {
+// SetCategoryDescriptionTemplateID sets the "category_description_template" edge to the CategoryDescriptionTemplate entity by ID.
+func (du *DescriptionUpdate) SetCategoryDescriptionTemplateID(id string) *DescriptionUpdate {
 	du.mutation.SetCategoryDescriptionTemplateID(id)
 	return du
 }
 
-// SetNillableCategoryDescriptionTemplateID sets the "category_description_template" edge to the Category_description_template entity by ID if the given value is not nil.
-func (du *DescriptionUpdate) SetNillableCategoryDescriptionTemplateID(id *pulid.ID) *DescriptionUpdate {
+// SetNillableCategoryDescriptionTemplateID sets the "category_description_template" edge to the CategoryDescriptionTemplate entity by ID if the given value is not nil.
+func (du *DescriptionUpdate) SetNillableCategoryDescriptionTemplateID(id *string) *DescriptionUpdate {
 	if id != nil {
 		du = du.SetCategoryDescriptionTemplateID(*id)
 	}
 	return du
 }
 
-// SetCategoryDescriptionTemplate sets the "category_description_template" edge to the Category_description_template entity.
-func (du *DescriptionUpdate) SetCategoryDescriptionTemplate(c *Category_description_template) *DescriptionUpdate {
+// SetCategoryDescriptionTemplate sets the "category_description_template" edge to the CategoryDescriptionTemplate entity.
+func (du *DescriptionUpdate) SetCategoryDescriptionTemplate(c *CategoryDescriptionTemplate) *DescriptionUpdate {
 	return du.SetCategoryDescriptionTemplateID(c.ID)
 }
 
-// AddDescriptionChangeIDs adds the "description_changes" edge to the Description_change entity by IDs.
-func (du *DescriptionUpdate) AddDescriptionChangeIDs(ids ...pulid.ID) *DescriptionUpdate {
+// AddDescriptionChangeIDs adds the "description_changes" edge to the DescriptionChange entity by IDs.
+func (du *DescriptionUpdate) AddDescriptionChangeIDs(ids ...string) *DescriptionUpdate {
 	du.mutation.AddDescriptionChangeIDs(ids...)
 	return du
 }
 
-// AddDescriptionChanges adds the "description_changes" edges to the Description_change entity.
-func (du *DescriptionUpdate) AddDescriptionChanges(d ...*Description_change) *DescriptionUpdate {
-	ids := make([]pulid.ID, len(d))
+// AddDescriptionChanges adds the "description_changes" edges to the DescriptionChange entity.
+func (du *DescriptionUpdate) AddDescriptionChanges(d ...*DescriptionChange) *DescriptionUpdate {
+	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
@@ -182,33 +181,33 @@ func (du *DescriptionUpdate) ClearVideo() *DescriptionUpdate {
 	return du
 }
 
-// ClearPeriodicDescriptionTemplate clears the "periodic_description_template" edge to the Periodic_description_template entity.
+// ClearPeriodicDescriptionTemplate clears the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity.
 func (du *DescriptionUpdate) ClearPeriodicDescriptionTemplate() *DescriptionUpdate {
 	du.mutation.ClearPeriodicDescriptionTemplate()
 	return du
 }
 
-// ClearCategoryDescriptionTemplate clears the "category_description_template" edge to the Category_description_template entity.
+// ClearCategoryDescriptionTemplate clears the "category_description_template" edge to the CategoryDescriptionTemplate entity.
 func (du *DescriptionUpdate) ClearCategoryDescriptionTemplate() *DescriptionUpdate {
 	du.mutation.ClearCategoryDescriptionTemplate()
 	return du
 }
 
-// ClearDescriptionChanges clears all "description_changes" edges to the Description_change entity.
+// ClearDescriptionChanges clears all "description_changes" edges to the DescriptionChange entity.
 func (du *DescriptionUpdate) ClearDescriptionChanges() *DescriptionUpdate {
 	du.mutation.ClearDescriptionChanges()
 	return du
 }
 
-// RemoveDescriptionChangeIDs removes the "description_changes" edge to Description_change entities by IDs.
-func (du *DescriptionUpdate) RemoveDescriptionChangeIDs(ids ...pulid.ID) *DescriptionUpdate {
+// RemoveDescriptionChangeIDs removes the "description_changes" edge to DescriptionChange entities by IDs.
+func (du *DescriptionUpdate) RemoveDescriptionChangeIDs(ids ...string) *DescriptionUpdate {
 	du.mutation.RemoveDescriptionChangeIDs(ids...)
 	return du
 }
 
-// RemoveDescriptionChanges removes "description_changes" edges to Description_change entities.
-func (du *DescriptionUpdate) RemoveDescriptionChanges(d ...*Description_change) *DescriptionUpdate {
-	ids := make([]pulid.ID, len(d))
+// RemoveDescriptionChanges removes "description_changes" edges to DescriptionChange entities.
+func (du *DescriptionUpdate) RemoveDescriptionChanges(d ...*DescriptionChange) *DescriptionUpdate {
+	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
@@ -324,12 +323,12 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if du.mutation.PeriodicDescriptionTemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: true,
+			Inverse: false,
 			Table:   description.PeriodicDescriptionTemplateTable,
 			Columns: []string{description.PeriodicDescriptionTemplateColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(periodic_description_template.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(periodicdescriptiontemplate.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -337,12 +336,12 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if nodes := du.mutation.PeriodicDescriptionTemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: true,
+			Inverse: false,
 			Table:   description.PeriodicDescriptionTemplateTable,
 			Columns: []string{description.PeriodicDescriptionTemplateColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(periodic_description_template.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(periodicdescriptiontemplate.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -353,12 +352,12 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if du.mutation.CategoryDescriptionTemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: true,
+			Inverse: false,
 			Table:   description.CategoryDescriptionTemplateTable,
 			Columns: []string{description.CategoryDescriptionTemplateColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(category_description_template.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(categorydescriptiontemplate.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -366,12 +365,12 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if nodes := du.mutation.CategoryDescriptionTemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: true,
+			Inverse: false,
 			Table:   description.CategoryDescriptionTemplateTable,
 			Columns: []string{description.CategoryDescriptionTemplateColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(category_description_template.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(categorydescriptiontemplate.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -387,7 +386,7 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{description.DescriptionChangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(description_change.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(descriptionchange.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -400,7 +399,7 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{description.DescriptionChangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(description_change.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(descriptionchange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -416,7 +415,7 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{description.DescriptionChangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(description_change.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(descriptionchange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -519,7 +518,7 @@ func (duo *DescriptionUpdateOne) SetUpdatedAt(t time.Time) *DescriptionUpdateOne
 }
 
 // SetVideoID sets the "video" edge to the Video entity by ID.
-func (duo *DescriptionUpdateOne) SetVideoID(id pulid.ID) *DescriptionUpdateOne {
+func (duo *DescriptionUpdateOne) SetVideoID(id string) *DescriptionUpdateOne {
 	duo.mutation.SetVideoID(id)
 	return duo
 }
@@ -529,53 +528,53 @@ func (duo *DescriptionUpdateOne) SetVideo(v *Video) *DescriptionUpdateOne {
 	return duo.SetVideoID(v.ID)
 }
 
-// SetPeriodicDescriptionTemplateID sets the "periodic_description_template" edge to the Periodic_description_template entity by ID.
-func (duo *DescriptionUpdateOne) SetPeriodicDescriptionTemplateID(id pulid.ID) *DescriptionUpdateOne {
+// SetPeriodicDescriptionTemplateID sets the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity by ID.
+func (duo *DescriptionUpdateOne) SetPeriodicDescriptionTemplateID(id string) *DescriptionUpdateOne {
 	duo.mutation.SetPeriodicDescriptionTemplateID(id)
 	return duo
 }
 
-// SetNillablePeriodicDescriptionTemplateID sets the "periodic_description_template" edge to the Periodic_description_template entity by ID if the given value is not nil.
-func (duo *DescriptionUpdateOne) SetNillablePeriodicDescriptionTemplateID(id *pulid.ID) *DescriptionUpdateOne {
+// SetNillablePeriodicDescriptionTemplateID sets the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity by ID if the given value is not nil.
+func (duo *DescriptionUpdateOne) SetNillablePeriodicDescriptionTemplateID(id *string) *DescriptionUpdateOne {
 	if id != nil {
 		duo = duo.SetPeriodicDescriptionTemplateID(*id)
 	}
 	return duo
 }
 
-// SetPeriodicDescriptionTemplate sets the "periodic_description_template" edge to the Periodic_description_template entity.
-func (duo *DescriptionUpdateOne) SetPeriodicDescriptionTemplate(p *Periodic_description_template) *DescriptionUpdateOne {
+// SetPeriodicDescriptionTemplate sets the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity.
+func (duo *DescriptionUpdateOne) SetPeriodicDescriptionTemplate(p *PeriodicDescriptionTemplate) *DescriptionUpdateOne {
 	return duo.SetPeriodicDescriptionTemplateID(p.ID)
 }
 
-// SetCategoryDescriptionTemplateID sets the "category_description_template" edge to the Category_description_template entity by ID.
-func (duo *DescriptionUpdateOne) SetCategoryDescriptionTemplateID(id pulid.ID) *DescriptionUpdateOne {
+// SetCategoryDescriptionTemplateID sets the "category_description_template" edge to the CategoryDescriptionTemplate entity by ID.
+func (duo *DescriptionUpdateOne) SetCategoryDescriptionTemplateID(id string) *DescriptionUpdateOne {
 	duo.mutation.SetCategoryDescriptionTemplateID(id)
 	return duo
 }
 
-// SetNillableCategoryDescriptionTemplateID sets the "category_description_template" edge to the Category_description_template entity by ID if the given value is not nil.
-func (duo *DescriptionUpdateOne) SetNillableCategoryDescriptionTemplateID(id *pulid.ID) *DescriptionUpdateOne {
+// SetNillableCategoryDescriptionTemplateID sets the "category_description_template" edge to the CategoryDescriptionTemplate entity by ID if the given value is not nil.
+func (duo *DescriptionUpdateOne) SetNillableCategoryDescriptionTemplateID(id *string) *DescriptionUpdateOne {
 	if id != nil {
 		duo = duo.SetCategoryDescriptionTemplateID(*id)
 	}
 	return duo
 }
 
-// SetCategoryDescriptionTemplate sets the "category_description_template" edge to the Category_description_template entity.
-func (duo *DescriptionUpdateOne) SetCategoryDescriptionTemplate(c *Category_description_template) *DescriptionUpdateOne {
+// SetCategoryDescriptionTemplate sets the "category_description_template" edge to the CategoryDescriptionTemplate entity.
+func (duo *DescriptionUpdateOne) SetCategoryDescriptionTemplate(c *CategoryDescriptionTemplate) *DescriptionUpdateOne {
 	return duo.SetCategoryDescriptionTemplateID(c.ID)
 }
 
-// AddDescriptionChangeIDs adds the "description_changes" edge to the Description_change entity by IDs.
-func (duo *DescriptionUpdateOne) AddDescriptionChangeIDs(ids ...pulid.ID) *DescriptionUpdateOne {
+// AddDescriptionChangeIDs adds the "description_changes" edge to the DescriptionChange entity by IDs.
+func (duo *DescriptionUpdateOne) AddDescriptionChangeIDs(ids ...string) *DescriptionUpdateOne {
 	duo.mutation.AddDescriptionChangeIDs(ids...)
 	return duo
 }
 
-// AddDescriptionChanges adds the "description_changes" edges to the Description_change entity.
-func (duo *DescriptionUpdateOne) AddDescriptionChanges(d ...*Description_change) *DescriptionUpdateOne {
-	ids := make([]pulid.ID, len(d))
+// AddDescriptionChanges adds the "description_changes" edges to the DescriptionChange entity.
+func (duo *DescriptionUpdateOne) AddDescriptionChanges(d ...*DescriptionChange) *DescriptionUpdateOne {
+	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
@@ -593,33 +592,33 @@ func (duo *DescriptionUpdateOne) ClearVideo() *DescriptionUpdateOne {
 	return duo
 }
 
-// ClearPeriodicDescriptionTemplate clears the "periodic_description_template" edge to the Periodic_description_template entity.
+// ClearPeriodicDescriptionTemplate clears the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity.
 func (duo *DescriptionUpdateOne) ClearPeriodicDescriptionTemplate() *DescriptionUpdateOne {
 	duo.mutation.ClearPeriodicDescriptionTemplate()
 	return duo
 }
 
-// ClearCategoryDescriptionTemplate clears the "category_description_template" edge to the Category_description_template entity.
+// ClearCategoryDescriptionTemplate clears the "category_description_template" edge to the CategoryDescriptionTemplate entity.
 func (duo *DescriptionUpdateOne) ClearCategoryDescriptionTemplate() *DescriptionUpdateOne {
 	duo.mutation.ClearCategoryDescriptionTemplate()
 	return duo
 }
 
-// ClearDescriptionChanges clears all "description_changes" edges to the Description_change entity.
+// ClearDescriptionChanges clears all "description_changes" edges to the DescriptionChange entity.
 func (duo *DescriptionUpdateOne) ClearDescriptionChanges() *DescriptionUpdateOne {
 	duo.mutation.ClearDescriptionChanges()
 	return duo
 }
 
-// RemoveDescriptionChangeIDs removes the "description_changes" edge to Description_change entities by IDs.
-func (duo *DescriptionUpdateOne) RemoveDescriptionChangeIDs(ids ...pulid.ID) *DescriptionUpdateOne {
+// RemoveDescriptionChangeIDs removes the "description_changes" edge to DescriptionChange entities by IDs.
+func (duo *DescriptionUpdateOne) RemoveDescriptionChangeIDs(ids ...string) *DescriptionUpdateOne {
 	duo.mutation.RemoveDescriptionChangeIDs(ids...)
 	return duo
 }
 
-// RemoveDescriptionChanges removes "description_changes" edges to Description_change entities.
-func (duo *DescriptionUpdateOne) RemoveDescriptionChanges(d ...*Description_change) *DescriptionUpdateOne {
-	ids := make([]pulid.ID, len(d))
+// RemoveDescriptionChanges removes "description_changes" edges to DescriptionChange entities.
+func (duo *DescriptionUpdateOne) RemoveDescriptionChanges(d ...*DescriptionChange) *DescriptionUpdateOne {
+	ids := make([]string, len(d))
 	for i := range d {
 		ids[i] = d[i].ID
 	}
@@ -765,12 +764,12 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 	if duo.mutation.PeriodicDescriptionTemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: true,
+			Inverse: false,
 			Table:   description.PeriodicDescriptionTemplateTable,
 			Columns: []string{description.PeriodicDescriptionTemplateColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(periodic_description_template.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(periodicdescriptiontemplate.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -778,12 +777,12 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 	if nodes := duo.mutation.PeriodicDescriptionTemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: true,
+			Inverse: false,
 			Table:   description.PeriodicDescriptionTemplateTable,
 			Columns: []string{description.PeriodicDescriptionTemplateColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(periodic_description_template.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(periodicdescriptiontemplate.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -794,12 +793,12 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 	if duo.mutation.CategoryDescriptionTemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: true,
+			Inverse: false,
 			Table:   description.CategoryDescriptionTemplateTable,
 			Columns: []string{description.CategoryDescriptionTemplateColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(category_description_template.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(categorydescriptiontemplate.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -807,12 +806,12 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 	if nodes := duo.mutation.CategoryDescriptionTemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: true,
+			Inverse: false,
 			Table:   description.CategoryDescriptionTemplateTable,
 			Columns: []string{description.CategoryDescriptionTemplateColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(category_description_template.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(categorydescriptiontemplate.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -828,7 +827,7 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 			Columns: []string{description.DescriptionChangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(description_change.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(descriptionchange.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -841,7 +840,7 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 			Columns: []string{description.DescriptionChangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(description_change.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(descriptionchange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -857,7 +856,7 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 			Columns: []string{description.DescriptionChangesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(description_change.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(descriptionchange.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

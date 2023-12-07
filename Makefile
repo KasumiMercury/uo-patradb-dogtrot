@@ -25,7 +25,7 @@ air:
 atlas-inspect:
 	atlas schema inspect -u "ent://ent/schema" --dev-url "sqlite://file?mode=memory&_fk=1" -w
 atlas-diff:
-	atlas migrate diff migration_name \
+	atlas migrate diff $(ARG) \
 	  --dir "file://ent/migrate/migrations" \
 	  --to "ent://ent/schema" \
 	  --dev-url "docker://mysql/8/ent"

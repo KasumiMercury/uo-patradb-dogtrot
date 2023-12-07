@@ -44,6 +44,9 @@ atlas-lint:
 	  --dir "file://ent/migrate/migrations/integrate" \
 	  --dev-url "docker://mysql/8/dev" \
 	  -w
+atlas-hash-custom:
+	atlas migrate hash \
+	  --dir "file://ent/migrate/migrations/custom"
 
 generate-sql:
 	go run -mod=mod ./cmd/migration/main.go $(ARG)

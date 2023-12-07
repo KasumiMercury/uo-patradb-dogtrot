@@ -35,7 +35,7 @@ atlas-custom:
 	atlas migrate new $(ARG) \
 	  --dir "file://ent/migrate/migrations/custom"
 integration:
-	cd ent/migrate/migrations/ &&
+	cd ent/migrate/migrations/ && \
 	bash integrate_migration.sh
 atlas-push:
 	atlas migrate push patradb \

@@ -42,7 +42,8 @@ atlas-push:
 atlas-lint:
 	atlas migrate lint \
 	  --dir "file://ent/migrate/migrations/integrate" \
-	  --dev-url "docker://mysql/8/dev"
+	  --dev-url "docker://mysql/8/dev" \
+	  -w
 
 generate-sql:
 	go run -mod=mod ./cmd/migration/main.go $(ARG)

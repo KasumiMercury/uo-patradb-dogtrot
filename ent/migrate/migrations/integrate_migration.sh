@@ -13,7 +13,11 @@ mkdir -p "$TARGET_DIR"
 
 
 for src in "${SOURCE_DIR[@]}"; do
-  cp "$src"/*.sql $TARGET_DIR/
+  # if .sql files exist in source directory, copy them to target directory
+  if [ -n "$(find "$src" -maxdepth 1 -name '*.sql' -print -quit)" ]; then
+    echo "cp $src/*.sql $TARGET_DIR"
+    cp "$src"/*.sql "$TARGET_DIR"
+  fi
 done
 
 for file in "${TARGET_DIR}"/*.sql; do

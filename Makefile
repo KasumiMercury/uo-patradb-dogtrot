@@ -1,3 +1,5 @@
+include .env
+
 build-dev:
 	docker compose build
 build-dev-no-cache:
@@ -47,6 +49,10 @@ atlas-lint:
 atlas-hash-custom:
 	atlas migrate hash \
 	  --dir "file://ent/migrate/migrations/custom"
+atlas-apply:
+	atlas migrate apply \
+	  --dir "file://ent/migrate/migrations/integrate" \
+	  --url "mysql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?parseTime=true&multiStatements=true" \
 
 generate-sql:
 	go run -mod=mod ./cmd/migration/main.go $(ARG)

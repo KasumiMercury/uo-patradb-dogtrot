@@ -8,3 +8,4 @@ go.work
 *.log
 tmp/
 __debug_bin*
+mysql/

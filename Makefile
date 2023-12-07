@@ -29,3 +29,5 @@ atlas-diff:
 	  --dir "file://ent/migrate/migrations" \
 	  --to "ent://ent/schema" \
 	  --dev-url "docker://mysql/8/ent"
+generate-sql:
+	go run -mod=mod ./cmd/migration/main.go $(ARG)

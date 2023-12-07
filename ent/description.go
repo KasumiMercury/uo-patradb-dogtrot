@@ -43,10 +43,10 @@ type Description struct {
 type DescriptionEdges struct {
 	// Video holds the value of the video edge.
 	Video *Video `json:"video,omitempty"`
-	// PeriodicDescriptionTemplate holds the value of the periodic_description_template edge.
-	PeriodicDescriptionTemplate *PeriodicDescriptionTemplate `json:"periodic_description_template,omitempty"`
-	// CategoryDescriptionTemplate holds the value of the category_description_template edge.
-	CategoryDescriptionTemplate *CategoryDescriptionTemplate `json:"category_description_template,omitempty"`
+	// PeriodicTemplate holds the value of the periodic_template edge.
+	PeriodicTemplate *PeriodicDescriptionTemplate `json:"periodic_template,omitempty"`
+	// CategoryTemplate holds the value of the category_template edge.
+	CategoryTemplate *CategoryDescriptionTemplate `json:"category_template,omitempty"`
 	// DescriptionChanges holds the value of the description_changes edge.
 	DescriptionChanges []*DescriptionChange `json:"description_changes,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -67,30 +67,30 @@ func (e DescriptionEdges) VideoOrErr() (*Video, error) {
 	return nil, &NotLoadedError{edge: "video"}
 }
 
-// PeriodicDescriptionTemplateOrErr returns the PeriodicDescriptionTemplate value or an error if the edge
+// PeriodicTemplateOrErr returns the PeriodicTemplate value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e DescriptionEdges) PeriodicDescriptionTemplateOrErr() (*PeriodicDescriptionTemplate, error) {
+func (e DescriptionEdges) PeriodicTemplateOrErr() (*PeriodicDescriptionTemplate, error) {
 	if e.loadedTypes[1] {
-		if e.PeriodicDescriptionTemplate == nil {
+		if e.PeriodicTemplate == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: periodicdescriptiontemplate.Label}
 		}
-		return e.PeriodicDescriptionTemplate, nil
+		return e.PeriodicTemplate, nil
 	}
-	return nil, &NotLoadedError{edge: "periodic_description_template"}
+	return nil, &NotLoadedError{edge: "periodic_template"}
 }
 
-// CategoryDescriptionTemplateOrErr returns the CategoryDescriptionTemplate value or an error if the edge
+// CategoryTemplateOrErr returns the CategoryTemplate value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e DescriptionEdges) CategoryDescriptionTemplateOrErr() (*CategoryDescriptionTemplate, error) {
+func (e DescriptionEdges) CategoryTemplateOrErr() (*CategoryDescriptionTemplate, error) {
 	if e.loadedTypes[2] {
-		if e.CategoryDescriptionTemplate == nil {
+		if e.CategoryTemplate == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: categorydescriptiontemplate.Label}
 		}
-		return e.CategoryDescriptionTemplate, nil
+		return e.CategoryTemplate, nil
 	}
-	return nil, &NotLoadedError{edge: "category_description_template"}
+	return nil, &NotLoadedError{edge: "category_template"}
 }
 
 // DescriptionChangesOrErr returns the DescriptionChanges value or an error if the edge
@@ -207,14 +207,14 @@ func (d *Description) QueryVideo() *VideoQuery {
 	return NewDescriptionClient(d.config).QueryVideo(d)
 }
 
-// QueryPeriodicDescriptionTemplate queries the "periodic_description_template" edge of the Description entity.
-func (d *Description) QueryPeriodicDescriptionTemplate() *PeriodicDescriptionTemplateQuery {
-	return NewDescriptionClient(d.config).QueryPeriodicDescriptionTemplate(d)
+// QueryPeriodicTemplate queries the "periodic_template" edge of the Description entity.
+func (d *Description) QueryPeriodicTemplate() *PeriodicDescriptionTemplateQuery {
+	return NewDescriptionClient(d.config).QueryPeriodicTemplate(d)
 }
 
-// QueryCategoryDescriptionTemplate queries the "category_description_template" edge of the Description entity.
-func (d *Description) QueryCategoryDescriptionTemplate() *CategoryDescriptionTemplateQuery {
-	return NewDescriptionClient(d.config).QueryCategoryDescriptionTemplate(d)
+// QueryCategoryTemplate queries the "category_template" edge of the Description entity.
+func (d *Description) QueryCategoryTemplate() *CategoryDescriptionTemplateQuery {
+	return NewDescriptionClient(d.config).QueryCategoryTemplate(d)
 }
 
 // QueryDescriptionChanges queries the "description_changes" edge of the Description entity.

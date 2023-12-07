@@ -26,10 +26,10 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// EdgeVideo holds the string denoting the video edge name in mutations.
 	EdgeVideo = "video"
-	// EdgePeriodicDescriptionTemplate holds the string denoting the periodic_description_template edge name in mutations.
-	EdgePeriodicDescriptionTemplate = "periodic_description_template"
-	// EdgeCategoryDescriptionTemplate holds the string denoting the category_description_template edge name in mutations.
-	EdgeCategoryDescriptionTemplate = "category_description_template"
+	// EdgePeriodicTemplate holds the string denoting the periodic_template edge name in mutations.
+	EdgePeriodicTemplate = "periodic_template"
+	// EdgeCategoryTemplate holds the string denoting the category_template edge name in mutations.
+	EdgeCategoryTemplate = "category_template"
 	// EdgeDescriptionChanges holds the string denoting the description_changes edge name in mutations.
 	EdgeDescriptionChanges = "description_changes"
 	// Table holds the table name of the description in the database.
@@ -41,20 +41,20 @@ const (
 	VideoInverseTable = "videos"
 	// VideoColumn is the table column denoting the video relation/edge.
 	VideoColumn = "video_id"
-	// PeriodicDescriptionTemplateTable is the table that holds the periodic_description_template relation/edge.
-	PeriodicDescriptionTemplateTable = "descriptions"
-	// PeriodicDescriptionTemplateInverseTable is the table name for the PeriodicDescriptionTemplate entity.
+	// PeriodicTemplateTable is the table that holds the periodic_template relation/edge.
+	PeriodicTemplateTable = "descriptions"
+	// PeriodicTemplateInverseTable is the table name for the PeriodicDescriptionTemplate entity.
 	// It exists in this package in order to avoid circular dependency with the "periodicdescriptiontemplate" package.
-	PeriodicDescriptionTemplateInverseTable = "periodic_description_templates"
-	// PeriodicDescriptionTemplateColumn is the table column denoting the periodic_description_template relation/edge.
-	PeriodicDescriptionTemplateColumn = "periodic_id"
-	// CategoryDescriptionTemplateTable is the table that holds the category_description_template relation/edge.
-	CategoryDescriptionTemplateTable = "descriptions"
-	// CategoryDescriptionTemplateInverseTable is the table name for the CategoryDescriptionTemplate entity.
+	PeriodicTemplateInverseTable = "periodic_description_templates"
+	// PeriodicTemplateColumn is the table column denoting the periodic_template relation/edge.
+	PeriodicTemplateColumn = "periodic_id"
+	// CategoryTemplateTable is the table that holds the category_template relation/edge.
+	CategoryTemplateTable = "descriptions"
+	// CategoryTemplateInverseTable is the table name for the CategoryDescriptionTemplate entity.
 	// It exists in this package in order to avoid circular dependency with the "categorydescriptiontemplate" package.
-	CategoryDescriptionTemplateInverseTable = "category_description_templates"
-	// CategoryDescriptionTemplateColumn is the table column denoting the category_description_template relation/edge.
-	CategoryDescriptionTemplateColumn = "category_id"
+	CategoryTemplateInverseTable = "category_description_templates"
+	// CategoryTemplateColumn is the table column denoting the category_template relation/edge.
+	CategoryTemplateColumn = "category_id"
 	// DescriptionChangesTable is the table that holds the description_changes relation/edge.
 	DescriptionChangesTable = "description_changes"
 	// DescriptionChangesInverseTable is the table name for the DescriptionChange entity.
@@ -148,17 +148,17 @@ func ByVideoField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByPeriodicDescriptionTemplateField orders the results by periodic_description_template field.
-func ByPeriodicDescriptionTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByPeriodicTemplateField orders the results by periodic_template field.
+func ByPeriodicTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newPeriodicDescriptionTemplateStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newPeriodicTemplateStep(), sql.OrderByField(field, opts...))
 	}
 }
 
-// ByCategoryDescriptionTemplateField orders the results by category_description_template field.
-func ByCategoryDescriptionTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByCategoryTemplateField orders the results by category_template field.
+func ByCategoryTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newCategoryDescriptionTemplateStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newCategoryTemplateStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -182,18 +182,18 @@ func newVideoStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2O, true, VideoTable, VideoColumn),
 	)
 }
-func newPeriodicDescriptionTemplateStep() *sqlgraph.Step {
+func newPeriodicTemplateStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(PeriodicDescriptionTemplateInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, PeriodicDescriptionTemplateTable, PeriodicDescriptionTemplateColumn),
+		sqlgraph.To(PeriodicTemplateInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, PeriodicTemplateTable, PeriodicTemplateColumn),
 	)
 }
-func newCategoryDescriptionTemplateStep() *sqlgraph.Step {
+func newCategoryTemplateStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(CategoryDescriptionTemplateInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, CategoryDescriptionTemplateTable, CategoryDescriptionTemplateColumn),
+		sqlgraph.To(CategoryTemplateInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, CategoryTemplateTable, CategoryTemplateColumn),
 	)
 }
 func newDescriptionChangesStep() *sqlgraph.Step {

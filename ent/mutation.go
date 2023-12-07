@@ -1209,27 +1209,27 @@ func (m *ChannelMutation) ResetEdge(name string) error {
 // DescriptionMutation represents an operation that mutates the Description nodes in the graph.
 type DescriptionMutation struct {
 	config
-	op                                   Op
-	typ                                  string
-	id                                   *string
-	raw                                  *string
-	variable                             *string
-	normalized_variable                  *string
-	created_at                           *time.Time
-	updated_at                           *time.Time
-	clearedFields                        map[string]struct{}
-	video                                *string
-	clearedvideo                         bool
-	periodic_description_template        *string
-	clearedperiodic_description_template bool
-	category_description_template        *string
-	clearedcategory_description_template bool
-	description_changes                  map[string]struct{}
-	removeddescription_changes           map[string]struct{}
-	cleareddescription_changes           bool
-	done                                 bool
-	oldValue                             func(context.Context) (*Description, error)
-	predicates                           []predicate.Description
+	op                         Op
+	typ                        string
+	id                         *string
+	raw                        *string
+	variable                   *string
+	normalized_variable        *string
+	created_at                 *time.Time
+	updated_at                 *time.Time
+	clearedFields              map[string]struct{}
+	video                      *string
+	clearedvideo               bool
+	periodic_template          *string
+	clearedperiodic_template   bool
+	category_template          *string
+	clearedcategory_template   bool
+	description_changes        map[string]struct{}
+	removeddescription_changes map[string]struct{}
+	cleareddescription_changes bool
+	done                       bool
+	oldValue                   func(context.Context) (*Description, error)
+	predicates                 []predicate.Description
 }
 
 var _ ent.Mutation = (*DescriptionMutation)(nil)
@@ -1581,82 +1581,82 @@ func (m *DescriptionMutation) ResetVideo() {
 	m.clearedvideo = false
 }
 
-// SetPeriodicDescriptionTemplateID sets the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity by id.
-func (m *DescriptionMutation) SetPeriodicDescriptionTemplateID(id string) {
-	m.periodic_description_template = &id
+// SetPeriodicTemplateID sets the "periodic_template" edge to the PeriodicDescriptionTemplate entity by id.
+func (m *DescriptionMutation) SetPeriodicTemplateID(id string) {
+	m.periodic_template = &id
 }
 
-// ClearPeriodicDescriptionTemplate clears the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity.
-func (m *DescriptionMutation) ClearPeriodicDescriptionTemplate() {
-	m.clearedperiodic_description_template = true
+// ClearPeriodicTemplate clears the "periodic_template" edge to the PeriodicDescriptionTemplate entity.
+func (m *DescriptionMutation) ClearPeriodicTemplate() {
+	m.clearedperiodic_template = true
 }
 
-// PeriodicDescriptionTemplateCleared reports if the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity was cleared.
-func (m *DescriptionMutation) PeriodicDescriptionTemplateCleared() bool {
-	return m.clearedperiodic_description_template
+// PeriodicTemplateCleared reports if the "periodic_template" edge to the PeriodicDescriptionTemplate entity was cleared.
+func (m *DescriptionMutation) PeriodicTemplateCleared() bool {
+	return m.clearedperiodic_template
 }
 
-// PeriodicDescriptionTemplateID returns the "periodic_description_template" edge ID in the mutation.
-func (m *DescriptionMutation) PeriodicDescriptionTemplateID() (id string, exists bool) {
-	if m.periodic_description_template != nil {
-		return *m.periodic_description_template, true
+// PeriodicTemplateID returns the "periodic_template" edge ID in the mutation.
+func (m *DescriptionMutation) PeriodicTemplateID() (id string, exists bool) {
+	if m.periodic_template != nil {
+		return *m.periodic_template, true
 	}
 	return
 }
 
-// PeriodicDescriptionTemplateIDs returns the "periodic_description_template" edge IDs in the mutation.
+// PeriodicTemplateIDs returns the "periodic_template" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// PeriodicDescriptionTemplateID instead. It exists only for internal usage by the builders.
-func (m *DescriptionMutation) PeriodicDescriptionTemplateIDs() (ids []string) {
-	if id := m.periodic_description_template; id != nil {
+// PeriodicTemplateID instead. It exists only for internal usage by the builders.
+func (m *DescriptionMutation) PeriodicTemplateIDs() (ids []string) {
+	if id := m.periodic_template; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetPeriodicDescriptionTemplate resets all changes to the "periodic_description_template" edge.
-func (m *DescriptionMutation) ResetPeriodicDescriptionTemplate() {
-	m.periodic_description_template = nil
-	m.clearedperiodic_description_template = false
+// ResetPeriodicTemplate resets all changes to the "periodic_template" edge.
+func (m *DescriptionMutation) ResetPeriodicTemplate() {
+	m.periodic_template = nil
+	m.clearedperiodic_template = false
 }
 
-// SetCategoryDescriptionTemplateID sets the "category_description_template" edge to the CategoryDescriptionTemplate entity by id.
-func (m *DescriptionMutation) SetCategoryDescriptionTemplateID(id string) {
-	m.category_description_template = &id
+// SetCategoryTemplateID sets the "category_template" edge to the CategoryDescriptionTemplate entity by id.
+func (m *DescriptionMutation) SetCategoryTemplateID(id string) {
+	m.category_template = &id
 }
 
-// ClearCategoryDescriptionTemplate clears the "category_description_template" edge to the CategoryDescriptionTemplate entity.
-func (m *DescriptionMutation) ClearCategoryDescriptionTemplate() {
-	m.clearedcategory_description_template = true
+// ClearCategoryTemplate clears the "category_template" edge to the CategoryDescriptionTemplate entity.
+func (m *DescriptionMutation) ClearCategoryTemplate() {
+	m.clearedcategory_template = true
 }
 
-// CategoryDescriptionTemplateCleared reports if the "category_description_template" edge to the CategoryDescriptionTemplate entity was cleared.
-func (m *DescriptionMutation) CategoryDescriptionTemplateCleared() bool {
-	return m.clearedcategory_description_template
+// CategoryTemplateCleared reports if the "category_template" edge to the CategoryDescriptionTemplate entity was cleared.
+func (m *DescriptionMutation) CategoryTemplateCleared() bool {
+	return m.clearedcategory_template
 }
 
-// CategoryDescriptionTemplateID returns the "category_description_template" edge ID in the mutation.
-func (m *DescriptionMutation) CategoryDescriptionTemplateID() (id string, exists bool) {
-	if m.category_description_template != nil {
-		return *m.category_description_template, true
+// CategoryTemplateID returns the "category_template" edge ID in the mutation.
+func (m *DescriptionMutation) CategoryTemplateID() (id string, exists bool) {
+	if m.category_template != nil {
+		return *m.category_template, true
 	}
 	return
 }
 
-// CategoryDescriptionTemplateIDs returns the "category_description_template" edge IDs in the mutation.
+// CategoryTemplateIDs returns the "category_template" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// CategoryDescriptionTemplateID instead. It exists only for internal usage by the builders.
-func (m *DescriptionMutation) CategoryDescriptionTemplateIDs() (ids []string) {
-	if id := m.category_description_template; id != nil {
+// CategoryTemplateID instead. It exists only for internal usage by the builders.
+func (m *DescriptionMutation) CategoryTemplateIDs() (ids []string) {
+	if id := m.category_template; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetCategoryDescriptionTemplate resets all changes to the "category_description_template" edge.
-func (m *DescriptionMutation) ResetCategoryDescriptionTemplate() {
-	m.category_description_template = nil
-	m.clearedcategory_description_template = false
+// ResetCategoryTemplate resets all changes to the "category_template" edge.
+func (m *DescriptionMutation) ResetCategoryTemplate() {
+	m.category_template = nil
+	m.clearedcategory_template = false
 }
 
 // AddDescriptionChangeIDs adds the "description_changes" edge to the DescriptionChange entity by ids.
@@ -1933,11 +1933,11 @@ func (m *DescriptionMutation) AddedEdges() []string {
 	if m.video != nil {
 		edges = append(edges, description.EdgeVideo)
 	}
-	if m.periodic_description_template != nil {
-		edges = append(edges, description.EdgePeriodicDescriptionTemplate)
+	if m.periodic_template != nil {
+		edges = append(edges, description.EdgePeriodicTemplate)
 	}
-	if m.category_description_template != nil {
-		edges = append(edges, description.EdgeCategoryDescriptionTemplate)
+	if m.category_template != nil {
+		edges = append(edges, description.EdgeCategoryTemplate)
 	}
 	if m.description_changes != nil {
 		edges = append(edges, description.EdgeDescriptionChanges)
@@ -1953,12 +1953,12 @@ func (m *DescriptionMutation) AddedIDs(name string) []ent.Value {
 		if id := m.video; id != nil {
 			return []ent.Value{*id}
 		}
-	case description.EdgePeriodicDescriptionTemplate:
-		if id := m.periodic_description_template; id != nil {
+	case description.EdgePeriodicTemplate:
+		if id := m.periodic_template; id != nil {
 			return []ent.Value{*id}
 		}
-	case description.EdgeCategoryDescriptionTemplate:
-		if id := m.category_description_template; id != nil {
+	case description.EdgeCategoryTemplate:
+		if id := m.category_template; id != nil {
 			return []ent.Value{*id}
 		}
 	case description.EdgeDescriptionChanges:
@@ -2000,11 +2000,11 @@ func (m *DescriptionMutation) ClearedEdges() []string {
 	if m.clearedvideo {
 		edges = append(edges, description.EdgeVideo)
 	}
-	if m.clearedperiodic_description_template {
-		edges = append(edges, description.EdgePeriodicDescriptionTemplate)
+	if m.clearedperiodic_template {
+		edges = append(edges, description.EdgePeriodicTemplate)
 	}
-	if m.clearedcategory_description_template {
-		edges = append(edges, description.EdgeCategoryDescriptionTemplate)
+	if m.clearedcategory_template {
+		edges = append(edges, description.EdgeCategoryTemplate)
 	}
 	if m.cleareddescription_changes {
 		edges = append(edges, description.EdgeDescriptionChanges)
@@ -2018,10 +2018,10 @@ func (m *DescriptionMutation) EdgeCleared(name string) bool {
 	switch name {
 	case description.EdgeVideo:
 		return m.clearedvideo
-	case description.EdgePeriodicDescriptionTemplate:
-		return m.clearedperiodic_description_template
-	case description.EdgeCategoryDescriptionTemplate:
-		return m.clearedcategory_description_template
+	case description.EdgePeriodicTemplate:
+		return m.clearedperiodic_template
+	case description.EdgeCategoryTemplate:
+		return m.clearedcategory_template
 	case description.EdgeDescriptionChanges:
 		return m.cleareddescription_changes
 	}
@@ -2035,11 +2035,11 @@ func (m *DescriptionMutation) ClearEdge(name string) error {
 	case description.EdgeVideo:
 		m.ClearVideo()
 		return nil
-	case description.EdgePeriodicDescriptionTemplate:
-		m.ClearPeriodicDescriptionTemplate()
+	case description.EdgePeriodicTemplate:
+		m.ClearPeriodicTemplate()
 		return nil
-	case description.EdgeCategoryDescriptionTemplate:
-		m.ClearCategoryDescriptionTemplate()
+	case description.EdgeCategoryTemplate:
+		m.ClearCategoryTemplate()
 		return nil
 	}
 	return fmt.Errorf("unknown Description unique edge %s", name)
@@ -2052,11 +2052,11 @@ func (m *DescriptionMutation) ResetEdge(name string) error {
 	case description.EdgeVideo:
 		m.ResetVideo()
 		return nil
-	case description.EdgePeriodicDescriptionTemplate:
-		m.ResetPeriodicDescriptionTemplate()
+	case description.EdgePeriodicTemplate:
+		m.ResetPeriodicTemplate()
 		return nil
-	case description.EdgeCategoryDescriptionTemplate:
-		m.ResetCategoryDescriptionTemplate()
+	case description.EdgeCategoryTemplate:
+		m.ResetCategoryTemplate()
 		return nil
 	case description.EdgeDescriptionChanges:
 		m.ResetDescriptionChanges()

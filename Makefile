@@ -21,3 +21,11 @@ bash-dev:
 	docker compose exec dogtrot bash
 air:
 	docker compose exec dogtrot air -c .air.toml
+
+atlas-inspect:
+	atlas schema inspect -u "ent://ent/schema" --dev-url "sqlite://file?mode=memory&_fk=1" -w
+atlas-diff:
+	atlas migrate diff migration_name \
+	  --dir "file://ent/migrate/migrations" \
+	  --to "ent://ent/schema" \
+	  --dev-url "docker://mysql/8/ent"

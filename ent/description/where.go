@@ -408,21 +408,21 @@ func HasVideoWith(preds ...predicate.Video) predicate.Description {
 	})
 }
 
-// HasPeriodicDescriptionTemplate applies the HasEdge predicate on the "periodic_description_template" edge.
-func HasPeriodicDescriptionTemplate() predicate.Description {
+// HasPeriodicTemplate applies the HasEdge predicate on the "periodic_template" edge.
+func HasPeriodicTemplate() predicate.Description {
 	return predicate.Description(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, PeriodicDescriptionTemplateTable, PeriodicDescriptionTemplateColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, PeriodicTemplateTable, PeriodicTemplateColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasPeriodicDescriptionTemplateWith applies the HasEdge predicate on the "periodic_description_template" edge with a given conditions (other predicates).
-func HasPeriodicDescriptionTemplateWith(preds ...predicate.PeriodicDescriptionTemplate) predicate.Description {
+// HasPeriodicTemplateWith applies the HasEdge predicate on the "periodic_template" edge with a given conditions (other predicates).
+func HasPeriodicTemplateWith(preds ...predicate.PeriodicDescriptionTemplate) predicate.Description {
 	return predicate.Description(func(s *sql.Selector) {
-		step := newPeriodicDescriptionTemplateStep()
+		step := newPeriodicTemplateStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -431,21 +431,21 @@ func HasPeriodicDescriptionTemplateWith(preds ...predicate.PeriodicDescriptionTe
 	})
 }
 
-// HasCategoryDescriptionTemplate applies the HasEdge predicate on the "category_description_template" edge.
-func HasCategoryDescriptionTemplate() predicate.Description {
+// HasCategoryTemplate applies the HasEdge predicate on the "category_template" edge.
+func HasCategoryTemplate() predicate.Description {
 	return predicate.Description(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, CategoryDescriptionTemplateTable, CategoryDescriptionTemplateColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, CategoryTemplateTable, CategoryTemplateColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasCategoryDescriptionTemplateWith applies the HasEdge predicate on the "category_description_template" edge with a given conditions (other predicates).
-func HasCategoryDescriptionTemplateWith(preds ...predicate.CategoryDescriptionTemplate) predicate.Description {
+// HasCategoryTemplateWith applies the HasEdge predicate on the "category_template" edge with a given conditions (other predicates).
+func HasCategoryTemplateWith(preds ...predicate.CategoryDescriptionTemplate) predicate.Description {
 	return predicate.Description(func(s *sql.Selector) {
-		step := newCategoryDescriptionTemplateStep()
+		step := newCategoryTemplateStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

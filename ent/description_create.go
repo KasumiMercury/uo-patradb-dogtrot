@@ -111,42 +111,42 @@ func (dc *DescriptionCreate) SetVideo(v *Video) *DescriptionCreate {
 	return dc.SetVideoID(v.ID)
 }
 
-// SetPeriodicDescriptionTemplateID sets the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity by ID.
-func (dc *DescriptionCreate) SetPeriodicDescriptionTemplateID(id string) *DescriptionCreate {
-	dc.mutation.SetPeriodicDescriptionTemplateID(id)
+// SetPeriodicTemplateID sets the "periodic_template" edge to the PeriodicDescriptionTemplate entity by ID.
+func (dc *DescriptionCreate) SetPeriodicTemplateID(id string) *DescriptionCreate {
+	dc.mutation.SetPeriodicTemplateID(id)
 	return dc
 }
 
-// SetNillablePeriodicDescriptionTemplateID sets the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity by ID if the given value is not nil.
-func (dc *DescriptionCreate) SetNillablePeriodicDescriptionTemplateID(id *string) *DescriptionCreate {
+// SetNillablePeriodicTemplateID sets the "periodic_template" edge to the PeriodicDescriptionTemplate entity by ID if the given value is not nil.
+func (dc *DescriptionCreate) SetNillablePeriodicTemplateID(id *string) *DescriptionCreate {
 	if id != nil {
-		dc = dc.SetPeriodicDescriptionTemplateID(*id)
+		dc = dc.SetPeriodicTemplateID(*id)
 	}
 	return dc
 }
 
-// SetPeriodicDescriptionTemplate sets the "periodic_description_template" edge to the PeriodicDescriptionTemplate entity.
-func (dc *DescriptionCreate) SetPeriodicDescriptionTemplate(p *PeriodicDescriptionTemplate) *DescriptionCreate {
-	return dc.SetPeriodicDescriptionTemplateID(p.ID)
+// SetPeriodicTemplate sets the "periodic_template" edge to the PeriodicDescriptionTemplate entity.
+func (dc *DescriptionCreate) SetPeriodicTemplate(p *PeriodicDescriptionTemplate) *DescriptionCreate {
+	return dc.SetPeriodicTemplateID(p.ID)
 }
 
-// SetCategoryDescriptionTemplateID sets the "category_description_template" edge to the CategoryDescriptionTemplate entity by ID.
-func (dc *DescriptionCreate) SetCategoryDescriptionTemplateID(id string) *DescriptionCreate {
-	dc.mutation.SetCategoryDescriptionTemplateID(id)
+// SetCategoryTemplateID sets the "category_template" edge to the CategoryDescriptionTemplate entity by ID.
+func (dc *DescriptionCreate) SetCategoryTemplateID(id string) *DescriptionCreate {
+	dc.mutation.SetCategoryTemplateID(id)
 	return dc
 }
 
-// SetNillableCategoryDescriptionTemplateID sets the "category_description_template" edge to the CategoryDescriptionTemplate entity by ID if the given value is not nil.
-func (dc *DescriptionCreate) SetNillableCategoryDescriptionTemplateID(id *string) *DescriptionCreate {
+// SetNillableCategoryTemplateID sets the "category_template" edge to the CategoryDescriptionTemplate entity by ID if the given value is not nil.
+func (dc *DescriptionCreate) SetNillableCategoryTemplateID(id *string) *DescriptionCreate {
 	if id != nil {
-		dc = dc.SetCategoryDescriptionTemplateID(*id)
+		dc = dc.SetCategoryTemplateID(*id)
 	}
 	return dc
 }
 
-// SetCategoryDescriptionTemplate sets the "category_description_template" edge to the CategoryDescriptionTemplate entity.
-func (dc *DescriptionCreate) SetCategoryDescriptionTemplate(c *CategoryDescriptionTemplate) *DescriptionCreate {
-	return dc.SetCategoryDescriptionTemplateID(c.ID)
+// SetCategoryTemplate sets the "category_template" edge to the CategoryDescriptionTemplate entity.
+func (dc *DescriptionCreate) SetCategoryTemplate(c *CategoryDescriptionTemplate) *DescriptionCreate {
+	return dc.SetCategoryTemplateID(c.ID)
 }
 
 // AddDescriptionChangeIDs adds the "description_changes" edge to the DescriptionChange entity by IDs.
@@ -299,12 +299,12 @@ func (dc *DescriptionCreate) createSpec() (*Description, *sqlgraph.CreateSpec) {
 		_node.video_id = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := dc.mutation.PeriodicDescriptionTemplateIDs(); len(nodes) > 0 {
+	if nodes := dc.mutation.PeriodicTemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   description.PeriodicDescriptionTemplateTable,
-			Columns: []string{description.PeriodicDescriptionTemplateColumn},
+			Table:   description.PeriodicTemplateTable,
+			Columns: []string{description.PeriodicTemplateColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(periodicdescriptiontemplate.FieldID, field.TypeString),
@@ -316,12 +316,12 @@ func (dc *DescriptionCreate) createSpec() (*Description, *sqlgraph.CreateSpec) {
 		_node.periodic_id = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := dc.mutation.CategoryDescriptionTemplateIDs(); len(nodes) > 0 {
+	if nodes := dc.mutation.CategoryTemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   description.CategoryDescriptionTemplateTable,
-			Columns: []string{description.CategoryDescriptionTemplateColumn},
+			Table:   description.CategoryTemplateTable,
+			Columns: []string{description.CategoryTemplateColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(categorydescriptiontemplate.FieldID, field.TypeString),

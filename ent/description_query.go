@@ -22,15 +22,15 @@ import (
 // DescriptionQuery is the builder for querying Description entities.
 type DescriptionQuery struct {
 	config
-	ctx                             *QueryContext
-	order                           []description.OrderOption
-	inters                          []Interceptor
-	predicates                      []predicate.Description
-	withVideo                       *VideoQuery
-	withPeriodicDescriptionTemplate *PeriodicDescriptionTemplateQuery
-	withCategoryDescriptionTemplate *CategoryDescriptionTemplateQuery
-	withDescriptionChanges          *DescriptionChangeQuery
-	withFKs                         bool
+	ctx                    *QueryContext
+	order                  []description.OrderOption
+	inters                 []Interceptor
+	predicates             []predicate.Description
+	withVideo              *VideoQuery
+	withPeriodicTemplate   *PeriodicDescriptionTemplateQuery
+	withCategoryTemplate   *CategoryDescriptionTemplateQuery
+	withDescriptionChanges *DescriptionChangeQuery
+	withFKs                bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -89,8 +89,8 @@ func (dq *DescriptionQuery) QueryVideo() *VideoQuery {
 	return query
 }
 
-// QueryPeriodicDescriptionTemplate chains the current query on the "periodic_description_template" edge.
-func (dq *DescriptionQuery) QueryPeriodicDescriptionTemplate() *PeriodicDescriptionTemplateQuery {
+// QueryPeriodicTemplate chains the current query on the "periodic_template" edge.
+func (dq *DescriptionQuery) QueryPeriodicTemplate() *PeriodicDescriptionTemplateQuery {
 	query := (&PeriodicDescriptionTemplateClient{config: dq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := dq.prepareQuery(ctx); err != nil {
@@ -103,7 +103,7 @@ func (dq *DescriptionQuery) QueryPeriodicDescriptionTemplate() *PeriodicDescript
 		step := sqlgraph.NewStep(
 			sqlgraph.From(description.Table, description.FieldID, selector),
 			sqlgraph.To(periodicdescriptiontemplate.Table, periodicdescriptiontemplate.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, description.PeriodicDescriptionTemplateTable, description.PeriodicDescriptionTemplateColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, description.PeriodicTemplateTable, description.PeriodicTemplateColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
 		return fromU, nil
@@ -111,8 +111,8 @@ func (dq *DescriptionQuery) QueryPeriodicDescriptionTemplate() *PeriodicDescript
 	return query
 }
 
-// QueryCategoryDescriptionTemplate chains the current query on the "category_description_template" edge.
-func (dq *DescriptionQuery) QueryCategoryDescriptionTemplate() *CategoryDescriptionTemplateQuery {
+// QueryCategoryTemplate chains the current query on the "category_template" edge.
+func (dq *DescriptionQuery) QueryCategoryTemplate() *CategoryDescriptionTemplateQuery {
 	query := (&CategoryDescriptionTemplateClient{config: dq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := dq.prepareQuery(ctx); err != nil {
@@ -125,7 +125,7 @@ func (dq *DescriptionQuery) QueryCategoryDescriptionTemplate() *CategoryDescript
 		step := sqlgraph.NewStep(
 			sqlgraph.From(description.Table, description.FieldID, selector),
 			sqlgraph.To(categorydescriptiontemplate.Table, categorydescriptiontemplate.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, description.CategoryDescriptionTemplateTable, description.CategoryDescriptionTemplateColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, description.CategoryTemplateTable, description.CategoryTemplateColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
 		return fromU, nil
@@ -342,15 +342,15 @@ func (dq *DescriptionQuery) Clone() *DescriptionQuery {
 		return nil
 	}
 	return &DescriptionQuery{
-		config:                          dq.config,
-		ctx:                             dq.ctx.Clone(),
-		order:                           append([]description.OrderOption{}, dq.order...),
-		inters:                          append([]Interceptor{}, dq.inters...),
-		predicates:                      append([]predicate.Description{}, dq.predicates...),
-		withVideo:                       dq.withVideo.Clone(),
-		withPeriodicDescriptionTemplate: dq.withPeriodicDescriptionTemplate.Clone(),
-		withCategoryDescriptionTemplate: dq.withCategoryDescriptionTemplate.Clone(),
-		withDescriptionChanges:          dq.withDescriptionChanges.Clone(),
+		config:                 dq.config,
+		ctx:                    dq.ctx.Clone(),
+		order:                  append([]description.OrderOption{}, dq.order...),
+		inters:                 append([]Interceptor{}, dq.inters...),
+		predicates:             append([]predicate.Description{}, dq.predicates...),
+		withVideo:              dq.withVideo.Clone(),
+		withPeriodicTemplate:   dq.withPeriodicTemplate.Clone(),
+		withCategoryTemplate:   dq.withCategoryTemplate.Clone(),
+		withDescriptionChanges: dq.withDescriptionChanges.Clone(),
 		// clone intermediate query.
 		sql:  dq.sql.Clone(),
 		path: dq.path,
@@ -368,25 +368,25 @@ func (dq *DescriptionQuery) WithVideo(opts ...func(*VideoQuery)) *DescriptionQue
 	return dq
 }
 
-// WithPeriodicDescriptionTemplate tells the query-builder to eager-load the nodes that are connected to
-// the "periodic_description_template" edge. The optional arguments are used to configure the query builder of the edge.
-func (dq *DescriptionQuery) WithPeriodicDescriptionTemplate(opts ...func(*PeriodicDescriptionTemplateQuery)) *DescriptionQuery {
+// WithPeriodicTemplate tells the query-builder to eager-load the nodes that are connected to
+// the "periodic_template" edge. The optional arguments are used to configure the query builder of the edge.
+func (dq *DescriptionQuery) WithPeriodicTemplate(opts ...func(*PeriodicDescriptionTemplateQuery)) *DescriptionQuery {
 	query := (&PeriodicDescriptionTemplateClient{config: dq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	dq.withPeriodicDescriptionTemplate = query
+	dq.withPeriodicTemplate = query
 	return dq
 }
 
-// WithCategoryDescriptionTemplate tells the query-builder to eager-load the nodes that are connected to
-// the "category_description_template" edge. The optional arguments are used to configure the query builder of the edge.
-func (dq *DescriptionQuery) WithCategoryDescriptionTemplate(opts ...func(*CategoryDescriptionTemplateQuery)) *DescriptionQuery {
+// WithCategoryTemplate tells the query-builder to eager-load the nodes that are connected to
+// the "category_template" edge. The optional arguments are used to configure the query builder of the edge.
+func (dq *DescriptionQuery) WithCategoryTemplate(opts ...func(*CategoryDescriptionTemplateQuery)) *DescriptionQuery {
 	query := (&CategoryDescriptionTemplateClient{config: dq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	dq.withCategoryDescriptionTemplate = query
+	dq.withCategoryTemplate = query
 	return dq
 }
 
@@ -482,12 +482,12 @@ func (dq *DescriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		_spec       = dq.querySpec()
 		loadedTypes = [4]bool{
 			dq.withVideo != nil,
-			dq.withPeriodicDescriptionTemplate != nil,
-			dq.withCategoryDescriptionTemplate != nil,
+			dq.withPeriodicTemplate != nil,
+			dq.withCategoryTemplate != nil,
 			dq.withDescriptionChanges != nil,
 		}
 	)
-	if dq.withVideo != nil || dq.withPeriodicDescriptionTemplate != nil || dq.withCategoryDescriptionTemplate != nil {
+	if dq.withVideo != nil || dq.withPeriodicTemplate != nil || dq.withCategoryTemplate != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -517,15 +517,15 @@ func (dq *DescriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
-	if query := dq.withPeriodicDescriptionTemplate; query != nil {
-		if err := dq.loadPeriodicDescriptionTemplate(ctx, query, nodes, nil,
-			func(n *Description, e *PeriodicDescriptionTemplate) { n.Edges.PeriodicDescriptionTemplate = e }); err != nil {
+	if query := dq.withPeriodicTemplate; query != nil {
+		if err := dq.loadPeriodicTemplate(ctx, query, nodes, nil,
+			func(n *Description, e *PeriodicDescriptionTemplate) { n.Edges.PeriodicTemplate = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := dq.withCategoryDescriptionTemplate; query != nil {
-		if err := dq.loadCategoryDescriptionTemplate(ctx, query, nodes, nil,
-			func(n *Description, e *CategoryDescriptionTemplate) { n.Edges.CategoryDescriptionTemplate = e }); err != nil {
+	if query := dq.withCategoryTemplate; query != nil {
+		if err := dq.loadCategoryTemplate(ctx, query, nodes, nil,
+			func(n *Description, e *CategoryDescriptionTemplate) { n.Edges.CategoryTemplate = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -573,7 +573,7 @@ func (dq *DescriptionQuery) loadVideo(ctx context.Context, query *VideoQuery, no
 	}
 	return nil
 }
-func (dq *DescriptionQuery) loadPeriodicDescriptionTemplate(ctx context.Context, query *PeriodicDescriptionTemplateQuery, nodes []*Description, init func(*Description), assign func(*Description, *PeriodicDescriptionTemplate)) error {
+func (dq *DescriptionQuery) loadPeriodicTemplate(ctx context.Context, query *PeriodicDescriptionTemplateQuery, nodes []*Description, init func(*Description), assign func(*Description, *PeriodicDescriptionTemplate)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Description)
 	for i := range nodes {
@@ -605,7 +605,7 @@ func (dq *DescriptionQuery) loadPeriodicDescriptionTemplate(ctx context.Context,
 	}
 	return nil
 }
-func (dq *DescriptionQuery) loadCategoryDescriptionTemplate(ctx context.Context, query *CategoryDescriptionTemplateQuery, nodes []*Description, init func(*Description), assign func(*Description, *CategoryDescriptionTemplate)) error {
+func (dq *DescriptionQuery) loadCategoryTemplate(ctx context.Context, query *CategoryDescriptionTemplateQuery, nodes []*Description, init func(*Description), assign func(*Description, *CategoryDescriptionTemplate)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Description)
 	for i := range nodes {

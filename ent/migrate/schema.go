@@ -54,13 +54,13 @@ var (
 		PrimaryKey: []*schema.Column{DescriptionsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "descriptions_periodic_description_templates_periodic_description_template",
+				Symbol:     "descriptions_periodic_description_templates_periodic_template",
 				Columns:    []*schema.Column{DescriptionsColumns[6]},
 				RefColumns: []*schema.Column{PeriodicDescriptionTemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "descriptions_category_description_templates_category_description_template",
+				Symbol:     "descriptions_category_description_templates_category_template",
 				Columns:    []*schema.Column{DescriptionsColumns[7]},
 				RefColumns: []*schema.Column{CategoryDescriptionTemplatesColumns[0]},
 				OnDelete:   schema.SetNull,

@@ -41,6 +41,6 @@ func (PeriodicDescriptionTemplate) Annotations() []schema.Annotation {
 // Edges of the PeriodicDescriptionTemplate.
 func (PeriodicDescriptionTemplate) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("descriptions", Description.Type).Ref("periodic_description_template").Annotations(entproto.Skip()),
+		edge.From("descriptions", Description.Type).Ref("periodic_template").Annotations(entproto.Skip()),
 	}
 }

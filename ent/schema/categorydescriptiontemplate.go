@@ -41,6 +41,6 @@ func (CategoryDescriptionTemplate) Annotations() []schema.Annotation {
 // Edges of the CategoryDescriptionTemplate.
 func (CategoryDescriptionTemplate) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("descriptions", Description.Type).Ref("category_description_template").Annotations(entproto.Skip()),
+		edge.From("descriptions", Description.Type).Ref("category_template").Annotations(entproto.Skip()),
 	}
 }

@@ -45,15 +45,15 @@ func toProtoDescription(e *ent.Description) (*Description, error) {
 	v.UpdatedAt = updated_at
 	variable := wrapperspb.String(e.Variable)
 	v.Variable = variable
-	if edg := e.Edges.CategoryDescriptionTemplate; edg != nil {
+	if edg := e.Edges.CategoryTemplate; edg != nil {
 		id := edg.ID
-		v.CategoryDescriptionTemplate = &CategoryDescriptionTemplate{
+		v.CategoryTemplate = &CategoryDescriptionTemplate{
 			Id: id,
 		}
 	}
-	if edg := e.Edges.PeriodicDescriptionTemplate; edg != nil {
+	if edg := e.Edges.PeriodicTemplate; edg != nil {
 		id := edg.ID
-		v.PeriodicDescriptionTemplate = &PeriodicDescriptionTemplate{
+		v.PeriodicTemplate = &PeriodicDescriptionTemplate{
 			Id: id,
 		}
 	}
@@ -117,10 +117,10 @@ func (svc *DescriptionService) Get(ctx context.Context, req *GetDescriptionReque
 	case GetDescriptionRequest_WITH_EDGE_IDS:
 		get, err = svc.client.Description.Query().
 			Where(description.ID(id)).
-			WithCategoryDescriptionTemplate(func(query *ent.CategoryDescriptionTemplateQuery) {
+			WithCategoryTemplate(func(query *ent.CategoryDescriptionTemplateQuery) {
 				query.Select(categorydescriptiontemplate.FieldID)
 			}).
-			WithPeriodicDescriptionTemplate(func(query *ent.PeriodicDescriptionTemplateQuery) {
+			WithPeriodicTemplate(func(query *ent.PeriodicDescriptionTemplateQuery) {
 				query.Select(periodicdescriptiontemplate.FieldID)
 			}).
 			WithVideo(func(query *ent.VideoQuery) {
@@ -154,13 +154,13 @@ func (svc *DescriptionService) Update(ctx context.Context, req *UpdateDescriptio
 		descriptionVariable := description.GetVariable().GetValue()
 		m.SetVariable(descriptionVariable)
 	}
-	if description.GetCategoryDescriptionTemplate() != nil {
-		descriptionCategoryDescriptionTemplate := description.GetCategoryDescriptionTemplate().GetId()
-		m.SetCategoryDescriptionTemplateID(descriptionCategoryDescriptionTemplate)
+	if description.GetCategoryTemplate() != nil {
+		descriptionCategoryTemplate := description.GetCategoryTemplate().GetId()
+		m.SetCategoryTemplateID(descriptionCategoryTemplate)
 	}
-	if description.GetPeriodicDescriptionTemplate() != nil {
-		descriptionPeriodicDescriptionTemplate := description.GetPeriodicDescriptionTemplate().GetId()
-		m.SetPeriodicDescriptionTemplateID(descriptionPeriodicDescriptionTemplate)
+	if description.GetPeriodicTemplate() != nil {
+		descriptionPeriodicTemplate := description.GetPeriodicTemplate().GetId()
+		m.SetPeriodicTemplateID(descriptionPeriodicTemplate)
 	}
 	if description.GetVideo() != nil {
 		descriptionVideo := description.GetVideo().GetId()
@@ -232,10 +232,10 @@ func (svc *DescriptionService) List(ctx context.Context, req *ListDescriptionReq
 		entList, err = listQuery.All(ctx)
 	case ListDescriptionRequest_WITH_EDGE_IDS:
 		entList, err = listQuery.
-			WithCategoryDescriptionTemplate(func(query *ent.CategoryDescriptionTemplateQuery) {
+			WithCategoryTemplate(func(query *ent.CategoryDescriptionTemplateQuery) {
 				query.Select(categorydescriptiontemplate.FieldID)
 			}).
-			WithPeriodicDescriptionTemplate(func(query *ent.PeriodicDescriptionTemplateQuery) {
+			WithPeriodicTemplate(func(query *ent.PeriodicDescriptionTemplateQuery) {
 				query.Select(periodicdescriptiontemplate.FieldID)
 			}).
 			WithVideo(func(query *ent.VideoQuery) {
@@ -310,13 +310,13 @@ func (svc *DescriptionService) createBuilder(description *Description) (*ent.Des
 		descriptionVariable := description.GetVariable().GetValue()
 		m.SetVariable(descriptionVariable)
 	}
-	if description.GetCategoryDescriptionTemplate() != nil {
-		descriptionCategoryDescriptionTemplate := description.GetCategoryDescriptionTemplate().GetId()
-		m.SetCategoryDescriptionTemplateID(descriptionCategoryDescriptionTemplate)
+	if description.GetCategoryTemplate() != nil {
+		descriptionCategoryTemplate := description.GetCategoryTemplate().GetId()
+		m.SetCategoryTemplateID(descriptionCategoryTemplate)
 	}
-	if description.GetPeriodicDescriptionTemplate() != nil {
-		descriptionPeriodicDescriptionTemplate := description.GetPeriodicDescriptionTemplate().GetId()
-		m.SetPeriodicDescriptionTemplateID(descriptionPeriodicDescriptionTemplate)
+	if description.GetPeriodicTemplate() != nil {
+		descriptionPeriodicTemplate := description.GetPeriodicTemplate().GetId()
+		m.SetPeriodicTemplateID(descriptionPeriodicTemplate)
 	}
 	if description.GetVideo() != nil {
 		descriptionVideo := description.GetVideo().GetId()

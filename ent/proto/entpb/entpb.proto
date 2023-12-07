@@ -158,9 +158,9 @@ message Description {
 
   Video video = 5;
 
-  PeriodicDescriptionTemplate periodic_description_template = 6;
+  PeriodicDescriptionTemplate periodic_template = 6;
 
-  CategoryDescriptionTemplate category_description_template = 7;
+  CategoryDescriptionTemplate category_template = 7;
 }
 
 message CreateDescriptionRequest {

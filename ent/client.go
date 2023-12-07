@@ -703,15 +703,15 @@ func (c *DescriptionClient) QueryVideo(d *Description) *VideoQuery {
 	return query
 }
 
-// QueryPeriodicDescriptionTemplate queries the periodic_description_template edge of a Description.
-func (c *DescriptionClient) QueryPeriodicDescriptionTemplate(d *Description) *PeriodicDescriptionTemplateQuery {
+// QueryPeriodicTemplate queries the periodic_template edge of a Description.
+func (c *DescriptionClient) QueryPeriodicTemplate(d *Description) *PeriodicDescriptionTemplateQuery {
 	query := (&PeriodicDescriptionTemplateClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := d.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(description.Table, description.FieldID, id),
 			sqlgraph.To(periodicdescriptiontemplate.Table, periodicdescriptiontemplate.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, description.PeriodicDescriptionTemplateTable, description.PeriodicDescriptionTemplateColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, description.PeriodicTemplateTable, description.PeriodicTemplateColumn),
 		)
 		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
 		return fromV, nil
@@ -719,15 +719,15 @@ func (c *DescriptionClient) QueryPeriodicDescriptionTemplate(d *Description) *Pe
 	return query
 }
 
-// QueryCategoryDescriptionTemplate queries the category_description_template edge of a Description.
-func (c *DescriptionClient) QueryCategoryDescriptionTemplate(d *Description) *CategoryDescriptionTemplateQuery {
+// QueryCategoryTemplate queries the category_template edge of a Description.
+func (c *DescriptionClient) QueryCategoryTemplate(d *Description) *CategoryDescriptionTemplateQuery {
 	query := (&CategoryDescriptionTemplateClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := d.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(description.Table, description.FieldID, id),
 			sqlgraph.To(categorydescriptiontemplate.Table, categorydescriptiontemplate.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, description.CategoryDescriptionTemplateTable, description.CategoryDescriptionTemplateColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, description.CategoryTemplateTable, description.CategoryTemplateColumn),
 		)
 		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
 		return fromV, nil

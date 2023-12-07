@@ -35,6 +35,14 @@ atlas-custom:
 integration:
 	cd ent/migrate/migrations/ &&
 	bash integrate_migration.sh
+atlas-push:
+	atlas migrate push $(ARG) \
+	  --dir "file://ent/migrate/migrations/integrate" \
+	  --dev-url "docker://mysql/8/dev"
+atlas-lint:
+	atlas migrate lint \
+	  --dir "file://ent/migrate/migrations/integrate" \
+	  --dev-url "docker://mysql/8/dev"
 
 generate-sql:
 	go run -mod=mod ./cmd/migration/main.go $(ARG)

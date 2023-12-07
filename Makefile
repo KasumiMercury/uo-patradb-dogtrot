@@ -26,8 +26,14 @@ atlas-inspect:
 	atlas schema inspect -u "ent://ent/schema" --dev-url "sqlite://file?mode=memory&_fk=1" -w
 atlas-diff:
 	atlas migrate diff $(ARG) \
-	  --dir "file://ent/migrate/migrations" \
+	  --dir "file://ent/migrate/migrations/ent" \
 	  --to "ent://ent/schema" \
 	  --dev-url "docker://mysql/8/ent"
+atlas-custom:
+	atlas migrate new $(ARG) \
+	  --dir "file://ent/migrate/migrations/custom"
+integration:
+	bash ./ent/migrate/migarations/integrate-migration.sh
+
 generate-sql:
 	go run -mod=mod ./cmd/migration/main.go $(ARG)

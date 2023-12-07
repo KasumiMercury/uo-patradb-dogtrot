@@ -28,7 +28,7 @@ func main() {
 
 	ctx := context.Background()
 
-	dir, err := atlas.NewLocalDir("ent/migrate/migrations")
+	dir, err := atlas.NewLocalDir("ent/migrate/migrations/ent")
 	if err != nil {
 		log.Fatalf("failed to create migrations directory: %v", err)
 	}

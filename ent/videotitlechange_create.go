@@ -122,6 +122,11 @@ func (vtcc *VideoTitleChangeCreate) check() error {
 	if _, ok := vtcc.mutation.Title(); !ok {
 		return &ValidationError{Name: "title", err: errors.New(`ent: missing required field "VideoTitleChange.title"`)}
 	}
+	if v, ok := vtcc.mutation.Title(); ok {
+		if err := videotitlechange.TitleValidator(v); err != nil {
+			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "VideoTitleChange.title": %w`, err)}
+		}
+	}
 	if _, ok := vtcc.mutation.NormalizedTitle(); !ok {
 		return &ValidationError{Name: "normalized_title", err: errors.New(`ent: missing required field "VideoTitleChange.normalized_title"`)}
 	}

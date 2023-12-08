@@ -121,6 +121,16 @@ func (vdru *VideoDisallowRangeUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (vdru *VideoDisallowRangeUpdate) check() error {
+	if v, ok := vdru.mutation.StartSeconds(); ok {
+		if err := videodisallowrange.StartSecondsValidator(v); err != nil {
+			return &ValidationError{Name: "start_seconds", err: fmt.Errorf(`ent: validator failed for field "VideoDisallowRange.start_seconds": %w`, err)}
+		}
+	}
+	if v, ok := vdru.mutation.EndSeconds(); ok {
+		if err := videodisallowrange.EndSecondsValidator(v); err != nil {
+			return &ValidationError{Name: "end_seconds", err: fmt.Errorf(`ent: validator failed for field "VideoDisallowRange.end_seconds": %w`, err)}
+		}
+	}
 	if _, ok := vdru.mutation.VideoID(); vdru.mutation.VideoCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "VideoDisallowRange.video"`)
 	}
@@ -306,6 +316,16 @@ func (vdruo *VideoDisallowRangeUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (vdruo *VideoDisallowRangeUpdateOne) check() error {
+	if v, ok := vdruo.mutation.StartSeconds(); ok {
+		if err := videodisallowrange.StartSecondsValidator(v); err != nil {
+			return &ValidationError{Name: "start_seconds", err: fmt.Errorf(`ent: validator failed for field "VideoDisallowRange.start_seconds": %w`, err)}
+		}
+	}
+	if v, ok := vdruo.mutation.EndSeconds(); ok {
+		if err := videodisallowrange.EndSecondsValidator(v); err != nil {
+			return &ValidationError{Name: "end_seconds", err: fmt.Errorf(`ent: validator failed for field "VideoDisallowRange.end_seconds": %w`, err)}
+		}
+	}
 	if _, ok := vdruo.mutation.VideoID(); vdruo.mutation.VideoCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "VideoDisallowRange.video"`)
 	}

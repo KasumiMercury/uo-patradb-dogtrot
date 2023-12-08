@@ -144,6 +144,11 @@ func (dcc *DescriptionChangeCreate) check() error {
 	if _, ok := dcc.mutation.Raw(); !ok {
 		return &ValidationError{Name: "raw", err: errors.New(`ent: missing required field "DescriptionChange.raw"`)}
 	}
+	if v, ok := dcc.mutation.Raw(); ok {
+		if err := descriptionchange.RawValidator(v); err != nil {
+			return &ValidationError{Name: "raw", err: fmt.Errorf(`ent: validator failed for field "DescriptionChange.raw": %w`, err)}
+		}
+	}
 	if _, ok := dcc.mutation.ChangedAt(); !ok {
 		return &ValidationError{Name: "changed_at", err: errors.New(`ent: missing required field "DescriptionChange.changed_at"`)}
 	}

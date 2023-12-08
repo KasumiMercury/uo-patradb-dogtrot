@@ -218,6 +218,11 @@ func (dc *DescriptionCreate) check() error {
 	if _, ok := dc.mutation.Raw(); !ok {
 		return &ValidationError{Name: "raw", err: errors.New(`ent: missing required field "Description.raw"`)}
 	}
+	if v, ok := dc.mutation.Raw(); ok {
+		if err := description.RawValidator(v); err != nil {
+			return &ValidationError{Name: "raw", err: fmt.Errorf(`ent: validator failed for field "Description.raw": %w`, err)}
+		}
+	}
 	if _, ok := dc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Description.created_at"`)}
 	}

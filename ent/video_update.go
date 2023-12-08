@@ -479,7 +479,30 @@ func (vu *VideoUpdate) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (vu *VideoUpdate) check() error {
+	if v, ok := vu.mutation.VideoID(); ok {
+		if err := video.VideoIDValidator(v); err != nil {
+			return &ValidationError{Name: "video_id", err: fmt.Errorf(`ent: validator failed for field "Video.video_id": %w`, err)}
+		}
+	}
+	if v, ok := vu.mutation.Title(); ok {
+		if err := video.TitleValidator(v); err != nil {
+			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "Video.title": %w`, err)}
+		}
+	}
+	if v, ok := vu.mutation.DurationSeconds(); ok {
+		if err := video.DurationSecondsValidator(v); err != nil {
+			return &ValidationError{Name: "duration_seconds", err: fmt.Errorf(`ent: validator failed for field "Video.duration_seconds": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := vu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(video.Table, video.Columns, sqlgraph.NewFieldSpec(video.FieldID, field.TypeString))
 	if ps := vu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -1271,7 +1294,30 @@ func (vuo *VideoUpdateOne) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (vuo *VideoUpdateOne) check() error {
+	if v, ok := vuo.mutation.VideoID(); ok {
+		if err := video.VideoIDValidator(v); err != nil {
+			return &ValidationError{Name: "video_id", err: fmt.Errorf(`ent: validator failed for field "Video.video_id": %w`, err)}
+		}
+	}
+	if v, ok := vuo.mutation.Title(); ok {
+		if err := video.TitleValidator(v); err != nil {
+			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "Video.title": %w`, err)}
+		}
+	}
+	if v, ok := vuo.mutation.DurationSeconds(); ok {
+		if err := video.DurationSecondsValidator(v); err != nil {
+			return &ValidationError{Name: "duration_seconds", err: fmt.Errorf(`ent: validator failed for field "Video.duration_seconds": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error) {
+	if err := vuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(video.Table, video.Columns, sqlgraph.NewFieldSpec(video.FieldID, field.TypeString))
 	id, ok := vuo.mutation.ID()
 	if !ok {

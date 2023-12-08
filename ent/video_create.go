@@ -56,6 +56,14 @@ func (vc *VideoCreate) SetIsCollaboration(b bool) *VideoCreate {
 	return vc
 }
 
+// SetNillableIsCollaboration sets the "is_collaboration" field if the given value is not nil.
+func (vc *VideoCreate) SetNillableIsCollaboration(b *bool) *VideoCreate {
+	if b != nil {
+		vc.SetIsCollaboration(*b)
+	}
+	return vc
+}
+
 // SetStatus sets the "status" field.
 func (vc *VideoCreate) SetStatus(s string) *VideoCreate {
 	vc.mutation.SetStatus(s)
@@ -295,6 +303,10 @@ func (vc *VideoCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (vc *VideoCreate) defaults() {
+	if _, ok := vc.mutation.IsCollaboration(); !ok {
+		v := video.DefaultIsCollaboration
+		vc.mutation.SetIsCollaboration(v)
+	}
 	if _, ok := vc.mutation.HasTimeRange(); !ok {
 		v := video.DefaultHasTimeRange
 		vc.mutation.SetHasTimeRange(v)
@@ -318,14 +330,29 @@ func (vc *VideoCreate) check() error {
 	if _, ok := vc.mutation.VideoID(); !ok {
 		return &ValidationError{Name: "video_id", err: errors.New(`ent: missing required field "Video.video_id"`)}
 	}
+	if v, ok := vc.mutation.VideoID(); ok {
+		if err := video.VideoIDValidator(v); err != nil {
+			return &ValidationError{Name: "video_id", err: fmt.Errorf(`ent: validator failed for field "Video.video_id": %w`, err)}
+		}
+	}
 	if _, ok := vc.mutation.Title(); !ok {
 		return &ValidationError{Name: "title", err: errors.New(`ent: missing required field "Video.title"`)}
+	}
+	if v, ok := vc.mutation.Title(); ok {
+		if err := video.TitleValidator(v); err != nil {
+			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "Video.title": %w`, err)}
+		}
 	}
 	if _, ok := vc.mutation.NormalizedTitle(); !ok {
 		return &ValidationError{Name: "normalized_title", err: errors.New(`ent: missing required field "Video.normalized_title"`)}
 	}
 	if _, ok := vc.mutation.DurationSeconds(); !ok {
 		return &ValidationError{Name: "duration_seconds", err: errors.New(`ent: missing required field "Video.duration_seconds"`)}
+	}
+	if v, ok := vc.mutation.DurationSeconds(); ok {
+		if err := video.DurationSecondsValidator(v); err != nil {
+			return &ValidationError{Name: "duration_seconds", err: fmt.Errorf(`ent: validator failed for field "Video.duration_seconds": %w`, err)}
+		}
 	}
 	if _, ok := vc.mutation.IsCollaboration(); !ok {
 		return &ValidationError{Name: "is_collaboration", err: errors.New(`ent: missing required field "Video.is_collaboration"`)}

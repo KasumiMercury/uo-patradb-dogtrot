@@ -60,6 +60,10 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultStartSeconds holds the default value on creation for the "start_seconds" field.
 	DefaultStartSeconds int
+	// StartSecondsValidator is a validator for the "start_seconds" field. It is called by the builders before save.
+	StartSecondsValidator func(int) error
+	// EndSecondsValidator is a validator for the "end_seconds" field. It is called by the builders before save.
+	EndSecondsValidator func(int) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.

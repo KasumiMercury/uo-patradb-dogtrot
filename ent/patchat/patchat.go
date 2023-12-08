@@ -72,6 +72,12 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// MessageValidator is a validator for the "message" field. It is called by the builders before save.
+	MessageValidator func(string) error
+	// MagnitudeValidator is a validator for the "magnitude" field. It is called by the builders before save.
+	MagnitudeValidator func(float64) error
+	// ScoreValidator is a validator for the "score" field. It is called by the builders before save.
+	ScoreValidator func(float64) error
 	// DefaultIsNegative holds the default value on creation for the "is_negative" field.
 	DefaultIsNegative bool
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.

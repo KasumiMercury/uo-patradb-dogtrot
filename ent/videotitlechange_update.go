@@ -122,6 +122,11 @@ func (vtcu *VideoTitleChangeUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (vtcu *VideoTitleChangeUpdate) check() error {
+	if v, ok := vtcu.mutation.Title(); ok {
+		if err := videotitlechange.TitleValidator(v); err != nil {
+			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "VideoTitleChange.title": %w`, err)}
+		}
+	}
 	if _, ok := vtcu.mutation.VideoID(); vtcu.mutation.VideoCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "VideoTitleChange.video"`)
 	}
@@ -304,6 +309,11 @@ func (vtcuo *VideoTitleChangeUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (vtcuo *VideoTitleChangeUpdateOne) check() error {
+	if v, ok := vtcuo.mutation.Title(); ok {
+		if err := videotitlechange.TitleValidator(v); err != nil {
+			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "VideoTitleChange.title": %w`, err)}
+		}
+	}
 	if _, ok := vtcuo.mutation.VideoID(); vtcuo.mutation.VideoCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "VideoTitleChange.video"`)
 	}

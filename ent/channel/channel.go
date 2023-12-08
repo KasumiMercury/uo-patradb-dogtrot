@@ -57,6 +57,14 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
+	DisplayNameValidator func(string) error
+	// ChannelIDValidator is a validator for the "channel_id" field. It is called by the builders before save.
+	ChannelIDValidator func(string) error
+	// HandleValidator is a validator for the "handle" field. It is called by the builders before save.
+	HandleValidator func(string) error
+	// ThumbnailURLValidator is a validator for the "thumbnail_url" field. It is called by the builders before save.
+	ThumbnailURLValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.

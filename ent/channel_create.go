@@ -119,14 +119,34 @@ func (cc *ChannelCreate) check() error {
 	if _, ok := cc.mutation.DisplayName(); !ok {
 		return &ValidationError{Name: "display_name", err: errors.New(`ent: missing required field "Channel.display_name"`)}
 	}
+	if v, ok := cc.mutation.DisplayName(); ok {
+		if err := channel.DisplayNameValidator(v); err != nil {
+			return &ValidationError{Name: "display_name", err: fmt.Errorf(`ent: validator failed for field "Channel.display_name": %w`, err)}
+		}
+	}
 	if _, ok := cc.mutation.ChannelID(); !ok {
 		return &ValidationError{Name: "channel_id", err: errors.New(`ent: missing required field "Channel.channel_id"`)}
+	}
+	if v, ok := cc.mutation.ChannelID(); ok {
+		if err := channel.ChannelIDValidator(v); err != nil {
+			return &ValidationError{Name: "channel_id", err: fmt.Errorf(`ent: validator failed for field "Channel.channel_id": %w`, err)}
+		}
 	}
 	if _, ok := cc.mutation.Handle(); !ok {
 		return &ValidationError{Name: "handle", err: errors.New(`ent: missing required field "Channel.handle"`)}
 	}
+	if v, ok := cc.mutation.Handle(); ok {
+		if err := channel.HandleValidator(v); err != nil {
+			return &ValidationError{Name: "handle", err: fmt.Errorf(`ent: validator failed for field "Channel.handle": %w`, err)}
+		}
+	}
 	if _, ok := cc.mutation.ThumbnailURL(); !ok {
 		return &ValidationError{Name: "thumbnail_url", err: errors.New(`ent: missing required field "Channel.thumbnail_url"`)}
+	}
+	if v, ok := cc.mutation.ThumbnailURL(); ok {
+		if err := channel.ThumbnailURLValidator(v); err != nil {
+			return &ValidationError{Name: "thumbnail_url", err: fmt.Errorf(`ent: validator failed for field "Channel.thumbnail_url": %w`, err)}
+		}
 	}
 	if v, ok := cc.mutation.ID(); ok {
 		if err := channel.IDValidator(v); err != nil {

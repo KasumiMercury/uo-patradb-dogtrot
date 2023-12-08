@@ -178,6 +178,21 @@ func (pcu *PatChatUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (pcu *PatChatUpdate) check() error {
+	if v, ok := pcu.mutation.Message(); ok {
+		if err := patchat.MessageValidator(v); err != nil {
+			return &ValidationError{Name: "message", err: fmt.Errorf(`ent: validator failed for field "PatChat.message": %w`, err)}
+		}
+	}
+	if v, ok := pcu.mutation.Magnitude(); ok {
+		if err := patchat.MagnitudeValidator(v); err != nil {
+			return &ValidationError{Name: "magnitude", err: fmt.Errorf(`ent: validator failed for field "PatChat.magnitude": %w`, err)}
+		}
+	}
+	if v, ok := pcu.mutation.Score(); ok {
+		if err := patchat.ScoreValidator(v); err != nil {
+			return &ValidationError{Name: "score", err: fmt.Errorf(`ent: validator failed for field "PatChat.score": %w`, err)}
+		}
+	}
 	if _, ok := pcu.mutation.VideoID(); pcu.mutation.VideoCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "PatChat.video"`)
 	}
@@ -431,6 +446,21 @@ func (pcuo *PatChatUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (pcuo *PatChatUpdateOne) check() error {
+	if v, ok := pcuo.mutation.Message(); ok {
+		if err := patchat.MessageValidator(v); err != nil {
+			return &ValidationError{Name: "message", err: fmt.Errorf(`ent: validator failed for field "PatChat.message": %w`, err)}
+		}
+	}
+	if v, ok := pcuo.mutation.Magnitude(); ok {
+		if err := patchat.MagnitudeValidator(v); err != nil {
+			return &ValidationError{Name: "magnitude", err: fmt.Errorf(`ent: validator failed for field "PatChat.magnitude": %w`, err)}
+		}
+	}
+	if v, ok := pcuo.mutation.Score(); ok {
+		if err := patchat.ScoreValidator(v); err != nil {
+			return &ValidationError{Name: "score", err: fmt.Errorf(`ent: validator failed for field "PatChat.score": %w`, err)}
+		}
+	}
 	if _, ok := pcuo.mutation.VideoID(); pcuo.mutation.VideoCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "PatChat.video"`)
 	}

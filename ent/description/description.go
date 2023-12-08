@@ -98,6 +98,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// RawValidator is a validator for the "raw" field. It is called by the builders before save.
+	RawValidator func(string) error
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.

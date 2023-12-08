@@ -131,6 +131,14 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// VideoIDValidator is a validator for the "video_id" field. It is called by the builders before save.
+	VideoIDValidator func(string) error
+	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	TitleValidator func(string) error
+	// DurationSecondsValidator is a validator for the "duration_seconds" field. It is called by the builders before save.
+	DurationSecondsValidator func(int) error
+	// DefaultIsCollaboration holds the default value on creation for the "is_collaboration" field.
+	DefaultIsCollaboration bool
 	// DefaultHasTimeRange holds the default value on creation for the "has_time_range" field.
 	DefaultHasTimeRange bool
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.

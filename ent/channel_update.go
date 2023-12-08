@@ -152,7 +152,35 @@ func (cu *ChannelUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (cu *ChannelUpdate) check() error {
+	if v, ok := cu.mutation.DisplayName(); ok {
+		if err := channel.DisplayNameValidator(v); err != nil {
+			return &ValidationError{Name: "display_name", err: fmt.Errorf(`ent: validator failed for field "Channel.display_name": %w`, err)}
+		}
+	}
+	if v, ok := cu.mutation.ChannelID(); ok {
+		if err := channel.ChannelIDValidator(v); err != nil {
+			return &ValidationError{Name: "channel_id", err: fmt.Errorf(`ent: validator failed for field "Channel.channel_id": %w`, err)}
+		}
+	}
+	if v, ok := cu.mutation.Handle(); ok {
+		if err := channel.HandleValidator(v); err != nil {
+			return &ValidationError{Name: "handle", err: fmt.Errorf(`ent: validator failed for field "Channel.handle": %w`, err)}
+		}
+	}
+	if v, ok := cu.mutation.ThumbnailURL(); ok {
+		if err := channel.ThumbnailURLValidator(v); err != nil {
+			return &ValidationError{Name: "thumbnail_url", err: fmt.Errorf(`ent: validator failed for field "Channel.thumbnail_url": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (cu *ChannelUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := cu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(channel.Table, channel.Columns, sqlgraph.NewFieldSpec(channel.FieldID, field.TypeString))
 	if ps := cu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -375,7 +403,35 @@ func (cuo *ChannelUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (cuo *ChannelUpdateOne) check() error {
+	if v, ok := cuo.mutation.DisplayName(); ok {
+		if err := channel.DisplayNameValidator(v); err != nil {
+			return &ValidationError{Name: "display_name", err: fmt.Errorf(`ent: validator failed for field "Channel.display_name": %w`, err)}
+		}
+	}
+	if v, ok := cuo.mutation.ChannelID(); ok {
+		if err := channel.ChannelIDValidator(v); err != nil {
+			return &ValidationError{Name: "channel_id", err: fmt.Errorf(`ent: validator failed for field "Channel.channel_id": %w`, err)}
+		}
+	}
+	if v, ok := cuo.mutation.Handle(); ok {
+		if err := channel.HandleValidator(v); err != nil {
+			return &ValidationError{Name: "handle", err: fmt.Errorf(`ent: validator failed for field "Channel.handle": %w`, err)}
+		}
+	}
+	if v, ok := cuo.mutation.ThumbnailURL(); ok {
+		if err := channel.ThumbnailURLValidator(v); err != nil {
+			return &ValidationError{Name: "thumbnail_url", err: fmt.Errorf(`ent: validator failed for field "Channel.thumbnail_url": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (cuo *ChannelUpdateOne) sqlSave(ctx context.Context) (_node *Channel, err error) {
+	if err := cuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(channel.Table, channel.Columns, sqlgraph.NewFieldSpec(channel.FieldID, field.TypeString))
 	id, ok := cuo.mutation.ID()
 	if !ok {

@@ -151,7 +151,20 @@ func (pdtu *PeriodicDescriptionTemplateUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (pdtu *PeriodicDescriptionTemplateUpdate) check() error {
+	if v, ok := pdtu.mutation.Text(); ok {
+		if err := periodicdescriptiontemplate.TextValidator(v); err != nil {
+			return &ValidationError{Name: "text", err: fmt.Errorf(`ent: validator failed for field "PeriodicDescriptionTemplate.text": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (pdtu *PeriodicDescriptionTemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := pdtu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(periodicdescriptiontemplate.Table, periodicdescriptiontemplate.Columns, sqlgraph.NewFieldSpec(periodicdescriptiontemplate.FieldID, field.TypeString))
 	if ps := pdtu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -375,7 +388,20 @@ func (pdtuo *PeriodicDescriptionTemplateUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (pdtuo *PeriodicDescriptionTemplateUpdateOne) check() error {
+	if v, ok := pdtuo.mutation.Text(); ok {
+		if err := periodicdescriptiontemplate.TextValidator(v); err != nil {
+			return &ValidationError{Name: "text", err: fmt.Errorf(`ent: validator failed for field "PeriodicDescriptionTemplate.text": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (pdtuo *PeriodicDescriptionTemplateUpdateOne) sqlSave(ctx context.Context) (_node *PeriodicDescriptionTemplate, err error) {
+	if err := pdtuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(periodicdescriptiontemplate.Table, periodicdescriptiontemplate.Columns, sqlgraph.NewFieldSpec(periodicdescriptiontemplate.FieldID, field.TypeString))
 	id, ok := pdtuo.mutation.ID()
 	if !ok {

@@ -24,10 +24,10 @@ var (
 	// ChannelsColumns holds the columns for the "channels" table.
 	ChannelsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
-		{Name: "display_name", Type: field.TypeString},
-		{Name: "channel_id", Type: field.TypeString, Unique: true},
-		{Name: "handle", Type: field.TypeString},
-		{Name: "thumbnail_url", Type: field.TypeString},
+		{Name: "display_name", Type: field.TypeString, Size: 100},
+		{Name: "channel_id", Type: field.TypeString, Unique: true, Size: 26},
+		{Name: "handle", Type: field.TypeString, Size: 30},
+		{Name: "thumbnail_url", Type: field.TypeString, Size: 140},
 	}
 	// ChannelsTable holds the schema information for the "channels" table.
 	ChannelsTable = &schema.Table{
@@ -38,7 +38,7 @@ var (
 	// DescriptionsColumns holds the columns for the "descriptions" table.
 	DescriptionsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
-		{Name: "raw", Type: field.TypeString},
+		{Name: "raw", Type: field.TypeString, Size: 1000},
 		{Name: "variable", Type: field.TypeString, Nullable: true},
 		{Name: "normalized_variable", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime},
@@ -76,7 +76,7 @@ var (
 	// DescriptionChangesColumns holds the columns for the "description_changes" table.
 	DescriptionChangesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
-		{Name: "raw", Type: field.TypeString},
+		{Name: "raw", Type: field.TypeString, Size: 1000},
 		{Name: "variable", Type: field.TypeString, Nullable: true},
 		{Name: "normalized_variable", Type: field.TypeString, Nullable: true},
 		{Name: "changed_at", Type: field.TypeTime},
@@ -99,7 +99,7 @@ var (
 	// PatChatsColumns holds the columns for the "pat_chats" table.
 	PatChatsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
-		{Name: "message", Type: field.TypeString},
+		{Name: "message", Type: field.TypeString, Size: 200},
 		{Name: "magnitude", Type: field.TypeFloat64},
 		{Name: "score", Type: field.TypeFloat64},
 		{Name: "is_negative", Type: field.TypeBool, Default: false},
@@ -124,7 +124,7 @@ var (
 	// PeriodicDescriptionTemplatesColumns holds the columns for the "periodic_description_templates" table.
 	PeriodicDescriptionTemplatesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
-		{Name: "text", Type: field.TypeString},
+		{Name: "text", Type: field.TypeString, Size: 1000},
 		{Name: "start_use_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_use_at", Type: field.TypeTime, Nullable: true},
 	}
@@ -137,11 +137,11 @@ var (
 	// VideosColumns holds the columns for the "videos" table.
 	VideosColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
-		{Name: "video_id", Type: field.TypeString, Unique: true},
-		{Name: "title", Type: field.TypeString},
+		{Name: "video_id", Type: field.TypeString, Unique: true, Size: 12},
+		{Name: "title", Type: field.TypeString, Size: 100},
 		{Name: "normalized_title", Type: field.TypeString},
 		{Name: "duration_seconds", Type: field.TypeInt},
-		{Name: "is_collaboration", Type: field.TypeBool},
+		{Name: "is_collaboration", Type: field.TypeBool, Default: false},
 		{Name: "status", Type: field.TypeString},
 		{Name: "chat_id", Type: field.TypeString, Nullable: true},
 		{Name: "has_time_range", Type: field.TypeBool, Default: false},
@@ -202,7 +202,7 @@ var (
 	// VideoTitleChangesColumns holds the columns for the "video_title_changes" table.
 	VideoTitleChangesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
-		{Name: "title", Type: field.TypeString},
+		{Name: "title", Type: field.TypeString, Size: 100},
 		{Name: "normalized_title", Type: field.TypeString},
 		{Name: "changed_at", Type: field.TypeTime},
 		{Name: "video_id", Type: field.TypeString, Size: 26},

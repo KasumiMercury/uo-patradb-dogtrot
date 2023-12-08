@@ -38,6 +38,36 @@ func init() {
 	_ = channelMixinFields0
 	channelFields := schema.Channel{}.Fields()
 	_ = channelFields
+	// channelDescDisplayName is the schema descriptor for display_name field.
+	channelDescDisplayName := channelFields[0].Descriptor()
+	// channel.DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
+	channel.DisplayNameValidator = channelDescDisplayName.Validators[0].(func(string) error)
+	// channelDescChannelID is the schema descriptor for channel_id field.
+	channelDescChannelID := channelFields[1].Descriptor()
+	// channel.ChannelIDValidator is a validator for the "channel_id" field. It is called by the builders before save.
+	channel.ChannelIDValidator = channelDescChannelID.Validators[0].(func(string) error)
+	// channelDescHandle is the schema descriptor for handle field.
+	channelDescHandle := channelFields[2].Descriptor()
+	// channel.HandleValidator is a validator for the "handle" field. It is called by the builders before save.
+	channel.HandleValidator = channelDescHandle.Validators[0].(func(string) error)
+	// channelDescThumbnailURL is the schema descriptor for thumbnail_url field.
+	channelDescThumbnailURL := channelFields[3].Descriptor()
+	// channel.ThumbnailURLValidator is a validator for the "thumbnail_url" field. It is called by the builders before save.
+	channel.ThumbnailURLValidator = func() func(string) error {
+		validators := channelDescThumbnailURL.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(thumbnail_url string) error {
+			for _, fn := range fns {
+				if err := fn(thumbnail_url); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	// channelDescID is the schema descriptor for id field.
 	channelDescID := channelMixinFields0[0].Descriptor()
 	// channel.DefaultID holds the default value on creation for the id field.
@@ -49,6 +79,10 @@ func init() {
 	_ = descriptionMixinFields0
 	descriptionFields := schema.Description{}.Fields()
 	_ = descriptionFields
+	// descriptionDescRaw is the schema descriptor for raw field.
+	descriptionDescRaw := descriptionFields[0].Descriptor()
+	// description.RawValidator is a validator for the "raw" field. It is called by the builders before save.
+	description.RawValidator = descriptionDescRaw.Validators[0].(func(string) error)
 	// descriptionDescCreatedAt is the schema descriptor for created_at field.
 	descriptionDescCreatedAt := descriptionFields[3].Descriptor()
 	// description.DefaultCreatedAt holds the default value on creation for the created_at field.
@@ -70,6 +104,10 @@ func init() {
 	_ = descriptionchangeMixinFields0
 	descriptionchangeFields := schema.DescriptionChange{}.Fields()
 	_ = descriptionchangeFields
+	// descriptionchangeDescRaw is the schema descriptor for raw field.
+	descriptionchangeDescRaw := descriptionchangeFields[0].Descriptor()
+	// descriptionchange.RawValidator is a validator for the "raw" field. It is called by the builders before save.
+	descriptionchange.RawValidator = descriptionchangeDescRaw.Validators[0].(func(string) error)
 	// descriptionchangeDescChangedAt is the schema descriptor for changed_at field.
 	descriptionchangeDescChangedAt := descriptionchangeFields[3].Descriptor()
 	// descriptionchange.DefaultChangedAt holds the default value on creation for the changed_at field.
@@ -85,6 +123,18 @@ func init() {
 	_ = patchatMixinFields0
 	patchatFields := schema.PatChat{}.Fields()
 	_ = patchatFields
+	// patchatDescMessage is the schema descriptor for message field.
+	patchatDescMessage := patchatFields[0].Descriptor()
+	// patchat.MessageValidator is a validator for the "message" field. It is called by the builders before save.
+	patchat.MessageValidator = patchatDescMessage.Validators[0].(func(string) error)
+	// patchatDescMagnitude is the schema descriptor for magnitude field.
+	patchatDescMagnitude := patchatFields[1].Descriptor()
+	// patchat.MagnitudeValidator is a validator for the "magnitude" field. It is called by the builders before save.
+	patchat.MagnitudeValidator = patchatDescMagnitude.Validators[0].(func(float64) error)
+	// patchatDescScore is the schema descriptor for score field.
+	patchatDescScore := patchatFields[2].Descriptor()
+	// patchat.ScoreValidator is a validator for the "score" field. It is called by the builders before save.
+	patchat.ScoreValidator = patchatDescScore.Validators[0].(func(float64) error)
 	// patchatDescIsNegative is the schema descriptor for is_negative field.
 	patchatDescIsNegative := patchatFields[3].Descriptor()
 	// patchat.DefaultIsNegative holds the default value on creation for the is_negative field.
@@ -104,6 +154,10 @@ func init() {
 	_ = periodicdescriptiontemplateMixinFields0
 	periodicdescriptiontemplateFields := schema.PeriodicDescriptionTemplate{}.Fields()
 	_ = periodicdescriptiontemplateFields
+	// periodicdescriptiontemplateDescText is the schema descriptor for text field.
+	periodicdescriptiontemplateDescText := periodicdescriptiontemplateFields[0].Descriptor()
+	// periodicdescriptiontemplate.TextValidator is a validator for the "text" field. It is called by the builders before save.
+	periodicdescriptiontemplate.TextValidator = periodicdescriptiontemplateDescText.Validators[0].(func(string) error)
 	// periodicdescriptiontemplateDescID is the schema descriptor for id field.
 	periodicdescriptiontemplateDescID := periodicdescriptiontemplateMixinFields0[0].Descriptor()
 	// periodicdescriptiontemplate.DefaultID holds the default value on creation for the id field.
@@ -115,6 +169,36 @@ func init() {
 	_ = videoMixinFields0
 	videoFields := schema.Video{}.Fields()
 	_ = videoFields
+	// videoDescVideoID is the schema descriptor for video_id field.
+	videoDescVideoID := videoFields[0].Descriptor()
+	// video.VideoIDValidator is a validator for the "video_id" field. It is called by the builders before save.
+	video.VideoIDValidator = videoDescVideoID.Validators[0].(func(string) error)
+	// videoDescTitle is the schema descriptor for title field.
+	videoDescTitle := videoFields[1].Descriptor()
+	// video.TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	video.TitleValidator = videoDescTitle.Validators[0].(func(string) error)
+	// videoDescDurationSeconds is the schema descriptor for duration_seconds field.
+	videoDescDurationSeconds := videoFields[3].Descriptor()
+	// video.DurationSecondsValidator is a validator for the "duration_seconds" field. It is called by the builders before save.
+	video.DurationSecondsValidator = func() func(int) error {
+		validators := videoDescDurationSeconds.Validators
+		fns := [...]func(int) error{
+			validators[0].(func(int) error),
+			validators[1].(func(int) error),
+		}
+		return func(duration_seconds int) error {
+			for _, fn := range fns {
+				if err := fn(duration_seconds); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// videoDescIsCollaboration is the schema descriptor for is_collaboration field.
+	videoDescIsCollaboration := videoFields[4].Descriptor()
+	// video.DefaultIsCollaboration holds the default value on creation for the is_collaboration field.
+	video.DefaultIsCollaboration = videoDescIsCollaboration.Default.(bool)
 	// videoDescHasTimeRange is the schema descriptor for has_time_range field.
 	videoDescHasTimeRange := videoFields[7].Descriptor()
 	// video.DefaultHasTimeRange holds the default value on creation for the has_time_range field.
@@ -140,6 +224,14 @@ func init() {
 	_ = videodisallowrangeMixinFields0
 	videodisallowrangeFields := schema.VideoDisallowRange{}.Fields()
 	_ = videodisallowrangeFields
+	// videodisallowrangeDescStartSeconds is the schema descriptor for start_seconds field.
+	videodisallowrangeDescStartSeconds := videodisallowrangeFields[0].Descriptor()
+	// videodisallowrange.StartSecondsValidator is a validator for the "start_seconds" field. It is called by the builders before save.
+	videodisallowrange.StartSecondsValidator = videodisallowrangeDescStartSeconds.Validators[0].(func(int) error)
+	// videodisallowrangeDescEndSeconds is the schema descriptor for end_seconds field.
+	videodisallowrangeDescEndSeconds := videodisallowrangeFields[1].Descriptor()
+	// videodisallowrange.EndSecondsValidator is a validator for the "end_seconds" field. It is called by the builders before save.
+	videodisallowrange.EndSecondsValidator = videodisallowrangeDescEndSeconds.Validators[0].(func(int) error)
 	// videodisallowrangeDescID is the schema descriptor for id field.
 	videodisallowrangeDescID := videodisallowrangeMixinFields0[0].Descriptor()
 	// videodisallowrange.DefaultID holds the default value on creation for the id field.
@@ -155,6 +247,12 @@ func init() {
 	videoplayrangeDescStartSeconds := videoplayrangeFields[0].Descriptor()
 	// videoplayrange.DefaultStartSeconds holds the default value on creation for the start_seconds field.
 	videoplayrange.DefaultStartSeconds = videoplayrangeDescStartSeconds.Default.(int)
+	// videoplayrange.StartSecondsValidator is a validator for the "start_seconds" field. It is called by the builders before save.
+	videoplayrange.StartSecondsValidator = videoplayrangeDescStartSeconds.Validators[0].(func(int) error)
+	// videoplayrangeDescEndSeconds is the schema descriptor for end_seconds field.
+	videoplayrangeDescEndSeconds := videoplayrangeFields[1].Descriptor()
+	// videoplayrange.EndSecondsValidator is a validator for the "end_seconds" field. It is called by the builders before save.
+	videoplayrange.EndSecondsValidator = videoplayrangeDescEndSeconds.Validators[0].(func(int) error)
 	// videoplayrangeDescID is the schema descriptor for id field.
 	videoplayrangeDescID := videoplayrangeMixinFields0[0].Descriptor()
 	// videoplayrange.DefaultID holds the default value on creation for the id field.
@@ -166,6 +264,10 @@ func init() {
 	_ = videotitlechangeMixinFields0
 	videotitlechangeFields := schema.VideoTitleChange{}.Fields()
 	_ = videotitlechangeFields
+	// videotitlechangeDescTitle is the schema descriptor for title field.
+	videotitlechangeDescTitle := videotitlechangeFields[0].Descriptor()
+	// videotitlechange.TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	videotitlechange.TitleValidator = videotitlechangeDescTitle.Validators[0].(func(string) error)
 	// videotitlechangeDescChangedAt is the schema descriptor for changed_at field.
 	videotitlechangeDescChangedAt := videotitlechangeFields[2].Descriptor()
 	// videotitlechange.DefaultChangedAt holds the default value on creation for the changed_at field.

@@ -148,6 +148,11 @@ func (dcu *DescriptionChangeUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (dcu *DescriptionChangeUpdate) check() error {
+	if v, ok := dcu.mutation.Raw(); ok {
+		if err := descriptionchange.RawValidator(v); err != nil {
+			return &ValidationError{Name: "raw", err: fmt.Errorf(`ent: validator failed for field "DescriptionChange.raw": %w`, err)}
+		}
+	}
 	if _, ok := dcu.mutation.DescriptionID(); dcu.mutation.DescriptionCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "DescriptionChange.description"`)
 	}
@@ -365,6 +370,11 @@ func (dcuo *DescriptionChangeUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (dcuo *DescriptionChangeUpdateOne) check() error {
+	if v, ok := dcuo.mutation.Raw(); ok {
+		if err := descriptionchange.RawValidator(v); err != nil {
+			return &ValidationError{Name: "raw", err: fmt.Errorf(`ent: validator failed for field "DescriptionChange.raw": %w`, err)}
+		}
+	}
 	if _, ok := dcuo.mutation.DescriptionID(); dcuo.mutation.DescriptionCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "DescriptionChange.description"`)
 	}

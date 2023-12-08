@@ -127,6 +127,16 @@ func (vpru *VideoPlayRangeUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (vpru *VideoPlayRangeUpdate) check() error {
+	if v, ok := vpru.mutation.StartSeconds(); ok {
+		if err := videoplayrange.StartSecondsValidator(v); err != nil {
+			return &ValidationError{Name: "start_seconds", err: fmt.Errorf(`ent: validator failed for field "VideoPlayRange.start_seconds": %w`, err)}
+		}
+	}
+	if v, ok := vpru.mutation.EndSeconds(); ok {
+		if err := videoplayrange.EndSecondsValidator(v); err != nil {
+			return &ValidationError{Name: "end_seconds", err: fmt.Errorf(`ent: validator failed for field "VideoPlayRange.end_seconds": %w`, err)}
+		}
+	}
 	if _, ok := vpru.mutation.VideoID(); vpru.mutation.VideoCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "VideoPlayRange.video"`)
 	}
@@ -321,6 +331,16 @@ func (vpruo *VideoPlayRangeUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (vpruo *VideoPlayRangeUpdateOne) check() error {
+	if v, ok := vpruo.mutation.StartSeconds(); ok {
+		if err := videoplayrange.StartSecondsValidator(v); err != nil {
+			return &ValidationError{Name: "start_seconds", err: fmt.Errorf(`ent: validator failed for field "VideoPlayRange.start_seconds": %w`, err)}
+		}
+	}
+	if v, ok := vpruo.mutation.EndSeconds(); ok {
+		if err := videoplayrange.EndSecondsValidator(v); err != nil {
+			return &ValidationError{Name: "end_seconds", err: fmt.Errorf(`ent: validator failed for field "VideoPlayRange.end_seconds": %w`, err)}
+		}
+	}
 	if _, ok := vpruo.mutation.VideoID(); vpruo.mutation.VideoCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "VideoPlayRange.video"`)
 	}

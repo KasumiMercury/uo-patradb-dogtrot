@@ -1,6 +1,7 @@
-h1:cO/xKZfl8VQRN/jXfEvwXOF8ijTJEOQXErovx6+6LVs=
+h1:iP24YjgkqQAzsxF3FVVDSgsz36mOUHx+BWmzqilCGlU=
 20231207163917_init.sql h1:wuRJCopu5I78BiBW+PdDzDuJopHoy8VA+nor2vKlNK0=
 20231207171600_index_description.sql h1:khdJ/E2qdZKqaVkTX4zQsI1hZDcyWBCug9/SCLK0qZs=
 20231207180936_index_video_id.sql h1:qz2rbhuP+LnS1uvOWUEoGu+yEdjJAy+kKnCb1LgVypM=
 20231207181816_index_description_changes.sql h1:GCCrlylUFQPlwq1JkuZRcQpP6WSNkgBD5ZkyfDJ7jws=
 20231207185617_change_length_of_id_column.sql h1:KlTn1k4yNTilvT40yPe+Rfufb3zOKh5hRSCJdW40DQA=
+20231208094837_add_validator.sql h1:c6kV8gPZ6Kevr+xqR6Q5iONzCAi1N9kI/Z4uqMcLn98=

@@ -63,6 +63,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	TitleValidator func(string) error
 	// DefaultChangedAt holds the default value on creation for the "changed_at" field.
 	DefaultChangedAt func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.

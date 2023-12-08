@@ -152,11 +152,26 @@ func (pcc *PatChatCreate) check() error {
 	if _, ok := pcc.mutation.Message(); !ok {
 		return &ValidationError{Name: "message", err: errors.New(`ent: missing required field "PatChat.message"`)}
 	}
+	if v, ok := pcc.mutation.Message(); ok {
+		if err := patchat.MessageValidator(v); err != nil {
+			return &ValidationError{Name: "message", err: fmt.Errorf(`ent: validator failed for field "PatChat.message": %w`, err)}
+		}
+	}
 	if _, ok := pcc.mutation.Magnitude(); !ok {
 		return &ValidationError{Name: "magnitude", err: errors.New(`ent: missing required field "PatChat.magnitude"`)}
 	}
+	if v, ok := pcc.mutation.Magnitude(); ok {
+		if err := patchat.MagnitudeValidator(v); err != nil {
+			return &ValidationError{Name: "magnitude", err: fmt.Errorf(`ent: validator failed for field "PatChat.magnitude": %w`, err)}
+		}
+	}
 	if _, ok := pcc.mutation.Score(); !ok {
 		return &ValidationError{Name: "score", err: errors.New(`ent: missing required field "PatChat.score"`)}
+	}
+	if v, ok := pcc.mutation.Score(); ok {
+		if err := patchat.ScoreValidator(v); err != nil {
+			return &ValidationError{Name: "score", err: fmt.Errorf(`ent: validator failed for field "PatChat.score": %w`, err)}
+		}
 	}
 	if _, ok := pcc.mutation.IsNegative(); !ok {
 		return &ValidationError{Name: "is_negative", err: errors.New(`ent: missing required field "PatChat.is_negative"`)}

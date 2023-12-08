@@ -103,8 +103,18 @@ func (vdrc *VideoDisallowRangeCreate) check() error {
 	if _, ok := vdrc.mutation.StartSeconds(); !ok {
 		return &ValidationError{Name: "start_seconds", err: errors.New(`ent: missing required field "VideoDisallowRange.start_seconds"`)}
 	}
+	if v, ok := vdrc.mutation.StartSeconds(); ok {
+		if err := videodisallowrange.StartSecondsValidator(v); err != nil {
+			return &ValidationError{Name: "start_seconds", err: fmt.Errorf(`ent: validator failed for field "VideoDisallowRange.start_seconds": %w`, err)}
+		}
+	}
 	if _, ok := vdrc.mutation.EndSeconds(); !ok {
 		return &ValidationError{Name: "end_seconds", err: errors.New(`ent: missing required field "VideoDisallowRange.end_seconds"`)}
+	}
+	if v, ok := vdrc.mutation.EndSeconds(); ok {
+		if err := videodisallowrange.EndSecondsValidator(v); err != nil {
+			return &ValidationError{Name: "end_seconds", err: fmt.Errorf(`ent: validator failed for field "VideoDisallowRange.end_seconds": %w`, err)}
+		}
 	}
 	if v, ok := vdrc.mutation.ID(); ok {
 		if err := videodisallowrange.IDValidator(v); err != nil {

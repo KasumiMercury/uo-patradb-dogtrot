@@ -18,7 +18,6 @@ import (
 func main() {
 	loadEnv()
 
-	//dsn := os.Getenv("MYSQL_MIGRATE_DSN")
 	du := os.Getenv("MYSQL_USER")
 	dp := os.Getenv("MYSQL_PASSWORD")
 	da := os.Getenv("MYSQL_ADDR")

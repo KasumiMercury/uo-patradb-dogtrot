@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/proto/entpb"
 	"github.com/joho/godotenv"
@@ -23,9 +24,12 @@ func loadEnv() {
 func main() {
 	loadEnv()
 
-	dsn := os.Getenv("MYSQL_CONNECT_DSN")
+	du := os.Getenv("MYSQL_USER")
+	dp := os.Getenv("MYSQL_PASSWORD")
+	da := os.Getenv("MYSQL_ADDR")
+	dn := os.Getenv("MYSQL_DATABASE")
 
-	client, err := ent.Open("mysql", dsn)
+	client, err := ent.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", du, dp, da, dn))
 	if err != nil {
 		log.Fatalf("failed to connect to mysql: %v", err)
 	}

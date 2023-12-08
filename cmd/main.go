@@ -29,7 +29,7 @@ func main() {
 	da := os.Getenv("MYSQL_ADDR")
 	dn := os.Getenv("MYSQL_DATABASE")
 
-	client, err := ent.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", du, dp, da, dn))
+	client, err := ent.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=True", du, dp, da, dn))
 	if err != nil {
 		log.Fatalf("failed to connect to mysql: %v", err)
 	}

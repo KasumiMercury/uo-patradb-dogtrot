@@ -34,6 +34,8 @@ func NewVideoService(client *ent.Client) *VideoService {
 // toProtoVideo transforms the ent type to the pb type
 func toProtoVideo(e *ent.Video) (*Video, error) {
 	v := &Video{}
+	actual_end_at := timestamppb.New(e.ActualEndAt)
+	v.ActualEndAt = actual_end_at
 	actual_start_at := timestamppb.New(e.ActualStartAt)
 	v.ActualStartAt = actual_start_at
 	duration_seconds := int64(e.DurationSeconds)
@@ -139,6 +141,10 @@ func (svc *VideoService) Update(ctx context.Context, req *UpdateVideoRequest) (*
 	video := req.GetVideo()
 	videoID := video.GetId()
 	m := svc.client.Video.UpdateOneID(videoID)
+	if video.GetActualEndAt() != nil {
+		videoActualEndAt := runtime.ExtractTime(video.GetActualEndAt())
+		m.SetActualEndAt(videoActualEndAt)
+	}
 	if video.GetActualStartAt() != nil {
 		videoActualStartAt := runtime.ExtractTime(video.GetActualStartAt())
 		m.SetActualStartAt(videoActualStartAt)
@@ -297,6 +303,10 @@ func (svc *VideoService) BatchCreate(ctx context.Context, req *BatchCreateVideos
 
 func (svc *VideoService) createBuilder(video *Video) (*ent.VideoCreate, error) {
 	m := svc.client.Video.Create()
+	if video.GetActualEndAt() != nil {
+		videoActualEndAt := runtime.ExtractTime(video.GetActualEndAt())
+		m.SetActualEndAt(videoActualEndAt)
+	}
 	if video.GetActualStartAt() != nil {
 		videoActualStartAt := runtime.ExtractTime(video.GetActualStartAt())
 		m.SetActualStartAt(videoActualStartAt)

@@ -3062,8 +3062,9 @@ type Video struct {
 	HasTimeRange    bool                 `protobuf:"varint,7,opt,name=has_time_range,json=hasTimeRange,proto3" json:"has_time_range,omitempty"`
 	ScheduledAt     *timestamp.Timestamp `protobuf:"bytes,8,opt,name=scheduled_at,json=scheduledAt,proto3" json:"scheduled_at,omitempty"`
 	ActualStartAt   *timestamp.Timestamp `protobuf:"bytes,9,opt,name=actual_start_at,json=actualStartAt,proto3" json:"actual_start_at,omitempty"`
-	PublishedAt     *timestamp.Timestamp `protobuf:"bytes,10,opt,name=published_at,json=publishedAt,proto3" json:"published_at,omitempty"`
-	UpdatedAt       *timestamp.Timestamp `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	ActualEndAt     *timestamp.Timestamp `protobuf:"bytes,10,opt,name=actual_end_at,json=actualEndAt,proto3" json:"actual_end_at,omitempty"`
+	PublishedAt     *timestamp.Timestamp `protobuf:"bytes,11,opt,name=published_at,json=publishedAt,proto3" json:"published_at,omitempty"`
+	UpdatedAt       *timestamp.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	Channel         []*Channel           `protobuf:"bytes,13,rep,name=channel,proto3" json:"channel,omitempty"`
 }
 
@@ -3158,6 +3159,13 @@ func (x *Video) GetScheduledAt() *timestamp.Timestamp {
 func (x *Video) GetActualStartAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.ActualStartAt
+	}
+	return nil
+}
+
+func (x *Video) GetActualEndAt() *timestamp.Timestamp {
+	if x != nil {
+		return x.ActualEndAt
 	}
 	return nil
 }
@@ -4108,7 +4116,7 @@ var file_entpb_entpb_proto_rawDesc = []byte{
 	0x44, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x65, 0x6d, 0x70, 0x6c,
 	0x61, 0x74, 0x65, 0x52, 0x1c, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x69, 0x63, 0x44, 0x65, 0x73,
 	0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65,
-	0x73, 0x22, 0x83, 0x04, 0x0a, 0x05, 0x56, 0x69, 0x64, 0x65, 0x6f, 0x12, 0x0e, 0x0a, 0x02, 0x69,
+	0x73, 0x22, 0xc3, 0x04, 0x0a, 0x05, 0x56, 0x69, 0x64, 0x65, 0x6f, 0x12, 0x0e, 0x0a, 0x02, 0x69,
 	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x19, 0x0a, 0x08, 0x76,
 	0x69, 0x64, 0x65, 0x6f, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x76,
 	0x69, 0x64, 0x65, 0x6f, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x18,
@@ -4130,12 +4138,16 @@ var file_entpb_entpb_proto_rawDesc = []byte{
 	0x61, 0x74, 0x18, 0x09, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
 	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73,
 	0x74, 0x61, 0x6d, 0x70, 0x52, 0x0d, 0x61, 0x63, 0x74, 0x75, 0x61, 0x6c, 0x53, 0x74, 0x61, 0x72,
-	0x74, 0x41, 0x74, 0x12, 0x3d, 0x0a, 0x0c, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x65, 0x64,
-	0x5f, 0x61, 0x74, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
+	0x74, 0x41, 0x74, 0x12, 0x3e, 0x0a, 0x0d, 0x61, 0x63, 0x74, 0x75, 0x61, 0x6c, 0x5f, 0x65, 0x6e,
+	0x64, 0x5f, 0x61, 0x74, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f,
+	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d,
+	0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x0b, 0x61, 0x63, 0x74, 0x75, 0x61, 0x6c, 0x45, 0x6e,
+	0x64, 0x41, 0x74, 0x12, 0x3d, 0x0a, 0x0c, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x65, 0x64,
+	0x5f, 0x61, 0x74, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
 	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65,
 	0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x0b, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x65, 0x64,
 	0x41, 0x74, 0x12, 0x39, 0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74,
-	0x18, 0x0b, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
+	0x18, 0x0c, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61,
 	0x6d, 0x70, 0x52, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12, 0x28, 0x0a,
 	0x07, 0x63, 0x68, 0x61, 0x6e, 0x6e, 0x65, 0x6c, 0x18, 0x0d, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e,
@@ -4524,94 +4536,95 @@ var file_entpb_entpb_proto_depIdxs = []int32{
 	48, // 45: entpb.BatchCreatePeriodicDescriptionTemplatesResponse.periodic_description_templates:type_name -> entpb.PeriodicDescriptionTemplate
 	68, // 46: entpb.Video.scheduled_at:type_name -> google.protobuf.Timestamp
 	68, // 47: entpb.Video.actual_start_at:type_name -> google.protobuf.Timestamp
-	68, // 48: entpb.Video.published_at:type_name -> google.protobuf.Timestamp
-	68, // 49: entpb.Video.updated_at:type_name -> google.protobuf.Timestamp
-	21, // 50: entpb.Video.channel:type_name -> entpb.Channel
-	57, // 51: entpb.CreateVideoRequest.video:type_name -> entpb.Video
-	10, // 52: entpb.GetVideoRequest.view:type_name -> entpb.GetVideoRequest.View
-	57, // 53: entpb.UpdateVideoRequest.video:type_name -> entpb.Video
-	11, // 54: entpb.ListVideoRequest.view:type_name -> entpb.ListVideoRequest.View
-	57, // 55: entpb.ListVideoResponse.video_list:type_name -> entpb.Video
-	58, // 56: entpb.BatchCreateVideosRequest.requests:type_name -> entpb.CreateVideoRequest
-	57, // 57: entpb.BatchCreateVideosResponse.videos:type_name -> entpb.Video
-	70, // 58: entpb.VideoPlayRange.end_seconds:type_name -> google.protobuf.Int64Value
-	13, // 59: entpb.CategoryDescriptionTemplateService.Create:input_type -> entpb.CreateCategoryDescriptionTemplateRequest
-	14, // 60: entpb.CategoryDescriptionTemplateService.Get:input_type -> entpb.GetCategoryDescriptionTemplateRequest
-	15, // 61: entpb.CategoryDescriptionTemplateService.Update:input_type -> entpb.UpdateCategoryDescriptionTemplateRequest
-	16, // 62: entpb.CategoryDescriptionTemplateService.Delete:input_type -> entpb.DeleteCategoryDescriptionTemplateRequest
-	17, // 63: entpb.CategoryDescriptionTemplateService.List:input_type -> entpb.ListCategoryDescriptionTemplateRequest
-	19, // 64: entpb.CategoryDescriptionTemplateService.BatchCreate:input_type -> entpb.BatchCreateCategoryDescriptionTemplatesRequest
-	22, // 65: entpb.ChannelService.Create:input_type -> entpb.CreateChannelRequest
-	23, // 66: entpb.ChannelService.Get:input_type -> entpb.GetChannelRequest
-	24, // 67: entpb.ChannelService.Update:input_type -> entpb.UpdateChannelRequest
-	25, // 68: entpb.ChannelService.Delete:input_type -> entpb.DeleteChannelRequest
-	26, // 69: entpb.ChannelService.List:input_type -> entpb.ListChannelRequest
-	28, // 70: entpb.ChannelService.BatchCreate:input_type -> entpb.BatchCreateChannelsRequest
-	31, // 71: entpb.DescriptionService.Create:input_type -> entpb.CreateDescriptionRequest
-	32, // 72: entpb.DescriptionService.Get:input_type -> entpb.GetDescriptionRequest
-	33, // 73: entpb.DescriptionService.Update:input_type -> entpb.UpdateDescriptionRequest
-	34, // 74: entpb.DescriptionService.Delete:input_type -> entpb.DeleteDescriptionRequest
-	35, // 75: entpb.DescriptionService.List:input_type -> entpb.ListDescriptionRequest
-	37, // 76: entpb.DescriptionService.BatchCreate:input_type -> entpb.BatchCreateDescriptionsRequest
-	40, // 77: entpb.PatChatService.Create:input_type -> entpb.CreatePatChatRequest
-	41, // 78: entpb.PatChatService.Get:input_type -> entpb.GetPatChatRequest
-	42, // 79: entpb.PatChatService.Update:input_type -> entpb.UpdatePatChatRequest
-	43, // 80: entpb.PatChatService.Delete:input_type -> entpb.DeletePatChatRequest
-	44, // 81: entpb.PatChatService.List:input_type -> entpb.ListPatChatRequest
-	46, // 82: entpb.PatChatService.BatchCreate:input_type -> entpb.BatchCreatePatChatsRequest
-	49, // 83: entpb.PeriodicDescriptionTemplateService.Create:input_type -> entpb.CreatePeriodicDescriptionTemplateRequest
-	50, // 84: entpb.PeriodicDescriptionTemplateService.Get:input_type -> entpb.GetPeriodicDescriptionTemplateRequest
-	51, // 85: entpb.PeriodicDescriptionTemplateService.Update:input_type -> entpb.UpdatePeriodicDescriptionTemplateRequest
-	52, // 86: entpb.PeriodicDescriptionTemplateService.Delete:input_type -> entpb.DeletePeriodicDescriptionTemplateRequest
-	53, // 87: entpb.PeriodicDescriptionTemplateService.List:input_type -> entpb.ListPeriodicDescriptionTemplateRequest
-	55, // 88: entpb.PeriodicDescriptionTemplateService.BatchCreate:input_type -> entpb.BatchCreatePeriodicDescriptionTemplatesRequest
-	58, // 89: entpb.VideoService.Create:input_type -> entpb.CreateVideoRequest
-	59, // 90: entpb.VideoService.Get:input_type -> entpb.GetVideoRequest
-	60, // 91: entpb.VideoService.Update:input_type -> entpb.UpdateVideoRequest
-	61, // 92: entpb.VideoService.Delete:input_type -> entpb.DeleteVideoRequest
-	62, // 93: entpb.VideoService.List:input_type -> entpb.ListVideoRequest
-	64, // 94: entpb.VideoService.BatchCreate:input_type -> entpb.BatchCreateVideosRequest
-	12, // 95: entpb.CategoryDescriptionTemplateService.Create:output_type -> entpb.CategoryDescriptionTemplate
-	12, // 96: entpb.CategoryDescriptionTemplateService.Get:output_type -> entpb.CategoryDescriptionTemplate
-	12, // 97: entpb.CategoryDescriptionTemplateService.Update:output_type -> entpb.CategoryDescriptionTemplate
-	71, // 98: entpb.CategoryDescriptionTemplateService.Delete:output_type -> google.protobuf.Empty
-	18, // 99: entpb.CategoryDescriptionTemplateService.List:output_type -> entpb.ListCategoryDescriptionTemplateResponse
-	20, // 100: entpb.CategoryDescriptionTemplateService.BatchCreate:output_type -> entpb.BatchCreateCategoryDescriptionTemplatesResponse
-	21, // 101: entpb.ChannelService.Create:output_type -> entpb.Channel
-	21, // 102: entpb.ChannelService.Get:output_type -> entpb.Channel
-	21, // 103: entpb.ChannelService.Update:output_type -> entpb.Channel
-	71, // 104: entpb.ChannelService.Delete:output_type -> google.protobuf.Empty
-	27, // 105: entpb.ChannelService.List:output_type -> entpb.ListChannelResponse
-	29, // 106: entpb.ChannelService.BatchCreate:output_type -> entpb.BatchCreateChannelsResponse
-	30, // 107: entpb.DescriptionService.Create:output_type -> entpb.Description
-	30, // 108: entpb.DescriptionService.Get:output_type -> entpb.Description
-	30, // 109: entpb.DescriptionService.Update:output_type -> entpb.Description
-	71, // 110: entpb.DescriptionService.Delete:output_type -> google.protobuf.Empty
-	36, // 111: entpb.DescriptionService.List:output_type -> entpb.ListDescriptionResponse
-	38, // 112: entpb.DescriptionService.BatchCreate:output_type -> entpb.BatchCreateDescriptionsResponse
-	39, // 113: entpb.PatChatService.Create:output_type -> entpb.PatChat
-	39, // 114: entpb.PatChatService.Get:output_type -> entpb.PatChat
-	39, // 115: entpb.PatChatService.Update:output_type -> entpb.PatChat
-	71, // 116: entpb.PatChatService.Delete:output_type -> google.protobuf.Empty
-	45, // 117: entpb.PatChatService.List:output_type -> entpb.ListPatChatResponse
-	47, // 118: entpb.PatChatService.BatchCreate:output_type -> entpb.BatchCreatePatChatsResponse
-	48, // 119: entpb.PeriodicDescriptionTemplateService.Create:output_type -> entpb.PeriodicDescriptionTemplate
-	48, // 120: entpb.PeriodicDescriptionTemplateService.Get:output_type -> entpb.PeriodicDescriptionTemplate
-	48, // 121: entpb.PeriodicDescriptionTemplateService.Update:output_type -> entpb.PeriodicDescriptionTemplate
-	71, // 122: entpb.PeriodicDescriptionTemplateService.Delete:output_type -> google.protobuf.Empty
-	54, // 123: entpb.PeriodicDescriptionTemplateService.List:output_type -> entpb.ListPeriodicDescriptionTemplateResponse
-	56, // 124: entpb.PeriodicDescriptionTemplateService.BatchCreate:output_type -> entpb.BatchCreatePeriodicDescriptionTemplatesResponse
-	57, // 125: entpb.VideoService.Create:output_type -> entpb.Video
-	57, // 126: entpb.VideoService.Get:output_type -> entpb.Video
-	57, // 127: entpb.VideoService.Update:output_type -> entpb.Video
-	71, // 128: entpb.VideoService.Delete:output_type -> google.protobuf.Empty
-	63, // 129: entpb.VideoService.List:output_type -> entpb.ListVideoResponse
-	65, // 130: entpb.VideoService.BatchCreate:output_type -> entpb.BatchCreateVideosResponse
-	95, // [95:131] is the sub-list for method output_type
-	59, // [59:95] is the sub-list for method input_type
-	59, // [59:59] is the sub-list for extension type_name
-	59, // [59:59] is the sub-list for extension extendee
-	0,  // [0:59] is the sub-list for field type_name
+	68, // 48: entpb.Video.actual_end_at:type_name -> google.protobuf.Timestamp
+	68, // 49: entpb.Video.published_at:type_name -> google.protobuf.Timestamp
+	68, // 50: entpb.Video.updated_at:type_name -> google.protobuf.Timestamp
+	21, // 51: entpb.Video.channel:type_name -> entpb.Channel
+	57, // 52: entpb.CreateVideoRequest.video:type_name -> entpb.Video
+	10, // 53: entpb.GetVideoRequest.view:type_name -> entpb.GetVideoRequest.View
+	57, // 54: entpb.UpdateVideoRequest.video:type_name -> entpb.Video
+	11, // 55: entpb.ListVideoRequest.view:type_name -> entpb.ListVideoRequest.View
+	57, // 56: entpb.ListVideoResponse.video_list:type_name -> entpb.Video
+	58, // 57: entpb.BatchCreateVideosRequest.requests:type_name -> entpb.CreateVideoRequest
+	57, // 58: entpb.BatchCreateVideosResponse.videos:type_name -> entpb.Video
+	70, // 59: entpb.VideoPlayRange.end_seconds:type_name -> google.protobuf.Int64Value
+	13, // 60: entpb.CategoryDescriptionTemplateService.Create:input_type -> entpb.CreateCategoryDescriptionTemplateRequest
+	14, // 61: entpb.CategoryDescriptionTemplateService.Get:input_type -> entpb.GetCategoryDescriptionTemplateRequest
+	15, // 62: entpb.CategoryDescriptionTemplateService.Update:input_type -> entpb.UpdateCategoryDescriptionTemplateRequest
+	16, // 63: entpb.CategoryDescriptionTemplateService.Delete:input_type -> entpb.DeleteCategoryDescriptionTemplateRequest
+	17, // 64: entpb.CategoryDescriptionTemplateService.List:input_type -> entpb.ListCategoryDescriptionTemplateRequest
+	19, // 65: entpb.CategoryDescriptionTemplateService.BatchCreate:input_type -> entpb.BatchCreateCategoryDescriptionTemplatesRequest
+	22, // 66: entpb.ChannelService.Create:input_type -> entpb.CreateChannelRequest
+	23, // 67: entpb.ChannelService.Get:input_type -> entpb.GetChannelRequest
+	24, // 68: entpb.ChannelService.Update:input_type -> entpb.UpdateChannelRequest
+	25, // 69: entpb.ChannelService.Delete:input_type -> entpb.DeleteChannelRequest
+	26, // 70: entpb.ChannelService.List:input_type -> entpb.ListChannelRequest
+	28, // 71: entpb.ChannelService.BatchCreate:input_type -> entpb.BatchCreateChannelsRequest
+	31, // 72: entpb.DescriptionService.Create:input_type -> entpb.CreateDescriptionRequest
+	32, // 73: entpb.DescriptionService.Get:input_type -> entpb.GetDescriptionRequest
+	33, // 74: entpb.DescriptionService.Update:input_type -> entpb.UpdateDescriptionRequest
+	34, // 75: entpb.DescriptionService.Delete:input_type -> entpb.DeleteDescriptionRequest
+	35, // 76: entpb.DescriptionService.List:input_type -> entpb.ListDescriptionRequest
+	37, // 77: entpb.DescriptionService.BatchCreate:input_type -> entpb.BatchCreateDescriptionsRequest
+	40, // 78: entpb.PatChatService.Create:input_type -> entpb.CreatePatChatRequest
+	41, // 79: entpb.PatChatService.Get:input_type -> entpb.GetPatChatRequest
+	42, // 80: entpb.PatChatService.Update:input_type -> entpb.UpdatePatChatRequest
+	43, // 81: entpb.PatChatService.Delete:input_type -> entpb.DeletePatChatRequest
+	44, // 82: entpb.PatChatService.List:input_type -> entpb.ListPatChatRequest
+	46, // 83: entpb.PatChatService.BatchCreate:input_type -> entpb.BatchCreatePatChatsRequest
+	49, // 84: entpb.PeriodicDescriptionTemplateService.Create:input_type -> entpb.CreatePeriodicDescriptionTemplateRequest
+	50, // 85: entpb.PeriodicDescriptionTemplateService.Get:input_type -> entpb.GetPeriodicDescriptionTemplateRequest
+	51, // 86: entpb.PeriodicDescriptionTemplateService.Update:input_type -> entpb.UpdatePeriodicDescriptionTemplateRequest
+	52, // 87: entpb.PeriodicDescriptionTemplateService.Delete:input_type -> entpb.DeletePeriodicDescriptionTemplateRequest
+	53, // 88: entpb.PeriodicDescriptionTemplateService.List:input_type -> entpb.ListPeriodicDescriptionTemplateRequest
+	55, // 89: entpb.PeriodicDescriptionTemplateService.BatchCreate:input_type -> entpb.BatchCreatePeriodicDescriptionTemplatesRequest
+	58, // 90: entpb.VideoService.Create:input_type -> entpb.CreateVideoRequest
+	59, // 91: entpb.VideoService.Get:input_type -> entpb.GetVideoRequest
+	60, // 92: entpb.VideoService.Update:input_type -> entpb.UpdateVideoRequest
+	61, // 93: entpb.VideoService.Delete:input_type -> entpb.DeleteVideoRequest
+	62, // 94: entpb.VideoService.List:input_type -> entpb.ListVideoRequest
+	64, // 95: entpb.VideoService.BatchCreate:input_type -> entpb.BatchCreateVideosRequest
+	12, // 96: entpb.CategoryDescriptionTemplateService.Create:output_type -> entpb.CategoryDescriptionTemplate
+	12, // 97: entpb.CategoryDescriptionTemplateService.Get:output_type -> entpb.CategoryDescriptionTemplate
+	12, // 98: entpb.CategoryDescriptionTemplateService.Update:output_type -> entpb.CategoryDescriptionTemplate
+	71, // 99: entpb.CategoryDescriptionTemplateService.Delete:output_type -> google.protobuf.Empty
+	18, // 100: entpb.CategoryDescriptionTemplateService.List:output_type -> entpb.ListCategoryDescriptionTemplateResponse
+	20, // 101: entpb.CategoryDescriptionTemplateService.BatchCreate:output_type -> entpb.BatchCreateCategoryDescriptionTemplatesResponse
+	21, // 102: entpb.ChannelService.Create:output_type -> entpb.Channel
+	21, // 103: entpb.ChannelService.Get:output_type -> entpb.Channel
+	21, // 104: entpb.ChannelService.Update:output_type -> entpb.Channel
+	71, // 105: entpb.ChannelService.Delete:output_type -> google.protobuf.Empty
+	27, // 106: entpb.ChannelService.List:output_type -> entpb.ListChannelResponse
+	29, // 107: entpb.ChannelService.BatchCreate:output_type -> entpb.BatchCreateChannelsResponse
+	30, // 108: entpb.DescriptionService.Create:output_type -> entpb.Description
+	30, // 109: entpb.DescriptionService.Get:output_type -> entpb.Description
+	30, // 110: entpb.DescriptionService.Update:output_type -> entpb.Description
+	71, // 111: entpb.DescriptionService.Delete:output_type -> google.protobuf.Empty
+	36, // 112: entpb.DescriptionService.List:output_type -> entpb.ListDescriptionResponse
+	38, // 113: entpb.DescriptionService.BatchCreate:output_type -> entpb.BatchCreateDescriptionsResponse
+	39, // 114: entpb.PatChatService.Create:output_type -> entpb.PatChat
+	39, // 115: entpb.PatChatService.Get:output_type -> entpb.PatChat
+	39, // 116: entpb.PatChatService.Update:output_type -> entpb.PatChat
+	71, // 117: entpb.PatChatService.Delete:output_type -> google.protobuf.Empty
+	45, // 118: entpb.PatChatService.List:output_type -> entpb.ListPatChatResponse
+	47, // 119: entpb.PatChatService.BatchCreate:output_type -> entpb.BatchCreatePatChatsResponse
+	48, // 120: entpb.PeriodicDescriptionTemplateService.Create:output_type -> entpb.PeriodicDescriptionTemplate
+	48, // 121: entpb.PeriodicDescriptionTemplateService.Get:output_type -> entpb.PeriodicDescriptionTemplate
+	48, // 122: entpb.PeriodicDescriptionTemplateService.Update:output_type -> entpb.PeriodicDescriptionTemplate
+	71, // 123: entpb.PeriodicDescriptionTemplateService.Delete:output_type -> google.protobuf.Empty
+	54, // 124: entpb.PeriodicDescriptionTemplateService.List:output_type -> entpb.ListPeriodicDescriptionTemplateResponse
+	56, // 125: entpb.PeriodicDescriptionTemplateService.BatchCreate:output_type -> entpb.BatchCreatePeriodicDescriptionTemplatesResponse
+	57, // 126: entpb.VideoService.Create:output_type -> entpb.Video
+	57, // 127: entpb.VideoService.Get:output_type -> entpb.Video
+	57, // 128: entpb.VideoService.Update:output_type -> entpb.Video
+	71, // 129: entpb.VideoService.Delete:output_type -> google.protobuf.Empty
+	63, // 130: entpb.VideoService.List:output_type -> entpb.ListVideoResponse
+	65, // 131: entpb.VideoService.BatchCreate:output_type -> entpb.BatchCreateVideosResponse
+	96, // [96:132] is the sub-list for method output_type
+	60, // [60:96] is the sub-list for method input_type
+	60, // [60:60] is the sub-list for extension type_name
+	60, // [60:60] is the sub-list for extension extendee
+	0,  // [0:60] is the sub-list for field type_name
 }
 
 func init() { file_entpb_entpb_proto_init() }

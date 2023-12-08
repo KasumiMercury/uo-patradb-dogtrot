@@ -38,6 +38,8 @@ type Video struct {
 	ScheduledAt time.Time `json:"scheduled_at,omitempty"`
 	// ActualStartAt holds the value of the "actual_start_at" field.
 	ActualStartAt time.Time `json:"actual_start_at,omitempty"`
+	// ActualEndAt holds the value of the "actual_end_at" field.
+	ActualEndAt time.Time `json:"actual_end_at,omitempty"`
 	// PublishedAt holds the value of the "published_at" field.
 	PublishedAt time.Time `json:"published_at,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
@@ -138,7 +140,7 @@ func (*Video) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case video.FieldID, video.FieldVideoID, video.FieldTitle, video.FieldNormalizedTitle, video.FieldStatus, video.FieldChatID:
 			values[i] = new(sql.NullString)
-		case video.FieldScheduledAt, video.FieldActualStartAt, video.FieldPublishedAt, video.FieldCreatedAt, video.FieldUpdatedAt:
+		case video.FieldScheduledAt, video.FieldActualStartAt, video.FieldActualEndAt, video.FieldPublishedAt, video.FieldCreatedAt, video.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -220,6 +222,12 @@ func (v *Video) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field actual_start_at", values[i])
 			} else if value.Valid {
 				v.ActualStartAt = value.Time
+			}
+		case video.FieldActualEndAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field actual_end_at", values[i])
+			} else if value.Valid {
+				v.ActualEndAt = value.Time
 			}
 		case video.FieldPublishedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -334,6 +342,9 @@ func (v *Video) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("actual_start_at=")
 	builder.WriteString(v.ActualStartAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("actual_end_at=")
+	builder.WriteString(v.ActualEndAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("published_at=")
 	builder.WriteString(v.PublishedAt.Format(time.ANSIC))

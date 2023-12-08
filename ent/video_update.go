@@ -199,6 +199,26 @@ func (vu *VideoUpdate) ClearActualStartAt() *VideoUpdate {
 	return vu
 }
 
+// SetActualEndAt sets the "actual_end_at" field.
+func (vu *VideoUpdate) SetActualEndAt(t time.Time) *VideoUpdate {
+	vu.mutation.SetActualEndAt(t)
+	return vu
+}
+
+// SetNillableActualEndAt sets the "actual_end_at" field if the given value is not nil.
+func (vu *VideoUpdate) SetNillableActualEndAt(t *time.Time) *VideoUpdate {
+	if t != nil {
+		vu.SetActualEndAt(*t)
+	}
+	return vu
+}
+
+// ClearActualEndAt clears the value of the "actual_end_at" field.
+func (vu *VideoUpdate) ClearActualEndAt() *VideoUpdate {
+	vu.mutation.ClearActualEndAt()
+	return vu
+}
+
 // SetPublishedAt sets the "published_at" field.
 func (vu *VideoUpdate) SetPublishedAt(t time.Time) *VideoUpdate {
 	vu.mutation.SetPublishedAt(t)
@@ -552,6 +572,12 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if vu.mutation.ActualStartAtCleared() {
 		_spec.ClearField(video.FieldActualStartAt, field.TypeTime)
+	}
+	if value, ok := vu.mutation.ActualEndAt(); ok {
+		_spec.SetField(video.FieldActualEndAt, field.TypeTime, value)
+	}
+	if vu.mutation.ActualEndAtCleared() {
+		_spec.ClearField(video.FieldActualEndAt, field.TypeTime)
 	}
 	if value, ok := vu.mutation.PublishedAt(); ok {
 		_spec.SetField(video.FieldPublishedAt, field.TypeTime, value)
@@ -1001,6 +1027,26 @@ func (vuo *VideoUpdateOne) ClearActualStartAt() *VideoUpdateOne {
 	return vuo
 }
 
+// SetActualEndAt sets the "actual_end_at" field.
+func (vuo *VideoUpdateOne) SetActualEndAt(t time.Time) *VideoUpdateOne {
+	vuo.mutation.SetActualEndAt(t)
+	return vuo
+}
+
+// SetNillableActualEndAt sets the "actual_end_at" field if the given value is not nil.
+func (vuo *VideoUpdateOne) SetNillableActualEndAt(t *time.Time) *VideoUpdateOne {
+	if t != nil {
+		vuo.SetActualEndAt(*t)
+	}
+	return vuo
+}
+
+// ClearActualEndAt clears the value of the "actual_end_at" field.
+func (vuo *VideoUpdateOne) ClearActualEndAt() *VideoUpdateOne {
+	vuo.mutation.ClearActualEndAt()
+	return vuo
+}
+
 // SetPublishedAt sets the "published_at" field.
 func (vuo *VideoUpdateOne) SetPublishedAt(t time.Time) *VideoUpdateOne {
 	vuo.mutation.SetPublishedAt(t)
@@ -1384,6 +1430,12 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 	}
 	if vuo.mutation.ActualStartAtCleared() {
 		_spec.ClearField(video.FieldActualStartAt, field.TypeTime)
+	}
+	if value, ok := vuo.mutation.ActualEndAt(); ok {
+		_spec.SetField(video.FieldActualEndAt, field.TypeTime, value)
+	}
+	if vuo.mutation.ActualEndAtCleared() {
+		_spec.ClearField(video.FieldActualEndAt, field.TypeTime)
 	}
 	if value, ok := vuo.mutation.PublishedAt(); ok {
 		_spec.SetField(video.FieldPublishedAt, field.TypeTime, value)

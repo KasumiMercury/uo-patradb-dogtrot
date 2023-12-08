@@ -3996,6 +3996,7 @@ type VideoMutation struct {
 	has_time_range               *bool
 	scheduled_at                 *time.Time
 	actual_start_at              *time.Time
+	actual_end_at                *time.Time
 	published_at                 *time.Time
 	created_at                   *time.Time
 	updated_at                   *time.Time
@@ -4545,6 +4546,55 @@ func (m *VideoMutation) ResetActualStartAt() {
 	delete(m.clearedFields, video.FieldActualStartAt)
 }
 
+// SetActualEndAt sets the "actual_end_at" field.
+func (m *VideoMutation) SetActualEndAt(t time.Time) {
+	m.actual_end_at = &t
+}
+
+// ActualEndAt returns the value of the "actual_end_at" field in the mutation.
+func (m *VideoMutation) ActualEndAt() (r time.Time, exists bool) {
+	v := m.actual_end_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldActualEndAt returns the old "actual_end_at" field's value of the Video entity.
+// If the Video object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VideoMutation) OldActualEndAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldActualEndAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldActualEndAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldActualEndAt: %w", err)
+	}
+	return oldValue.ActualEndAt, nil
+}
+
+// ClearActualEndAt clears the value of the "actual_end_at" field.
+func (m *VideoMutation) ClearActualEndAt() {
+	m.actual_end_at = nil
+	m.clearedFields[video.FieldActualEndAt] = struct{}{}
+}
+
+// ActualEndAtCleared returns if the "actual_end_at" field was cleared in this mutation.
+func (m *VideoMutation) ActualEndAtCleared() bool {
+	_, ok := m.clearedFields[video.FieldActualEndAt]
+	return ok
+}
+
+// ResetActualEndAt resets all changes to the "actual_end_at" field.
+func (m *VideoMutation) ResetActualEndAt() {
+	m.actual_end_at = nil
+	delete(m.clearedFields, video.FieldActualEndAt)
+}
+
 // SetPublishedAt sets the "published_at" field.
 func (m *VideoMutation) SetPublishedAt(t time.Time) {
 	m.published_at = &t
@@ -4996,7 +5046,7 @@ func (m *VideoMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *VideoMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 14)
 	if m.video_id != nil {
 		fields = append(fields, video.FieldVideoID)
 	}
@@ -5026,6 +5076,9 @@ func (m *VideoMutation) Fields() []string {
 	}
 	if m.actual_start_at != nil {
 		fields = append(fields, video.FieldActualStartAt)
+	}
+	if m.actual_end_at != nil {
+		fields = append(fields, video.FieldActualEndAt)
 	}
 	if m.published_at != nil {
 		fields = append(fields, video.FieldPublishedAt)
@@ -5064,6 +5117,8 @@ func (m *VideoMutation) Field(name string) (ent.Value, bool) {
 		return m.ScheduledAt()
 	case video.FieldActualStartAt:
 		return m.ActualStartAt()
+	case video.FieldActualEndAt:
+		return m.ActualEndAt()
 	case video.FieldPublishedAt:
 		return m.PublishedAt()
 	case video.FieldCreatedAt:
@@ -5099,6 +5154,8 @@ func (m *VideoMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldScheduledAt(ctx)
 	case video.FieldActualStartAt:
 		return m.OldActualStartAt(ctx)
+	case video.FieldActualEndAt:
+		return m.OldActualEndAt(ctx)
 	case video.FieldPublishedAt:
 		return m.OldPublishedAt(ctx)
 	case video.FieldCreatedAt:
@@ -5184,6 +5241,13 @@ func (m *VideoMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetActualStartAt(v)
 		return nil
+	case video.FieldActualEndAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetActualEndAt(v)
+		return nil
 	case video.FieldPublishedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -5259,6 +5323,9 @@ func (m *VideoMutation) ClearedFields() []string {
 	if m.FieldCleared(video.FieldActualStartAt) {
 		fields = append(fields, video.FieldActualStartAt)
 	}
+	if m.FieldCleared(video.FieldActualEndAt) {
+		fields = append(fields, video.FieldActualEndAt)
+	}
 	return fields
 }
 
@@ -5281,6 +5348,9 @@ func (m *VideoMutation) ClearField(name string) error {
 		return nil
 	case video.FieldActualStartAt:
 		m.ClearActualStartAt()
+		return nil
+	case video.FieldActualEndAt:
+		m.ClearActualEndAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Video nullable field %s", name)
@@ -5319,6 +5389,9 @@ func (m *VideoMutation) ResetField(name string) error {
 		return nil
 	case video.FieldActualStartAt:
 		m.ResetActualStartAt()
+		return nil
+	case video.FieldActualEndAt:
+		m.ResetActualEndAt()
 		return nil
 	case video.FieldPublishedAt:
 		m.ResetPublishedAt()

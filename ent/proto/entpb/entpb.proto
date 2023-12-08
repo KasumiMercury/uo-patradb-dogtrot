@@ -370,9 +370,11 @@ message Video {
 
   google.protobuf.Timestamp actual_start_at = 9;
 
-  google.protobuf.Timestamp published_at = 10;
+  google.protobuf.Timestamp actual_end_at = 10;
 
-  google.protobuf.Timestamp updated_at = 11;
+  google.protobuf.Timestamp published_at = 11;
+
+  google.protobuf.Timestamp updated_at = 12;
 
   repeated Channel channel = 13;
 }

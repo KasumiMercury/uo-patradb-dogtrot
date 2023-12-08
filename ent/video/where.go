@@ -115,6 +115,11 @@ func ActualStartAt(v time.Time) predicate.Video {
 	return predicate.Video(sql.FieldEQ(FieldActualStartAt, v))
 }
 
+// ActualEndAt applies equality check predicate on the "actual_end_at" field. It's identical to ActualEndAtEQ.
+func ActualEndAt(v time.Time) predicate.Video {
+	return predicate.Video(sql.FieldEQ(FieldActualEndAt, v))
+}
+
 // PublishedAt applies equality check predicate on the "published_at" field. It's identical to PublishedAtEQ.
 func PublishedAt(v time.Time) predicate.Video {
 	return predicate.Video(sql.FieldEQ(FieldPublishedAt, v))
@@ -623,6 +628,56 @@ func ActualStartAtIsNil() predicate.Video {
 // ActualStartAtNotNil applies the NotNil predicate on the "actual_start_at" field.
 func ActualStartAtNotNil() predicate.Video {
 	return predicate.Video(sql.FieldNotNull(FieldActualStartAt))
+}
+
+// ActualEndAtEQ applies the EQ predicate on the "actual_end_at" field.
+func ActualEndAtEQ(v time.Time) predicate.Video {
+	return predicate.Video(sql.FieldEQ(FieldActualEndAt, v))
+}
+
+// ActualEndAtNEQ applies the NEQ predicate on the "actual_end_at" field.
+func ActualEndAtNEQ(v time.Time) predicate.Video {
+	return predicate.Video(sql.FieldNEQ(FieldActualEndAt, v))
+}
+
+// ActualEndAtIn applies the In predicate on the "actual_end_at" field.
+func ActualEndAtIn(vs ...time.Time) predicate.Video {
+	return predicate.Video(sql.FieldIn(FieldActualEndAt, vs...))
+}
+
+// ActualEndAtNotIn applies the NotIn predicate on the "actual_end_at" field.
+func ActualEndAtNotIn(vs ...time.Time) predicate.Video {
+	return predicate.Video(sql.FieldNotIn(FieldActualEndAt, vs...))
+}
+
+// ActualEndAtGT applies the GT predicate on the "actual_end_at" field.
+func ActualEndAtGT(v time.Time) predicate.Video {
+	return predicate.Video(sql.FieldGT(FieldActualEndAt, v))
+}
+
+// ActualEndAtGTE applies the GTE predicate on the "actual_end_at" field.
+func ActualEndAtGTE(v time.Time) predicate.Video {
+	return predicate.Video(sql.FieldGTE(FieldActualEndAt, v))
+}
+
+// ActualEndAtLT applies the LT predicate on the "actual_end_at" field.
+func ActualEndAtLT(v time.Time) predicate.Video {
+	return predicate.Video(sql.FieldLT(FieldActualEndAt, v))
+}
+
+// ActualEndAtLTE applies the LTE predicate on the "actual_end_at" field.
+func ActualEndAtLTE(v time.Time) predicate.Video {
+	return predicate.Video(sql.FieldLTE(FieldActualEndAt, v))
+}
+
+// ActualEndAtIsNil applies the IsNil predicate on the "actual_end_at" field.
+func ActualEndAtIsNil() predicate.Video {
+	return predicate.Video(sql.FieldIsNull(FieldActualEndAt))
+}
+
+// ActualEndAtNotNil applies the NotNil predicate on the "actual_end_at" field.
+func ActualEndAtNotNil() predicate.Video {
+	return predicate.Video(sql.FieldNotNull(FieldActualEndAt))
 }
 
 // PublishedAtEQ applies the EQ predicate on the "published_at" field.

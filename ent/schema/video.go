@@ -35,9 +35,10 @@ func (Video) Fields() []ent.Field {
 		field.Bool("has_time_range").Default(false).Annotations(entproto.Field(7)),
 		field.Time("scheduled_at").Optional().Annotations(entproto.Field(8)),
 		field.Time("actual_start_at").Optional().Annotations(entproto.Field(9)),
-		field.Time("published_at").Annotations(entproto.Field(10)),
+		field.Time("actual_end_at").Optional().Annotations(entproto.Field(10)),
+		field.Time("published_at").Annotations(entproto.Field(11)),
 		field.Time("created_at").Default(func() time.Time { return time.Now() }).Annotations(entproto.Skip()),
-		field.Time("updated_at").Default(func() time.Time { return time.Now() }).UpdateDefault(func() time.Time { return time.Now() }).Annotations(entproto.Field(11)),
+		field.Time("updated_at").Default(func() time.Time { return time.Now() }).UpdateDefault(func() time.Time { return time.Now() }).Annotations(entproto.Field(12)),
 	}
 }
 

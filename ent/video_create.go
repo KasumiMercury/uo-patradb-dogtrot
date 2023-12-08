@@ -126,6 +126,20 @@ func (vc *VideoCreate) SetNillableActualStartAt(t *time.Time) *VideoCreate {
 	return vc
 }
 
+// SetActualEndAt sets the "actual_end_at" field.
+func (vc *VideoCreate) SetActualEndAt(t time.Time) *VideoCreate {
+	vc.mutation.SetActualEndAt(t)
+	return vc
+}
+
+// SetNillableActualEndAt sets the "actual_end_at" field if the given value is not nil.
+func (vc *VideoCreate) SetNillableActualEndAt(t *time.Time) *VideoCreate {
+	if t != nil {
+		vc.SetActualEndAt(*t)
+	}
+	return vc
+}
+
 // SetPublishedAt sets the "published_at" field.
 func (vc *VideoCreate) SetPublishedAt(t time.Time) *VideoCreate {
 	vc.mutation.SetPublishedAt(t)
@@ -451,6 +465,10 @@ func (vc *VideoCreate) createSpec() (*Video, *sqlgraph.CreateSpec) {
 	if value, ok := vc.mutation.ActualStartAt(); ok {
 		_spec.SetField(video.FieldActualStartAt, field.TypeTime, value)
 		_node.ActualStartAt = value
+	}
+	if value, ok := vc.mutation.ActualEndAt(); ok {
+		_spec.SetField(video.FieldActualEndAt, field.TypeTime, value)
+		_node.ActualEndAt = value
 	}
 	if value, ok := vc.mutation.PublishedAt(); ok {
 		_spec.SetField(video.FieldPublishedAt, field.TypeTime, value)

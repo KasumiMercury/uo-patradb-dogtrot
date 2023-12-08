@@ -147,6 +147,7 @@ var (
 		{Name: "has_time_range", Type: field.TypeBool, Default: false},
 		{Name: "scheduled_at", Type: field.TypeTime, Nullable: true},
 		{Name: "actual_start_at", Type: field.TypeTime, Nullable: true},
+		{Name: "actual_end_at", Type: field.TypeTime, Nullable: true},
 		{Name: "published_at", Type: field.TypeTime},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},

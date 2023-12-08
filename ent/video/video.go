@@ -34,6 +34,8 @@ const (
 	FieldScheduledAt = "scheduled_at"
 	// FieldActualStartAt holds the string denoting the actual_start_at field in the database.
 	FieldActualStartAt = "actual_start_at"
+	// FieldActualEndAt holds the string denoting the actual_end_at field in the database.
+	FieldActualEndAt = "actual_end_at"
 	// FieldPublishedAt holds the string denoting the published_at field in the database.
 	FieldPublishedAt = "published_at"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
@@ -109,6 +111,7 @@ var Columns = []string{
 	FieldHasTimeRange,
 	FieldScheduledAt,
 	FieldActualStartAt,
+	FieldActualEndAt,
 	FieldPublishedAt,
 	FieldCreatedAt,
 	FieldUpdatedAt,
@@ -209,6 +212,11 @@ func ByScheduledAt(opts ...sql.OrderTermOption) OrderOption {
 // ByActualStartAt orders the results by the actual_start_at field.
 func ByActualStartAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldActualStartAt, opts...).ToFunc()
+}
+
+// ByActualEndAt orders the results by the actual_end_at field.
+func ByActualEndAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldActualEndAt, opts...).ToFunc()
 }
 
 // ByPublishedAt orders the results by the published_at field.

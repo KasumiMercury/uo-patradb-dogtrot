@@ -204,11 +204,11 @@ func init() {
 	// video.DefaultHasTimeRange holds the default value on creation for the has_time_range field.
 	video.DefaultHasTimeRange = videoDescHasTimeRange.Default.(bool)
 	// videoDescCreatedAt is the schema descriptor for created_at field.
-	videoDescCreatedAt := videoFields[11].Descriptor()
+	videoDescCreatedAt := videoFields[12].Descriptor()
 	// video.DefaultCreatedAt holds the default value on creation for the created_at field.
 	video.DefaultCreatedAt = videoDescCreatedAt.Default.(func() time.Time)
 	// videoDescUpdatedAt is the schema descriptor for updated_at field.
-	videoDescUpdatedAt := videoFields[12].Descriptor()
+	videoDescUpdatedAt := videoFields[13].Descriptor()
 	// video.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	video.DefaultUpdatedAt = videoDescUpdatedAt.Default.(func() time.Time)
 	// video.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.

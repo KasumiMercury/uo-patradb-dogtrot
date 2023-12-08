@@ -18,7 +18,11 @@ import (
 func main() {
 	loadEnv()
 
-	dsn := os.Getenv("MYSQL_MIGRATE_DSN")
+	//dsn := os.Getenv("MYSQL_MIGRATE_DSN")
+	du := os.Getenv("MYSQL_USER")
+	dp := os.Getenv("MYSQL_PASSWORD")
+	da := os.Getenv("MYSQL_ADDR")
+	dn := os.Getenv("MYSQL_DATABASE")
 
 	ctx := context.Background()
 
@@ -35,7 +39,7 @@ func main() {
 		schema.WithFormatter(atlas.DefaultFormatter),
 	}
 
-	err = migrate.NamedDiff(ctx, fmt.Sprintf("mysql://%s", dsn), os.Args[1], opts...)
+	err = migrate.NamedDiff(ctx, fmt.Sprintf("mysql://%s:%s@%s/%s", du, dp, da, dn), os.Args[1], opts...)
 	if err != nil {
 		log.Fatalf("failed to generate migrations: %v", err)
 	}

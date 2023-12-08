@@ -24,8 +24,8 @@ func (VideoPlayRange) Mixin() []ent.Mixin {
 // Fields of the VideoPlayRange.
 func (VideoPlayRange) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int("start_seconds").Default(0).Annotations(entproto.Field(2)),
-		field.Int("end_seconds").Optional().Annotations(entproto.Field(3)),
+		field.Int("start_seconds").NonNegative().Default(0).Annotations(entproto.Field(2)),
+		field.Int("end_seconds").Positive().Optional().Annotations(entproto.Field(3)),
 	}
 }
 

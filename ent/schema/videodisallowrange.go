@@ -24,8 +24,8 @@ func (VideoDisallowRange) Mixin() []ent.Mixin {
 // Fields of the VideoDisallowRange.
 func (VideoDisallowRange) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int("start_seconds").Annotations(entproto.Field(2)),
-		field.Int("end_seconds").Annotations(entproto.Field(3)),
+		field.Int("start_seconds").NonNegative().Annotations(entproto.Field(2)),
+		field.Int("end_seconds").Positive().Annotations(entproto.Field(3)),
 	}
 }
 

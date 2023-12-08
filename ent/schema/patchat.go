@@ -25,9 +25,9 @@ func (PatChat) Mixin() []ent.Mixin {
 // Fields of the PatChat.
 func (PatChat) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("message").Annotations(entproto.Field(2)),
-		field.Float("magnitude").Annotations(entproto.Skip()),
-		field.Float("score").Annotations(entproto.Skip()),
+		field.String("message").MaxLen(200).Annotations(entproto.Field(2)),
+		field.Float("magnitude").Min(0.0).Annotations(entproto.Skip()),
+		field.Float("score").Range(-1.0, 1.0).Annotations(entproto.Skip()),
 		field.Bool("is_negative").Default(false).Annotations(entproto.Field(3)),
 		field.Time("published_at").Annotations(entproto.Field(4)),
 		field.Time("created_at").Default(func() time.Time { return time.Now() }).Annotations(entproto.Skip()),

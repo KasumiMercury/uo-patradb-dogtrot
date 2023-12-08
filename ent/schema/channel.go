@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
+	"regexp"
 )
 
 // Channel holds the schema definition for the Channel entity.
@@ -24,10 +25,10 @@ func (Channel) Mixin() []ent.Mixin {
 // Fields of the Channel.
 func (Channel) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("display_name").Annotations(entproto.Field(2)),
-		field.String("channel_id").Unique().Annotations(entproto.Field(3)),
-		field.String("handle").Annotations(entproto.Field(4)),
-		field.String("thumbnail_url").Annotations(entproto.Field(5)),
+		field.String("display_name").MaxLen(100).Annotations(entproto.Field(2)),
+		field.String("channel_id").MaxLen(26).Unique().Annotations(entproto.Field(3)),
+		field.String("handle").MaxLen(30).Annotations(entproto.Field(4)),
+		field.String("thumbnail_url").MaxLen(140).Match(regexp.MustCompile("^https://yt3.ggpht.com/.+")).Annotations(entproto.Field(5)),
 	}
 }
 

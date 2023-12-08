@@ -25,11 +25,11 @@ func (Video) Mixin() []ent.Mixin {
 // Fields of the Video.
 func (Video) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("video_id").Unique().Annotations(entproto.Field(2)),
-		field.String("title").Annotations(entproto.Field(3)),
+		field.String("video_id").MaxLen(12).Unique().Annotations(entproto.Field(2)),
+		field.String("title").MaxLen(100).Annotations(entproto.Field(3)),
 		field.String("normalized_title").Annotations(entproto.Skip()),
-		field.Int("duration_seconds").Annotations(entproto.Field(4)),
-		field.Bool("is_collaboration").Annotations(entproto.Field(5)),
+		field.Int("duration_seconds").Positive().Max(43200).Annotations(entproto.Field(4)),
+		field.Bool("is_collaboration").Default(false).Annotations(entproto.Field(5)),
 		field.String("status").Annotations(entproto.Field(6)),
 		field.String("chat_id").Optional().Annotations(entproto.Skip()),
 		field.Bool("has_time_range").Default(false).Annotations(entproto.Field(7)),

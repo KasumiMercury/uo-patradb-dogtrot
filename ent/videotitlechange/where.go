@@ -200,6 +200,16 @@ func NormalizedTitleHasSuffix(v string) predicate.VideoTitleChange {
 	return predicate.VideoTitleChange(sql.FieldHasSuffix(FieldNormalizedTitle, v))
 }
 
+// NormalizedTitleIsNil applies the IsNil predicate on the "normalized_title" field.
+func NormalizedTitleIsNil() predicate.VideoTitleChange {
+	return predicate.VideoTitleChange(sql.FieldIsNull(FieldNormalizedTitle))
+}
+
+// NormalizedTitleNotNil applies the NotNil predicate on the "normalized_title" field.
+func NormalizedTitleNotNil() predicate.VideoTitleChange {
+	return predicate.VideoTitleChange(sql.FieldNotNull(FieldNormalizedTitle))
+}
+
 // NormalizedTitleEqualFold applies the EqualFold predicate on the "normalized_title" field.
 func NormalizedTitleEqualFold(v string) predicate.VideoTitleChange {
 	return predicate.VideoTitleChange(sql.FieldEqualFold(FieldNormalizedTitle, v))

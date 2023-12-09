@@ -33,6 +33,14 @@ func (vtcc *VideoTitleChangeCreate) SetNormalizedTitle(s string) *VideoTitleChan
 	return vtcc
 }
 
+// SetNillableNormalizedTitle sets the "normalized_title" field if the given value is not nil.
+func (vtcc *VideoTitleChangeCreate) SetNillableNormalizedTitle(s *string) *VideoTitleChangeCreate {
+	if s != nil {
+		vtcc.SetNormalizedTitle(*s)
+	}
+	return vtcc
+}
+
 // SetChangedAt sets the "changed_at" field.
 func (vtcc *VideoTitleChangeCreate) SetChangedAt(t time.Time) *VideoTitleChangeCreate {
 	vtcc.mutation.SetChangedAt(t)
@@ -126,9 +134,6 @@ func (vtcc *VideoTitleChangeCreate) check() error {
 		if err := videotitlechange.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "VideoTitleChange.title": %w`, err)}
 		}
-	}
-	if _, ok := vtcc.mutation.NormalizedTitle(); !ok {
-		return &ValidationError{Name: "normalized_title", err: errors.New(`ent: missing required field "VideoTitleChange.normalized_title"`)}
 	}
 	if _, ok := vtcc.mutation.ChangedAt(); !ok {
 		return &ValidationError{Name: "changed_at", err: errors.New(`ent: missing required field "VideoTitleChange.changed_at"`)}

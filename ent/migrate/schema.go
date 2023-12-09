@@ -204,7 +204,7 @@ var (
 	VideoTitleChangesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
 		{Name: "title", Type: field.TypeString, Size: 100},
-		{Name: "normalized_title", Type: field.TypeString},
+		{Name: "normalized_title", Type: field.TypeString, Nullable: true},
 		{Name: "changed_at", Type: field.TypeTime},
 		{Name: "video_id", Type: field.TypeString, Size: 26},
 	}

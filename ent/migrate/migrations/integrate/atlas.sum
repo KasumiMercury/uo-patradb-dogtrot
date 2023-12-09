@@ -1,4 +1,4 @@
-h1:z5meI+XiBn0d4/4vg6sNmOYCP54EpMn/kBpMJgn/eYs=
+h1:UMhf95BxTOwQJkNvCMDQhqw1rHq+hPDG9vCYlr6wGg0=
 20231207163917_init.sql h1:wuRJCopu5I78BiBW+PdDzDuJopHoy8VA+nor2vKlNK0=
 20231207171600_index_description.sql h1:khdJ/E2qdZKqaVkTX4zQsI1hZDcyWBCug9/SCLK0qZs=
 20231207180936_index_video_id.sql h1:qz2rbhuP+LnS1uvOWUEoGu+yEdjJAy+kKnCb1LgVypM=
@@ -7,3 +7,4 @@ h1:z5meI+XiBn0d4/4vg6sNmOYCP54EpMn/kBpMJgn/eYs=
 20231208094837_add_validator.sql h1:c6kV8gPZ6Kevr+xqR6Q5iONzCAi1N9kI/Z4uqMcLn98=
 20231208164914_change_video_time_data.sql h1:tOboH8LVH6f9+yqLFGrjBXTid79Ygw0LvOoW3ygg/uE=
 20231209190133_change_null_column.sql h1:xiAlSUoGQ6CDynSxxKKE819dDsAimvfZXfbg50VIQdM=
+20231209204645_change_null_column.sql h1:CTYT5E3e0M7Xy2fCo5oZXqm4jchR73Jepo5nH4p+zfk=

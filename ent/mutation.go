@@ -6906,9 +6906,22 @@ func (m *VideoTitleChangeMutation) OldNormalizedTitle(ctx context.Context) (v st
 	return oldValue.NormalizedTitle, nil
 }
 
+// ClearNormalizedTitle clears the value of the "normalized_title" field.
+func (m *VideoTitleChangeMutation) ClearNormalizedTitle() {
+	m.normalized_title = nil
+	m.clearedFields[videotitlechange.FieldNormalizedTitle] = struct{}{}
+}
+
+// NormalizedTitleCleared returns if the "normalized_title" field was cleared in this mutation.
+func (m *VideoTitleChangeMutation) NormalizedTitleCleared() bool {
+	_, ok := m.clearedFields[videotitlechange.FieldNormalizedTitle]
+	return ok
+}
+
 // ResetNormalizedTitle resets all changes to the "normalized_title" field.
 func (m *VideoTitleChangeMutation) ResetNormalizedTitle() {
 	m.normalized_title = nil
+	delete(m.clearedFields, videotitlechange.FieldNormalizedTitle)
 }
 
 // SetChangedAt sets the "changed_at" field.
@@ -7118,7 +7131,11 @@ func (m *VideoTitleChangeMutation) AddField(name string, value ent.Value) error 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *VideoTitleChangeMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(videotitlechange.FieldNormalizedTitle) {
+		fields = append(fields, videotitlechange.FieldNormalizedTitle)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -7131,6 +7148,11 @@ func (m *VideoTitleChangeMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *VideoTitleChangeMutation) ClearField(name string) error {
+	switch name {
+	case videotitlechange.FieldNormalizedTitle:
+		m.ClearNormalizedTitle()
+		return nil
+	}
 	return fmt.Errorf("unknown VideoTitleChange nullable field %s", name)
 }
 

@@ -358,7 +358,7 @@ message Video {
 
   string title = 3;
 
-  int64 duration_seconds = 4;
+  google.protobuf.Int64Value duration_seconds = 4;
 
   bool is_collaboration = 5;
 

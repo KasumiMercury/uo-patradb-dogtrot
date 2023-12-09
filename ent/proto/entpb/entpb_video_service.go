@@ -16,6 +16,7 @@ import (
 	status "google.golang.org/grpc/status"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
+	wrapperspb "google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 // VideoService implements VideoServiceServer
@@ -38,7 +39,7 @@ func toProtoVideo(e *ent.Video) (*Video, error) {
 	v.ActualEndAt = actual_end_at
 	actual_start_at := timestamppb.New(e.ActualStartAt)
 	v.ActualStartAt = actual_start_at
-	duration_seconds := int64(e.DurationSeconds)
+	duration_seconds := wrapperspb.Int64(int64(e.DurationSeconds))
 	v.DurationSeconds = duration_seconds
 	has_time_range := e.HasTimeRange
 	v.HasTimeRange = has_time_range
@@ -149,8 +150,10 @@ func (svc *VideoService) Update(ctx context.Context, req *UpdateVideoRequest) (*
 		videoActualStartAt := runtime.ExtractTime(video.GetActualStartAt())
 		m.SetActualStartAt(videoActualStartAt)
 	}
-	videoDurationSeconds := int(video.GetDurationSeconds())
-	m.SetDurationSeconds(videoDurationSeconds)
+	if video.GetDurationSeconds() != nil {
+		videoDurationSeconds := int(video.GetDurationSeconds().GetValue())
+		m.SetDurationSeconds(videoDurationSeconds)
+	}
 	videoHasTimeRange := video.GetHasTimeRange()
 	m.SetHasTimeRange(videoHasTimeRange)
 	videoIsCollaboration := video.GetIsCollaboration()
@@ -311,8 +314,10 @@ func (svc *VideoService) createBuilder(video *Video) (*ent.VideoCreate, error) {
 		videoActualStartAt := runtime.ExtractTime(video.GetActualStartAt())
 		m.SetActualStartAt(videoActualStartAt)
 	}
-	videoDurationSeconds := int(video.GetDurationSeconds())
-	m.SetDurationSeconds(videoDurationSeconds)
+	if video.GetDurationSeconds() != nil {
+		videoDurationSeconds := int(video.GetDurationSeconds().GetValue())
+		m.SetDurationSeconds(videoDurationSeconds)
+	}
 	videoHasTimeRange := video.GetHasTimeRange()
 	m.SetHasTimeRange(videoHasTimeRange)
 	videoIsCollaboration := video.GetIsCollaboration()

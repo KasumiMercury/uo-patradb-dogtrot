@@ -52,7 +52,7 @@ atlas-hash-custom:
 atlas-apply:
 	atlas migrate apply \
 	  --dir "file://ent/migrate/migrations/integrate" \
-	  --url "mysql://$(MYSQL_USER):$(MYSQL_PASSWORD)@$(MYSQL_HOST):$(MYSQL_PORT)/$(MYSQL_DATABASE)?parseTime=true&multiStatements=true"
+	  --url "mysql://$(MYSQL_USER):$(MYSQL_PASSWORD)@$(MYSQL_ADDR)/$(MYSQL_DATABASE)?parseTime=true&multiStatements=true"
 
 generate-sql:
 	go run -mod=mod ./cmd/migration/main.go $(ARG)

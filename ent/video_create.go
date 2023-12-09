@@ -44,9 +44,25 @@ func (vc *VideoCreate) SetNormalizedTitle(s string) *VideoCreate {
 	return vc
 }
 
+// SetNillableNormalizedTitle sets the "normalized_title" field if the given value is not nil.
+func (vc *VideoCreate) SetNillableNormalizedTitle(s *string) *VideoCreate {
+	if s != nil {
+		vc.SetNormalizedTitle(*s)
+	}
+	return vc
+}
+
 // SetDurationSeconds sets the "duration_seconds" field.
 func (vc *VideoCreate) SetDurationSeconds(i int) *VideoCreate {
 	vc.mutation.SetDurationSeconds(i)
+	return vc
+}
+
+// SetNillableDurationSeconds sets the "duration_seconds" field if the given value is not nil.
+func (vc *VideoCreate) SetNillableDurationSeconds(i *int) *VideoCreate {
+	if i != nil {
+		vc.SetDurationSeconds(*i)
+	}
 	return vc
 }
 
@@ -356,12 +372,6 @@ func (vc *VideoCreate) check() error {
 		if err := video.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "Video.title": %w`, err)}
 		}
-	}
-	if _, ok := vc.mutation.NormalizedTitle(); !ok {
-		return &ValidationError{Name: "normalized_title", err: errors.New(`ent: missing required field "Video.normalized_title"`)}
-	}
-	if _, ok := vc.mutation.DurationSeconds(); !ok {
-		return &ValidationError{Name: "duration_seconds", err: errors.New(`ent: missing required field "Video.duration_seconds"`)}
 	}
 	if v, ok := vc.mutation.DurationSeconds(); ok {
 		if err := video.DurationSecondsValidator(v); err != nil {

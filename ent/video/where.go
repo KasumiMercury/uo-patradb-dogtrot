@@ -320,6 +320,16 @@ func NormalizedTitleHasSuffix(v string) predicate.Video {
 	return predicate.Video(sql.FieldHasSuffix(FieldNormalizedTitle, v))
 }
 
+// NormalizedTitleIsNil applies the IsNil predicate on the "normalized_title" field.
+func NormalizedTitleIsNil() predicate.Video {
+	return predicate.Video(sql.FieldIsNull(FieldNormalizedTitle))
+}
+
+// NormalizedTitleNotNil applies the NotNil predicate on the "normalized_title" field.
+func NormalizedTitleNotNil() predicate.Video {
+	return predicate.Video(sql.FieldNotNull(FieldNormalizedTitle))
+}
+
 // NormalizedTitleEqualFold applies the EqualFold predicate on the "normalized_title" field.
 func NormalizedTitleEqualFold(v string) predicate.Video {
 	return predicate.Video(sql.FieldEqualFold(FieldNormalizedTitle, v))
@@ -368,6 +378,16 @@ func DurationSecondsLT(v int) predicate.Video {
 // DurationSecondsLTE applies the LTE predicate on the "duration_seconds" field.
 func DurationSecondsLTE(v int) predicate.Video {
 	return predicate.Video(sql.FieldLTE(FieldDurationSeconds, v))
+}
+
+// DurationSecondsIsNil applies the IsNil predicate on the "duration_seconds" field.
+func DurationSecondsIsNil() predicate.Video {
+	return predicate.Video(sql.FieldIsNull(FieldDurationSeconds))
+}
+
+// DurationSecondsNotNil applies the NotNil predicate on the "duration_seconds" field.
+func DurationSecondsNotNil() predicate.Video {
+	return predicate.Video(sql.FieldNotNull(FieldDurationSeconds))
 }
 
 // IsCollaborationEQ applies the EQ predicate on the "is_collaboration" field.

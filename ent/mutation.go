@@ -4230,9 +4230,22 @@ func (m *VideoMutation) OldNormalizedTitle(ctx context.Context) (v string, err e
 	return oldValue.NormalizedTitle, nil
 }
 
+// ClearNormalizedTitle clears the value of the "normalized_title" field.
+func (m *VideoMutation) ClearNormalizedTitle() {
+	m.normalized_title = nil
+	m.clearedFields[video.FieldNormalizedTitle] = struct{}{}
+}
+
+// NormalizedTitleCleared returns if the "normalized_title" field was cleared in this mutation.
+func (m *VideoMutation) NormalizedTitleCleared() bool {
+	_, ok := m.clearedFields[video.FieldNormalizedTitle]
+	return ok
+}
+
 // ResetNormalizedTitle resets all changes to the "normalized_title" field.
 func (m *VideoMutation) ResetNormalizedTitle() {
 	m.normalized_title = nil
+	delete(m.clearedFields, video.FieldNormalizedTitle)
 }
 
 // SetDurationSeconds sets the "duration_seconds" field.
@@ -4285,10 +4298,24 @@ func (m *VideoMutation) AddedDurationSeconds() (r int, exists bool) {
 	return *v, true
 }
 
+// ClearDurationSeconds clears the value of the "duration_seconds" field.
+func (m *VideoMutation) ClearDurationSeconds() {
+	m.duration_seconds = nil
+	m.addduration_seconds = nil
+	m.clearedFields[video.FieldDurationSeconds] = struct{}{}
+}
+
+// DurationSecondsCleared returns if the "duration_seconds" field was cleared in this mutation.
+func (m *VideoMutation) DurationSecondsCleared() bool {
+	_, ok := m.clearedFields[video.FieldDurationSeconds]
+	return ok
+}
+
 // ResetDurationSeconds resets all changes to the "duration_seconds" field.
 func (m *VideoMutation) ResetDurationSeconds() {
 	m.duration_seconds = nil
 	m.addduration_seconds = nil
+	delete(m.clearedFields, video.FieldDurationSeconds)
 }
 
 // SetIsCollaboration sets the "is_collaboration" field.
@@ -5314,6 +5341,12 @@ func (m *VideoMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *VideoMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(video.FieldNormalizedTitle) {
+		fields = append(fields, video.FieldNormalizedTitle)
+	}
+	if m.FieldCleared(video.FieldDurationSeconds) {
+		fields = append(fields, video.FieldDurationSeconds)
+	}
 	if m.FieldCleared(video.FieldChatID) {
 		fields = append(fields, video.FieldChatID)
 	}
@@ -5340,6 +5373,12 @@ func (m *VideoMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *VideoMutation) ClearField(name string) error {
 	switch name {
+	case video.FieldNormalizedTitle:
+		m.ClearNormalizedTitle()
+		return nil
+	case video.FieldDurationSeconds:
+		m.ClearDurationSeconds()
+		return nil
 	case video.FieldChatID:
 		m.ClearChatID()
 		return nil

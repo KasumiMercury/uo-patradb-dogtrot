@@ -76,6 +76,12 @@ func (vu *VideoUpdate) SetNillableNormalizedTitle(s *string) *VideoUpdate {
 	return vu
 }
 
+// ClearNormalizedTitle clears the value of the "normalized_title" field.
+func (vu *VideoUpdate) ClearNormalizedTitle() *VideoUpdate {
+	vu.mutation.ClearNormalizedTitle()
+	return vu
+}
+
 // SetDurationSeconds sets the "duration_seconds" field.
 func (vu *VideoUpdate) SetDurationSeconds(i int) *VideoUpdate {
 	vu.mutation.ResetDurationSeconds()
@@ -94,6 +100,12 @@ func (vu *VideoUpdate) SetNillableDurationSeconds(i *int) *VideoUpdate {
 // AddDurationSeconds adds i to the "duration_seconds" field.
 func (vu *VideoUpdate) AddDurationSeconds(i int) *VideoUpdate {
 	vu.mutation.AddDurationSeconds(i)
+	return vu
+}
+
+// ClearDurationSeconds clears the value of the "duration_seconds" field.
+func (vu *VideoUpdate) ClearDurationSeconds() *VideoUpdate {
+	vu.mutation.ClearDurationSeconds()
 	return vu
 }
 
@@ -540,11 +552,17 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := vu.mutation.NormalizedTitle(); ok {
 		_spec.SetField(video.FieldNormalizedTitle, field.TypeString, value)
 	}
+	if vu.mutation.NormalizedTitleCleared() {
+		_spec.ClearField(video.FieldNormalizedTitle, field.TypeString)
+	}
 	if value, ok := vu.mutation.DurationSeconds(); ok {
 		_spec.SetField(video.FieldDurationSeconds, field.TypeInt, value)
 	}
 	if value, ok := vu.mutation.AddedDurationSeconds(); ok {
 		_spec.AddField(video.FieldDurationSeconds, field.TypeInt, value)
+	}
+	if vu.mutation.DurationSecondsCleared() {
+		_spec.ClearField(video.FieldDurationSeconds, field.TypeInt)
 	}
 	if value, ok := vu.mutation.IsCollaboration(); ok {
 		_spec.SetField(video.FieldIsCollaboration, field.TypeBool, value)
@@ -904,6 +922,12 @@ func (vuo *VideoUpdateOne) SetNillableNormalizedTitle(s *string) *VideoUpdateOne
 	return vuo
 }
 
+// ClearNormalizedTitle clears the value of the "normalized_title" field.
+func (vuo *VideoUpdateOne) ClearNormalizedTitle() *VideoUpdateOne {
+	vuo.mutation.ClearNormalizedTitle()
+	return vuo
+}
+
 // SetDurationSeconds sets the "duration_seconds" field.
 func (vuo *VideoUpdateOne) SetDurationSeconds(i int) *VideoUpdateOne {
 	vuo.mutation.ResetDurationSeconds()
@@ -922,6 +946,12 @@ func (vuo *VideoUpdateOne) SetNillableDurationSeconds(i *int) *VideoUpdateOne {
 // AddDurationSeconds adds i to the "duration_seconds" field.
 func (vuo *VideoUpdateOne) AddDurationSeconds(i int) *VideoUpdateOne {
 	vuo.mutation.AddDurationSeconds(i)
+	return vuo
+}
+
+// ClearDurationSeconds clears the value of the "duration_seconds" field.
+func (vuo *VideoUpdateOne) ClearDurationSeconds() *VideoUpdateOne {
+	vuo.mutation.ClearDurationSeconds()
 	return vuo
 }
 
@@ -1398,11 +1428,17 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 	if value, ok := vuo.mutation.NormalizedTitle(); ok {
 		_spec.SetField(video.FieldNormalizedTitle, field.TypeString, value)
 	}
+	if vuo.mutation.NormalizedTitleCleared() {
+		_spec.ClearField(video.FieldNormalizedTitle, field.TypeString)
+	}
 	if value, ok := vuo.mutation.DurationSeconds(); ok {
 		_spec.SetField(video.FieldDurationSeconds, field.TypeInt, value)
 	}
 	if value, ok := vuo.mutation.AddedDurationSeconds(); ok {
 		_spec.AddField(video.FieldDurationSeconds, field.TypeInt, value)
+	}
+	if vuo.mutation.DurationSecondsCleared() {
+		_spec.ClearField(video.FieldDurationSeconds, field.TypeInt)
 	}
 	if value, ok := vuo.mutation.IsCollaboration(); ok {
 		_spec.SetField(video.FieldIsCollaboration, field.TypeBool, value)

@@ -16,5 +16,3 @@ func init() {
 func MustNew() string {
 	return ulid.MustNew(ulid.Timestamp(time.Now()), defaultEntropySource).String()
 }
-
-//func MustNew(prefix string) string { return prefix + fmt.Sprint(newULID()) }

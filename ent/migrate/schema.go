@@ -38,7 +38,7 @@ var (
 	// DescriptionsColumns holds the columns for the "descriptions" table.
 	DescriptionsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
-		{Name: "raw", Type: field.TypeString, Size: 1000},
+		{Name: "raw", Type: field.TypeString, Size: 5000},
 		{Name: "variable", Type: field.TypeString, Nullable: true},
 		{Name: "normalized_variable", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime},
@@ -76,7 +76,7 @@ var (
 	// DescriptionChangesColumns holds the columns for the "description_changes" table.
 	DescriptionChangesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
-		{Name: "raw", Type: field.TypeString, Size: 1000},
+		{Name: "raw", Type: field.TypeString, Size: 5000},
 		{Name: "variable", Type: field.TypeString, Nullable: true},
 		{Name: "normalized_variable", Type: field.TypeString, Nullable: true},
 		{Name: "changed_at", Type: field.TypeTime},

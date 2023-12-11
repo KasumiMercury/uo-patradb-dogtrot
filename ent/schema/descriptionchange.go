@@ -23,7 +23,7 @@ func (DescriptionChange) Mixin() []ent.Mixin {
 // Fields of the DescriptionChange.
 func (DescriptionChange) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("raw").MaxLen(1000),
+		field.String("raw").MaxLen(5000),
 		field.String("variable").Optional(),
 		field.String("normalized_variable").Optional(),
 		field.Time("changed_at").Default(func() time.Time { return time.Now() }),

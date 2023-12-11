@@ -9,3 +9,4 @@ go.work
 tmp/
 __debug_bin*
 mysql/
+/mysql-data

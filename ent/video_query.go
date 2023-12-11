@@ -478,12 +478,12 @@ func (vq *VideoQuery) WithPatChats(opts ...func(*PatChatQuery)) *VideoQuery {
 // Example:
 //
 //	var v []struct {
-//		VideoID string `json:"video_id,omitempty"`
+//		SourceID string `json:"source_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Video.Query().
-//		GroupBy(video.FieldVideoID).
+//		GroupBy(video.FieldSourceID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (vq *VideoQuery) GroupBy(field string, fields ...string) *VideoGroupBy {
@@ -501,11 +501,11 @@ func (vq *VideoQuery) GroupBy(field string, fields ...string) *VideoGroupBy {
 // Example:
 //
 //	var v []struct {
-//		VideoID string `json:"video_id,omitempty"`
+//		SourceID string `json:"source_id,omitempty"`
 //	}
 //
 //	client.Video.Query().
-//		Select(video.FieldVideoID).
+//		Select(video.FieldSourceID).
 //		Scan(ctx, &v)
 func (vq *VideoQuery) Select(fields ...string) *VideoSelect {
 	vq.ctx.Fields = append(vq.ctx.Fields, fields...)

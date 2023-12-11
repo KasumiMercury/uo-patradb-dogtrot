@@ -51,14 +51,14 @@ func toProtoVideo(e *ent.Video) (*Video, error) {
 	v.PublishedAt = published_at
 	scheduled_at := timestamppb.New(e.ScheduledAt)
 	v.ScheduledAt = scheduled_at
+	source_id := e.SourceID
+	v.SourceId = source_id
 	status := e.Status
 	v.Status = status
 	title := e.Title
 	v.Title = title
 	updated_at := timestamppb.New(e.UpdatedAt)
 	v.UpdatedAt = updated_at
-	video_id := e.VideoID
-	v.VideoId = video_id
 	for _, edg := range e.Edges.Channel {
 		id := edg.ID
 		v.Channel = append(v.Channel, &Channel{
@@ -164,14 +164,14 @@ func (svc *VideoService) Update(ctx context.Context, req *UpdateVideoRequest) (*
 		videoScheduledAt := runtime.ExtractTime(video.GetScheduledAt())
 		m.SetScheduledAt(videoScheduledAt)
 	}
+	videoSourceID := video.GetSourceId()
+	m.SetSourceID(videoSourceID)
 	videoStatus := video.GetStatus()
 	m.SetStatus(videoStatus)
 	videoTitle := video.GetTitle()
 	m.SetTitle(videoTitle)
 	videoUpdatedAt := runtime.ExtractTime(video.GetUpdatedAt())
 	m.SetUpdatedAt(videoUpdatedAt)
-	videoVideoID := video.GetVideoId()
-	m.SetVideoID(videoVideoID)
 	for _, item := range video.GetChannel() {
 		channel := item.GetId()
 		m.AddChannelIDs(channel)
@@ -328,14 +328,14 @@ func (svc *VideoService) createBuilder(video *Video) (*ent.VideoCreate, error) {
 		videoScheduledAt := runtime.ExtractTime(video.GetScheduledAt())
 		m.SetScheduledAt(videoScheduledAt)
 	}
+	videoSourceID := video.GetSourceId()
+	m.SetSourceID(videoSourceID)
 	videoStatus := video.GetStatus()
 	m.SetStatus(videoStatus)
 	videoTitle := video.GetTitle()
 	m.SetTitle(videoTitle)
 	videoUpdatedAt := runtime.ExtractTime(video.GetUpdatedAt())
 	m.SetUpdatedAt(videoUpdatedAt)
-	videoVideoID := video.GetVideoId()
-	m.SetVideoID(videoVideoID)
 	for _, item := range video.GetChannel() {
 		channel := item.GetId()
 		m.AddChannelIDs(channel)

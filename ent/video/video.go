@@ -14,8 +14,8 @@ const (
 	Label = "video"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldVideoID holds the string denoting the video_id field in the database.
-	FieldVideoID = "video_id"
+	// FieldSourceID holds the string denoting the source_id field in the database.
+	FieldSourceID = "source_id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
 	// FieldNormalizedTitle holds the string denoting the normalized_title field in the database.
@@ -101,7 +101,7 @@ const (
 // Columns holds all SQL columns for video fields.
 var Columns = []string{
 	FieldID,
-	FieldVideoID,
+	FieldSourceID,
 	FieldTitle,
 	FieldNormalizedTitle,
 	FieldDurationSeconds,
@@ -134,8 +134,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// VideoIDValidator is a validator for the "video_id" field. It is called by the builders before save.
-	VideoIDValidator func(string) error
+	// SourceIDValidator is a validator for the "source_id" field. It is called by the builders before save.
+	SourceIDValidator func(string) error
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
 	// DurationSecondsValidator is a validator for the "duration_seconds" field. It is called by the builders before save.
@@ -164,9 +164,9 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByVideoID orders the results by the video_id field.
-func ByVideoID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldVideoID, opts...).ToFunc()
+// BySourceID orders the results by the source_id field.
+func BySourceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceID, opts...).ToFunc()
 }
 
 // ByTitle orders the results by the title field.

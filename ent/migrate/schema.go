@@ -137,7 +137,7 @@ var (
 	// VideosColumns holds the columns for the "videos" table.
 	VideosColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
-		{Name: "video_id", Type: field.TypeString, Unique: true, Size: 12},
+		{Name: "source_id", Type: field.TypeString, Unique: true, Size: 12},
 		{Name: "title", Type: field.TypeString, Size: 100},
 		{Name: "normalized_title", Type: field.TypeString, Nullable: true},
 		{Name: "duration_seconds", Type: field.TypeInt, Nullable: true},

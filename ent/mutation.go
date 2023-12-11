@@ -3985,7 +3985,7 @@ type VideoMutation struct {
 	op                           Op
 	typ                          string
 	id                           *string
-	video_id                     *string
+	source_id                    *string
 	title                        *string
 	normalized_title             *string
 	duration_seconds             *int
@@ -4127,40 +4127,40 @@ func (m *VideoMutation) IDs(ctx context.Context) ([]string, error) {
 	}
 }
 
-// SetVideoID sets the "video_id" field.
-func (m *VideoMutation) SetVideoID(s string) {
-	m.video_id = &s
+// SetSourceID sets the "source_id" field.
+func (m *VideoMutation) SetSourceID(s string) {
+	m.source_id = &s
 }
 
-// VideoID returns the value of the "video_id" field in the mutation.
-func (m *VideoMutation) VideoID() (r string, exists bool) {
-	v := m.video_id
+// SourceID returns the value of the "source_id" field in the mutation.
+func (m *VideoMutation) SourceID() (r string, exists bool) {
+	v := m.source_id
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldVideoID returns the old "video_id" field's value of the Video entity.
+// OldSourceID returns the old "source_id" field's value of the Video entity.
 // If the Video object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *VideoMutation) OldVideoID(ctx context.Context) (v string, err error) {
+func (m *VideoMutation) OldSourceID(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldVideoID is only allowed on UpdateOne operations")
+		return v, errors.New("OldSourceID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldVideoID requires an ID field in the mutation")
+		return v, errors.New("OldSourceID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldVideoID: %w", err)
+		return v, fmt.Errorf("querying old value for OldSourceID: %w", err)
 	}
-	return oldValue.VideoID, nil
+	return oldValue.SourceID, nil
 }
 
-// ResetVideoID resets all changes to the "video_id" field.
-func (m *VideoMutation) ResetVideoID() {
-	m.video_id = nil
+// ResetSourceID resets all changes to the "source_id" field.
+func (m *VideoMutation) ResetSourceID() {
+	m.source_id = nil
 }
 
 // SetTitle sets the "title" field.
@@ -5074,8 +5074,8 @@ func (m *VideoMutation) Type() string {
 // AddedFields().
 func (m *VideoMutation) Fields() []string {
 	fields := make([]string, 0, 14)
-	if m.video_id != nil {
-		fields = append(fields, video.FieldVideoID)
+	if m.source_id != nil {
+		fields = append(fields, video.FieldSourceID)
 	}
 	if m.title != nil {
 		fields = append(fields, video.FieldTitle)
@@ -5124,8 +5124,8 @@ func (m *VideoMutation) Fields() []string {
 // schema.
 func (m *VideoMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case video.FieldVideoID:
-		return m.VideoID()
+	case video.FieldSourceID:
+		return m.SourceID()
 	case video.FieldTitle:
 		return m.Title()
 	case video.FieldNormalizedTitle:
@@ -5161,8 +5161,8 @@ func (m *VideoMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *VideoMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case video.FieldVideoID:
-		return m.OldVideoID(ctx)
+	case video.FieldSourceID:
+		return m.OldSourceID(ctx)
 	case video.FieldTitle:
 		return m.OldTitle(ctx)
 	case video.FieldNormalizedTitle:
@@ -5198,12 +5198,12 @@ func (m *VideoMutation) OldField(ctx context.Context, name string) (ent.Value, e
 // type.
 func (m *VideoMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case video.FieldVideoID:
+	case video.FieldSourceID:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetVideoID(v)
+		m.SetSourceID(v)
 		return nil
 	case video.FieldTitle:
 		v, ok := value.(string)
@@ -5399,8 +5399,8 @@ func (m *VideoMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *VideoMutation) ResetField(name string) error {
 	switch name {
-	case video.FieldVideoID:
-		m.ResetVideoID()
+	case video.FieldSourceID:
+		m.ResetSourceID()
 		return nil
 	case video.FieldTitle:
 		m.ResetTitle()

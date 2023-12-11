@@ -10,6 +10,8 @@ down:
 	docker compose down --remove-orphans
 ps:
 	docker compose ps
+destroy:
+	docker compose down --rmi all --volumes --remove-orphans
 
 build-prod:
 	docker build --target runner -t patradb-dogtrot-prod:latest .

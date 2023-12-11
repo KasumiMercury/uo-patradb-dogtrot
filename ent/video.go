@@ -18,8 +18,8 @@ type Video struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID string `json:"id,omitempty"`
-	// VideoID holds the value of the "video_id" field.
-	VideoID string `json:"video_id,omitempty"`
+	// SourceID holds the value of the "source_id" field.
+	SourceID string `json:"source_id,omitempty"`
 	// Title holds the value of the "title" field.
 	Title string `json:"title,omitempty"`
 	// NormalizedTitle holds the value of the "normalized_title" field.
@@ -138,7 +138,7 @@ func (*Video) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case video.FieldDurationSeconds:
 			values[i] = new(sql.NullInt64)
-		case video.FieldID, video.FieldVideoID, video.FieldTitle, video.FieldNormalizedTitle, video.FieldStatus, video.FieldChatID:
+		case video.FieldID, video.FieldSourceID, video.FieldTitle, video.FieldNormalizedTitle, video.FieldStatus, video.FieldChatID:
 			values[i] = new(sql.NullString)
 		case video.FieldScheduledAt, video.FieldActualStartAt, video.FieldActualEndAt, video.FieldPublishedAt, video.FieldCreatedAt, video.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -163,11 +163,11 @@ func (v *Video) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				v.ID = value.String
 			}
-		case video.FieldVideoID:
+		case video.FieldSourceID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field video_id", values[i])
+				return fmt.Errorf("unexpected type %T for field source_id", values[i])
 			} else if value.Valid {
-				v.VideoID = value.String
+				v.SourceID = value.String
 			}
 		case video.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -313,8 +313,8 @@ func (v *Video) String() string {
 	var builder strings.Builder
 	builder.WriteString("Video(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", v.ID))
-	builder.WriteString("video_id=")
-	builder.WriteString(v.VideoID)
+	builder.WriteString("source_id=")
+	builder.WriteString(v.SourceID)
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(v.Title)

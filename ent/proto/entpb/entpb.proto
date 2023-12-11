@@ -354,7 +354,7 @@ message BatchCreatePeriodicDescriptionTemplatesResponse {
 message Video {
   string id = 1;
 
-  string video_id = 2;
+  string source_id = 2;
 
   string title = 3;
 

@@ -25,7 +25,7 @@ func (Video) Mixin() []ent.Mixin {
 // Fields of the Video.
 func (Video) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("video_id").MaxLen(12).Unique().Annotations(entproto.Field(2)),
+		field.String("source_id").MaxLen(12).Unique().Annotations(entproto.Field(2)),
 		field.String("title").MaxLen(100).Annotations(entproto.Field(3)),
 		field.String("normalized_title").Optional().Annotations(entproto.Skip()),
 		field.Int("duration_seconds").Optional().Positive().Max(43200).Annotations(entproto.Field(4)),

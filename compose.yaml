@@ -26,5 +26,10 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - ./mysql:/var/lib/mysql
+      - type: bind
+        source: mysql-data
+        target: /var/lib/mysql
     restart: always
+
+volumes:
+    mysql-data:

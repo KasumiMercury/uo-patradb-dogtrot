@@ -169,10 +169,10 @@ func init() {
 	_ = videoMixinFields0
 	videoFields := schema.Video{}.Fields()
 	_ = videoFields
-	// videoDescVideoID is the schema descriptor for video_id field.
-	videoDescVideoID := videoFields[0].Descriptor()
-	// video.VideoIDValidator is a validator for the "video_id" field. It is called by the builders before save.
-	video.VideoIDValidator = videoDescVideoID.Validators[0].(func(string) error)
+	// videoDescSourceID is the schema descriptor for source_id field.
+	videoDescSourceID := videoFields[0].Descriptor()
+	// video.SourceIDValidator is a validator for the "source_id" field. It is called by the builders before save.
+	video.SourceIDValidator = videoDescSourceID.Validators[0].(func(string) error)
 	// videoDescTitle is the schema descriptor for title field.
 	videoDescTitle := videoFields[1].Descriptor()
 	// video.TitleValidator is a validator for the "title" field. It is called by the builders before save.

@@ -34,16 +34,16 @@ func (vu *VideoUpdate) Where(ps ...predicate.Video) *VideoUpdate {
 	return vu
 }
 
-// SetVideoID sets the "video_id" field.
-func (vu *VideoUpdate) SetVideoID(s string) *VideoUpdate {
-	vu.mutation.SetVideoID(s)
+// SetSourceID sets the "source_id" field.
+func (vu *VideoUpdate) SetSourceID(s string) *VideoUpdate {
+	vu.mutation.SetSourceID(s)
 	return vu
 }
 
-// SetNillableVideoID sets the "video_id" field if the given value is not nil.
-func (vu *VideoUpdate) SetNillableVideoID(s *string) *VideoUpdate {
+// SetNillableSourceID sets the "source_id" field if the given value is not nil.
+func (vu *VideoUpdate) SetNillableSourceID(s *string) *VideoUpdate {
 	if s != nil {
-		vu.SetVideoID(*s)
+		vu.SetSourceID(*s)
 	}
 	return vu
 }
@@ -513,9 +513,9 @@ func (vu *VideoUpdate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (vu *VideoUpdate) check() error {
-	if v, ok := vu.mutation.VideoID(); ok {
-		if err := video.VideoIDValidator(v); err != nil {
-			return &ValidationError{Name: "video_id", err: fmt.Errorf(`ent: validator failed for field "Video.video_id": %w`, err)}
+	if v, ok := vu.mutation.SourceID(); ok {
+		if err := video.SourceIDValidator(v); err != nil {
+			return &ValidationError{Name: "source_id", err: fmt.Errorf(`ent: validator failed for field "Video.source_id": %w`, err)}
 		}
 	}
 	if v, ok := vu.mutation.Title(); ok {
@@ -543,8 +543,8 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := vu.mutation.VideoID(); ok {
-		_spec.SetField(video.FieldVideoID, field.TypeString, value)
+	if value, ok := vu.mutation.SourceID(); ok {
+		_spec.SetField(video.FieldSourceID, field.TypeString, value)
 	}
 	if value, ok := vu.mutation.Title(); ok {
 		_spec.SetField(video.FieldTitle, field.TypeString, value)
@@ -880,16 +880,16 @@ type VideoUpdateOne struct {
 	mutation *VideoMutation
 }
 
-// SetVideoID sets the "video_id" field.
-func (vuo *VideoUpdateOne) SetVideoID(s string) *VideoUpdateOne {
-	vuo.mutation.SetVideoID(s)
+// SetSourceID sets the "source_id" field.
+func (vuo *VideoUpdateOne) SetSourceID(s string) *VideoUpdateOne {
+	vuo.mutation.SetSourceID(s)
 	return vuo
 }
 
-// SetNillableVideoID sets the "video_id" field if the given value is not nil.
-func (vuo *VideoUpdateOne) SetNillableVideoID(s *string) *VideoUpdateOne {
+// SetNillableSourceID sets the "source_id" field if the given value is not nil.
+func (vuo *VideoUpdateOne) SetNillableSourceID(s *string) *VideoUpdateOne {
 	if s != nil {
-		vuo.SetVideoID(*s)
+		vuo.SetSourceID(*s)
 	}
 	return vuo
 }
@@ -1372,9 +1372,9 @@ func (vuo *VideoUpdateOne) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (vuo *VideoUpdateOne) check() error {
-	if v, ok := vuo.mutation.VideoID(); ok {
-		if err := video.VideoIDValidator(v); err != nil {
-			return &ValidationError{Name: "video_id", err: fmt.Errorf(`ent: validator failed for field "Video.video_id": %w`, err)}
+	if v, ok := vuo.mutation.SourceID(); ok {
+		if err := video.SourceIDValidator(v); err != nil {
+			return &ValidationError{Name: "source_id", err: fmt.Errorf(`ent: validator failed for field "Video.source_id": %w`, err)}
 		}
 	}
 	if v, ok := vuo.mutation.Title(); ok {
@@ -1419,8 +1419,8 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 			}
 		}
 	}
-	if value, ok := vuo.mutation.VideoID(); ok {
-		_spec.SetField(video.FieldVideoID, field.TypeString, value)
+	if value, ok := vuo.mutation.SourceID(); ok {
+		_spec.SetField(video.FieldSourceID, field.TypeString, value)
 	}
 	if value, ok := vuo.mutation.Title(); ok {
 		_spec.SetField(video.FieldTitle, field.TypeString, value)

@@ -65,9 +65,9 @@ func IDContainsFold(id string) predicate.Video {
 	return predicate.Video(sql.FieldContainsFold(FieldID, id))
 }
 
-// VideoID applies equality check predicate on the "video_id" field. It's identical to VideoIDEQ.
-func VideoID(v string) predicate.Video {
-	return predicate.Video(sql.FieldEQ(FieldVideoID, v))
+// SourceID applies equality check predicate on the "source_id" field. It's identical to SourceIDEQ.
+func SourceID(v string) predicate.Video {
+	return predicate.Video(sql.FieldEQ(FieldSourceID, v))
 }
 
 // Title applies equality check predicate on the "title" field. It's identical to TitleEQ.
@@ -135,69 +135,69 @@ func UpdatedAt(v time.Time) predicate.Video {
 	return predicate.Video(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
-// VideoIDEQ applies the EQ predicate on the "video_id" field.
-func VideoIDEQ(v string) predicate.Video {
-	return predicate.Video(sql.FieldEQ(FieldVideoID, v))
+// SourceIDEQ applies the EQ predicate on the "source_id" field.
+func SourceIDEQ(v string) predicate.Video {
+	return predicate.Video(sql.FieldEQ(FieldSourceID, v))
 }
 
-// VideoIDNEQ applies the NEQ predicate on the "video_id" field.
-func VideoIDNEQ(v string) predicate.Video {
-	return predicate.Video(sql.FieldNEQ(FieldVideoID, v))
+// SourceIDNEQ applies the NEQ predicate on the "source_id" field.
+func SourceIDNEQ(v string) predicate.Video {
+	return predicate.Video(sql.FieldNEQ(FieldSourceID, v))
 }
 
-// VideoIDIn applies the In predicate on the "video_id" field.
-func VideoIDIn(vs ...string) predicate.Video {
-	return predicate.Video(sql.FieldIn(FieldVideoID, vs...))
+// SourceIDIn applies the In predicate on the "source_id" field.
+func SourceIDIn(vs ...string) predicate.Video {
+	return predicate.Video(sql.FieldIn(FieldSourceID, vs...))
 }
 
-// VideoIDNotIn applies the NotIn predicate on the "video_id" field.
-func VideoIDNotIn(vs ...string) predicate.Video {
-	return predicate.Video(sql.FieldNotIn(FieldVideoID, vs...))
+// SourceIDNotIn applies the NotIn predicate on the "source_id" field.
+func SourceIDNotIn(vs ...string) predicate.Video {
+	return predicate.Video(sql.FieldNotIn(FieldSourceID, vs...))
 }
 
-// VideoIDGT applies the GT predicate on the "video_id" field.
-func VideoIDGT(v string) predicate.Video {
-	return predicate.Video(sql.FieldGT(FieldVideoID, v))
+// SourceIDGT applies the GT predicate on the "source_id" field.
+func SourceIDGT(v string) predicate.Video {
+	return predicate.Video(sql.FieldGT(FieldSourceID, v))
 }
 
-// VideoIDGTE applies the GTE predicate on the "video_id" field.
-func VideoIDGTE(v string) predicate.Video {
-	return predicate.Video(sql.FieldGTE(FieldVideoID, v))
+// SourceIDGTE applies the GTE predicate on the "source_id" field.
+func SourceIDGTE(v string) predicate.Video {
+	return predicate.Video(sql.FieldGTE(FieldSourceID, v))
 }
 
-// VideoIDLT applies the LT predicate on the "video_id" field.
-func VideoIDLT(v string) predicate.Video {
-	return predicate.Video(sql.FieldLT(FieldVideoID, v))
+// SourceIDLT applies the LT predicate on the "source_id" field.
+func SourceIDLT(v string) predicate.Video {
+	return predicate.Video(sql.FieldLT(FieldSourceID, v))
 }
 
-// VideoIDLTE applies the LTE predicate on the "video_id" field.
-func VideoIDLTE(v string) predicate.Video {
-	return predicate.Video(sql.FieldLTE(FieldVideoID, v))
+// SourceIDLTE applies the LTE predicate on the "source_id" field.
+func SourceIDLTE(v string) predicate.Video {
+	return predicate.Video(sql.FieldLTE(FieldSourceID, v))
 }
 
-// VideoIDContains applies the Contains predicate on the "video_id" field.
-func VideoIDContains(v string) predicate.Video {
-	return predicate.Video(sql.FieldContains(FieldVideoID, v))
+// SourceIDContains applies the Contains predicate on the "source_id" field.
+func SourceIDContains(v string) predicate.Video {
+	return predicate.Video(sql.FieldContains(FieldSourceID, v))
 }
 
-// VideoIDHasPrefix applies the HasPrefix predicate on the "video_id" field.
-func VideoIDHasPrefix(v string) predicate.Video {
-	return predicate.Video(sql.FieldHasPrefix(FieldVideoID, v))
+// SourceIDHasPrefix applies the HasPrefix predicate on the "source_id" field.
+func SourceIDHasPrefix(v string) predicate.Video {
+	return predicate.Video(sql.FieldHasPrefix(FieldSourceID, v))
 }
 
-// VideoIDHasSuffix applies the HasSuffix predicate on the "video_id" field.
-func VideoIDHasSuffix(v string) predicate.Video {
-	return predicate.Video(sql.FieldHasSuffix(FieldVideoID, v))
+// SourceIDHasSuffix applies the HasSuffix predicate on the "source_id" field.
+func SourceIDHasSuffix(v string) predicate.Video {
+	return predicate.Video(sql.FieldHasSuffix(FieldSourceID, v))
 }
 
-// VideoIDEqualFold applies the EqualFold predicate on the "video_id" field.
-func VideoIDEqualFold(v string) predicate.Video {
-	return predicate.Video(sql.FieldEqualFold(FieldVideoID, v))
+// SourceIDEqualFold applies the EqualFold predicate on the "source_id" field.
+func SourceIDEqualFold(v string) predicate.Video {
+	return predicate.Video(sql.FieldEqualFold(FieldSourceID, v))
 }
 
-// VideoIDContainsFold applies the ContainsFold predicate on the "video_id" field.
-func VideoIDContainsFold(v string) predicate.Video {
-	return predicate.Video(sql.FieldContainsFold(FieldVideoID, v))
+// SourceIDContainsFold applies the ContainsFold predicate on the "source_id" field.
+func SourceIDContainsFold(v string) predicate.Video {
+	return predicate.Video(sql.FieldContainsFold(FieldSourceID, v))
 }
 
 // TitleEQ applies the EQ predicate on the "title" field.

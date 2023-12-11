@@ -26,9 +26,9 @@ type VideoCreate struct {
 	hooks    []Hook
 }
 
-// SetVideoID sets the "video_id" field.
-func (vc *VideoCreate) SetVideoID(s string) *VideoCreate {
-	vc.mutation.SetVideoID(s)
+// SetSourceID sets the "source_id" field.
+func (vc *VideoCreate) SetSourceID(s string) *VideoCreate {
+	vc.mutation.SetSourceID(s)
 	return vc
 }
 
@@ -357,12 +357,12 @@ func (vc *VideoCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (vc *VideoCreate) check() error {
-	if _, ok := vc.mutation.VideoID(); !ok {
-		return &ValidationError{Name: "video_id", err: errors.New(`ent: missing required field "Video.video_id"`)}
+	if _, ok := vc.mutation.SourceID(); !ok {
+		return &ValidationError{Name: "source_id", err: errors.New(`ent: missing required field "Video.source_id"`)}
 	}
-	if v, ok := vc.mutation.VideoID(); ok {
-		if err := video.VideoIDValidator(v); err != nil {
-			return &ValidationError{Name: "video_id", err: fmt.Errorf(`ent: validator failed for field "Video.video_id": %w`, err)}
+	if v, ok := vc.mutation.SourceID(); ok {
+		if err := video.SourceIDValidator(v); err != nil {
+			return &ValidationError{Name: "source_id", err: fmt.Errorf(`ent: validator failed for field "Video.source_id": %w`, err)}
 		}
 	}
 	if _, ok := vc.mutation.Title(); !ok {
@@ -436,9 +436,9 @@ func (vc *VideoCreate) createSpec() (*Video, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := vc.mutation.VideoID(); ok {
-		_spec.SetField(video.FieldVideoID, field.TypeString, value)
-		_node.VideoID = value
+	if value, ok := vc.mutation.SourceID(); ok {
+		_spec.SetField(video.FieldSourceID, field.TypeString, value)
+		_node.SourceID = value
 	}
 	if value, ok := vc.mutation.Title(); ok {
 		_spec.SetField(video.FieldTitle, field.TypeString, value)

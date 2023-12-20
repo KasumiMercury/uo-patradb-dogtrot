@@ -27,20 +27,6 @@ func (vtcc *VideoTitleChangeCreate) SetTitle(s string) *VideoTitleChangeCreate {
 	return vtcc
 }
 
-// SetNormalizedTitle sets the "normalized_title" field.
-func (vtcc *VideoTitleChangeCreate) SetNormalizedTitle(s string) *VideoTitleChangeCreate {
-	vtcc.mutation.SetNormalizedTitle(s)
-	return vtcc
-}
-
-// SetNillableNormalizedTitle sets the "normalized_title" field if the given value is not nil.
-func (vtcc *VideoTitleChangeCreate) SetNillableNormalizedTitle(s *string) *VideoTitleChangeCreate {
-	if s != nil {
-		vtcc.SetNormalizedTitle(*s)
-	}
-	return vtcc
-}
-
 // SetChangedAt sets the "changed_at" field.
 func (vtcc *VideoTitleChangeCreate) SetChangedAt(t time.Time) *VideoTitleChangeCreate {
 	vtcc.mutation.SetChangedAt(t)
@@ -184,10 +170,6 @@ func (vtcc *VideoTitleChangeCreate) createSpec() (*VideoTitleChange, *sqlgraph.C
 	if value, ok := vtcc.mutation.Title(); ok {
 		_spec.SetField(videotitlechange.FieldTitle, field.TypeString, value)
 		_node.Title = value
-	}
-	if value, ok := vtcc.mutation.NormalizedTitle(); ok {
-		_spec.SetField(videotitlechange.FieldNormalizedTitle, field.TypeString, value)
-		_node.NormalizedTitle = value
 	}
 	if value, ok := vtcc.mutation.ChangedAt(); ok {
 		_spec.SetField(videotitlechange.FieldChangedAt, field.TypeTime, value)

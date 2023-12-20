@@ -38,20 +38,6 @@ func (vc *VideoCreate) SetTitle(s string) *VideoCreate {
 	return vc
 }
 
-// SetNormalizedTitle sets the "normalized_title" field.
-func (vc *VideoCreate) SetNormalizedTitle(s string) *VideoCreate {
-	vc.mutation.SetNormalizedTitle(s)
-	return vc
-}
-
-// SetNillableNormalizedTitle sets the "normalized_title" field if the given value is not nil.
-func (vc *VideoCreate) SetNillableNormalizedTitle(s *string) *VideoCreate {
-	if s != nil {
-		vc.SetNormalizedTitle(*s)
-	}
-	return vc
-}
-
 // SetDurationSeconds sets the "duration_seconds" field.
 func (vc *VideoCreate) SetDurationSeconds(i int) *VideoCreate {
 	vc.mutation.SetDurationSeconds(i)
@@ -443,10 +429,6 @@ func (vc *VideoCreate) createSpec() (*Video, *sqlgraph.CreateSpec) {
 	if value, ok := vc.mutation.Title(); ok {
 		_spec.SetField(video.FieldTitle, field.TypeString, value)
 		_node.Title = value
-	}
-	if value, ok := vc.mutation.NormalizedTitle(); ok {
-		_spec.SetField(video.FieldNormalizedTitle, field.TypeString, value)
-		_node.NormalizedTitle = value
 	}
 	if value, ok := vc.mutation.DurationSeconds(); ok {
 		_spec.SetField(video.FieldDurationSeconds, field.TypeInt, value)

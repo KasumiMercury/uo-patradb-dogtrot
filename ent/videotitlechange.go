@@ -20,8 +20,6 @@ type VideoTitleChange struct {
 	ID string `json:"id,omitempty"`
 	// Title holds the value of the "title" field.
 	Title string `json:"title,omitempty"`
-	// NormalizedTitle holds the value of the "normalized_title" field.
-	NormalizedTitle string `json:"normalized_title,omitempty"`
 	// ChangedAt holds the value of the "changed_at" field.
 	ChangedAt time.Time `json:"changed_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -58,7 +56,7 @@ func (*VideoTitleChange) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case videotitlechange.FieldID, videotitlechange.FieldTitle, videotitlechange.FieldNormalizedTitle:
+		case videotitlechange.FieldID, videotitlechange.FieldTitle:
 			values[i] = new(sql.NullString)
 		case videotitlechange.FieldChangedAt:
 			values[i] = new(sql.NullTime)
@@ -90,12 +88,6 @@ func (vtc *VideoTitleChange) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
 				vtc.Title = value.String
-			}
-		case videotitlechange.FieldNormalizedTitle:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field normalized_title", values[i])
-			} else if value.Valid {
-				vtc.NormalizedTitle = value.String
 			}
 		case videotitlechange.FieldChangedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -153,9 +145,6 @@ func (vtc *VideoTitleChange) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", vtc.ID))
 	builder.WriteString("title=")
 	builder.WriteString(vtc.Title)
-	builder.WriteString(", ")
-	builder.WriteString("normalized_title=")
-	builder.WriteString(vtc.NormalizedTitle)
 	builder.WriteString(", ")
 	builder.WriteString("changed_at=")
 	builder.WriteString(vtc.ChangedAt.Format(time.ANSIC))

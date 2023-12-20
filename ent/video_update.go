@@ -62,26 +62,6 @@ func (vu *VideoUpdate) SetNillableTitle(s *string) *VideoUpdate {
 	return vu
 }
 
-// SetNormalizedTitle sets the "normalized_title" field.
-func (vu *VideoUpdate) SetNormalizedTitle(s string) *VideoUpdate {
-	vu.mutation.SetNormalizedTitle(s)
-	return vu
-}
-
-// SetNillableNormalizedTitle sets the "normalized_title" field if the given value is not nil.
-func (vu *VideoUpdate) SetNillableNormalizedTitle(s *string) *VideoUpdate {
-	if s != nil {
-		vu.SetNormalizedTitle(*s)
-	}
-	return vu
-}
-
-// ClearNormalizedTitle clears the value of the "normalized_title" field.
-func (vu *VideoUpdate) ClearNormalizedTitle() *VideoUpdate {
-	vu.mutation.ClearNormalizedTitle()
-	return vu
-}
-
 // SetDurationSeconds sets the "duration_seconds" field.
 func (vu *VideoUpdate) SetDurationSeconds(i int) *VideoUpdate {
 	vu.mutation.ResetDurationSeconds()
@@ -549,12 +529,6 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := vu.mutation.Title(); ok {
 		_spec.SetField(video.FieldTitle, field.TypeString, value)
 	}
-	if value, ok := vu.mutation.NormalizedTitle(); ok {
-		_spec.SetField(video.FieldNormalizedTitle, field.TypeString, value)
-	}
-	if vu.mutation.NormalizedTitleCleared() {
-		_spec.ClearField(video.FieldNormalizedTitle, field.TypeString)
-	}
 	if value, ok := vu.mutation.DurationSeconds(); ok {
 		_spec.SetField(video.FieldDurationSeconds, field.TypeInt, value)
 	}
@@ -905,26 +879,6 @@ func (vuo *VideoUpdateOne) SetNillableTitle(s *string) *VideoUpdateOne {
 	if s != nil {
 		vuo.SetTitle(*s)
 	}
-	return vuo
-}
-
-// SetNormalizedTitle sets the "normalized_title" field.
-func (vuo *VideoUpdateOne) SetNormalizedTitle(s string) *VideoUpdateOne {
-	vuo.mutation.SetNormalizedTitle(s)
-	return vuo
-}
-
-// SetNillableNormalizedTitle sets the "normalized_title" field if the given value is not nil.
-func (vuo *VideoUpdateOne) SetNillableNormalizedTitle(s *string) *VideoUpdateOne {
-	if s != nil {
-		vuo.SetNormalizedTitle(*s)
-	}
-	return vuo
-}
-
-// ClearNormalizedTitle clears the value of the "normalized_title" field.
-func (vuo *VideoUpdateOne) ClearNormalizedTitle() *VideoUpdateOne {
-	vuo.mutation.ClearNormalizedTitle()
 	return vuo
 }
 
@@ -1424,12 +1378,6 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 	}
 	if value, ok := vuo.mutation.Title(); ok {
 		_spec.SetField(video.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := vuo.mutation.NormalizedTitle(); ok {
-		_spec.SetField(video.FieldNormalizedTitle, field.TypeString, value)
-	}
-	if vuo.mutation.NormalizedTitleCleared() {
-		_spec.ClearField(video.FieldNormalizedTitle, field.TypeString)
 	}
 	if value, ok := vuo.mutation.DurationSeconds(); ok {
 		_spec.SetField(video.FieldDurationSeconds, field.TypeInt, value)

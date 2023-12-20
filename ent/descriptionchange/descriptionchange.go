@@ -18,8 +18,6 @@ const (
 	FieldRaw = "raw"
 	// FieldVariable holds the string denoting the variable field in the database.
 	FieldVariable = "variable"
-	// FieldNormalizedVariable holds the string denoting the normalized_variable field in the database.
-	FieldNormalizedVariable = "normalized_variable"
 	// FieldChangedAt holds the string denoting the changed_at field in the database.
 	FieldChangedAt = "changed_at"
 	// EdgeDescription holds the string denoting the description edge name in mutations.
@@ -40,7 +38,6 @@ var Columns = []string{
 	FieldID,
 	FieldRaw,
 	FieldVariable,
-	FieldNormalizedVariable,
 	FieldChangedAt,
 }
 
@@ -92,11 +89,6 @@ func ByRaw(opts ...sql.OrderTermOption) OrderOption {
 // ByVariable orders the results by the variable field.
 func ByVariable(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVariable, opts...).ToFunc()
-}
-
-// ByNormalizedVariable orders the results by the normalized_variable field.
-func ByNormalizedVariable(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNormalizedVariable, opts...).ToFunc()
 }
 
 // ByChangedAt orders the results by the changed_at field.

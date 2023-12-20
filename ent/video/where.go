@@ -75,11 +75,6 @@ func Title(v string) predicate.Video {
 	return predicate.Video(sql.FieldEQ(FieldTitle, v))
 }
 
-// NormalizedTitle applies equality check predicate on the "normalized_title" field. It's identical to NormalizedTitleEQ.
-func NormalizedTitle(v string) predicate.Video {
-	return predicate.Video(sql.FieldEQ(FieldNormalizedTitle, v))
-}
-
 // DurationSeconds applies equality check predicate on the "duration_seconds" field. It's identical to DurationSecondsEQ.
 func DurationSeconds(v int) predicate.Video {
 	return predicate.Video(sql.FieldEQ(FieldDurationSeconds, v))
@@ -263,81 +258,6 @@ func TitleEqualFold(v string) predicate.Video {
 // TitleContainsFold applies the ContainsFold predicate on the "title" field.
 func TitleContainsFold(v string) predicate.Video {
 	return predicate.Video(sql.FieldContainsFold(FieldTitle, v))
-}
-
-// NormalizedTitleEQ applies the EQ predicate on the "normalized_title" field.
-func NormalizedTitleEQ(v string) predicate.Video {
-	return predicate.Video(sql.FieldEQ(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleNEQ applies the NEQ predicate on the "normalized_title" field.
-func NormalizedTitleNEQ(v string) predicate.Video {
-	return predicate.Video(sql.FieldNEQ(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleIn applies the In predicate on the "normalized_title" field.
-func NormalizedTitleIn(vs ...string) predicate.Video {
-	return predicate.Video(sql.FieldIn(FieldNormalizedTitle, vs...))
-}
-
-// NormalizedTitleNotIn applies the NotIn predicate on the "normalized_title" field.
-func NormalizedTitleNotIn(vs ...string) predicate.Video {
-	return predicate.Video(sql.FieldNotIn(FieldNormalizedTitle, vs...))
-}
-
-// NormalizedTitleGT applies the GT predicate on the "normalized_title" field.
-func NormalizedTitleGT(v string) predicate.Video {
-	return predicate.Video(sql.FieldGT(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleGTE applies the GTE predicate on the "normalized_title" field.
-func NormalizedTitleGTE(v string) predicate.Video {
-	return predicate.Video(sql.FieldGTE(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleLT applies the LT predicate on the "normalized_title" field.
-func NormalizedTitleLT(v string) predicate.Video {
-	return predicate.Video(sql.FieldLT(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleLTE applies the LTE predicate on the "normalized_title" field.
-func NormalizedTitleLTE(v string) predicate.Video {
-	return predicate.Video(sql.FieldLTE(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleContains applies the Contains predicate on the "normalized_title" field.
-func NormalizedTitleContains(v string) predicate.Video {
-	return predicate.Video(sql.FieldContains(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleHasPrefix applies the HasPrefix predicate on the "normalized_title" field.
-func NormalizedTitleHasPrefix(v string) predicate.Video {
-	return predicate.Video(sql.FieldHasPrefix(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleHasSuffix applies the HasSuffix predicate on the "normalized_title" field.
-func NormalizedTitleHasSuffix(v string) predicate.Video {
-	return predicate.Video(sql.FieldHasSuffix(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleIsNil applies the IsNil predicate on the "normalized_title" field.
-func NormalizedTitleIsNil() predicate.Video {
-	return predicate.Video(sql.FieldIsNull(FieldNormalizedTitle))
-}
-
-// NormalizedTitleNotNil applies the NotNil predicate on the "normalized_title" field.
-func NormalizedTitleNotNil() predicate.Video {
-	return predicate.Video(sql.FieldNotNull(FieldNormalizedTitle))
-}
-
-// NormalizedTitleEqualFold applies the EqualFold predicate on the "normalized_title" field.
-func NormalizedTitleEqualFold(v string) predicate.Video {
-	return predicate.Video(sql.FieldEqualFold(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleContainsFold applies the ContainsFold predicate on the "normalized_title" field.
-func NormalizedTitleContainsFold(v string) predicate.Video {
-	return predicate.Video(sql.FieldContainsFold(FieldNormalizedTitle, v))
 }
 
 // DurationSecondsEQ applies the EQ predicate on the "duration_seconds" field.

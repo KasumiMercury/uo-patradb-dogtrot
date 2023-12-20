@@ -40,7 +40,6 @@ var (
 		{Name: "id", Type: field.TypeString, Size: 26},
 		{Name: "raw", Type: field.TypeString, Size: 5000},
 		{Name: "variable", Type: field.TypeString, Nullable: true},
-		{Name: "normalized_variable", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "periodic_id", Type: field.TypeString, Nullable: true, Size: 26},
@@ -55,19 +54,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "descriptions_periodic_description_templates_periodic_template",
-				Columns:    []*schema.Column{DescriptionsColumns[6]},
+				Columns:    []*schema.Column{DescriptionsColumns[5]},
 				RefColumns: []*schema.Column{PeriodicDescriptionTemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "descriptions_category_description_templates_category_template",
-				Columns:    []*schema.Column{DescriptionsColumns[7]},
+				Columns:    []*schema.Column{DescriptionsColumns[6]},
 				RefColumns: []*schema.Column{CategoryDescriptionTemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "descriptions_videos_descriptions",
-				Columns:    []*schema.Column{DescriptionsColumns[8]},
+				Columns:    []*schema.Column{DescriptionsColumns[7]},
 				RefColumns: []*schema.Column{VideosColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -78,7 +77,6 @@ var (
 		{Name: "id", Type: field.TypeString, Size: 26},
 		{Name: "raw", Type: field.TypeString, Size: 5000},
 		{Name: "variable", Type: field.TypeString, Nullable: true},
-		{Name: "normalized_variable", Type: field.TypeString, Nullable: true},
 		{Name: "changed_at", Type: field.TypeTime},
 		{Name: "description_id", Type: field.TypeString, Size: 26},
 	}
@@ -90,7 +88,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "description_changes_descriptions_description_changes",
-				Columns:    []*schema.Column{DescriptionChangesColumns[5]},
+				Columns:    []*schema.Column{DescriptionChangesColumns[4]},
 				RefColumns: []*schema.Column{DescriptionsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -139,7 +137,6 @@ var (
 		{Name: "id", Type: field.TypeString, Size: 26},
 		{Name: "source_id", Type: field.TypeString, Unique: true, Size: 12},
 		{Name: "title", Type: field.TypeString, Size: 100},
-		{Name: "normalized_title", Type: field.TypeString, Nullable: true},
 		{Name: "duration_seconds", Type: field.TypeInt, Nullable: true},
 		{Name: "is_collaboration", Type: field.TypeBool, Default: false},
 		{Name: "status", Type: field.TypeString},
@@ -204,7 +201,6 @@ var (
 	VideoTitleChangesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
 		{Name: "title", Type: field.TypeString, Size: 100},
-		{Name: "normalized_title", Type: field.TypeString, Nullable: true},
 		{Name: "changed_at", Type: field.TypeTime},
 		{Name: "video_id", Type: field.TypeString, Size: 26},
 	}
@@ -216,7 +212,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "video_title_changes_videos_video_title_changes",
-				Columns:    []*schema.Column{VideoTitleChangesColumns[4]},
+				Columns:    []*schema.Column{VideoTitleChangesColumns[3]},
 				RefColumns: []*schema.Column{VideosColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

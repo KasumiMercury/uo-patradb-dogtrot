@@ -66,26 +66,6 @@ func (du *DescriptionUpdate) ClearVariable() *DescriptionUpdate {
 	return du
 }
 
-// SetNormalizedVariable sets the "normalized_variable" field.
-func (du *DescriptionUpdate) SetNormalizedVariable(s string) *DescriptionUpdate {
-	du.mutation.SetNormalizedVariable(s)
-	return du
-}
-
-// SetNillableNormalizedVariable sets the "normalized_variable" field if the given value is not nil.
-func (du *DescriptionUpdate) SetNillableNormalizedVariable(s *string) *DescriptionUpdate {
-	if s != nil {
-		du.SetNormalizedVariable(*s)
-	}
-	return du
-}
-
-// ClearNormalizedVariable clears the value of the "normalized_variable" field.
-func (du *DescriptionUpdate) ClearNormalizedVariable() *DescriptionUpdate {
-	du.mutation.ClearNormalizedVariable()
-	return du
-}
-
 // SetCreatedAt sets the "created_at" field.
 func (du *DescriptionUpdate) SetCreatedAt(t time.Time) *DescriptionUpdate {
 	du.mutation.SetCreatedAt(t)
@@ -284,12 +264,6 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if du.mutation.VariableCleared() {
 		_spec.ClearField(description.FieldVariable, field.TypeString)
 	}
-	if value, ok := du.mutation.NormalizedVariable(); ok {
-		_spec.SetField(description.FieldNormalizedVariable, field.TypeString, value)
-	}
-	if du.mutation.NormalizedVariableCleared() {
-		_spec.ClearField(description.FieldNormalizedVariable, field.TypeString)
-	}
 	if value, ok := du.mutation.CreatedAt(); ok {
 		_spec.SetField(description.FieldCreatedAt, field.TypeTime, value)
 	}
@@ -479,26 +453,6 @@ func (duo *DescriptionUpdateOne) SetNillableVariable(s *string) *DescriptionUpda
 // ClearVariable clears the value of the "variable" field.
 func (duo *DescriptionUpdateOne) ClearVariable() *DescriptionUpdateOne {
 	duo.mutation.ClearVariable()
-	return duo
-}
-
-// SetNormalizedVariable sets the "normalized_variable" field.
-func (duo *DescriptionUpdateOne) SetNormalizedVariable(s string) *DescriptionUpdateOne {
-	duo.mutation.SetNormalizedVariable(s)
-	return duo
-}
-
-// SetNillableNormalizedVariable sets the "normalized_variable" field if the given value is not nil.
-func (duo *DescriptionUpdateOne) SetNillableNormalizedVariable(s *string) *DescriptionUpdateOne {
-	if s != nil {
-		duo.SetNormalizedVariable(*s)
-	}
-	return duo
-}
-
-// ClearNormalizedVariable clears the value of the "normalized_variable" field.
-func (duo *DescriptionUpdateOne) ClearNormalizedVariable() *DescriptionUpdateOne {
-	duo.mutation.ClearNormalizedVariable()
 	return duo
 }
 
@@ -729,12 +683,6 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 	}
 	if duo.mutation.VariableCleared() {
 		_spec.ClearField(description.FieldVariable, field.TypeString)
-	}
-	if value, ok := duo.mutation.NormalizedVariable(); ok {
-		_spec.SetField(description.FieldNormalizedVariable, field.TypeString, value)
-	}
-	if duo.mutation.NormalizedVariableCleared() {
-		_spec.ClearField(description.FieldNormalizedVariable, field.TypeString)
 	}
 	if value, ok := duo.mutation.CreatedAt(); ok {
 		_spec.SetField(description.FieldCreatedAt, field.TypeTime, value)

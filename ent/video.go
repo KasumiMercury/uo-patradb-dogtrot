@@ -22,8 +22,6 @@ type Video struct {
 	SourceID string `json:"source_id,omitempty"`
 	// Title holds the value of the "title" field.
 	Title string `json:"title,omitempty"`
-	// NormalizedTitle holds the value of the "normalized_title" field.
-	NormalizedTitle string `json:"normalized_title,omitempty"`
 	// DurationSeconds holds the value of the "duration_seconds" field.
 	DurationSeconds int `json:"duration_seconds,omitempty"`
 	// IsCollaboration holds the value of the "is_collaboration" field.
@@ -138,7 +136,7 @@ func (*Video) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case video.FieldDurationSeconds:
 			values[i] = new(sql.NullInt64)
-		case video.FieldID, video.FieldSourceID, video.FieldTitle, video.FieldNormalizedTitle, video.FieldStatus, video.FieldChatID:
+		case video.FieldID, video.FieldSourceID, video.FieldTitle, video.FieldStatus, video.FieldChatID:
 			values[i] = new(sql.NullString)
 		case video.FieldScheduledAt, video.FieldActualStartAt, video.FieldActualEndAt, video.FieldPublishedAt, video.FieldCreatedAt, video.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -174,12 +172,6 @@ func (v *Video) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
 				v.Title = value.String
-			}
-		case video.FieldNormalizedTitle:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field normalized_title", values[i])
-			} else if value.Valid {
-				v.NormalizedTitle = value.String
 			}
 		case video.FieldDurationSeconds:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -318,9 +310,6 @@ func (v *Video) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(v.Title)
-	builder.WriteString(", ")
-	builder.WriteString("normalized_title=")
-	builder.WriteString(v.NormalizedTitle)
 	builder.WriteString(", ")
 	builder.WriteString("duration_seconds=")
 	builder.WriteString(fmt.Sprintf("%v", v.DurationSeconds))

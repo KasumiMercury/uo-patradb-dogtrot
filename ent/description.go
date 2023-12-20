@@ -24,8 +24,6 @@ type Description struct {
 	Raw string `json:"raw,omitempty"`
 	// Variable holds the value of the "variable" field.
 	Variable string `json:"variable,omitempty"`
-	// NormalizedVariable holds the value of the "normalized_variable" field.
-	NormalizedVariable string `json:"normalized_variable,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -107,7 +105,7 @@ func (*Description) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case description.FieldID, description.FieldRaw, description.FieldVariable, description.FieldNormalizedVariable:
+		case description.FieldID, description.FieldRaw, description.FieldVariable:
 			values[i] = new(sql.NullString)
 		case description.FieldCreatedAt, description.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -149,12 +147,6 @@ func (d *Description) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field variable", values[i])
 			} else if value.Valid {
 				d.Variable = value.String
-			}
-		case description.FieldNormalizedVariable:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field normalized_variable", values[i])
-			} else if value.Valid {
-				d.NormalizedVariable = value.String
 			}
 		case description.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -250,9 +242,6 @@ func (d *Description) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("variable=")
 	builder.WriteString(d.Variable)
-	builder.WriteString(", ")
-	builder.WriteString("normalized_variable=")
-	builder.WriteString(d.NormalizedVariable)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(d.CreatedAt.Format(time.ANSIC))

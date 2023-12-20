@@ -1214,7 +1214,6 @@ type DescriptionMutation struct {
 	id                         *string
 	raw                        *string
 	variable                   *string
-	normalized_variable        *string
 	created_at                 *time.Time
 	updated_at                 *time.Time
 	clearedFields              map[string]struct{}
@@ -1419,55 +1418,6 @@ func (m *DescriptionMutation) VariableCleared() bool {
 func (m *DescriptionMutation) ResetVariable() {
 	m.variable = nil
 	delete(m.clearedFields, description.FieldVariable)
-}
-
-// SetNormalizedVariable sets the "normalized_variable" field.
-func (m *DescriptionMutation) SetNormalizedVariable(s string) {
-	m.normalized_variable = &s
-}
-
-// NormalizedVariable returns the value of the "normalized_variable" field in the mutation.
-func (m *DescriptionMutation) NormalizedVariable() (r string, exists bool) {
-	v := m.normalized_variable
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldNormalizedVariable returns the old "normalized_variable" field's value of the Description entity.
-// If the Description object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DescriptionMutation) OldNormalizedVariable(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldNormalizedVariable is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldNormalizedVariable requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldNormalizedVariable: %w", err)
-	}
-	return oldValue.NormalizedVariable, nil
-}
-
-// ClearNormalizedVariable clears the value of the "normalized_variable" field.
-func (m *DescriptionMutation) ClearNormalizedVariable() {
-	m.normalized_variable = nil
-	m.clearedFields[description.FieldNormalizedVariable] = struct{}{}
-}
-
-// NormalizedVariableCleared returns if the "normalized_variable" field was cleared in this mutation.
-func (m *DescriptionMutation) NormalizedVariableCleared() bool {
-	_, ok := m.clearedFields[description.FieldNormalizedVariable]
-	return ok
-}
-
-// ResetNormalizedVariable resets all changes to the "normalized_variable" field.
-func (m *DescriptionMutation) ResetNormalizedVariable() {
-	m.normalized_variable = nil
-	delete(m.clearedFields, description.FieldNormalizedVariable)
 }
 
 // SetCreatedAt sets the "created_at" field.
@@ -1747,15 +1697,12 @@ func (m *DescriptionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DescriptionMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 4)
 	if m.raw != nil {
 		fields = append(fields, description.FieldRaw)
 	}
 	if m.variable != nil {
 		fields = append(fields, description.FieldVariable)
-	}
-	if m.normalized_variable != nil {
-		fields = append(fields, description.FieldNormalizedVariable)
 	}
 	if m.created_at != nil {
 		fields = append(fields, description.FieldCreatedAt)
@@ -1775,8 +1722,6 @@ func (m *DescriptionMutation) Field(name string) (ent.Value, bool) {
 		return m.Raw()
 	case description.FieldVariable:
 		return m.Variable()
-	case description.FieldNormalizedVariable:
-		return m.NormalizedVariable()
 	case description.FieldCreatedAt:
 		return m.CreatedAt()
 	case description.FieldUpdatedAt:
@@ -1794,8 +1739,6 @@ func (m *DescriptionMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldRaw(ctx)
 	case description.FieldVariable:
 		return m.OldVariable(ctx)
-	case description.FieldNormalizedVariable:
-		return m.OldNormalizedVariable(ctx)
 	case description.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case description.FieldUpdatedAt:
@@ -1822,13 +1765,6 @@ func (m *DescriptionMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetVariable(v)
-		return nil
-	case description.FieldNormalizedVariable:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetNormalizedVariable(v)
 		return nil
 	case description.FieldCreatedAt:
 		v, ok := value.(time.Time)
@@ -1877,9 +1813,6 @@ func (m *DescriptionMutation) ClearedFields() []string {
 	if m.FieldCleared(description.FieldVariable) {
 		fields = append(fields, description.FieldVariable)
 	}
-	if m.FieldCleared(description.FieldNormalizedVariable) {
-		fields = append(fields, description.FieldNormalizedVariable)
-	}
 	return fields
 }
 
@@ -1897,9 +1830,6 @@ func (m *DescriptionMutation) ClearField(name string) error {
 	case description.FieldVariable:
 		m.ClearVariable()
 		return nil
-	case description.FieldNormalizedVariable:
-		m.ClearNormalizedVariable()
-		return nil
 	}
 	return fmt.Errorf("unknown Description nullable field %s", name)
 }
@@ -1913,9 +1843,6 @@ func (m *DescriptionMutation) ResetField(name string) error {
 		return nil
 	case description.FieldVariable:
 		m.ResetVariable()
-		return nil
-	case description.FieldNormalizedVariable:
-		m.ResetNormalizedVariable()
 		return nil
 	case description.FieldCreatedAt:
 		m.ResetCreatedAt()
@@ -2068,19 +1995,18 @@ func (m *DescriptionMutation) ResetEdge(name string) error {
 // DescriptionChangeMutation represents an operation that mutates the DescriptionChange nodes in the graph.
 type DescriptionChangeMutation struct {
 	config
-	op                  Op
-	typ                 string
-	id                  *string
-	raw                 *string
-	variable            *string
-	normalized_variable *string
-	changed_at          *time.Time
-	clearedFields       map[string]struct{}
-	description         *string
-	cleareddescription  bool
-	done                bool
-	oldValue            func(context.Context) (*DescriptionChange, error)
-	predicates          []predicate.DescriptionChange
+	op                 Op
+	typ                string
+	id                 *string
+	raw                *string
+	variable           *string
+	changed_at         *time.Time
+	clearedFields      map[string]struct{}
+	description        *string
+	cleareddescription bool
+	done               bool
+	oldValue           func(context.Context) (*DescriptionChange, error)
+	predicates         []predicate.DescriptionChange
 }
 
 var _ ent.Mutation = (*DescriptionChangeMutation)(nil)
@@ -2272,55 +2198,6 @@ func (m *DescriptionChangeMutation) ResetVariable() {
 	delete(m.clearedFields, descriptionchange.FieldVariable)
 }
 
-// SetNormalizedVariable sets the "normalized_variable" field.
-func (m *DescriptionChangeMutation) SetNormalizedVariable(s string) {
-	m.normalized_variable = &s
-}
-
-// NormalizedVariable returns the value of the "normalized_variable" field in the mutation.
-func (m *DescriptionChangeMutation) NormalizedVariable() (r string, exists bool) {
-	v := m.normalized_variable
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldNormalizedVariable returns the old "normalized_variable" field's value of the DescriptionChange entity.
-// If the DescriptionChange object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DescriptionChangeMutation) OldNormalizedVariable(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldNormalizedVariable is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldNormalizedVariable requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldNormalizedVariable: %w", err)
-	}
-	return oldValue.NormalizedVariable, nil
-}
-
-// ClearNormalizedVariable clears the value of the "normalized_variable" field.
-func (m *DescriptionChangeMutation) ClearNormalizedVariable() {
-	m.normalized_variable = nil
-	m.clearedFields[descriptionchange.FieldNormalizedVariable] = struct{}{}
-}
-
-// NormalizedVariableCleared returns if the "normalized_variable" field was cleared in this mutation.
-func (m *DescriptionChangeMutation) NormalizedVariableCleared() bool {
-	_, ok := m.clearedFields[descriptionchange.FieldNormalizedVariable]
-	return ok
-}
-
-// ResetNormalizedVariable resets all changes to the "normalized_variable" field.
-func (m *DescriptionChangeMutation) ResetNormalizedVariable() {
-	m.normalized_variable = nil
-	delete(m.clearedFields, descriptionchange.FieldNormalizedVariable)
-}
-
 // SetChangedAt sets the "changed_at" field.
 func (m *DescriptionChangeMutation) SetChangedAt(t time.Time) {
 	m.changed_at = &t
@@ -2430,15 +2307,12 @@ func (m *DescriptionChangeMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DescriptionChangeMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 3)
 	if m.raw != nil {
 		fields = append(fields, descriptionchange.FieldRaw)
 	}
 	if m.variable != nil {
 		fields = append(fields, descriptionchange.FieldVariable)
-	}
-	if m.normalized_variable != nil {
-		fields = append(fields, descriptionchange.FieldNormalizedVariable)
 	}
 	if m.changed_at != nil {
 		fields = append(fields, descriptionchange.FieldChangedAt)
@@ -2455,8 +2329,6 @@ func (m *DescriptionChangeMutation) Field(name string) (ent.Value, bool) {
 		return m.Raw()
 	case descriptionchange.FieldVariable:
 		return m.Variable()
-	case descriptionchange.FieldNormalizedVariable:
-		return m.NormalizedVariable()
 	case descriptionchange.FieldChangedAt:
 		return m.ChangedAt()
 	}
@@ -2472,8 +2344,6 @@ func (m *DescriptionChangeMutation) OldField(ctx context.Context, name string) (
 		return m.OldRaw(ctx)
 	case descriptionchange.FieldVariable:
 		return m.OldVariable(ctx)
-	case descriptionchange.FieldNormalizedVariable:
-		return m.OldNormalizedVariable(ctx)
 	case descriptionchange.FieldChangedAt:
 		return m.OldChangedAt(ctx)
 	}
@@ -2498,13 +2368,6 @@ func (m *DescriptionChangeMutation) SetField(name string, value ent.Value) error
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetVariable(v)
-		return nil
-	case descriptionchange.FieldNormalizedVariable:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetNormalizedVariable(v)
 		return nil
 	case descriptionchange.FieldChangedAt:
 		v, ok := value.(time.Time)
@@ -2546,9 +2409,6 @@ func (m *DescriptionChangeMutation) ClearedFields() []string {
 	if m.FieldCleared(descriptionchange.FieldVariable) {
 		fields = append(fields, descriptionchange.FieldVariable)
 	}
-	if m.FieldCleared(descriptionchange.FieldNormalizedVariable) {
-		fields = append(fields, descriptionchange.FieldNormalizedVariable)
-	}
 	return fields
 }
 
@@ -2566,9 +2426,6 @@ func (m *DescriptionChangeMutation) ClearField(name string) error {
 	case descriptionchange.FieldVariable:
 		m.ClearVariable()
 		return nil
-	case descriptionchange.FieldNormalizedVariable:
-		m.ClearNormalizedVariable()
-		return nil
 	}
 	return fmt.Errorf("unknown DescriptionChange nullable field %s", name)
 }
@@ -2582,9 +2439,6 @@ func (m *DescriptionChangeMutation) ResetField(name string) error {
 		return nil
 	case descriptionchange.FieldVariable:
 		m.ResetVariable()
-		return nil
-	case descriptionchange.FieldNormalizedVariable:
-		m.ResetNormalizedVariable()
 		return nil
 	case descriptionchange.FieldChangedAt:
 		m.ResetChangedAt()
@@ -3987,7 +3841,6 @@ type VideoMutation struct {
 	id                           *string
 	source_id                    *string
 	title                        *string
-	normalized_title             *string
 	duration_seconds             *int
 	addduration_seconds          *int
 	is_collaboration             *bool
@@ -4197,55 +4050,6 @@ func (m *VideoMutation) OldTitle(ctx context.Context) (v string, err error) {
 // ResetTitle resets all changes to the "title" field.
 func (m *VideoMutation) ResetTitle() {
 	m.title = nil
-}
-
-// SetNormalizedTitle sets the "normalized_title" field.
-func (m *VideoMutation) SetNormalizedTitle(s string) {
-	m.normalized_title = &s
-}
-
-// NormalizedTitle returns the value of the "normalized_title" field in the mutation.
-func (m *VideoMutation) NormalizedTitle() (r string, exists bool) {
-	v := m.normalized_title
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldNormalizedTitle returns the old "normalized_title" field's value of the Video entity.
-// If the Video object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *VideoMutation) OldNormalizedTitle(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldNormalizedTitle is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldNormalizedTitle requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldNormalizedTitle: %w", err)
-	}
-	return oldValue.NormalizedTitle, nil
-}
-
-// ClearNormalizedTitle clears the value of the "normalized_title" field.
-func (m *VideoMutation) ClearNormalizedTitle() {
-	m.normalized_title = nil
-	m.clearedFields[video.FieldNormalizedTitle] = struct{}{}
-}
-
-// NormalizedTitleCleared returns if the "normalized_title" field was cleared in this mutation.
-func (m *VideoMutation) NormalizedTitleCleared() bool {
-	_, ok := m.clearedFields[video.FieldNormalizedTitle]
-	return ok
-}
-
-// ResetNormalizedTitle resets all changes to the "normalized_title" field.
-func (m *VideoMutation) ResetNormalizedTitle() {
-	m.normalized_title = nil
-	delete(m.clearedFields, video.FieldNormalizedTitle)
 }
 
 // SetDurationSeconds sets the "duration_seconds" field.
@@ -5073,15 +4877,12 @@ func (m *VideoMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *VideoMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 13)
 	if m.source_id != nil {
 		fields = append(fields, video.FieldSourceID)
 	}
 	if m.title != nil {
 		fields = append(fields, video.FieldTitle)
-	}
-	if m.normalized_title != nil {
-		fields = append(fields, video.FieldNormalizedTitle)
 	}
 	if m.duration_seconds != nil {
 		fields = append(fields, video.FieldDurationSeconds)
@@ -5128,8 +4929,6 @@ func (m *VideoMutation) Field(name string) (ent.Value, bool) {
 		return m.SourceID()
 	case video.FieldTitle:
 		return m.Title()
-	case video.FieldNormalizedTitle:
-		return m.NormalizedTitle()
 	case video.FieldDurationSeconds:
 		return m.DurationSeconds()
 	case video.FieldIsCollaboration:
@@ -5165,8 +4964,6 @@ func (m *VideoMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldSourceID(ctx)
 	case video.FieldTitle:
 		return m.OldTitle(ctx)
-	case video.FieldNormalizedTitle:
-		return m.OldNormalizedTitle(ctx)
 	case video.FieldDurationSeconds:
 		return m.OldDurationSeconds(ctx)
 	case video.FieldIsCollaboration:
@@ -5211,13 +5008,6 @@ func (m *VideoMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTitle(v)
-		return nil
-	case video.FieldNormalizedTitle:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetNormalizedTitle(v)
 		return nil
 	case video.FieldDurationSeconds:
 		v, ok := value.(int)
@@ -5341,9 +5131,6 @@ func (m *VideoMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *VideoMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(video.FieldNormalizedTitle) {
-		fields = append(fields, video.FieldNormalizedTitle)
-	}
 	if m.FieldCleared(video.FieldDurationSeconds) {
 		fields = append(fields, video.FieldDurationSeconds)
 	}
@@ -5373,9 +5160,6 @@ func (m *VideoMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *VideoMutation) ClearField(name string) error {
 	switch name {
-	case video.FieldNormalizedTitle:
-		m.ClearNormalizedTitle()
-		return nil
 	case video.FieldDurationSeconds:
 		m.ClearDurationSeconds()
 		return nil
@@ -5404,9 +5188,6 @@ func (m *VideoMutation) ResetField(name string) error {
 		return nil
 	case video.FieldTitle:
 		m.ResetTitle()
-		return nil
-	case video.FieldNormalizedTitle:
-		m.ResetNormalizedTitle()
 		return nil
 	case video.FieldDurationSeconds:
 		m.ResetDurationSeconds()
@@ -6721,18 +6502,17 @@ func (m *VideoPlayRangeMutation) ResetEdge(name string) error {
 // VideoTitleChangeMutation represents an operation that mutates the VideoTitleChange nodes in the graph.
 type VideoTitleChangeMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *string
-	title            *string
-	normalized_title *string
-	changed_at       *time.Time
-	clearedFields    map[string]struct{}
-	video            *string
-	clearedvideo     bool
-	done             bool
-	oldValue         func(context.Context) (*VideoTitleChange, error)
-	predicates       []predicate.VideoTitleChange
+	op            Op
+	typ           string
+	id            *string
+	title         *string
+	changed_at    *time.Time
+	clearedFields map[string]struct{}
+	video         *string
+	clearedvideo  bool
+	done          bool
+	oldValue      func(context.Context) (*VideoTitleChange, error)
+	predicates    []predicate.VideoTitleChange
 }
 
 var _ ent.Mutation = (*VideoTitleChangeMutation)(nil)
@@ -6875,55 +6655,6 @@ func (m *VideoTitleChangeMutation) ResetTitle() {
 	m.title = nil
 }
 
-// SetNormalizedTitle sets the "normalized_title" field.
-func (m *VideoTitleChangeMutation) SetNormalizedTitle(s string) {
-	m.normalized_title = &s
-}
-
-// NormalizedTitle returns the value of the "normalized_title" field in the mutation.
-func (m *VideoTitleChangeMutation) NormalizedTitle() (r string, exists bool) {
-	v := m.normalized_title
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldNormalizedTitle returns the old "normalized_title" field's value of the VideoTitleChange entity.
-// If the VideoTitleChange object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *VideoTitleChangeMutation) OldNormalizedTitle(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldNormalizedTitle is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldNormalizedTitle requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldNormalizedTitle: %w", err)
-	}
-	return oldValue.NormalizedTitle, nil
-}
-
-// ClearNormalizedTitle clears the value of the "normalized_title" field.
-func (m *VideoTitleChangeMutation) ClearNormalizedTitle() {
-	m.normalized_title = nil
-	m.clearedFields[videotitlechange.FieldNormalizedTitle] = struct{}{}
-}
-
-// NormalizedTitleCleared returns if the "normalized_title" field was cleared in this mutation.
-func (m *VideoTitleChangeMutation) NormalizedTitleCleared() bool {
-	_, ok := m.clearedFields[videotitlechange.FieldNormalizedTitle]
-	return ok
-}
-
-// ResetNormalizedTitle resets all changes to the "normalized_title" field.
-func (m *VideoTitleChangeMutation) ResetNormalizedTitle() {
-	m.normalized_title = nil
-	delete(m.clearedFields, videotitlechange.FieldNormalizedTitle)
-}
-
 // SetChangedAt sets the "changed_at" field.
 func (m *VideoTitleChangeMutation) SetChangedAt(t time.Time) {
 	m.changed_at = &t
@@ -7033,12 +6764,9 @@ func (m *VideoTitleChangeMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *VideoTitleChangeMutation) Fields() []string {
-	fields := make([]string, 0, 3)
+	fields := make([]string, 0, 2)
 	if m.title != nil {
 		fields = append(fields, videotitlechange.FieldTitle)
-	}
-	if m.normalized_title != nil {
-		fields = append(fields, videotitlechange.FieldNormalizedTitle)
 	}
 	if m.changed_at != nil {
 		fields = append(fields, videotitlechange.FieldChangedAt)
@@ -7053,8 +6781,6 @@ func (m *VideoTitleChangeMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case videotitlechange.FieldTitle:
 		return m.Title()
-	case videotitlechange.FieldNormalizedTitle:
-		return m.NormalizedTitle()
 	case videotitlechange.FieldChangedAt:
 		return m.ChangedAt()
 	}
@@ -7068,8 +6794,6 @@ func (m *VideoTitleChangeMutation) OldField(ctx context.Context, name string) (e
 	switch name {
 	case videotitlechange.FieldTitle:
 		return m.OldTitle(ctx)
-	case videotitlechange.FieldNormalizedTitle:
-		return m.OldNormalizedTitle(ctx)
 	case videotitlechange.FieldChangedAt:
 		return m.OldChangedAt(ctx)
 	}
@@ -7087,13 +6811,6 @@ func (m *VideoTitleChangeMutation) SetField(name string, value ent.Value) error 
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTitle(v)
-		return nil
-	case videotitlechange.FieldNormalizedTitle:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetNormalizedTitle(v)
 		return nil
 	case videotitlechange.FieldChangedAt:
 		v, ok := value.(time.Time)
@@ -7131,11 +6848,7 @@ func (m *VideoTitleChangeMutation) AddField(name string, value ent.Value) error 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *VideoTitleChangeMutation) ClearedFields() []string {
-	var fields []string
-	if m.FieldCleared(videotitlechange.FieldNormalizedTitle) {
-		fields = append(fields, videotitlechange.FieldNormalizedTitle)
-	}
-	return fields
+	return nil
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -7148,11 +6861,6 @@ func (m *VideoTitleChangeMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *VideoTitleChangeMutation) ClearField(name string) error {
-	switch name {
-	case videotitlechange.FieldNormalizedTitle:
-		m.ClearNormalizedTitle()
-		return nil
-	}
 	return fmt.Errorf("unknown VideoTitleChange nullable field %s", name)
 }
 
@@ -7162,9 +6870,6 @@ func (m *VideoTitleChangeMutation) ResetField(name string) error {
 	switch name {
 	case videotitlechange.FieldTitle:
 		m.ResetTitle()
-		return nil
-	case videotitlechange.FieldNormalizedTitle:
-		m.ResetNormalizedTitle()
 		return nil
 	case videotitlechange.FieldChangedAt:
 		m.ResetChangedAt()

@@ -63,26 +63,6 @@ func (dcu *DescriptionChangeUpdate) ClearVariable() *DescriptionChangeUpdate {
 	return dcu
 }
 
-// SetNormalizedVariable sets the "normalized_variable" field.
-func (dcu *DescriptionChangeUpdate) SetNormalizedVariable(s string) *DescriptionChangeUpdate {
-	dcu.mutation.SetNormalizedVariable(s)
-	return dcu
-}
-
-// SetNillableNormalizedVariable sets the "normalized_variable" field if the given value is not nil.
-func (dcu *DescriptionChangeUpdate) SetNillableNormalizedVariable(s *string) *DescriptionChangeUpdate {
-	if s != nil {
-		dcu.SetNormalizedVariable(*s)
-	}
-	return dcu
-}
-
-// ClearNormalizedVariable clears the value of the "normalized_variable" field.
-func (dcu *DescriptionChangeUpdate) ClearNormalizedVariable() *DescriptionChangeUpdate {
-	dcu.mutation.ClearNormalizedVariable()
-	return dcu
-}
-
 // SetChangedAt sets the "changed_at" field.
 func (dcu *DescriptionChangeUpdate) SetChangedAt(t time.Time) *DescriptionChangeUpdate {
 	dcu.mutation.SetChangedAt(t)
@@ -180,12 +160,6 @@ func (dcu *DescriptionChangeUpdate) sqlSave(ctx context.Context) (n int, err err
 	if dcu.mutation.VariableCleared() {
 		_spec.ClearField(descriptionchange.FieldVariable, field.TypeString)
 	}
-	if value, ok := dcu.mutation.NormalizedVariable(); ok {
-		_spec.SetField(descriptionchange.FieldNormalizedVariable, field.TypeString, value)
-	}
-	if dcu.mutation.NormalizedVariableCleared() {
-		_spec.ClearField(descriptionchange.FieldNormalizedVariable, field.TypeString)
-	}
 	if value, ok := dcu.mutation.ChangedAt(); ok {
 		_spec.SetField(descriptionchange.FieldChangedAt, field.TypeTime, value)
 	}
@@ -269,26 +243,6 @@ func (dcuo *DescriptionChangeUpdateOne) SetNillableVariable(s *string) *Descript
 // ClearVariable clears the value of the "variable" field.
 func (dcuo *DescriptionChangeUpdateOne) ClearVariable() *DescriptionChangeUpdateOne {
 	dcuo.mutation.ClearVariable()
-	return dcuo
-}
-
-// SetNormalizedVariable sets the "normalized_variable" field.
-func (dcuo *DescriptionChangeUpdateOne) SetNormalizedVariable(s string) *DescriptionChangeUpdateOne {
-	dcuo.mutation.SetNormalizedVariable(s)
-	return dcuo
-}
-
-// SetNillableNormalizedVariable sets the "normalized_variable" field if the given value is not nil.
-func (dcuo *DescriptionChangeUpdateOne) SetNillableNormalizedVariable(s *string) *DescriptionChangeUpdateOne {
-	if s != nil {
-		dcuo.SetNormalizedVariable(*s)
-	}
-	return dcuo
-}
-
-// ClearNormalizedVariable clears the value of the "normalized_variable" field.
-func (dcuo *DescriptionChangeUpdateOne) ClearNormalizedVariable() *DescriptionChangeUpdateOne {
-	dcuo.mutation.ClearNormalizedVariable()
 	return dcuo
 }
 
@@ -418,12 +372,6 @@ func (dcuo *DescriptionChangeUpdateOne) sqlSave(ctx context.Context) (_node *Des
 	}
 	if dcuo.mutation.VariableCleared() {
 		_spec.ClearField(descriptionchange.FieldVariable, field.TypeString)
-	}
-	if value, ok := dcuo.mutation.NormalizedVariable(); ok {
-		_spec.SetField(descriptionchange.FieldNormalizedVariable, field.TypeString, value)
-	}
-	if dcuo.mutation.NormalizedVariableCleared() {
-		_spec.ClearField(descriptionchange.FieldNormalizedVariable, field.TypeString)
 	}
 	if value, ok := dcuo.mutation.ChangedAt(); ok {
 		_spec.SetField(descriptionchange.FieldChangedAt, field.TypeTime, value)

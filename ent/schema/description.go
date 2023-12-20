@@ -27,7 +27,6 @@ func (Description) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("raw").MaxLen(5000).Annotations(entproto.Field(2)),
 		field.String("variable").Optional().Annotations(entproto.Field(3)),
-		field.String("normalized_variable").Optional().Annotations(entproto.Skip()),
 		field.Time("created_at").Default(func() time.Time { return time.Now() }).Annotations(entproto.Skip()),
 		field.Time("updated_at").Default(func() time.Time { return time.Now() }).UpdateDefault(func() time.Time { return time.Now() }).Annotations(entproto.Field(4)),
 	}

@@ -18,8 +18,6 @@ const (
 	FieldSourceID = "source_id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
-	// FieldNormalizedTitle holds the string denoting the normalized_title field in the database.
-	FieldNormalizedTitle = "normalized_title"
 	// FieldDurationSeconds holds the string denoting the duration_seconds field in the database.
 	FieldDurationSeconds = "duration_seconds"
 	// FieldIsCollaboration holds the string denoting the is_collaboration field in the database.
@@ -103,7 +101,6 @@ var Columns = []string{
 	FieldID,
 	FieldSourceID,
 	FieldTitle,
-	FieldNormalizedTitle,
 	FieldDurationSeconds,
 	FieldIsCollaboration,
 	FieldStatus,
@@ -172,11 +169,6 @@ func BySourceID(opts ...sql.OrderTermOption) OrderOption {
 // ByTitle orders the results by the title field.
 func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
-}
-
-// ByNormalizedTitle orders the results by the normalized_title field.
-func ByNormalizedTitle(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNormalizedTitle, opts...).ToFunc()
 }
 
 // ByDurationSeconds orders the results by the duration_seconds field.

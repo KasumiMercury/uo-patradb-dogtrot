@@ -22,8 +22,6 @@ type DescriptionChange struct {
 	Raw string `json:"raw,omitempty"`
 	// Variable holds the value of the "variable" field.
 	Variable string `json:"variable,omitempty"`
-	// NormalizedVariable holds the value of the "normalized_variable" field.
-	NormalizedVariable string `json:"normalized_variable,omitempty"`
 	// ChangedAt holds the value of the "changed_at" field.
 	ChangedAt time.Time `json:"changed_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -60,7 +58,7 @@ func (*DescriptionChange) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case descriptionchange.FieldID, descriptionchange.FieldRaw, descriptionchange.FieldVariable, descriptionchange.FieldNormalizedVariable:
+		case descriptionchange.FieldID, descriptionchange.FieldRaw, descriptionchange.FieldVariable:
 			values[i] = new(sql.NullString)
 		case descriptionchange.FieldChangedAt:
 			values[i] = new(sql.NullTime)
@@ -98,12 +96,6 @@ func (dc *DescriptionChange) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field variable", values[i])
 			} else if value.Valid {
 				dc.Variable = value.String
-			}
-		case descriptionchange.FieldNormalizedVariable:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field normalized_variable", values[i])
-			} else if value.Valid {
-				dc.NormalizedVariable = value.String
 			}
 		case descriptionchange.FieldChangedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -164,9 +156,6 @@ func (dc *DescriptionChange) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("variable=")
 	builder.WriteString(dc.Variable)
-	builder.WriteString(", ")
-	builder.WriteString("normalized_variable=")
-	builder.WriteString(dc.NormalizedVariable)
 	builder.WriteString(", ")
 	builder.WriteString("changed_at=")
 	builder.WriteString(dc.ChangedAt.Format(time.ANSIC))

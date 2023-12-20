@@ -75,11 +75,6 @@ func Variable(v string) predicate.DescriptionChange {
 	return predicate.DescriptionChange(sql.FieldEQ(FieldVariable, v))
 }
 
-// NormalizedVariable applies equality check predicate on the "normalized_variable" field. It's identical to NormalizedVariableEQ.
-func NormalizedVariable(v string) predicate.DescriptionChange {
-	return predicate.DescriptionChange(sql.FieldEQ(FieldNormalizedVariable, v))
-}
-
 // ChangedAt applies equality check predicate on the "changed_at" field. It's identical to ChangedAtEQ.
 func ChangedAt(v time.Time) predicate.DescriptionChange {
 	return predicate.DescriptionChange(sql.FieldEQ(FieldChangedAt, v))
@@ -223,81 +218,6 @@ func VariableEqualFold(v string) predicate.DescriptionChange {
 // VariableContainsFold applies the ContainsFold predicate on the "variable" field.
 func VariableContainsFold(v string) predicate.DescriptionChange {
 	return predicate.DescriptionChange(sql.FieldContainsFold(FieldVariable, v))
-}
-
-// NormalizedVariableEQ applies the EQ predicate on the "normalized_variable" field.
-func NormalizedVariableEQ(v string) predicate.DescriptionChange {
-	return predicate.DescriptionChange(sql.FieldEQ(FieldNormalizedVariable, v))
-}
-
-// NormalizedVariableNEQ applies the NEQ predicate on the "normalized_variable" field.
-func NormalizedVariableNEQ(v string) predicate.DescriptionChange {
-	return predicate.DescriptionChange(sql.FieldNEQ(FieldNormalizedVariable, v))
-}
-
-// NormalizedVariableIn applies the In predicate on the "normalized_variable" field.
-func NormalizedVariableIn(vs ...string) predicate.DescriptionChange {
-	return predicate.DescriptionChange(sql.FieldIn(FieldNormalizedVariable, vs...))
-}
-
-// NormalizedVariableNotIn applies the NotIn predicate on the "normalized_variable" field.
-func NormalizedVariableNotIn(vs ...string) predicate.DescriptionChange {
-	return predicate.DescriptionChange(sql.FieldNotIn(FieldNormalizedVariable, vs...))
-}
-
-// NormalizedVariableGT applies the GT predicate on the "normalized_variable" field.
-func NormalizedVariableGT(v string) predicate.DescriptionChange {
-	return predicate.DescriptionChange(sql.FieldGT(FieldNormalizedVariable, v))
-}
-
-// NormalizedVariableGTE applies the GTE predicate on the "normalized_variable" field.
-func NormalizedVariableGTE(v string) predicate.DescriptionChange {
-	return predicate.DescriptionChange(sql.FieldGTE(FieldNormalizedVariable, v))
-}
-
-// NormalizedVariableLT applies the LT predicate on the "normalized_variable" field.
-func NormalizedVariableLT(v string) predicate.DescriptionChange {
-	return predicate.DescriptionChange(sql.FieldLT(FieldNormalizedVariable, v))
-}
-
-// NormalizedVariableLTE applies the LTE predicate on the "normalized_variable" field.
-func NormalizedVariableLTE(v string) predicate.DescriptionChange {
-	return predicate.DescriptionChange(sql.FieldLTE(FieldNormalizedVariable, v))
-}
-
-// NormalizedVariableContains applies the Contains predicate on the "normalized_variable" field.
-func NormalizedVariableContains(v string) predicate.DescriptionChange {
-	return predicate.DescriptionChange(sql.FieldContains(FieldNormalizedVariable, v))
-}
-
-// NormalizedVariableHasPrefix applies the HasPrefix predicate on the "normalized_variable" field.
-func NormalizedVariableHasPrefix(v string) predicate.DescriptionChange {
-	return predicate.DescriptionChange(sql.FieldHasPrefix(FieldNormalizedVariable, v))
-}
-
-// NormalizedVariableHasSuffix applies the HasSuffix predicate on the "normalized_variable" field.
-func NormalizedVariableHasSuffix(v string) predicate.DescriptionChange {
-	return predicate.DescriptionChange(sql.FieldHasSuffix(FieldNormalizedVariable, v))
-}
-
-// NormalizedVariableIsNil applies the IsNil predicate on the "normalized_variable" field.
-func NormalizedVariableIsNil() predicate.DescriptionChange {
-	return predicate.DescriptionChange(sql.FieldIsNull(FieldNormalizedVariable))
-}
-
-// NormalizedVariableNotNil applies the NotNil predicate on the "normalized_variable" field.
-func NormalizedVariableNotNil() predicate.DescriptionChange {
-	return predicate.DescriptionChange(sql.FieldNotNull(FieldNormalizedVariable))
-}
-
-// NormalizedVariableEqualFold applies the EqualFold predicate on the "normalized_variable" field.
-func NormalizedVariableEqualFold(v string) predicate.DescriptionChange {
-	return predicate.DescriptionChange(sql.FieldEqualFold(FieldNormalizedVariable, v))
-}
-
-// NormalizedVariableContainsFold applies the ContainsFold predicate on the "normalized_variable" field.
-func NormalizedVariableContainsFold(v string) predicate.DescriptionChange {
-	return predicate.DescriptionChange(sql.FieldContainsFold(FieldNormalizedVariable, v))
 }
 
 // ChangedAtEQ applies the EQ predicate on the "changed_at" field.

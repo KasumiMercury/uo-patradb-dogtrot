@@ -16,8 +16,6 @@ const (
 	FieldID = "id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
-	// FieldNormalizedTitle holds the string denoting the normalized_title field in the database.
-	FieldNormalizedTitle = "normalized_title"
 	// FieldChangedAt holds the string denoting the changed_at field in the database.
 	FieldChangedAt = "changed_at"
 	// EdgeVideo holds the string denoting the video edge name in mutations.
@@ -37,7 +35,6 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldTitle,
-	FieldNormalizedTitle,
 	FieldChangedAt,
 }
 
@@ -84,11 +81,6 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByTitle orders the results by the title field.
 func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
-}
-
-// ByNormalizedTitle orders the results by the normalized_title field.
-func ByNormalizedTitle(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNormalizedTitle, opts...).ToFunc()
 }
 
 // ByChangedAt orders the results by the changed_at field.

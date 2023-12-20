@@ -41,20 +41,6 @@ func (dcc *DescriptionChangeCreate) SetNillableVariable(s *string) *DescriptionC
 	return dcc
 }
 
-// SetNormalizedVariable sets the "normalized_variable" field.
-func (dcc *DescriptionChangeCreate) SetNormalizedVariable(s string) *DescriptionChangeCreate {
-	dcc.mutation.SetNormalizedVariable(s)
-	return dcc
-}
-
-// SetNillableNormalizedVariable sets the "normalized_variable" field if the given value is not nil.
-func (dcc *DescriptionChangeCreate) SetNillableNormalizedVariable(s *string) *DescriptionChangeCreate {
-	if s != nil {
-		dcc.SetNormalizedVariable(*s)
-	}
-	return dcc
-}
-
 // SetChangedAt sets the "changed_at" field.
 func (dcc *DescriptionChangeCreate) SetChangedAt(t time.Time) *DescriptionChangeCreate {
 	dcc.mutation.SetChangedAt(t)
@@ -202,10 +188,6 @@ func (dcc *DescriptionChangeCreate) createSpec() (*DescriptionChange, *sqlgraph.
 	if value, ok := dcc.mutation.Variable(); ok {
 		_spec.SetField(descriptionchange.FieldVariable, field.TypeString, value)
 		_node.Variable = value
-	}
-	if value, ok := dcc.mutation.NormalizedVariable(); ok {
-		_spec.SetField(descriptionchange.FieldNormalizedVariable, field.TypeString, value)
-		_node.NormalizedVariable = value
 	}
 	if value, ok := dcc.mutation.ChangedAt(); ok {
 		_spec.SetField(descriptionchange.FieldChangedAt, field.TypeTime, value)

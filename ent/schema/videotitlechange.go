@@ -24,7 +24,6 @@ func (VideoTitleChange) Mixin() []ent.Mixin {
 func (VideoTitleChange) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("title").MaxLen(100),
-		field.String("normalized_title").Optional(),
 		field.Time("changed_at").Default(func() time.Time { return time.Now() }),
 	}
 }

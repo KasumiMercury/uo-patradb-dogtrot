@@ -70,11 +70,6 @@ func Title(v string) predicate.VideoTitleChange {
 	return predicate.VideoTitleChange(sql.FieldEQ(FieldTitle, v))
 }
 
-// NormalizedTitle applies equality check predicate on the "normalized_title" field. It's identical to NormalizedTitleEQ.
-func NormalizedTitle(v string) predicate.VideoTitleChange {
-	return predicate.VideoTitleChange(sql.FieldEQ(FieldNormalizedTitle, v))
-}
-
 // ChangedAt applies equality check predicate on the "changed_at" field. It's identical to ChangedAtEQ.
 func ChangedAt(v time.Time) predicate.VideoTitleChange {
 	return predicate.VideoTitleChange(sql.FieldEQ(FieldChangedAt, v))
@@ -143,81 +138,6 @@ func TitleEqualFold(v string) predicate.VideoTitleChange {
 // TitleContainsFold applies the ContainsFold predicate on the "title" field.
 func TitleContainsFold(v string) predicate.VideoTitleChange {
 	return predicate.VideoTitleChange(sql.FieldContainsFold(FieldTitle, v))
-}
-
-// NormalizedTitleEQ applies the EQ predicate on the "normalized_title" field.
-func NormalizedTitleEQ(v string) predicate.VideoTitleChange {
-	return predicate.VideoTitleChange(sql.FieldEQ(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleNEQ applies the NEQ predicate on the "normalized_title" field.
-func NormalizedTitleNEQ(v string) predicate.VideoTitleChange {
-	return predicate.VideoTitleChange(sql.FieldNEQ(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleIn applies the In predicate on the "normalized_title" field.
-func NormalizedTitleIn(vs ...string) predicate.VideoTitleChange {
-	return predicate.VideoTitleChange(sql.FieldIn(FieldNormalizedTitle, vs...))
-}
-
-// NormalizedTitleNotIn applies the NotIn predicate on the "normalized_title" field.
-func NormalizedTitleNotIn(vs ...string) predicate.VideoTitleChange {
-	return predicate.VideoTitleChange(sql.FieldNotIn(FieldNormalizedTitle, vs...))
-}
-
-// NormalizedTitleGT applies the GT predicate on the "normalized_title" field.
-func NormalizedTitleGT(v string) predicate.VideoTitleChange {
-	return predicate.VideoTitleChange(sql.FieldGT(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleGTE applies the GTE predicate on the "normalized_title" field.
-func NormalizedTitleGTE(v string) predicate.VideoTitleChange {
-	return predicate.VideoTitleChange(sql.FieldGTE(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleLT applies the LT predicate on the "normalized_title" field.
-func NormalizedTitleLT(v string) predicate.VideoTitleChange {
-	return predicate.VideoTitleChange(sql.FieldLT(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleLTE applies the LTE predicate on the "normalized_title" field.
-func NormalizedTitleLTE(v string) predicate.VideoTitleChange {
-	return predicate.VideoTitleChange(sql.FieldLTE(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleContains applies the Contains predicate on the "normalized_title" field.
-func NormalizedTitleContains(v string) predicate.VideoTitleChange {
-	return predicate.VideoTitleChange(sql.FieldContains(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleHasPrefix applies the HasPrefix predicate on the "normalized_title" field.
-func NormalizedTitleHasPrefix(v string) predicate.VideoTitleChange {
-	return predicate.VideoTitleChange(sql.FieldHasPrefix(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleHasSuffix applies the HasSuffix predicate on the "normalized_title" field.
-func NormalizedTitleHasSuffix(v string) predicate.VideoTitleChange {
-	return predicate.VideoTitleChange(sql.FieldHasSuffix(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleIsNil applies the IsNil predicate on the "normalized_title" field.
-func NormalizedTitleIsNil() predicate.VideoTitleChange {
-	return predicate.VideoTitleChange(sql.FieldIsNull(FieldNormalizedTitle))
-}
-
-// NormalizedTitleNotNil applies the NotNil predicate on the "normalized_title" field.
-func NormalizedTitleNotNil() predicate.VideoTitleChange {
-	return predicate.VideoTitleChange(sql.FieldNotNull(FieldNormalizedTitle))
-}
-
-// NormalizedTitleEqualFold applies the EqualFold predicate on the "normalized_title" field.
-func NormalizedTitleEqualFold(v string) predicate.VideoTitleChange {
-	return predicate.VideoTitleChange(sql.FieldEqualFold(FieldNormalizedTitle, v))
-}
-
-// NormalizedTitleContainsFold applies the ContainsFold predicate on the "normalized_title" field.
-func NormalizedTitleContainsFold(v string) predicate.VideoTitleChange {
-	return predicate.VideoTitleChange(sql.FieldContainsFold(FieldNormalizedTitle, v))
 }
 
 // ChangedAtEQ applies the EQ predicate on the "changed_at" field.

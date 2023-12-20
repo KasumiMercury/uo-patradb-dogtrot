@@ -84,11 +84,11 @@ func init() {
 	// description.RawValidator is a validator for the "raw" field. It is called by the builders before save.
 	description.RawValidator = descriptionDescRaw.Validators[0].(func(string) error)
 	// descriptionDescCreatedAt is the schema descriptor for created_at field.
-	descriptionDescCreatedAt := descriptionFields[3].Descriptor()
+	descriptionDescCreatedAt := descriptionFields[2].Descriptor()
 	// description.DefaultCreatedAt holds the default value on creation for the created_at field.
 	description.DefaultCreatedAt = descriptionDescCreatedAt.Default.(func() time.Time)
 	// descriptionDescUpdatedAt is the schema descriptor for updated_at field.
-	descriptionDescUpdatedAt := descriptionFields[4].Descriptor()
+	descriptionDescUpdatedAt := descriptionFields[3].Descriptor()
 	// description.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	description.DefaultUpdatedAt = descriptionDescUpdatedAt.Default.(func() time.Time)
 	// description.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
@@ -109,7 +109,7 @@ func init() {
 	// descriptionchange.RawValidator is a validator for the "raw" field. It is called by the builders before save.
 	descriptionchange.RawValidator = descriptionchangeDescRaw.Validators[0].(func(string) error)
 	// descriptionchangeDescChangedAt is the schema descriptor for changed_at field.
-	descriptionchangeDescChangedAt := descriptionchangeFields[3].Descriptor()
+	descriptionchangeDescChangedAt := descriptionchangeFields[2].Descriptor()
 	// descriptionchange.DefaultChangedAt holds the default value on creation for the changed_at field.
 	descriptionchange.DefaultChangedAt = descriptionchangeDescChangedAt.Default.(func() time.Time)
 	// descriptionchangeDescID is the schema descriptor for id field.
@@ -178,7 +178,7 @@ func init() {
 	// video.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	video.TitleValidator = videoDescTitle.Validators[0].(func(string) error)
 	// videoDescDurationSeconds is the schema descriptor for duration_seconds field.
-	videoDescDurationSeconds := videoFields[3].Descriptor()
+	videoDescDurationSeconds := videoFields[2].Descriptor()
 	// video.DurationSecondsValidator is a validator for the "duration_seconds" field. It is called by the builders before save.
 	video.DurationSecondsValidator = func() func(int) error {
 		validators := videoDescDurationSeconds.Validators
@@ -196,19 +196,19 @@ func init() {
 		}
 	}()
 	// videoDescIsCollaboration is the schema descriptor for is_collaboration field.
-	videoDescIsCollaboration := videoFields[4].Descriptor()
+	videoDescIsCollaboration := videoFields[3].Descriptor()
 	// video.DefaultIsCollaboration holds the default value on creation for the is_collaboration field.
 	video.DefaultIsCollaboration = videoDescIsCollaboration.Default.(bool)
 	// videoDescHasTimeRange is the schema descriptor for has_time_range field.
-	videoDescHasTimeRange := videoFields[7].Descriptor()
+	videoDescHasTimeRange := videoFields[6].Descriptor()
 	// video.DefaultHasTimeRange holds the default value on creation for the has_time_range field.
 	video.DefaultHasTimeRange = videoDescHasTimeRange.Default.(bool)
 	// videoDescCreatedAt is the schema descriptor for created_at field.
-	videoDescCreatedAt := videoFields[12].Descriptor()
+	videoDescCreatedAt := videoFields[11].Descriptor()
 	// video.DefaultCreatedAt holds the default value on creation for the created_at field.
 	video.DefaultCreatedAt = videoDescCreatedAt.Default.(func() time.Time)
 	// videoDescUpdatedAt is the schema descriptor for updated_at field.
-	videoDescUpdatedAt := videoFields[13].Descriptor()
+	videoDescUpdatedAt := videoFields[12].Descriptor()
 	// video.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	video.DefaultUpdatedAt = videoDescUpdatedAt.Default.(func() time.Time)
 	// video.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
@@ -269,7 +269,7 @@ func init() {
 	// videotitlechange.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	videotitlechange.TitleValidator = videotitlechangeDescTitle.Validators[0].(func(string) error)
 	// videotitlechangeDescChangedAt is the schema descriptor for changed_at field.
-	videotitlechangeDescChangedAt := videotitlechangeFields[2].Descriptor()
+	videotitlechangeDescChangedAt := videotitlechangeFields[1].Descriptor()
 	// videotitlechange.DefaultChangedAt holds the default value on creation for the changed_at field.
 	videotitlechange.DefaultChangedAt = videotitlechangeDescChangedAt.Default.(func() time.Time)
 	// videotitlechangeDescID is the schema descriptor for id field.

@@ -43,26 +43,6 @@ func (vtcu *VideoTitleChangeUpdate) SetNillableTitle(s *string) *VideoTitleChang
 	return vtcu
 }
 
-// SetNormalizedTitle sets the "normalized_title" field.
-func (vtcu *VideoTitleChangeUpdate) SetNormalizedTitle(s string) *VideoTitleChangeUpdate {
-	vtcu.mutation.SetNormalizedTitle(s)
-	return vtcu
-}
-
-// SetNillableNormalizedTitle sets the "normalized_title" field if the given value is not nil.
-func (vtcu *VideoTitleChangeUpdate) SetNillableNormalizedTitle(s *string) *VideoTitleChangeUpdate {
-	if s != nil {
-		vtcu.SetNormalizedTitle(*s)
-	}
-	return vtcu
-}
-
-// ClearNormalizedTitle clears the value of the "normalized_title" field.
-func (vtcu *VideoTitleChangeUpdate) ClearNormalizedTitle() *VideoTitleChangeUpdate {
-	vtcu.mutation.ClearNormalizedTitle()
-	return vtcu
-}
-
 // SetChangedAt sets the "changed_at" field.
 func (vtcu *VideoTitleChangeUpdate) SetChangedAt(t time.Time) *VideoTitleChangeUpdate {
 	vtcu.mutation.SetChangedAt(t)
@@ -154,12 +134,6 @@ func (vtcu *VideoTitleChangeUpdate) sqlSave(ctx context.Context) (n int, err err
 	if value, ok := vtcu.mutation.Title(); ok {
 		_spec.SetField(videotitlechange.FieldTitle, field.TypeString, value)
 	}
-	if value, ok := vtcu.mutation.NormalizedTitle(); ok {
-		_spec.SetField(videotitlechange.FieldNormalizedTitle, field.TypeString, value)
-	}
-	if vtcu.mutation.NormalizedTitleCleared() {
-		_spec.ClearField(videotitlechange.FieldNormalizedTitle, field.TypeString)
-	}
 	if value, ok := vtcu.mutation.ChangedAt(); ok {
 		_spec.SetField(videotitlechange.FieldChangedAt, field.TypeTime, value)
 	}
@@ -223,26 +197,6 @@ func (vtcuo *VideoTitleChangeUpdateOne) SetNillableTitle(s *string) *VideoTitleC
 	if s != nil {
 		vtcuo.SetTitle(*s)
 	}
-	return vtcuo
-}
-
-// SetNormalizedTitle sets the "normalized_title" field.
-func (vtcuo *VideoTitleChangeUpdateOne) SetNormalizedTitle(s string) *VideoTitleChangeUpdateOne {
-	vtcuo.mutation.SetNormalizedTitle(s)
-	return vtcuo
-}
-
-// SetNillableNormalizedTitle sets the "normalized_title" field if the given value is not nil.
-func (vtcuo *VideoTitleChangeUpdateOne) SetNillableNormalizedTitle(s *string) *VideoTitleChangeUpdateOne {
-	if s != nil {
-		vtcuo.SetNormalizedTitle(*s)
-	}
-	return vtcuo
-}
-
-// ClearNormalizedTitle clears the value of the "normalized_title" field.
-func (vtcuo *VideoTitleChangeUpdateOne) ClearNormalizedTitle() *VideoTitleChangeUpdateOne {
-	vtcuo.mutation.ClearNormalizedTitle()
 	return vtcuo
 }
 
@@ -366,12 +320,6 @@ func (vtcuo *VideoTitleChangeUpdateOne) sqlSave(ctx context.Context) (_node *Vid
 	}
 	if value, ok := vtcuo.mutation.Title(); ok {
 		_spec.SetField(videotitlechange.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := vtcuo.mutation.NormalizedTitle(); ok {
-		_spec.SetField(videotitlechange.FieldNormalizedTitle, field.TypeString, value)
-	}
-	if vtcuo.mutation.NormalizedTitleCleared() {
-		_spec.ClearField(videotitlechange.FieldNormalizedTitle, field.TypeString)
 	}
 	if value, ok := vtcuo.mutation.ChangedAt(); ok {
 		_spec.SetField(videotitlechange.FieldChangedAt, field.TypeTime, value)

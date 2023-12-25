@@ -58,3 +58,6 @@ atlas-apply:
 
 generate-sql:
 	go run -mod=mod ./cmd/migration/main.go $(ARG)
+
+schema:
+	go run -mod=mod entgo.io/ent/cmd/ent new $(ARG)

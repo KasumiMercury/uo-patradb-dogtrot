@@ -12,6 +12,7 @@ import (
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/patchat"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodicdescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/streamschedule"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
@@ -164,6 +165,21 @@ func init() {
 	periodicdescriptiontemplate.DefaultID = periodicdescriptiontemplateDescID.Default.(func() string)
 	// periodicdescriptiontemplate.IDValidator is a validator for the "id" field. It is called by the builders before save.
 	periodicdescriptiontemplate.IDValidator = periodicdescriptiontemplateDescID.Validators[0].(func(string) error)
+	streamscheduleMixin := schema.StreamSchedule{}.Mixin()
+	streamscheduleMixinFields0 := streamscheduleMixin[0].Fields()
+	_ = streamscheduleMixinFields0
+	streamscheduleFields := schema.StreamSchedule{}.Fields()
+	_ = streamscheduleFields
+	// streamscheduleDescTitle is the schema descriptor for Title field.
+	streamscheduleDescTitle := streamscheduleFields[1].Descriptor()
+	// streamschedule.TitleValidator is a validator for the "Title" field. It is called by the builders before save.
+	streamschedule.TitleValidator = streamscheduleDescTitle.Validators[0].(func(string) error)
+	// streamscheduleDescID is the schema descriptor for id field.
+	streamscheduleDescID := streamscheduleMixinFields0[0].Descriptor()
+	// streamschedule.DefaultID holds the default value on creation for the id field.
+	streamschedule.DefaultID = streamscheduleDescID.Default.(func() string)
+	// streamschedule.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	streamschedule.IDValidator = streamscheduleDescID.Validators[0].(func(string) error)
 	videoMixin := schema.Video{}.Mixin()
 	videoMixinFields0 := videoMixin[0].Fields()
 	_ = videoMixinFields0

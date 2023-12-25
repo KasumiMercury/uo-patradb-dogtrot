@@ -1351,6 +1351,272 @@ var PeriodicDescriptionTemplateService_ServiceDesc = grpc.ServiceDesc{
 	Metadata: "entpb/entpb.proto",
 }
 
+// StreamScheduleServiceClient is the client API for StreamScheduleService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type StreamScheduleServiceClient interface {
+	Create(ctx context.Context, in *CreateStreamScheduleRequest, opts ...grpc.CallOption) (*StreamSchedule, error)
+	Get(ctx context.Context, in *GetStreamScheduleRequest, opts ...grpc.CallOption) (*StreamSchedule, error)
+	Update(ctx context.Context, in *UpdateStreamScheduleRequest, opts ...grpc.CallOption) (*StreamSchedule, error)
+	Delete(ctx context.Context, in *DeleteStreamScheduleRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	List(ctx context.Context, in *ListStreamScheduleRequest, opts ...grpc.CallOption) (*ListStreamScheduleResponse, error)
+	BatchCreate(ctx context.Context, in *BatchCreateStreamSchedulesRequest, opts ...grpc.CallOption) (*BatchCreateStreamSchedulesResponse, error)
+}
+
+type streamScheduleServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewStreamScheduleServiceClient(cc grpc.ClientConnInterface) StreamScheduleServiceClient {
+	return &streamScheduleServiceClient{cc}
+}
+
+func (c *streamScheduleServiceClient) Create(ctx context.Context, in *CreateStreamScheduleRequest, opts ...grpc.CallOption) (*StreamSchedule, error) {
+	out := new(StreamSchedule)
+	err := c.cc.Invoke(ctx, "/entpb.StreamScheduleService/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *streamScheduleServiceClient) Get(ctx context.Context, in *GetStreamScheduleRequest, opts ...grpc.CallOption) (*StreamSchedule, error) {
+	out := new(StreamSchedule)
+	err := c.cc.Invoke(ctx, "/entpb.StreamScheduleService/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *streamScheduleServiceClient) Update(ctx context.Context, in *UpdateStreamScheduleRequest, opts ...grpc.CallOption) (*StreamSchedule, error) {
+	out := new(StreamSchedule)
+	err := c.cc.Invoke(ctx, "/entpb.StreamScheduleService/Update", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *streamScheduleServiceClient) Delete(ctx context.Context, in *DeleteStreamScheduleRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/entpb.StreamScheduleService/Delete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *streamScheduleServiceClient) List(ctx context.Context, in *ListStreamScheduleRequest, opts ...grpc.CallOption) (*ListStreamScheduleResponse, error) {
+	out := new(ListStreamScheduleResponse)
+	err := c.cc.Invoke(ctx, "/entpb.StreamScheduleService/List", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *streamScheduleServiceClient) BatchCreate(ctx context.Context, in *BatchCreateStreamSchedulesRequest, opts ...grpc.CallOption) (*BatchCreateStreamSchedulesResponse, error) {
+	out := new(BatchCreateStreamSchedulesResponse)
+	err := c.cc.Invoke(ctx, "/entpb.StreamScheduleService/BatchCreate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// StreamScheduleServiceServer is the server API for StreamScheduleService service.
+// All implementations must embed UnimplementedStreamScheduleServiceServer
+// for forward compatibility
+type StreamScheduleServiceServer interface {
+	Create(context.Context, *CreateStreamScheduleRequest) (*StreamSchedule, error)
+	Get(context.Context, *GetStreamScheduleRequest) (*StreamSchedule, error)
+	Update(context.Context, *UpdateStreamScheduleRequest) (*StreamSchedule, error)
+	Delete(context.Context, *DeleteStreamScheduleRequest) (*empty.Empty, error)
+	List(context.Context, *ListStreamScheduleRequest) (*ListStreamScheduleResponse, error)
+	BatchCreate(context.Context, *BatchCreateStreamSchedulesRequest) (*BatchCreateStreamSchedulesResponse, error)
+	mustEmbedUnimplementedStreamScheduleServiceServer()
+}
+
+// UnimplementedStreamScheduleServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedStreamScheduleServiceServer struct {
+}
+
+func (UnimplementedStreamScheduleServiceServer) Create(context.Context, *CreateStreamScheduleRequest) (*StreamSchedule, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedStreamScheduleServiceServer) Get(context.Context, *GetStreamScheduleRequest) (*StreamSchedule, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedStreamScheduleServiceServer) Update(context.Context, *UpdateStreamScheduleRequest) (*StreamSchedule, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedStreamScheduleServiceServer) Delete(context.Context, *DeleteStreamScheduleRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedStreamScheduleServiceServer) List(context.Context, *ListStreamScheduleRequest) (*ListStreamScheduleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedStreamScheduleServiceServer) BatchCreate(context.Context, *BatchCreateStreamSchedulesRequest) (*BatchCreateStreamSchedulesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BatchCreate not implemented")
+}
+func (UnimplementedStreamScheduleServiceServer) mustEmbedUnimplementedStreamScheduleServiceServer() {}
+
+// UnsafeStreamScheduleServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to StreamScheduleServiceServer will
+// result in compilation errors.
+type UnsafeStreamScheduleServiceServer interface {
+	mustEmbedUnimplementedStreamScheduleServiceServer()
+}
+
+func RegisterStreamScheduleServiceServer(s grpc.ServiceRegistrar, srv StreamScheduleServiceServer) {
+	s.RegisterService(&StreamScheduleService_ServiceDesc, srv)
+}
+
+func _StreamScheduleService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateStreamScheduleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StreamScheduleServiceServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.StreamScheduleService/Create",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StreamScheduleServiceServer).Create(ctx, req.(*CreateStreamScheduleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StreamScheduleService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetStreamScheduleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StreamScheduleServiceServer).Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.StreamScheduleService/Get",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StreamScheduleServiceServer).Get(ctx, req.(*GetStreamScheduleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StreamScheduleService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateStreamScheduleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StreamScheduleServiceServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.StreamScheduleService/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StreamScheduleServiceServer).Update(ctx, req.(*UpdateStreamScheduleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StreamScheduleService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteStreamScheduleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StreamScheduleServiceServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.StreamScheduleService/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StreamScheduleServiceServer).Delete(ctx, req.(*DeleteStreamScheduleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StreamScheduleService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListStreamScheduleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StreamScheduleServiceServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.StreamScheduleService/List",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StreamScheduleServiceServer).List(ctx, req.(*ListStreamScheduleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StreamScheduleService_BatchCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchCreateStreamSchedulesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StreamScheduleServiceServer).BatchCreate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.StreamScheduleService/BatchCreate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StreamScheduleServiceServer).BatchCreate(ctx, req.(*BatchCreateStreamSchedulesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// StreamScheduleService_ServiceDesc is the grpc.ServiceDesc for StreamScheduleService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var StreamScheduleService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "entpb.StreamScheduleService",
+	HandlerType: (*StreamScheduleServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Create",
+			Handler:    _StreamScheduleService_Create_Handler,
+		},
+		{
+			MethodName: "Get",
+			Handler:    _StreamScheduleService_Get_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _StreamScheduleService_Update_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _StreamScheduleService_Delete_Handler,
+		},
+		{
+			MethodName: "List",
+			Handler:    _StreamScheduleService_List_Handler,
+		},
+		{
+			MethodName: "BatchCreate",
+			Handler:    _StreamScheduleService_BatchCreate_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "entpb/entpb.proto",
+}
+
 // VideoServiceClient is the client API for VideoService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.

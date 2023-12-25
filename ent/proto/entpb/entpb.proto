@@ -351,6 +351,70 @@ message BatchCreatePeriodicDescriptionTemplatesResponse {
   repeated PeriodicDescriptionTemplate periodic_description_templates = 1;
 }
 
+message StreamSchedule {
+  string id = 1;
+
+  google.protobuf.Timestamp scheduled_at = 2;
+
+  string Title = 3;
+}
+
+message CreateStreamScheduleRequest {
+  StreamSchedule stream_schedule = 1;
+}
+
+message GetStreamScheduleRequest {
+  string id = 1;
+
+  View view = 2;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message UpdateStreamScheduleRequest {
+  StreamSchedule stream_schedule = 1;
+}
+
+message DeleteStreamScheduleRequest {
+  string id = 1;
+}
+
+message ListStreamScheduleRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+
+  View view = 3;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message ListStreamScheduleResponse {
+  repeated StreamSchedule stream_schedule_list = 1;
+
+  string next_page_token = 2;
+}
+
+message BatchCreateStreamSchedulesRequest {
+  repeated CreateStreamScheduleRequest requests = 1;
+}
+
+message BatchCreateStreamSchedulesResponse {
+  repeated StreamSchedule stream_schedules = 1;
+}
+
 message Video {
   string id = 1;
 
@@ -519,6 +583,20 @@ service PeriodicDescriptionTemplateService {
   rpc List ( ListPeriodicDescriptionTemplateRequest ) returns ( ListPeriodicDescriptionTemplateResponse );
 
   rpc BatchCreate ( BatchCreatePeriodicDescriptionTemplatesRequest ) returns ( BatchCreatePeriodicDescriptionTemplatesResponse );
+}
+
+service StreamScheduleService {
+  rpc Create ( CreateStreamScheduleRequest ) returns ( StreamSchedule );
+
+  rpc Get ( GetStreamScheduleRequest ) returns ( StreamSchedule );
+
+  rpc Update ( UpdateStreamScheduleRequest ) returns ( StreamSchedule );
+
+  rpc Delete ( DeleteStreamScheduleRequest ) returns ( google.protobuf.Empty );
+
+  rpc List ( ListStreamScheduleRequest ) returns ( ListStreamScheduleResponse );
+
+  rpc BatchCreate ( BatchCreateStreamSchedulesRequest ) returns ( BatchCreateStreamSchedulesResponse );
 }
 
 service VideoService {

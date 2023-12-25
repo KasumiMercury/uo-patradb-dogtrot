@@ -24,6 +24,8 @@ type Tx struct {
 	PatChat *PatChatClient
 	// PeriodicDescriptionTemplate is the client for interacting with the PeriodicDescriptionTemplate builders.
 	PeriodicDescriptionTemplate *PeriodicDescriptionTemplateClient
+	// StreamSchedule is the client for interacting with the StreamSchedule builders.
+	StreamSchedule *StreamScheduleClient
 	// Video is the client for interacting with the Video builders.
 	Video *VideoClient
 	// VideoDisallowRange is the client for interacting with the VideoDisallowRange builders.
@@ -169,6 +171,7 @@ func (tx *Tx) init() {
 	tx.DescriptionChange = NewDescriptionChangeClient(tx.config)
 	tx.PatChat = NewPatChatClient(tx.config)
 	tx.PeriodicDescriptionTemplate = NewPeriodicDescriptionTemplateClient(tx.config)
+	tx.StreamSchedule = NewStreamScheduleClient(tx.config)
 	tx.Video = NewVideoClient(tx.config)
 	tx.VideoDisallowRange = NewVideoDisallowRangeClient(tx.config)
 	tx.VideoPlayRange = NewVideoPlayRangeClient(tx.config)

@@ -132,6 +132,29 @@ var (
 		Columns:    PeriodicDescriptionTemplatesColumns,
 		PrimaryKey: []*schema.Column{PeriodicDescriptionTemplatesColumns[0]},
 	}
+	// StreamSchedulesColumns holds the columns for the "stream_schedules" table.
+	StreamSchedulesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString, Size: 26},
+		{Name: "scheduled_at", Type: field.TypeTime},
+		{Name: "title", Type: field.TypeString, Size: 100},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "video_id", Type: field.TypeString, Nullable: true, Size: 26},
+	}
+	// StreamSchedulesTable holds the schema information for the "stream_schedules" table.
+	StreamSchedulesTable = &schema.Table{
+		Name:       "stream_schedules",
+		Columns:    StreamSchedulesColumns,
+		PrimaryKey: []*schema.Column{StreamSchedulesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "stream_schedules_videos_videos",
+				Columns:    []*schema.Column{StreamSchedulesColumns[5]},
+				RefColumns: []*schema.Column{VideosColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// VideosColumns holds the columns for the "videos" table.
 	VideosColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
@@ -251,6 +274,7 @@ var (
 		DescriptionChangesTable,
 		PatChatsTable,
 		PeriodicDescriptionTemplatesTable,
+		StreamSchedulesTable,
 		VideosTable,
 		VideoDisallowRangesTable,
 		VideoPlayRangesTable,
@@ -265,6 +289,7 @@ func init() {
 	DescriptionsTable.ForeignKeys[2].RefTable = VideosTable
 	DescriptionChangesTable.ForeignKeys[0].RefTable = DescriptionsTable
 	PatChatsTable.ForeignKeys[0].RefTable = VideosTable
+	StreamSchedulesTable.ForeignKeys[0].RefTable = VideosTable
 	VideoDisallowRangesTable.ForeignKeys[0].RefTable = VideosTable
 	VideoPlayRangesTable.ForeignKeys[0].RefTable = VideosTable
 	VideoTitleChangesTable.ForeignKeys[0].RefTable = VideosTable

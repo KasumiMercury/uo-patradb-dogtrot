@@ -18,6 +18,7 @@ import (
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/patchat"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodicdescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/predicate"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/streamschedule"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
@@ -39,6 +40,7 @@ const (
 	TypeDescriptionChange           = "DescriptionChange"
 	TypePatChat                     = "PatChat"
 	TypePeriodicDescriptionTemplate = "PeriodicDescriptionTemplate"
+	TypeStreamSchedule              = "StreamSchedule"
 	TypeVideo                       = "Video"
 	TypeVideoDisallowRange          = "VideoDisallowRange"
 	TypeVideoPlayRange              = "VideoPlayRange"
@@ -3831,6 +3833,567 @@ func (m *PeriodicDescriptionTemplateMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown PeriodicDescriptionTemplate edge %s", name)
+}
+
+// StreamScheduleMutation represents an operation that mutates the StreamSchedule nodes in the graph.
+type StreamScheduleMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *string
+	scheduled_at  *time.Time
+	_Title        *string
+	created_at    *time.Time
+	updated_at    *time.Time
+	clearedFields map[string]struct{}
+	videos        *string
+	clearedvideos bool
+	done          bool
+	oldValue      func(context.Context) (*StreamSchedule, error)
+	predicates    []predicate.StreamSchedule
+}
+
+var _ ent.Mutation = (*StreamScheduleMutation)(nil)
+
+// streamscheduleOption allows management of the mutation configuration using functional options.
+type streamscheduleOption func(*StreamScheduleMutation)
+
+// newStreamScheduleMutation creates new mutation for the StreamSchedule entity.
+func newStreamScheduleMutation(c config, op Op, opts ...streamscheduleOption) *StreamScheduleMutation {
+	m := &StreamScheduleMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeStreamSchedule,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withStreamScheduleID sets the ID field of the mutation.
+func withStreamScheduleID(id string) streamscheduleOption {
+	return func(m *StreamScheduleMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *StreamSchedule
+		)
+		m.oldValue = func(ctx context.Context) (*StreamSchedule, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().StreamSchedule.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withStreamSchedule sets the old StreamSchedule of the mutation.
+func withStreamSchedule(node *StreamSchedule) streamscheduleOption {
+	return func(m *StreamScheduleMutation) {
+		m.oldValue = func(context.Context) (*StreamSchedule, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m StreamScheduleMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m StreamScheduleMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of StreamSchedule entities.
+func (m *StreamScheduleMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *StreamScheduleMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *StreamScheduleMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().StreamSchedule.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetScheduledAt sets the "scheduled_at" field.
+func (m *StreamScheduleMutation) SetScheduledAt(t time.Time) {
+	m.scheduled_at = &t
+}
+
+// ScheduledAt returns the value of the "scheduled_at" field in the mutation.
+func (m *StreamScheduleMutation) ScheduledAt() (r time.Time, exists bool) {
+	v := m.scheduled_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldScheduledAt returns the old "scheduled_at" field's value of the StreamSchedule entity.
+// If the StreamSchedule object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StreamScheduleMutation) OldScheduledAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldScheduledAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldScheduledAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldScheduledAt: %w", err)
+	}
+	return oldValue.ScheduledAt, nil
+}
+
+// ResetScheduledAt resets all changes to the "scheduled_at" field.
+func (m *StreamScheduleMutation) ResetScheduledAt() {
+	m.scheduled_at = nil
+}
+
+// SetTitle sets the "Title" field.
+func (m *StreamScheduleMutation) SetTitle(s string) {
+	m._Title = &s
+}
+
+// Title returns the value of the "Title" field in the mutation.
+func (m *StreamScheduleMutation) Title() (r string, exists bool) {
+	v := m._Title
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTitle returns the old "Title" field's value of the StreamSchedule entity.
+// If the StreamSchedule object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StreamScheduleMutation) OldTitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTitle: %w", err)
+	}
+	return oldValue.Title, nil
+}
+
+// ResetTitle resets all changes to the "Title" field.
+func (m *StreamScheduleMutation) ResetTitle() {
+	m._Title = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *StreamScheduleMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *StreamScheduleMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the StreamSchedule entity.
+// If the StreamSchedule object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StreamScheduleMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *StreamScheduleMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *StreamScheduleMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *StreamScheduleMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the StreamSchedule entity.
+// If the StreamSchedule object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StreamScheduleMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *StreamScheduleMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetVideosID sets the "videos" edge to the Video entity by id.
+func (m *StreamScheduleMutation) SetVideosID(id string) {
+	m.videos = &id
+}
+
+// ClearVideos clears the "videos" edge to the Video entity.
+func (m *StreamScheduleMutation) ClearVideos() {
+	m.clearedvideos = true
+}
+
+// VideosCleared reports if the "videos" edge to the Video entity was cleared.
+func (m *StreamScheduleMutation) VideosCleared() bool {
+	return m.clearedvideos
+}
+
+// VideosID returns the "videos" edge ID in the mutation.
+func (m *StreamScheduleMutation) VideosID() (id string, exists bool) {
+	if m.videos != nil {
+		return *m.videos, true
+	}
+	return
+}
+
+// VideosIDs returns the "videos" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// VideosID instead. It exists only for internal usage by the builders.
+func (m *StreamScheduleMutation) VideosIDs() (ids []string) {
+	if id := m.videos; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetVideos resets all changes to the "videos" edge.
+func (m *StreamScheduleMutation) ResetVideos() {
+	m.videos = nil
+	m.clearedvideos = false
+}
+
+// Where appends a list predicates to the StreamScheduleMutation builder.
+func (m *StreamScheduleMutation) Where(ps ...predicate.StreamSchedule) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the StreamScheduleMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *StreamScheduleMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.StreamSchedule, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *StreamScheduleMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *StreamScheduleMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (StreamSchedule).
+func (m *StreamScheduleMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *StreamScheduleMutation) Fields() []string {
+	fields := make([]string, 0, 4)
+	if m.scheduled_at != nil {
+		fields = append(fields, streamschedule.FieldScheduledAt)
+	}
+	if m._Title != nil {
+		fields = append(fields, streamschedule.FieldTitle)
+	}
+	if m.created_at != nil {
+		fields = append(fields, streamschedule.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, streamschedule.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *StreamScheduleMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case streamschedule.FieldScheduledAt:
+		return m.ScheduledAt()
+	case streamschedule.FieldTitle:
+		return m.Title()
+	case streamschedule.FieldCreatedAt:
+		return m.CreatedAt()
+	case streamschedule.FieldUpdatedAt:
+		return m.UpdatedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *StreamScheduleMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case streamschedule.FieldScheduledAt:
+		return m.OldScheduledAt(ctx)
+	case streamschedule.FieldTitle:
+		return m.OldTitle(ctx)
+	case streamschedule.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case streamschedule.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown StreamSchedule field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *StreamScheduleMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case streamschedule.FieldScheduledAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetScheduledAt(v)
+		return nil
+	case streamschedule.FieldTitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTitle(v)
+		return nil
+	case streamschedule.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case streamschedule.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown StreamSchedule field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *StreamScheduleMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *StreamScheduleMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *StreamScheduleMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown StreamSchedule numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *StreamScheduleMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *StreamScheduleMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *StreamScheduleMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown StreamSchedule nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *StreamScheduleMutation) ResetField(name string) error {
+	switch name {
+	case streamschedule.FieldScheduledAt:
+		m.ResetScheduledAt()
+		return nil
+	case streamschedule.FieldTitle:
+		m.ResetTitle()
+		return nil
+	case streamschedule.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case streamschedule.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown StreamSchedule field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *StreamScheduleMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.videos != nil {
+		edges = append(edges, streamschedule.EdgeVideos)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *StreamScheduleMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case streamschedule.EdgeVideos:
+		if id := m.videos; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *StreamScheduleMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *StreamScheduleMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *StreamScheduleMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedvideos {
+		edges = append(edges, streamschedule.EdgeVideos)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *StreamScheduleMutation) EdgeCleared(name string) bool {
+	switch name {
+	case streamschedule.EdgeVideos:
+		return m.clearedvideos
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *StreamScheduleMutation) ClearEdge(name string) error {
+	switch name {
+	case streamschedule.EdgeVideos:
+		m.ClearVideos()
+		return nil
+	}
+	return fmt.Errorf("unknown StreamSchedule unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *StreamScheduleMutation) ResetEdge(name string) error {
+	switch name {
+	case streamschedule.EdgeVideos:
+		m.ResetVideos()
+		return nil
+	}
+	return fmt.Errorf("unknown StreamSchedule edge %s", name)
 }
 
 // VideoMutation represents an operation that mutates the Video nodes in the graph.

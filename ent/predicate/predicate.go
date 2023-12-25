@@ -24,6 +24,9 @@ type PatChat func(*sql.Selector)
 // PeriodicDescriptionTemplate is the predicate function for periodicdescriptiontemplate builders.
 type PeriodicDescriptionTemplate func(*sql.Selector)
 
+// StreamSchedule is the predicate function for streamschedule builders.
+type StreamSchedule func(*sql.Selector)
+
 // Video is the predicate function for video builders.
 type Video func(*sql.Selector)
 

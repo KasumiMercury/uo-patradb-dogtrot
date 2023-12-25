@@ -21,6 +21,7 @@ import (
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/descriptionchange"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/patchat"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodicdescriptiontemplate"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/streamschedule"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
@@ -44,6 +45,8 @@ type Client struct {
 	PatChat *PatChatClient
 	// PeriodicDescriptionTemplate is the client for interacting with the PeriodicDescriptionTemplate builders.
 	PeriodicDescriptionTemplate *PeriodicDescriptionTemplateClient
+	// StreamSchedule is the client for interacting with the StreamSchedule builders.
+	StreamSchedule *StreamScheduleClient
 	// Video is the client for interacting with the Video builders.
 	Video *VideoClient
 	// VideoDisallowRange is the client for interacting with the VideoDisallowRange builders.
@@ -69,6 +72,7 @@ func (c *Client) init() {
 	c.DescriptionChange = NewDescriptionChangeClient(c.config)
 	c.PatChat = NewPatChatClient(c.config)
 	c.PeriodicDescriptionTemplate = NewPeriodicDescriptionTemplateClient(c.config)
+	c.StreamSchedule = NewStreamScheduleClient(c.config)
 	c.Video = NewVideoClient(c.config)
 	c.VideoDisallowRange = NewVideoDisallowRangeClient(c.config)
 	c.VideoPlayRange = NewVideoPlayRangeClient(c.config)
@@ -171,6 +175,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		DescriptionChange:           NewDescriptionChangeClient(cfg),
 		PatChat:                     NewPatChatClient(cfg),
 		PeriodicDescriptionTemplate: NewPeriodicDescriptionTemplateClient(cfg),
+		StreamSchedule:              NewStreamScheduleClient(cfg),
 		Video:                       NewVideoClient(cfg),
 		VideoDisallowRange:          NewVideoDisallowRangeClient(cfg),
 		VideoPlayRange:              NewVideoPlayRangeClient(cfg),
@@ -200,6 +205,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		DescriptionChange:           NewDescriptionChangeClient(cfg),
 		PatChat:                     NewPatChatClient(cfg),
 		PeriodicDescriptionTemplate: NewPeriodicDescriptionTemplateClient(cfg),
+		StreamSchedule:              NewStreamScheduleClient(cfg),
 		Video:                       NewVideoClient(cfg),
 		VideoDisallowRange:          NewVideoDisallowRangeClient(cfg),
 		VideoPlayRange:              NewVideoPlayRangeClient(cfg),
@@ -234,8 +240,8 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.CategoryDescriptionTemplate, c.Channel, c.Description, c.DescriptionChange,
-		c.PatChat, c.PeriodicDescriptionTemplate, c.Video, c.VideoDisallowRange,
-		c.VideoPlayRange, c.VideoTitleChange,
+		c.PatChat, c.PeriodicDescriptionTemplate, c.StreamSchedule, c.Video,
+		c.VideoDisallowRange, c.VideoPlayRange, c.VideoTitleChange,
 	} {
 		n.Use(hooks...)
 	}
@@ -246,8 +252,8 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.CategoryDescriptionTemplate, c.Channel, c.Description, c.DescriptionChange,
-		c.PatChat, c.PeriodicDescriptionTemplate, c.Video, c.VideoDisallowRange,
-		c.VideoPlayRange, c.VideoTitleChange,
+		c.PatChat, c.PeriodicDescriptionTemplate, c.StreamSchedule, c.Video,
+		c.VideoDisallowRange, c.VideoPlayRange, c.VideoTitleChange,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -268,6 +274,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.PatChat.mutate(ctx, m)
 	case *PeriodicDescriptionTemplateMutation:
 		return c.PeriodicDescriptionTemplate.mutate(ctx, m)
+	case *StreamScheduleMutation:
+		return c.StreamSchedule.mutate(ctx, m)
 	case *VideoMutation:
 		return c.Video.mutate(ctx, m)
 	case *VideoDisallowRangeMutation:
@@ -1223,6 +1231,155 @@ func (c *PeriodicDescriptionTemplateClient) mutate(ctx context.Context, m *Perio
 	}
 }
 
+// StreamScheduleClient is a client for the StreamSchedule schema.
+type StreamScheduleClient struct {
+	config
+}
+
+// NewStreamScheduleClient returns a client for the StreamSchedule from the given config.
+func NewStreamScheduleClient(c config) *StreamScheduleClient {
+	return &StreamScheduleClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `streamschedule.Hooks(f(g(h())))`.
+func (c *StreamScheduleClient) Use(hooks ...Hook) {
+	c.hooks.StreamSchedule = append(c.hooks.StreamSchedule, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `streamschedule.Intercept(f(g(h())))`.
+func (c *StreamScheduleClient) Intercept(interceptors ...Interceptor) {
+	c.inters.StreamSchedule = append(c.inters.StreamSchedule, interceptors...)
+}
+
+// Create returns a builder for creating a StreamSchedule entity.
+func (c *StreamScheduleClient) Create() *StreamScheduleCreate {
+	mutation := newStreamScheduleMutation(c.config, OpCreate)
+	return &StreamScheduleCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of StreamSchedule entities.
+func (c *StreamScheduleClient) CreateBulk(builders ...*StreamScheduleCreate) *StreamScheduleCreateBulk {
+	return &StreamScheduleCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *StreamScheduleClient) MapCreateBulk(slice any, setFunc func(*StreamScheduleCreate, int)) *StreamScheduleCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &StreamScheduleCreateBulk{err: fmt.Errorf("calling to StreamScheduleClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*StreamScheduleCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &StreamScheduleCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for StreamSchedule.
+func (c *StreamScheduleClient) Update() *StreamScheduleUpdate {
+	mutation := newStreamScheduleMutation(c.config, OpUpdate)
+	return &StreamScheduleUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *StreamScheduleClient) UpdateOne(ss *StreamSchedule) *StreamScheduleUpdateOne {
+	mutation := newStreamScheduleMutation(c.config, OpUpdateOne, withStreamSchedule(ss))
+	return &StreamScheduleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *StreamScheduleClient) UpdateOneID(id string) *StreamScheduleUpdateOne {
+	mutation := newStreamScheduleMutation(c.config, OpUpdateOne, withStreamScheduleID(id))
+	return &StreamScheduleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for StreamSchedule.
+func (c *StreamScheduleClient) Delete() *StreamScheduleDelete {
+	mutation := newStreamScheduleMutation(c.config, OpDelete)
+	return &StreamScheduleDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *StreamScheduleClient) DeleteOne(ss *StreamSchedule) *StreamScheduleDeleteOne {
+	return c.DeleteOneID(ss.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *StreamScheduleClient) DeleteOneID(id string) *StreamScheduleDeleteOne {
+	builder := c.Delete().Where(streamschedule.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &StreamScheduleDeleteOne{builder}
+}
+
+// Query returns a query builder for StreamSchedule.
+func (c *StreamScheduleClient) Query() *StreamScheduleQuery {
+	return &StreamScheduleQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeStreamSchedule},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a StreamSchedule entity by its id.
+func (c *StreamScheduleClient) Get(ctx context.Context, id string) (*StreamSchedule, error) {
+	return c.Query().Where(streamschedule.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *StreamScheduleClient) GetX(ctx context.Context, id string) *StreamSchedule {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryVideos queries the videos edge of a StreamSchedule.
+func (c *StreamScheduleClient) QueryVideos(ss *StreamSchedule) *VideoQuery {
+	query := (&VideoClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ss.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(streamschedule.Table, streamschedule.FieldID, id),
+			sqlgraph.To(video.Table, video.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, streamschedule.VideosTable, streamschedule.VideosColumn),
+		)
+		fromV = sqlgraph.Neighbors(ss.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *StreamScheduleClient) Hooks() []Hook {
+	return c.hooks.StreamSchedule
+}
+
+// Interceptors returns the client interceptors.
+func (c *StreamScheduleClient) Interceptors() []Interceptor {
+	return c.inters.StreamSchedule
+}
+
+func (c *StreamScheduleClient) mutate(ctx context.Context, m *StreamScheduleMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&StreamScheduleCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&StreamScheduleUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&StreamScheduleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&StreamScheduleDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown StreamSchedule mutation op: %q", m.Op())
+	}
+}
+
 // VideoClient is a client for the Video schema.
 type VideoClient struct {
 	config
@@ -1903,12 +2060,12 @@ func (c *VideoTitleChangeClient) mutate(ctx context.Context, m *VideoTitleChange
 type (
 	hooks struct {
 		CategoryDescriptionTemplate, Channel, Description, DescriptionChange, PatChat,
-		PeriodicDescriptionTemplate, Video, VideoDisallowRange, VideoPlayRange,
-		VideoTitleChange []ent.Hook
+		PeriodicDescriptionTemplate, StreamSchedule, Video, VideoDisallowRange,
+		VideoPlayRange, VideoTitleChange []ent.Hook
 	}
 	inters struct {
 		CategoryDescriptionTemplate, Channel, Description, DescriptionChange, PatChat,
-		PeriodicDescriptionTemplate, Video, VideoDisallowRange, VideoPlayRange,
-		VideoTitleChange []ent.Interceptor
+		PeriodicDescriptionTemplate, StreamSchedule, Video, VideoDisallowRange,
+		VideoPlayRange, VideoTitleChange []ent.Interceptor
 	}
 )

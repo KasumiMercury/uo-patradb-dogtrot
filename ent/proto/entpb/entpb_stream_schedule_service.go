@@ -33,12 +33,16 @@ func NewStreamScheduleService(client *ent.Client) *StreamScheduleService {
 // toProtoStreamSchedule transforms the ent type to the pb type
 func toProtoStreamSchedule(e *ent.StreamSchedule) (*StreamSchedule, error) {
 	v := &StreamSchedule{}
+	created_at := timestamppb.New(e.CreatedAt)
+	v.CreatedAt = created_at
 	id := e.ID
 	v.Id = id
 	scheduled_at := timestamppb.New(e.ScheduledAt)
 	v.ScheduledAt = scheduled_at
 	_Title := e.Title
 	v.Title = _Title
+	updated_at := timestamppb.New(e.UpdatedAt)
+	v.UpdatedAt = updated_at
 	return v, nil
 }
 
@@ -113,10 +117,14 @@ func (svc *StreamScheduleService) Update(ctx context.Context, req *UpdateStreamS
 	streamschedule := req.GetStreamSchedule()
 	streamscheduleID := streamschedule.GetId()
 	m := svc.client.StreamSchedule.UpdateOneID(streamscheduleID)
+	streamscheduleCreatedAt := runtime.ExtractTime(streamschedule.GetCreatedAt())
+	m.SetCreatedAt(streamscheduleCreatedAt)
 	streamscheduleScheduledAt := runtime.ExtractTime(streamschedule.GetScheduledAt())
 	m.SetScheduledAt(streamscheduleScheduledAt)
 	streamscheduleTitle := streamschedule.GetTitle()
 	m.SetTitle(streamscheduleTitle)
+	streamscheduleUpdatedAt := runtime.ExtractTime(streamschedule.GetUpdatedAt())
+	m.SetUpdatedAt(streamscheduleUpdatedAt)
 
 	res, err := m.Save(ctx)
 	switch {
@@ -244,9 +252,13 @@ func (svc *StreamScheduleService) BatchCreate(ctx context.Context, req *BatchCre
 
 func (svc *StreamScheduleService) createBuilder(streamschedule *StreamSchedule) (*ent.StreamScheduleCreate, error) {
 	m := svc.client.StreamSchedule.Create()
+	streamscheduleCreatedAt := runtime.ExtractTime(streamschedule.GetCreatedAt())
+	m.SetCreatedAt(streamscheduleCreatedAt)
 	streamscheduleScheduledAt := runtime.ExtractTime(streamschedule.GetScheduledAt())
 	m.SetScheduledAt(streamscheduleScheduledAt)
 	streamscheduleTitle := streamschedule.GetTitle()
 	m.SetTitle(streamscheduleTitle)
+	streamscheduleUpdatedAt := runtime.ExtractTime(streamschedule.GetUpdatedAt())
+	m.SetUpdatedAt(streamscheduleUpdatedAt)
 	return m, nil
 }

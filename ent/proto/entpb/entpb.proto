@@ -357,6 +357,10 @@ message StreamSchedule {
   google.protobuf.Timestamp scheduled_at = 2;
 
   string Title = 3;
+
+  google.protobuf.Timestamp created_at = 4;
+
+  google.protobuf.Timestamp updated_at = 5;
 }
 
 message CreateStreamScheduleRequest {

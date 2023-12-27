@@ -26,8 +26,8 @@ func (StreamSchedule) Fields() []ent.Field {
 	return []ent.Field{
 		field.Time("scheduled_at").Annotations(entproto.Field(2)),
 		field.String("Title").MaxLen(100).Annotations(entproto.Field(3)),
-		field.Time("created_at").Annotations(entproto.Skip()),
-		field.Time("updated_at").Annotations(entproto.Skip()),
+		field.Time("created_at").Annotations(entproto.Field(4)),
+		field.Time("updated_at").Annotations(entproto.Field(5)),
 	}
 }
 

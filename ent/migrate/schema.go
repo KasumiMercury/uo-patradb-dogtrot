@@ -165,6 +165,7 @@ var (
 		{Name: "status", Type: field.TypeString},
 		{Name: "chat_id", Type: field.TypeString, Nullable: true},
 		{Name: "has_time_range", Type: field.TypeBool, Default: false},
+		{Name: "capture_permission", Type: field.TypeBool, Default: true},
 		{Name: "scheduled_at", Type: field.TypeTime, Nullable: true},
 		{Name: "actual_start_at", Type: field.TypeTime, Nullable: true},
 		{Name: "actual_end_at", Type: field.TypeTime, Nullable: true},

@@ -39,6 +39,8 @@ func toProtoVideo(e *ent.Video) (*Video, error) {
 	v.ActualEndAt = actual_end_at
 	actual_start_at := timestamppb.New(e.ActualStartAt)
 	v.ActualStartAt = actual_start_at
+	capture_permission := e.CapturePermission
+	v.CapturePermission = capture_permission
 	duration_seconds := wrapperspb.Int64(int64(e.DurationSeconds))
 	v.DurationSeconds = duration_seconds
 	has_time_range := e.HasTimeRange
@@ -150,6 +152,8 @@ func (svc *VideoService) Update(ctx context.Context, req *UpdateVideoRequest) (*
 		videoActualStartAt := runtime.ExtractTime(video.GetActualStartAt())
 		m.SetActualStartAt(videoActualStartAt)
 	}
+	videoCapturePermission := video.GetCapturePermission()
+	m.SetCapturePermission(videoCapturePermission)
 	if video.GetDurationSeconds() != nil {
 		videoDurationSeconds := int(video.GetDurationSeconds().GetValue())
 		m.SetDurationSeconds(videoDurationSeconds)
@@ -314,6 +318,8 @@ func (svc *VideoService) createBuilder(video *Video) (*ent.VideoCreate, error) {
 		videoActualStartAt := runtime.ExtractTime(video.GetActualStartAt())
 		m.SetActualStartAt(videoActualStartAt)
 	}
+	videoCapturePermission := video.GetCapturePermission()
+	m.SetCapturePermission(videoCapturePermission)
 	if video.GetDurationSeconds() != nil {
 		videoDurationSeconds := int(video.GetDurationSeconds().GetValue())
 		m.SetDurationSeconds(videoDurationSeconds)

@@ -15,6 +15,8 @@ services:
     restart: always
     env_file:
       - .env
+    networks:
+      - default
   mysql:
     image: mysql:latest
     container_name: ${MYSQL_CONTAINER_NAME}
@@ -30,6 +32,13 @@ services:
         source: mysql-data
         target: /var/lib/mysql
     restart: always
+    networks:
+        - pdog-shared
+        - default
 
 volumes:
     mysql-data:
+
+networks:
+  pdog-shared:
+    external: true

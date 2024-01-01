@@ -4410,6 +4410,7 @@ type VideoMutation struct {
 	status                       *string
 	chat_id                      *string
 	has_time_range               *bool
+	capture_permission           *bool
 	scheduled_at                 *time.Time
 	actual_start_at              *time.Time
 	actual_end_at                *time.Time
@@ -4840,6 +4841,42 @@ func (m *VideoMutation) OldHasTimeRange(ctx context.Context) (v bool, err error)
 // ResetHasTimeRange resets all changes to the "has_time_range" field.
 func (m *VideoMutation) ResetHasTimeRange() {
 	m.has_time_range = nil
+}
+
+// SetCapturePermission sets the "capture_permission" field.
+func (m *VideoMutation) SetCapturePermission(b bool) {
+	m.capture_permission = &b
+}
+
+// CapturePermission returns the value of the "capture_permission" field in the mutation.
+func (m *VideoMutation) CapturePermission() (r bool, exists bool) {
+	v := m.capture_permission
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCapturePermission returns the old "capture_permission" field's value of the Video entity.
+// If the Video object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VideoMutation) OldCapturePermission(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCapturePermission is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCapturePermission requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCapturePermission: %w", err)
+	}
+	return oldValue.CapturePermission, nil
+}
+
+// ResetCapturePermission resets all changes to the "capture_permission" field.
+func (m *VideoMutation) ResetCapturePermission() {
+	m.capture_permission = nil
 }
 
 // SetScheduledAt sets the "scheduled_at" field.
@@ -5440,7 +5477,7 @@ func (m *VideoMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *VideoMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 14)
 	if m.source_id != nil {
 		fields = append(fields, video.FieldSourceID)
 	}
@@ -5461,6 +5498,9 @@ func (m *VideoMutation) Fields() []string {
 	}
 	if m.has_time_range != nil {
 		fields = append(fields, video.FieldHasTimeRange)
+	}
+	if m.capture_permission != nil {
+		fields = append(fields, video.FieldCapturePermission)
 	}
 	if m.scheduled_at != nil {
 		fields = append(fields, video.FieldScheduledAt)
@@ -5502,6 +5542,8 @@ func (m *VideoMutation) Field(name string) (ent.Value, bool) {
 		return m.ChatID()
 	case video.FieldHasTimeRange:
 		return m.HasTimeRange()
+	case video.FieldCapturePermission:
+		return m.CapturePermission()
 	case video.FieldScheduledAt:
 		return m.ScheduledAt()
 	case video.FieldActualStartAt:
@@ -5537,6 +5579,8 @@ func (m *VideoMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldChatID(ctx)
 	case video.FieldHasTimeRange:
 		return m.OldHasTimeRange(ctx)
+	case video.FieldCapturePermission:
+		return m.OldCapturePermission(ctx)
 	case video.FieldScheduledAt:
 		return m.OldScheduledAt(ctx)
 	case video.FieldActualStartAt:
@@ -5606,6 +5650,13 @@ func (m *VideoMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetHasTimeRange(v)
+		return nil
+	case video.FieldCapturePermission:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCapturePermission(v)
 		return nil
 	case video.FieldScheduledAt:
 		v, ok := value.(time.Time)
@@ -5766,6 +5817,9 @@ func (m *VideoMutation) ResetField(name string) error {
 		return nil
 	case video.FieldHasTimeRange:
 		m.ResetHasTimeRange()
+		return nil
+	case video.FieldCapturePermission:
+		m.ResetCapturePermission()
 		return nil
 	case video.FieldScheduledAt:
 		m.ResetScheduledAt()

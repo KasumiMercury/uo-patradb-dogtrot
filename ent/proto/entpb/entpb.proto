@@ -434,17 +434,19 @@ message Video {
 
   bool has_time_range = 7;
 
-  google.protobuf.Timestamp scheduled_at = 8;
+  bool capture_permission = 8;
 
-  google.protobuf.Timestamp actual_start_at = 9;
+  google.protobuf.Timestamp scheduled_at = 9;
 
-  google.protobuf.Timestamp actual_end_at = 10;
+  google.protobuf.Timestamp actual_start_at = 10;
 
-  google.protobuf.Timestamp published_at = 11;
+  google.protobuf.Timestamp actual_end_at = 11;
 
-  google.protobuf.Timestamp updated_at = 12;
+  google.protobuf.Timestamp published_at = 12;
 
-  repeated Channel channel = 13;
+  google.protobuf.Timestamp updated_at = 13;
+
+  repeated Channel channel = 14;
 }
 
 message CreateVideoRequest {

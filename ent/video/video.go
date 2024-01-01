@@ -28,6 +28,8 @@ const (
 	FieldChatID = "chat_id"
 	// FieldHasTimeRange holds the string denoting the has_time_range field in the database.
 	FieldHasTimeRange = "has_time_range"
+	// FieldCapturePermission holds the string denoting the capture_permission field in the database.
+	FieldCapturePermission = "capture_permission"
 	// FieldScheduledAt holds the string denoting the scheduled_at field in the database.
 	FieldScheduledAt = "scheduled_at"
 	// FieldActualStartAt holds the string denoting the actual_start_at field in the database.
@@ -106,6 +108,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldChatID,
 	FieldHasTimeRange,
+	FieldCapturePermission,
 	FieldScheduledAt,
 	FieldActualStartAt,
 	FieldActualEndAt,
@@ -141,6 +144,8 @@ var (
 	DefaultIsCollaboration bool
 	// DefaultHasTimeRange holds the default value on creation for the "has_time_range" field.
 	DefaultHasTimeRange bool
+	// DefaultCapturePermission holds the default value on creation for the "capture_permission" field.
+	DefaultCapturePermission bool
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -194,6 +199,11 @@ func ByChatID(opts ...sql.OrderTermOption) OrderOption {
 // ByHasTimeRange orders the results by the has_time_range field.
 func ByHasTimeRange(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldHasTimeRange, opts...).ToFunc()
+}
+
+// ByCapturePermission orders the results by the capture_permission field.
+func ByCapturePermission(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCapturePermission, opts...).ToFunc()
 }
 
 // ByScheduledAt orders the results by the scheduled_at field.

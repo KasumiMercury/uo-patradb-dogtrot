@@ -151,6 +151,20 @@ func (vu *VideoUpdate) SetNillableHasTimeRange(b *bool) *VideoUpdate {
 	return vu
 }
 
+// SetCapturePermission sets the "capture_permission" field.
+func (vu *VideoUpdate) SetCapturePermission(b bool) *VideoUpdate {
+	vu.mutation.SetCapturePermission(b)
+	return vu
+}
+
+// SetNillableCapturePermission sets the "capture_permission" field if the given value is not nil.
+func (vu *VideoUpdate) SetNillableCapturePermission(b *bool) *VideoUpdate {
+	if b != nil {
+		vu.SetCapturePermission(*b)
+	}
+	return vu
+}
+
 // SetScheduledAt sets the "scheduled_at" field.
 func (vu *VideoUpdate) SetScheduledAt(t time.Time) *VideoUpdate {
 	vu.mutation.SetScheduledAt(t)
@@ -552,6 +566,9 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := vu.mutation.HasTimeRange(); ok {
 		_spec.SetField(video.FieldHasTimeRange, field.TypeBool, value)
+	}
+	if value, ok := vu.mutation.CapturePermission(); ok {
+		_spec.SetField(video.FieldCapturePermission, field.TypeBool, value)
 	}
 	if value, ok := vu.mutation.ScheduledAt(); ok {
 		_spec.SetField(video.FieldScheduledAt, field.TypeTime, value)
@@ -967,6 +984,20 @@ func (vuo *VideoUpdateOne) SetHasTimeRange(b bool) *VideoUpdateOne {
 func (vuo *VideoUpdateOne) SetNillableHasTimeRange(b *bool) *VideoUpdateOne {
 	if b != nil {
 		vuo.SetHasTimeRange(*b)
+	}
+	return vuo
+}
+
+// SetCapturePermission sets the "capture_permission" field.
+func (vuo *VideoUpdateOne) SetCapturePermission(b bool) *VideoUpdateOne {
+	vuo.mutation.SetCapturePermission(b)
+	return vuo
+}
+
+// SetNillableCapturePermission sets the "capture_permission" field if the given value is not nil.
+func (vuo *VideoUpdateOne) SetNillableCapturePermission(b *bool) *VideoUpdateOne {
+	if b != nil {
+		vuo.SetCapturePermission(*b)
 	}
 	return vuo
 }
@@ -1402,6 +1433,9 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 	}
 	if value, ok := vuo.mutation.HasTimeRange(); ok {
 		_spec.SetField(video.FieldHasTimeRange, field.TypeBool, value)
+	}
+	if value, ok := vuo.mutation.CapturePermission(); ok {
+		_spec.SetField(video.FieldCapturePermission, field.TypeBool, value)
 	}
 	if value, ok := vuo.mutation.ScheduledAt(); ok {
 		_spec.SetField(video.FieldScheduledAt, field.TypeTime, value)

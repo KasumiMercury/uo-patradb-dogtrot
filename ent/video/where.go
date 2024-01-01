@@ -100,6 +100,11 @@ func HasTimeRange(v bool) predicate.Video {
 	return predicate.Video(sql.FieldEQ(FieldHasTimeRange, v))
 }
 
+// CapturePermission applies equality check predicate on the "capture_permission" field. It's identical to CapturePermissionEQ.
+func CapturePermission(v bool) predicate.Video {
+	return predicate.Video(sql.FieldEQ(FieldCapturePermission, v))
+}
+
 // ScheduledAt applies equality check predicate on the "scheduled_at" field. It's identical to ScheduledAtEQ.
 func ScheduledAt(v time.Time) predicate.Video {
 	return predicate.Video(sql.FieldEQ(FieldScheduledAt, v))
@@ -468,6 +473,16 @@ func HasTimeRangeEQ(v bool) predicate.Video {
 // HasTimeRangeNEQ applies the NEQ predicate on the "has_time_range" field.
 func HasTimeRangeNEQ(v bool) predicate.Video {
 	return predicate.Video(sql.FieldNEQ(FieldHasTimeRange, v))
+}
+
+// CapturePermissionEQ applies the EQ predicate on the "capture_permission" field.
+func CapturePermissionEQ(v bool) predicate.Video {
+	return predicate.Video(sql.FieldEQ(FieldCapturePermission, v))
+}
+
+// CapturePermissionNEQ applies the NEQ predicate on the "capture_permission" field.
+func CapturePermissionNEQ(v bool) predicate.Video {
+	return predicate.Video(sql.FieldNEQ(FieldCapturePermission, v))
 }
 
 // ScheduledAtEQ applies the EQ predicate on the "scheduled_at" field.

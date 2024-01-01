@@ -32,6 +32,8 @@ type Video struct {
 	ChatID string `json:"chat_id,omitempty"`
 	// HasTimeRange holds the value of the "has_time_range" field.
 	HasTimeRange bool `json:"has_time_range,omitempty"`
+	// CapturePermission holds the value of the "capture_permission" field.
+	CapturePermission bool `json:"capture_permission,omitempty"`
 	// ScheduledAt holds the value of the "scheduled_at" field.
 	ScheduledAt time.Time `json:"scheduled_at,omitempty"`
 	// ActualStartAt holds the value of the "actual_start_at" field.
@@ -132,7 +134,7 @@ func (*Video) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case video.FieldIsCollaboration, video.FieldHasTimeRange:
+		case video.FieldIsCollaboration, video.FieldHasTimeRange, video.FieldCapturePermission:
 			values[i] = new(sql.NullBool)
 		case video.FieldDurationSeconds:
 			values[i] = new(sql.NullInt64)
@@ -202,6 +204,12 @@ func (v *Video) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field has_time_range", values[i])
 			} else if value.Valid {
 				v.HasTimeRange = value.Bool
+			}
+		case video.FieldCapturePermission:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field capture_permission", values[i])
+			} else if value.Valid {
+				v.CapturePermission = value.Bool
 			}
 		case video.FieldScheduledAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -325,6 +333,9 @@ func (v *Video) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("has_time_range=")
 	builder.WriteString(fmt.Sprintf("%v", v.HasTimeRange))
+	builder.WriteString(", ")
+	builder.WriteString("capture_permission=")
+	builder.WriteString(fmt.Sprintf("%v", v.CapturePermission))
 	builder.WriteString(", ")
 	builder.WriteString("scheduled_at=")
 	builder.WriteString(v.ScheduledAt.Format(time.ANSIC))

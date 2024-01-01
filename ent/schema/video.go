@@ -32,12 +32,13 @@ func (Video) Fields() []ent.Field {
 		field.String("status").Annotations(entproto.Field(6)),
 		field.String("chat_id").Optional().Annotations(entproto.Skip()),
 		field.Bool("has_time_range").Default(false).Annotations(entproto.Field(7)),
-		field.Time("scheduled_at").Optional().Annotations(entproto.Field(8)),
-		field.Time("actual_start_at").Optional().Annotations(entproto.Field(9)),
-		field.Time("actual_end_at").Optional().Annotations(entproto.Field(10)),
-		field.Time("published_at").Annotations(entproto.Field(11)),
+		field.Bool("capture_permission").Default(true).Annotations(entproto.Field(8)),
+		field.Time("scheduled_at").Optional().Annotations(entproto.Field(9)),
+		field.Time("actual_start_at").Optional().Annotations(entproto.Field(10)),
+		field.Time("actual_end_at").Optional().Annotations(entproto.Field(11)),
+		field.Time("published_at").Annotations(entproto.Field(12)),
 		field.Time("created_at").Default(func() time.Time { return time.Now() }).Annotations(entproto.Skip()),
-		field.Time("updated_at").Default(func() time.Time { return time.Now() }).UpdateDefault(func() time.Time { return time.Now() }).Annotations(entproto.Field(12)),
+		field.Time("updated_at").Default(func() time.Time { return time.Now() }).UpdateDefault(func() time.Time { return time.Now() }).Annotations(entproto.Field(13)),
 	}
 }
 
@@ -53,7 +54,7 @@ func (Video) Annotations() []schema.Annotation {
 func (Video) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("descriptions", Description.Type).Unique().StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
-		edge.To("channel", Channel.Type).Annotations(entproto.Field(13)),
+		edge.To("channel", Channel.Type).Annotations(entproto.Field(14)),
 		edge.To("video_play_ranges", VideoPlayRange.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
 		edge.To("video_disallow_ranges", VideoDisallowRange.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
 		edge.To("video_title_changes", VideoTitleChange.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),

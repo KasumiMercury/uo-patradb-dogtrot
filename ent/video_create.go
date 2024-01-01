@@ -100,6 +100,20 @@ func (vc *VideoCreate) SetNillableHasTimeRange(b *bool) *VideoCreate {
 	return vc
 }
 
+// SetCapturePermission sets the "capture_permission" field.
+func (vc *VideoCreate) SetCapturePermission(b bool) *VideoCreate {
+	vc.mutation.SetCapturePermission(b)
+	return vc
+}
+
+// SetNillableCapturePermission sets the "capture_permission" field if the given value is not nil.
+func (vc *VideoCreate) SetNillableCapturePermission(b *bool) *VideoCreate {
+	if b != nil {
+		vc.SetCapturePermission(*b)
+	}
+	return vc
+}
+
 // SetScheduledAt sets the "scheduled_at" field.
 func (vc *VideoCreate) SetScheduledAt(t time.Time) *VideoCreate {
 	vc.mutation.SetScheduledAt(t)
@@ -327,6 +341,10 @@ func (vc *VideoCreate) defaults() {
 		v := video.DefaultHasTimeRange
 		vc.mutation.SetHasTimeRange(v)
 	}
+	if _, ok := vc.mutation.CapturePermission(); !ok {
+		v := video.DefaultCapturePermission
+		vc.mutation.SetCapturePermission(v)
+	}
 	if _, ok := vc.mutation.CreatedAt(); !ok {
 		v := video.DefaultCreatedAt()
 		vc.mutation.SetCreatedAt(v)
@@ -372,6 +390,9 @@ func (vc *VideoCreate) check() error {
 	}
 	if _, ok := vc.mutation.HasTimeRange(); !ok {
 		return &ValidationError{Name: "has_time_range", err: errors.New(`ent: missing required field "Video.has_time_range"`)}
+	}
+	if _, ok := vc.mutation.CapturePermission(); !ok {
+		return &ValidationError{Name: "capture_permission", err: errors.New(`ent: missing required field "Video.capture_permission"`)}
 	}
 	if _, ok := vc.mutation.PublishedAt(); !ok {
 		return &ValidationError{Name: "published_at", err: errors.New(`ent: missing required field "Video.published_at"`)}
@@ -449,6 +470,10 @@ func (vc *VideoCreate) createSpec() (*Video, *sqlgraph.CreateSpec) {
 	if value, ok := vc.mutation.HasTimeRange(); ok {
 		_spec.SetField(video.FieldHasTimeRange, field.TypeBool, value)
 		_node.HasTimeRange = value
+	}
+	if value, ok := vc.mutation.CapturePermission(); ok {
+		_spec.SetField(video.FieldCapturePermission, field.TypeBool, value)
+		_node.CapturePermission = value
 	}
 	if value, ok := vc.mutation.ScheduledAt(); ok {
 		_spec.SetField(video.FieldScheduledAt, field.TypeTime, value)

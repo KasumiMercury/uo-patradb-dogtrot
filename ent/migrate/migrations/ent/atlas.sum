@@ -1,3 +1,4 @@
-h1:mopAV4vxQQRQWjOW8QL+IpGKXVIYugy5IW6ON7xTrhE=
+h1:ykylts0Vyu2K/AJi0vMqcY+Cld1zTCzcR+pc7mNqs4w=
 20231220082851_init.sql h1:CKRocXgRkYBEy6QLjDRd5gr75yoDSohM3FXi970JnsI=
 20231225092715_add_stream_schedule_table.sql h1:1KXPOElZw03gpM3B1hs5HQoGylKNr1gykU/Aq9IDH9k=
+20240101152450_add_capture_permission_column.sql h1:SX2pQjzqRhM4Vn5lccQc9dKiAYaAnsQoCcmt6jH+Q1A=

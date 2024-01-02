@@ -30,6 +30,7 @@ func (PatChat) Fields() []ent.Field {
 		field.Float("score").Range(-1.0, 1.0).Annotations(entproto.Skip()),
 		field.Bool("is_negative").Default(false).Annotations(entproto.Field(3)),
 		field.Time("published_at").Annotations(entproto.Field(4)),
+		field.Bool("from_freechat").Default(false).Annotations(entproto.Field(5)),
 		field.Time("created_at").Default(func() time.Time { return time.Now() }).Annotations(entproto.Skip()),
 	}
 }
@@ -45,6 +46,6 @@ func (PatChat) Annotations() []schema.Annotation {
 // Edges of the PatChat.
 func (PatChat) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("video", Video.Type).Ref("Pat_chats").Unique().Required().Annotations(entproto.Skip()),
+		edge.From("video", Video.Type).Ref("pat_chats").Unique().Annotations(entproto.Field(6)),
 	}
 }

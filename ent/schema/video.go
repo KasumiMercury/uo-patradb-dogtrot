@@ -58,6 +58,7 @@ func (Video) Edges() []ent.Edge {
 		edge.To("video_play_ranges", VideoPlayRange.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
 		edge.To("video_disallow_ranges", VideoDisallowRange.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
 		edge.To("video_title_changes", VideoTitleChange.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
-		edge.To("Pat_chats", PatChat.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
+		edge.To("pat_chats", PatChat.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
+		edge.From("video_tags", VideoTag.Type).Ref("videos").Annotations(entproto.Field(15)),
 	}
 }

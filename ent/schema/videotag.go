@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/schema/pulid"
 )
 
@@ -40,5 +41,12 @@ func (VideoTag) Annotations() []schema.Annotation {
 func (VideoTag) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("videos", Video.Type).Annotations(entproto.Field(3)),
+	}
+}
+
+// Indexes of the VideoTag.
+func (VideoTag) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("title"),
 	}
 }

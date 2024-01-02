@@ -229,6 +229,10 @@ message PatChat {
   bool is_negative = 3;
 
   google.protobuf.Timestamp published_at = 4;
+
+  bool from_freechat = 5;
+
+  Video video = 6;
 }
 
 message CreatePatChatRequest {
@@ -449,6 +453,8 @@ message Video {
   google.protobuf.Timestamp updated_at = 13;
 
   repeated Channel channel = 14;
+
+  repeated VideoTag video_tags = 15;
 }
 
 message CreateVideoRequest {
@@ -521,6 +527,70 @@ message VideoPlayRange {
   int64 start_seconds = 2;
 
   google.protobuf.Int64Value end_seconds = 3;
+}
+
+message VideoTag {
+  string id = 1;
+
+  string title = 2;
+
+  repeated Video videos = 3;
+}
+
+message CreateVideoTagRequest {
+  VideoTag video_tag = 1;
+}
+
+message GetVideoTagRequest {
+  string id = 1;
+
+  View view = 2;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message UpdateVideoTagRequest {
+  VideoTag video_tag = 1;
+}
+
+message DeleteVideoTagRequest {
+  string id = 1;
+}
+
+message ListVideoTagRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+
+  View view = 3;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message ListVideoTagResponse {
+  repeated VideoTag video_tag_list = 1;
+
+  string next_page_token = 2;
+}
+
+message BatchCreateVideoTagsRequest {
+  repeated CreateVideoTagRequest requests = 1;
+}
+
+message BatchCreateVideoTagsResponse {
+  repeated VideoTag video_tags = 1;
 }
 
 service CategoryDescriptionTemplateService {
@@ -619,4 +689,18 @@ service VideoService {
   rpc List ( ListVideoRequest ) returns ( ListVideoResponse );
 
   rpc BatchCreate ( BatchCreateVideosRequest ) returns ( BatchCreateVideosResponse );
+}
+
+service VideoTagService {
+  rpc Create ( CreateVideoTagRequest ) returns ( VideoTag );
+
+  rpc Get ( GetVideoTagRequest ) returns ( VideoTag );
+
+  rpc Update ( UpdateVideoTagRequest ) returns ( VideoTag );
+
+  rpc Delete ( DeleteVideoTagRequest ) returns ( google.protobuf.Empty );
+
+  rpc List ( ListVideoTagRequest ) returns ( ListVideoTagResponse );
+
+  rpc BatchCreate ( BatchCreateVideoTagsRequest ) returns ( BatchCreateVideoTagsResponse );
 }

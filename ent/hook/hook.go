@@ -129,6 +129,18 @@ func (f VideoPlayRangeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Val
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.VideoPlayRangeMutation", m)
 }
 
+// The VideoTagFunc type is an adapter to allow the use of ordinary
+// function as VideoTag mutator.
+type VideoTagFunc func(context.Context, *ent.VideoTagMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VideoTagFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.VideoTagMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.VideoTagMutation", m)
+}
+
 // The VideoTitleChangeFunc type is an adapter to allow the use of ordinary
 // function as VideoTitleChange mutator.
 type VideoTitleChangeFunc func(context.Context, *ent.VideoTitleChangeMutation) (ent.Value, error)

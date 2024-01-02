@@ -24,6 +24,8 @@ const (
 	FieldIsNegative = "is_negative"
 	// FieldPublishedAt holds the string denoting the published_at field in the database.
 	FieldPublishedAt = "published_at"
+	// FieldFromFreechat holds the string denoting the from_freechat field in the database.
+	FieldFromFreechat = "from_freechat"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// EdgeVideo holds the string denoting the video edge name in mutations.
@@ -47,6 +49,7 @@ var Columns = []string{
 	FieldScore,
 	FieldIsNegative,
 	FieldPublishedAt,
+	FieldFromFreechat,
 	FieldCreatedAt,
 }
 
@@ -80,6 +83,8 @@ var (
 	ScoreValidator func(float64) error
 	// DefaultIsNegative holds the default value on creation for the "is_negative" field.
 	DefaultIsNegative bool
+	// DefaultFromFreechat holds the default value on creation for the "from_freechat" field.
+	DefaultFromFreechat bool
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.
@@ -119,6 +124,11 @@ func ByIsNegative(opts ...sql.OrderTermOption) OrderOption {
 // ByPublishedAt orders the results by the published_at field.
 func ByPublishedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPublishedAt, opts...).ToFunc()
+}
+
+// ByFromFreechat orders the results by the from_freechat field.
+func ByFromFreechat(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFromFreechat, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

@@ -1882,3 +1882,269 @@ var VideoService_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "entpb/entpb.proto",
 }
+
+// VideoTagServiceClient is the client API for VideoTagService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type VideoTagServiceClient interface {
+	Create(ctx context.Context, in *CreateVideoTagRequest, opts ...grpc.CallOption) (*VideoTag, error)
+	Get(ctx context.Context, in *GetVideoTagRequest, opts ...grpc.CallOption) (*VideoTag, error)
+	Update(ctx context.Context, in *UpdateVideoTagRequest, opts ...grpc.CallOption) (*VideoTag, error)
+	Delete(ctx context.Context, in *DeleteVideoTagRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	List(ctx context.Context, in *ListVideoTagRequest, opts ...grpc.CallOption) (*ListVideoTagResponse, error)
+	BatchCreate(ctx context.Context, in *BatchCreateVideoTagsRequest, opts ...grpc.CallOption) (*BatchCreateVideoTagsResponse, error)
+}
+
+type videoTagServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewVideoTagServiceClient(cc grpc.ClientConnInterface) VideoTagServiceClient {
+	return &videoTagServiceClient{cc}
+}
+
+func (c *videoTagServiceClient) Create(ctx context.Context, in *CreateVideoTagRequest, opts ...grpc.CallOption) (*VideoTag, error) {
+	out := new(VideoTag)
+	err := c.cc.Invoke(ctx, "/entpb.VideoTagService/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *videoTagServiceClient) Get(ctx context.Context, in *GetVideoTagRequest, opts ...grpc.CallOption) (*VideoTag, error) {
+	out := new(VideoTag)
+	err := c.cc.Invoke(ctx, "/entpb.VideoTagService/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *videoTagServiceClient) Update(ctx context.Context, in *UpdateVideoTagRequest, opts ...grpc.CallOption) (*VideoTag, error) {
+	out := new(VideoTag)
+	err := c.cc.Invoke(ctx, "/entpb.VideoTagService/Update", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *videoTagServiceClient) Delete(ctx context.Context, in *DeleteVideoTagRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/entpb.VideoTagService/Delete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *videoTagServiceClient) List(ctx context.Context, in *ListVideoTagRequest, opts ...grpc.CallOption) (*ListVideoTagResponse, error) {
+	out := new(ListVideoTagResponse)
+	err := c.cc.Invoke(ctx, "/entpb.VideoTagService/List", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *videoTagServiceClient) BatchCreate(ctx context.Context, in *BatchCreateVideoTagsRequest, opts ...grpc.CallOption) (*BatchCreateVideoTagsResponse, error) {
+	out := new(BatchCreateVideoTagsResponse)
+	err := c.cc.Invoke(ctx, "/entpb.VideoTagService/BatchCreate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// VideoTagServiceServer is the server API for VideoTagService service.
+// All implementations must embed UnimplementedVideoTagServiceServer
+// for forward compatibility
+type VideoTagServiceServer interface {
+	Create(context.Context, *CreateVideoTagRequest) (*VideoTag, error)
+	Get(context.Context, *GetVideoTagRequest) (*VideoTag, error)
+	Update(context.Context, *UpdateVideoTagRequest) (*VideoTag, error)
+	Delete(context.Context, *DeleteVideoTagRequest) (*empty.Empty, error)
+	List(context.Context, *ListVideoTagRequest) (*ListVideoTagResponse, error)
+	BatchCreate(context.Context, *BatchCreateVideoTagsRequest) (*BatchCreateVideoTagsResponse, error)
+	mustEmbedUnimplementedVideoTagServiceServer()
+}
+
+// UnimplementedVideoTagServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedVideoTagServiceServer struct {
+}
+
+func (UnimplementedVideoTagServiceServer) Create(context.Context, *CreateVideoTagRequest) (*VideoTag, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedVideoTagServiceServer) Get(context.Context, *GetVideoTagRequest) (*VideoTag, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedVideoTagServiceServer) Update(context.Context, *UpdateVideoTagRequest) (*VideoTag, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedVideoTagServiceServer) Delete(context.Context, *DeleteVideoTagRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedVideoTagServiceServer) List(context.Context, *ListVideoTagRequest) (*ListVideoTagResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedVideoTagServiceServer) BatchCreate(context.Context, *BatchCreateVideoTagsRequest) (*BatchCreateVideoTagsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BatchCreate not implemented")
+}
+func (UnimplementedVideoTagServiceServer) mustEmbedUnimplementedVideoTagServiceServer() {}
+
+// UnsafeVideoTagServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to VideoTagServiceServer will
+// result in compilation errors.
+type UnsafeVideoTagServiceServer interface {
+	mustEmbedUnimplementedVideoTagServiceServer()
+}
+
+func RegisterVideoTagServiceServer(s grpc.ServiceRegistrar, srv VideoTagServiceServer) {
+	s.RegisterService(&VideoTagService_ServiceDesc, srv)
+}
+
+func _VideoTagService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateVideoTagRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoTagServiceServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.VideoTagService/Create",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoTagServiceServer).Create(ctx, req.(*CreateVideoTagRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VideoTagService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetVideoTagRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoTagServiceServer).Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.VideoTagService/Get",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoTagServiceServer).Get(ctx, req.(*GetVideoTagRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VideoTagService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateVideoTagRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoTagServiceServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.VideoTagService/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoTagServiceServer).Update(ctx, req.(*UpdateVideoTagRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VideoTagService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteVideoTagRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoTagServiceServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.VideoTagService/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoTagServiceServer).Delete(ctx, req.(*DeleteVideoTagRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VideoTagService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListVideoTagRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoTagServiceServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.VideoTagService/List",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoTagServiceServer).List(ctx, req.(*ListVideoTagRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VideoTagService_BatchCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchCreateVideoTagsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoTagServiceServer).BatchCreate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/entpb.VideoTagService/BatchCreate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoTagServiceServer).BatchCreate(ctx, req.(*BatchCreateVideoTagsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// VideoTagService_ServiceDesc is the grpc.ServiceDesc for VideoTagService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var VideoTagService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "entpb.VideoTagService",
+	HandlerType: (*VideoTagServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Create",
+			Handler:    _VideoTagService_Create_Handler,
+		},
+		{
+			MethodName: "Get",
+			Handler:    _VideoTagService_Get_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _VideoTagService_Update_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _VideoTagService_Delete_Handler,
+		},
+		{
+			MethodName: "List",
+			Handler:    _VideoTagService_List_Handler,
+		},
+		{
+			MethodName: "BatchCreate",
+			Handler:    _VideoTagService_BatchCreate_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "entpb/entpb.proto",
+}

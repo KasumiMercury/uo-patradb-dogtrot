@@ -36,5 +36,8 @@ type VideoDisallowRange func(*sql.Selector)
 // VideoPlayRange is the predicate function for videoplayrange builders.
 type VideoPlayRange func(*sql.Selector)
 
+// VideoTag is the predicate function for videotag builders.
+type VideoTag func(*sql.Selector)
+
 // VideoTitleChange is the predicate function for videotitlechange builders.
 type VideoTitleChange func(*sql.Selector)

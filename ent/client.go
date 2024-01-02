@@ -25,6 +25,7 @@ import (
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotag"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotitlechange"
 )
 
@@ -53,6 +54,8 @@ type Client struct {
 	VideoDisallowRange *VideoDisallowRangeClient
 	// VideoPlayRange is the client for interacting with the VideoPlayRange builders.
 	VideoPlayRange *VideoPlayRangeClient
+	// VideoTag is the client for interacting with the VideoTag builders.
+	VideoTag *VideoTagClient
 	// VideoTitleChange is the client for interacting with the VideoTitleChange builders.
 	VideoTitleChange *VideoTitleChangeClient
 }
@@ -76,6 +79,7 @@ func (c *Client) init() {
 	c.Video = NewVideoClient(c.config)
 	c.VideoDisallowRange = NewVideoDisallowRangeClient(c.config)
 	c.VideoPlayRange = NewVideoPlayRangeClient(c.config)
+	c.VideoTag = NewVideoTagClient(c.config)
 	c.VideoTitleChange = NewVideoTitleChangeClient(c.config)
 }
 
@@ -179,6 +183,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Video:                       NewVideoClient(cfg),
 		VideoDisallowRange:          NewVideoDisallowRangeClient(cfg),
 		VideoPlayRange:              NewVideoPlayRangeClient(cfg),
+		VideoTag:                    NewVideoTagClient(cfg),
 		VideoTitleChange:            NewVideoTitleChangeClient(cfg),
 	}, nil
 }
@@ -209,6 +214,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Video:                       NewVideoClient(cfg),
 		VideoDisallowRange:          NewVideoDisallowRangeClient(cfg),
 		VideoPlayRange:              NewVideoPlayRangeClient(cfg),
+		VideoTag:                    NewVideoTagClient(cfg),
 		VideoTitleChange:            NewVideoTitleChangeClient(cfg),
 	}, nil
 }
@@ -241,7 +247,7 @@ func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.CategoryDescriptionTemplate, c.Channel, c.Description, c.DescriptionChange,
 		c.PatChat, c.PeriodicDescriptionTemplate, c.StreamSchedule, c.Video,
-		c.VideoDisallowRange, c.VideoPlayRange, c.VideoTitleChange,
+		c.VideoDisallowRange, c.VideoPlayRange, c.VideoTag, c.VideoTitleChange,
 	} {
 		n.Use(hooks...)
 	}
@@ -253,7 +259,7 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.CategoryDescriptionTemplate, c.Channel, c.Description, c.DescriptionChange,
 		c.PatChat, c.PeriodicDescriptionTemplate, c.StreamSchedule, c.Video,
-		c.VideoDisallowRange, c.VideoPlayRange, c.VideoTitleChange,
+		c.VideoDisallowRange, c.VideoPlayRange, c.VideoTag, c.VideoTitleChange,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -282,6 +288,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.VideoDisallowRange.mutate(ctx, m)
 	case *VideoPlayRangeMutation:
 		return c.VideoPlayRange.mutate(ctx, m)
+	case *VideoTagMutation:
+		return c.VideoTag.mutate(ctx, m)
 	case *VideoTitleChangeMutation:
 		return c.VideoTitleChange.mutate(ctx, m)
 	default:
@@ -1568,7 +1576,7 @@ func (c *VideoClient) QueryVideoTitleChanges(v *Video) *VideoTitleChangeQuery {
 	return query
 }
 
-// QueryPatChats queries the Pat_chats edge of a Video.
+// QueryPatChats queries the pat_chats edge of a Video.
 func (c *VideoClient) QueryPatChats(v *Video) *PatChatQuery {
 	query := (&PatChatClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
@@ -1577,6 +1585,22 @@ func (c *VideoClient) QueryPatChats(v *Video) *PatChatQuery {
 			sqlgraph.From(video.Table, video.FieldID, id),
 			sqlgraph.To(patchat.Table, patchat.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, video.PatChatsTable, video.PatChatsColumn),
+		)
+		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVideoTags queries the video_tags edge of a Video.
+func (c *VideoClient) QueryVideoTags(v *Video) *VideoTagQuery {
+	query := (&VideoTagClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := v.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(video.Table, video.FieldID, id),
+			sqlgraph.To(videotag.Table, videotag.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, video.VideoTagsTable, video.VideoTagsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
 		return fromV, nil
@@ -1907,6 +1931,155 @@ func (c *VideoPlayRangeClient) mutate(ctx context.Context, m *VideoPlayRangeMuta
 	}
 }
 
+// VideoTagClient is a client for the VideoTag schema.
+type VideoTagClient struct {
+	config
+}
+
+// NewVideoTagClient returns a client for the VideoTag from the given config.
+func NewVideoTagClient(c config) *VideoTagClient {
+	return &VideoTagClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `videotag.Hooks(f(g(h())))`.
+func (c *VideoTagClient) Use(hooks ...Hook) {
+	c.hooks.VideoTag = append(c.hooks.VideoTag, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `videotag.Intercept(f(g(h())))`.
+func (c *VideoTagClient) Intercept(interceptors ...Interceptor) {
+	c.inters.VideoTag = append(c.inters.VideoTag, interceptors...)
+}
+
+// Create returns a builder for creating a VideoTag entity.
+func (c *VideoTagClient) Create() *VideoTagCreate {
+	mutation := newVideoTagMutation(c.config, OpCreate)
+	return &VideoTagCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of VideoTag entities.
+func (c *VideoTagClient) CreateBulk(builders ...*VideoTagCreate) *VideoTagCreateBulk {
+	return &VideoTagCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VideoTagClient) MapCreateBulk(slice any, setFunc func(*VideoTagCreate, int)) *VideoTagCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VideoTagCreateBulk{err: fmt.Errorf("calling to VideoTagClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VideoTagCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VideoTagCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for VideoTag.
+func (c *VideoTagClient) Update() *VideoTagUpdate {
+	mutation := newVideoTagMutation(c.config, OpUpdate)
+	return &VideoTagUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VideoTagClient) UpdateOne(vt *VideoTag) *VideoTagUpdateOne {
+	mutation := newVideoTagMutation(c.config, OpUpdateOne, withVideoTag(vt))
+	return &VideoTagUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VideoTagClient) UpdateOneID(id string) *VideoTagUpdateOne {
+	mutation := newVideoTagMutation(c.config, OpUpdateOne, withVideoTagID(id))
+	return &VideoTagUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for VideoTag.
+func (c *VideoTagClient) Delete() *VideoTagDelete {
+	mutation := newVideoTagMutation(c.config, OpDelete)
+	return &VideoTagDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VideoTagClient) DeleteOne(vt *VideoTag) *VideoTagDeleteOne {
+	return c.DeleteOneID(vt.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VideoTagClient) DeleteOneID(id string) *VideoTagDeleteOne {
+	builder := c.Delete().Where(videotag.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VideoTagDeleteOne{builder}
+}
+
+// Query returns a query builder for VideoTag.
+func (c *VideoTagClient) Query() *VideoTagQuery {
+	return &VideoTagQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVideoTag},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a VideoTag entity by its id.
+func (c *VideoTagClient) Get(ctx context.Context, id string) (*VideoTag, error) {
+	return c.Query().Where(videotag.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VideoTagClient) GetX(ctx context.Context, id string) *VideoTag {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryVideos queries the videos edge of a VideoTag.
+func (c *VideoTagClient) QueryVideos(vt *VideoTag) *VideoQuery {
+	query := (&VideoClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vt.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(videotag.Table, videotag.FieldID, id),
+			sqlgraph.To(video.Table, video.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, videotag.VideosTable, videotag.VideosPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(vt.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *VideoTagClient) Hooks() []Hook {
+	return c.hooks.VideoTag
+}
+
+// Interceptors returns the client interceptors.
+func (c *VideoTagClient) Interceptors() []Interceptor {
+	return c.inters.VideoTag
+}
+
+func (c *VideoTagClient) mutate(ctx context.Context, m *VideoTagMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VideoTagCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VideoTagUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VideoTagUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VideoTagDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown VideoTag mutation op: %q", m.Op())
+	}
+}
+
 // VideoTitleChangeClient is a client for the VideoTitleChange schema.
 type VideoTitleChangeClient struct {
 	config
@@ -2061,11 +2234,11 @@ type (
 	hooks struct {
 		CategoryDescriptionTemplate, Channel, Description, DescriptionChange, PatChat,
 		PeriodicDescriptionTemplate, StreamSchedule, Video, VideoDisallowRange,
-		VideoPlayRange, VideoTitleChange []ent.Hook
+		VideoPlayRange, VideoTag, VideoTitleChange []ent.Hook
 	}
 	inters struct {
 		CategoryDescriptionTemplate, Channel, Description, DescriptionChange, PatChat,
 		PeriodicDescriptionTemplate, StreamSchedule, Video, VideoDisallowRange,
-		VideoPlayRange, VideoTitleChange []ent.Interceptor
+		VideoPlayRange, VideoTag, VideoTitleChange []ent.Interceptor
 	}
 )

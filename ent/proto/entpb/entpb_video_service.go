@@ -11,6 +11,7 @@ import (
 	ent "github.com/KasumiMercury/uo-patradb-dogtrot/ent"
 	channel "github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	video "github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
+	videotag "github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotag"
 	empty "github.com/golang/protobuf/ptypes/empty"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -64,6 +65,12 @@ func toProtoVideo(e *ent.Video) (*Video, error) {
 	for _, edg := range e.Edges.Channel {
 		id := edg.ID
 		v.Channel = append(v.Channel, &Channel{
+			Id: id,
+		})
+	}
+	for _, edg := range e.Edges.VideoTags {
+		id := edg.ID
+		v.VideoTags = append(v.VideoTags, &VideoTag{
 			Id: id,
 		})
 	}
@@ -124,6 +131,9 @@ func (svc *VideoService) Get(ctx context.Context, req *GetVideoRequest) (*Video,
 			WithChannel(func(query *ent.ChannelQuery) {
 				query.Select(channel.FieldID)
 			}).
+			WithVideoTags(func(query *ent.VideoTagQuery) {
+				query.Select(videotag.FieldID)
+			}).
 			Only(ctx)
 	default:
 		return nil, status.Error(codes.InvalidArgument, "invalid argument: unknown view")
@@ -179,6 +189,10 @@ func (svc *VideoService) Update(ctx context.Context, req *UpdateVideoRequest) (*
 	for _, item := range video.GetChannel() {
 		channel := item.GetId()
 		m.AddChannelIDs(channel)
+	}
+	for _, item := range video.GetVideoTags() {
+		videotags := item.GetId()
+		m.AddVideoTagIDs(videotags)
 	}
 
 	res, err := m.Save(ctx)
@@ -248,6 +262,9 @@ func (svc *VideoService) List(ctx context.Context, req *ListVideoRequest) (*List
 		entList, err = listQuery.
 			WithChannel(func(query *ent.ChannelQuery) {
 				query.Select(channel.FieldID)
+			}).
+			WithVideoTags(func(query *ent.VideoTagQuery) {
+				query.Select(videotag.FieldID)
 			}).
 			All(ctx)
 	}
@@ -345,6 +362,10 @@ func (svc *VideoService) createBuilder(video *Video) (*ent.VideoCreate, error) {
 	for _, item := range video.GetChannel() {
 		channel := item.GetId()
 		m.AddChannelIDs(channel)
+	}
+	for _, item := range video.GetVideoTags() {
+		videotags := item.GetId()
+		m.AddVideoTagIDs(videotags)
 	}
 	return m, nil
 }

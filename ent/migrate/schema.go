@@ -103,8 +103,9 @@ var (
 		{Name: "score", Type: field.TypeFloat64},
 		{Name: "is_negative", Type: field.TypeBool, Default: false},
 		{Name: "published_at", Type: field.TypeTime},
+		{Name: "from_freechat", Type: field.TypeBool, Default: false},
 		{Name: "created_at", Type: field.TypeTime},
-		{Name: "video_id", Type: field.TypeString, Size: 26},
+		{Name: "video_id", Type: field.TypeString, Nullable: true, Size: 26},
 	}
 	// PatChatsTable holds the schema information for the "pat_chats" table.
 	PatChatsTable = &schema.Table{
@@ -113,10 +114,10 @@ var (
 		PrimaryKey: []*schema.Column{PatChatsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "pat_chats_videos_Pat_chats",
-				Columns:    []*schema.Column{PatChatsColumns[7]},
+				Symbol:     "pat_chats_videos_pat_chats",
+				Columns:    []*schema.Column{PatChatsColumns[8]},
 				RefColumns: []*schema.Column{VideosColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.SetNull,
 			},
 		},
 	}
@@ -222,6 +223,24 @@ var (
 			},
 		},
 	}
+	// VideoTagsColumns holds the columns for the "video_tags" table.
+	VideoTagsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString, Size: 26},
+		{Name: "title", Type: field.TypeString, Size: 30},
+	}
+	// VideoTagsTable holds the schema information for the "video_tags" table.
+	VideoTagsTable = &schema.Table{
+		Name:       "video_tags",
+		Columns:    VideoTagsColumns,
+		PrimaryKey: []*schema.Column{VideoTagsColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "videotag_title",
+				Unique:  false,
+				Columns: []*schema.Column{VideoTagsColumns[1]},
+			},
+		},
+	}
 	// VideoTitleChangesColumns holds the columns for the "video_title_changes" table.
 	VideoTitleChangesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
@@ -268,6 +287,31 @@ var (
 			},
 		},
 	}
+	// VideoTagVideosColumns holds the columns for the "video_tag_videos" table.
+	VideoTagVideosColumns = []*schema.Column{
+		{Name: "video_tag_id", Type: field.TypeString, Size: 26},
+		{Name: "video_id", Type: field.TypeString, Size: 26},
+	}
+	// VideoTagVideosTable holds the schema information for the "video_tag_videos" table.
+	VideoTagVideosTable = &schema.Table{
+		Name:       "video_tag_videos",
+		Columns:    VideoTagVideosColumns,
+		PrimaryKey: []*schema.Column{VideoTagVideosColumns[0], VideoTagVideosColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "video_tag_videos_video_tag_id",
+				Columns:    []*schema.Column{VideoTagVideosColumns[0]},
+				RefColumns: []*schema.Column{VideoTagsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "video_tag_videos_video_id",
+				Columns:    []*schema.Column{VideoTagVideosColumns[1]},
+				RefColumns: []*schema.Column{VideosColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		CategoryDescriptionTemplatesTable,
@@ -280,8 +324,10 @@ var (
 		VideosTable,
 		VideoDisallowRangesTable,
 		VideoPlayRangesTable,
+		VideoTagsTable,
 		VideoTitleChangesTable,
 		VideoChannelTable,
+		VideoTagVideosTable,
 	}
 )
 
@@ -297,4 +343,6 @@ func init() {
 	VideoTitleChangesTable.ForeignKeys[0].RefTable = VideosTable
 	VideoChannelTable.ForeignKeys[0].RefTable = VideosTable
 	VideoChannelTable.ForeignKeys[1].RefTable = ChannelsTable
+	VideoTagVideosTable.ForeignKeys[0].RefTable = VideoTagsTable
+	VideoTagVideosTable.ForeignKeys[1].RefTable = VideosTable
 }

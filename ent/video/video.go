@@ -53,7 +53,9 @@ const (
 	// EdgeVideoTitleChanges holds the string denoting the video_title_changes edge name in mutations.
 	EdgeVideoTitleChanges = "video_title_changes"
 	// EdgePatChats holds the string denoting the pat_chats edge name in mutations.
-	EdgePatChats = "Pat_chats"
+	EdgePatChats = "pat_chats"
+	// EdgeVideoTags holds the string denoting the video_tags edge name in mutations.
+	EdgeVideoTags = "video_tags"
 	// Table holds the table name of the video in the database.
 	Table = "videos"
 	// DescriptionsTable is the table that holds the descriptions relation/edge.
@@ -89,13 +91,18 @@ const (
 	VideoTitleChangesInverseTable = "video_title_changes"
 	// VideoTitleChangesColumn is the table column denoting the video_title_changes relation/edge.
 	VideoTitleChangesColumn = "video_id"
-	// PatChatsTable is the table that holds the Pat_chats relation/edge.
+	// PatChatsTable is the table that holds the pat_chats relation/edge.
 	PatChatsTable = "pat_chats"
 	// PatChatsInverseTable is the table name for the PatChat entity.
 	// It exists in this package in order to avoid circular dependency with the "patchat" package.
 	PatChatsInverseTable = "pat_chats"
-	// PatChatsColumn is the table column denoting the Pat_chats relation/edge.
+	// PatChatsColumn is the table column denoting the pat_chats relation/edge.
 	PatChatsColumn = "video_id"
+	// VideoTagsTable is the table that holds the video_tags relation/edge. The primary key declared below.
+	VideoTagsTable = "video_tag_videos"
+	// VideoTagsInverseTable is the table name for the VideoTag entity.
+	// It exists in this package in order to avoid circular dependency with the "videotag" package.
+	VideoTagsInverseTable = "video_tags"
 )
 
 // Columns holds all SQL columns for video fields.
@@ -121,6 +128,9 @@ var (
 	// ChannelPrimaryKey and ChannelColumn2 are the table columns denoting the
 	// primary key for the channel relation (M2M).
 	ChannelPrimaryKey = []string{"video_id", "channel_id"}
+	// VideoTagsPrimaryKey and VideoTagsColumn2 are the table columns denoting the
+	// primary key for the video_tags relation (M2M).
+	VideoTagsPrimaryKey = []string{"video_tag_id", "video_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -299,17 +309,31 @@ func ByVideoTitleChanges(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption
 	}
 }
 
-// ByPatChatsCount orders the results by Pat_chats count.
+// ByPatChatsCount orders the results by pat_chats count.
 func ByPatChatsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborsCount(s, newPatChatsStep(), opts...)
 	}
 }
 
-// ByPatChats orders the results by Pat_chats terms.
+// ByPatChats orders the results by pat_chats terms.
 func ByPatChats(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newPatChatsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByVideoTagsCount orders the results by video_tags count.
+func ByVideoTagsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVideoTagsStep(), opts...)
+	}
+}
+
+// ByVideoTags orders the results by video_tags terms.
+func ByVideoTags(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVideoTagsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newDescriptionsStep() *sqlgraph.Step {
@@ -352,5 +376,12 @@ func newPatChatsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PatChatsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, PatChatsTable, PatChatsColumn),
+	)
+}
+func newVideoTagsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VideoTagsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, VideoTagsTable, VideoTagsPrimaryKey...),
 	)
 }

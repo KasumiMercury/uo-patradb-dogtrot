@@ -870,7 +870,7 @@ func HasVideoTitleChangesWith(preds ...predicate.VideoTitleChange) predicate.Vid
 	})
 }
 
-// HasPatChats applies the HasEdge predicate on the "Pat_chats" edge.
+// HasPatChats applies the HasEdge predicate on the "pat_chats" edge.
 func HasPatChats() predicate.Video {
 	return predicate.Video(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
@@ -881,10 +881,33 @@ func HasPatChats() predicate.Video {
 	})
 }
 
-// HasPatChatsWith applies the HasEdge predicate on the "Pat_chats" edge with a given conditions (other predicates).
+// HasPatChatsWith applies the HasEdge predicate on the "pat_chats" edge with a given conditions (other predicates).
 func HasPatChatsWith(preds ...predicate.PatChat) predicate.Video {
 	return predicate.Video(func(s *sql.Selector) {
 		step := newPatChatsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasVideoTags applies the HasEdge predicate on the "video_tags" edge.
+func HasVideoTags() predicate.Video {
+	return predicate.Video(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, VideoTagsTable, VideoTagsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVideoTagsWith applies the HasEdge predicate on the "video_tags" edge with a given conditions (other predicates).
+func HasVideoTagsWith(preds ...predicate.VideoTag) predicate.Video {
+	return predicate.Video(func(s *sql.Selector) {
+		step := newVideoTagsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

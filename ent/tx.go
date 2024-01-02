@@ -32,6 +32,8 @@ type Tx struct {
 	VideoDisallowRange *VideoDisallowRangeClient
 	// VideoPlayRange is the client for interacting with the VideoPlayRange builders.
 	VideoPlayRange *VideoPlayRangeClient
+	// VideoTag is the client for interacting with the VideoTag builders.
+	VideoTag *VideoTagClient
 	// VideoTitleChange is the client for interacting with the VideoTitleChange builders.
 	VideoTitleChange *VideoTitleChangeClient
 
@@ -175,6 +177,7 @@ func (tx *Tx) init() {
 	tx.Video = NewVideoClient(tx.config)
 	tx.VideoDisallowRange = NewVideoDisallowRangeClient(tx.config)
 	tx.VideoPlayRange = NewVideoPlayRangeClient(tx.config)
+	tx.VideoTag = NewVideoTagClient(tx.config)
 	tx.VideoTitleChange = NewVideoTitleChangeClient(tx.config)
 }
 

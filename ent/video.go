@@ -64,11 +64,13 @@ type VideoEdges struct {
 	VideoDisallowRanges []*VideoDisallowRange `json:"video_disallow_ranges,omitempty"`
 	// VideoTitleChanges holds the value of the video_title_changes edge.
 	VideoTitleChanges []*VideoTitleChange `json:"video_title_changes,omitempty"`
-	// PatChats holds the value of the Pat_chats edge.
-	PatChats []*PatChat `json:"Pat_chats,omitempty"`
+	// PatChats holds the value of the pat_chats edge.
+	PatChats []*PatChat `json:"pat_chats,omitempty"`
+	// VideoTags holds the value of the video_tags edge.
+	VideoTags []*VideoTag `json:"video_tags,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 }
 
 // DescriptionsOrErr returns the Descriptions value or an error if the edge
@@ -126,7 +128,16 @@ func (e VideoEdges) PatChatsOrErr() ([]*PatChat, error) {
 	if e.loadedTypes[5] {
 		return e.PatChats, nil
 	}
-	return nil, &NotLoadedError{edge: "Pat_chats"}
+	return nil, &NotLoadedError{edge: "pat_chats"}
+}
+
+// VideoTagsOrErr returns the VideoTags value or an error if the edge
+// was not loaded in eager-loading.
+func (e VideoEdges) VideoTagsOrErr() ([]*VideoTag, error) {
+	if e.loadedTypes[6] {
+		return e.VideoTags, nil
+	}
+	return nil, &NotLoadedError{edge: "video_tags"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -285,9 +296,14 @@ func (v *Video) QueryVideoTitleChanges() *VideoTitleChangeQuery {
 	return NewVideoClient(v.config).QueryVideoTitleChanges(v)
 }
 
-// QueryPatChats queries the "Pat_chats" edge of the Video entity.
+// QueryPatChats queries the "pat_chats" edge of the Video entity.
 func (v *Video) QueryPatChats() *PatChatQuery {
 	return NewVideoClient(v.config).QueryPatChats(v)
+}
+
+// QueryVideoTags queries the "video_tags" edge of the Video entity.
+func (v *Video) QueryVideoTags() *VideoTagQuery {
+	return NewVideoClient(v.config).QueryVideoTags(v)
 }
 
 // Update returns a builder for updating this Video.

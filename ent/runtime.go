@@ -16,6 +16,7 @@ import (
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotag"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotitlechange"
 )
 
@@ -144,8 +145,12 @@ func init() {
 	patchatDescIsNegative := patchatFields[3].Descriptor()
 	// patchat.DefaultIsNegative holds the default value on creation for the is_negative field.
 	patchat.DefaultIsNegative = patchatDescIsNegative.Default.(bool)
+	// patchatDescFromFreechat is the schema descriptor for from_freechat field.
+	patchatDescFromFreechat := patchatFields[5].Descriptor()
+	// patchat.DefaultFromFreechat holds the default value on creation for the from_freechat field.
+	patchat.DefaultFromFreechat = patchatDescFromFreechat.Default.(bool)
 	// patchatDescCreatedAt is the schema descriptor for created_at field.
-	patchatDescCreatedAt := patchatFields[5].Descriptor()
+	patchatDescCreatedAt := patchatFields[6].Descriptor()
 	// patchat.DefaultCreatedAt holds the default value on creation for the created_at field.
 	patchat.DefaultCreatedAt = patchatDescCreatedAt.Default.(func() time.Time)
 	// patchatDescID is the schema descriptor for id field.
@@ -283,6 +288,21 @@ func init() {
 	videoplayrange.DefaultID = videoplayrangeDescID.Default.(func() string)
 	// videoplayrange.IDValidator is a validator for the "id" field. It is called by the builders before save.
 	videoplayrange.IDValidator = videoplayrangeDescID.Validators[0].(func(string) error)
+	videotagMixin := schema.VideoTag{}.Mixin()
+	videotagMixinFields0 := videotagMixin[0].Fields()
+	_ = videotagMixinFields0
+	videotagFields := schema.VideoTag{}.Fields()
+	_ = videotagFields
+	// videotagDescTitle is the schema descriptor for title field.
+	videotagDescTitle := videotagFields[0].Descriptor()
+	// videotag.TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	videotag.TitleValidator = videotagDescTitle.Validators[0].(func(string) error)
+	// videotagDescID is the schema descriptor for id field.
+	videotagDescID := videotagMixinFields0[0].Descriptor()
+	// videotag.DefaultID holds the default value on creation for the id field.
+	videotag.DefaultID = videotagDescID.Default.(func() string)
+	// videotag.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	videotag.IDValidator = videotagDescID.Validators[0].(func(string) error)
 	videotitlechangeMixin := schema.VideoTitleChange{}.Mixin()
 	videotitlechangeMixinFields0 := videotitlechangeMixin[0].Fields()
 	_ = videotitlechangeMixinFields0

@@ -18,6 +18,7 @@ import (
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotag"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotitlechange"
 )
 
@@ -34,6 +35,7 @@ type VideoQuery struct {
 	withVideoDisallowRanges *VideoDisallowRangeQuery
 	withVideoTitleChanges   *VideoTitleChangeQuery
 	withPatChats            *PatChatQuery
+	withVideoTags           *VideoTagQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -180,7 +182,7 @@ func (vq *VideoQuery) QueryVideoTitleChanges() *VideoTitleChangeQuery {
 	return query
 }
 
-// QueryPatChats chains the current query on the "Pat_chats" edge.
+// QueryPatChats chains the current query on the "pat_chats" edge.
 func (vq *VideoQuery) QueryPatChats() *PatChatQuery {
 	query := (&PatChatClient{config: vq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
@@ -195,6 +197,28 @@ func (vq *VideoQuery) QueryPatChats() *PatChatQuery {
 			sqlgraph.From(video.Table, video.FieldID, selector),
 			sqlgraph.To(patchat.Table, patchat.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, video.PatChatsTable, video.PatChatsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVideoTags chains the current query on the "video_tags" edge.
+func (vq *VideoQuery) QueryVideoTags() *VideoTagQuery {
+	query := (&VideoTagClient{config: vq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := vq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := vq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(video.Table, video.FieldID, selector),
+			sqlgraph.To(videotag.Table, videotag.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, video.VideoTagsTable, video.VideoTagsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(vq.driver.Dialect(), step)
 		return fromU, nil
@@ -400,6 +424,7 @@ func (vq *VideoQuery) Clone() *VideoQuery {
 		withVideoDisallowRanges: vq.withVideoDisallowRanges.Clone(),
 		withVideoTitleChanges:   vq.withVideoTitleChanges.Clone(),
 		withPatChats:            vq.withPatChats.Clone(),
+		withVideoTags:           vq.withVideoTags.Clone(),
 		// clone intermediate query.
 		sql:  vq.sql.Clone(),
 		path: vq.path,
@@ -462,13 +487,24 @@ func (vq *VideoQuery) WithVideoTitleChanges(opts ...func(*VideoTitleChangeQuery)
 }
 
 // WithPatChats tells the query-builder to eager-load the nodes that are connected to
-// the "Pat_chats" edge. The optional arguments are used to configure the query builder of the edge.
+// the "pat_chats" edge. The optional arguments are used to configure the query builder of the edge.
 func (vq *VideoQuery) WithPatChats(opts ...func(*PatChatQuery)) *VideoQuery {
 	query := (&PatChatClient{config: vq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
 	vq.withPatChats = query
+	return vq
+}
+
+// WithVideoTags tells the query-builder to eager-load the nodes that are connected to
+// the "video_tags" edge. The optional arguments are used to configure the query builder of the edge.
+func (vq *VideoQuery) WithVideoTags(opts ...func(*VideoTagQuery)) *VideoQuery {
+	query := (&VideoTagClient{config: vq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	vq.withVideoTags = query
 	return vq
 }
 
@@ -550,13 +586,14 @@ func (vq *VideoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Video,
 	var (
 		nodes       = []*Video{}
 		_spec       = vq.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			vq.withDescriptions != nil,
 			vq.withChannel != nil,
 			vq.withVideoPlayRanges != nil,
 			vq.withVideoDisallowRanges != nil,
 			vq.withVideoTitleChanges != nil,
 			vq.withPatChats != nil,
+			vq.withVideoTags != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -617,6 +654,13 @@ func (vq *VideoQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Video,
 		if err := vq.loadPatChats(ctx, query, nodes,
 			func(n *Video) { n.Edges.PatChats = []*PatChat{} },
 			func(n *Video, e *PatChat) { n.Edges.PatChats = append(n.Edges.PatChats, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := vq.withVideoTags; query != nil {
+		if err := vq.loadVideoTags(ctx, query, nodes,
+			func(n *Video) { n.Edges.VideoTags = []*VideoTag{} },
+			func(n *Video, e *VideoTag) { n.Edges.VideoTags = append(n.Edges.VideoTags, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -833,6 +877,67 @@ func (vq *VideoQuery) loadPatChats(ctx context.Context, query *PatChatQuery, nod
 			return fmt.Errorf(`unexpected referenced foreign-key "video_id" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
+	}
+	return nil
+}
+func (vq *VideoQuery) loadVideoTags(ctx context.Context, query *VideoTagQuery, nodes []*Video, init func(*Video), assign func(*Video, *VideoTag)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Video)
+	nids := make(map[string]map[*Video]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(video.VideoTagsTable)
+		s.Join(joinT).On(s.C(videotag.FieldID), joinT.C(video.VideoTagsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(video.VideoTagsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(video.VideoTagsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Video]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*VideoTag](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "video_tags" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }

@@ -22,6 +22,7 @@ import (
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotag"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotitlechange"
 )
 
@@ -93,6 +94,7 @@ func checkColumn(table, column string) error {
 			video.Table:                       video.ValidColumn,
 			videodisallowrange.Table:          videodisallowrange.ValidColumn,
 			videoplayrange.Table:              videoplayrange.ValidColumn,
+			videotag.Table:                    videotag.ValidColumn,
 			videotitlechange.Table:            videotitlechange.ValidColumn,
 		})
 	})

@@ -5,59 +5,51 @@ import (
 	context "context"
 	base64 "encoding/base64"
 	entproto "entgo.io/contrib/entproto"
-	runtime "entgo.io/contrib/entproto/runtime"
 	sqlgraph "entgo.io/ent/dialect/sql/sqlgraph"
 	fmt "fmt"
 	ent "github.com/KasumiMercury/uo-patradb-dogtrot/ent"
-	patchat "github.com/KasumiMercury/uo-patradb-dogtrot/ent/patchat"
 	video "github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
+	videotag "github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotag"
 	empty "github.com/golang/protobuf/ptypes/empty"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
-	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 )
 
-// PatChatService implements PatChatServiceServer
-type PatChatService struct {
+// VideoTagService implements VideoTagServiceServer
+type VideoTagService struct {
 	client *ent.Client
-	UnimplementedPatChatServiceServer
+	UnimplementedVideoTagServiceServer
 }
 
-// NewPatChatService returns a new PatChatService
-func NewPatChatService(client *ent.Client) *PatChatService {
-	return &PatChatService{
+// NewVideoTagService returns a new VideoTagService
+func NewVideoTagService(client *ent.Client) *VideoTagService {
+	return &VideoTagService{
 		client: client,
 	}
 }
 
-// toProtoPatChat transforms the ent type to the pb type
-func toProtoPatChat(e *ent.PatChat) (*PatChat, error) {
-	v := &PatChat{}
-	from_freechat := e.FromFreechat
-	v.FromFreechat = from_freechat
+// toProtoVideoTag transforms the ent type to the pb type
+func toProtoVideoTag(e *ent.VideoTag) (*VideoTag, error) {
+	v := &VideoTag{}
 	id := e.ID
 	v.Id = id
-	is_negative := e.IsNegative
-	v.IsNegative = is_negative
-	message := e.Message
-	v.Message = message
-	published_at := timestamppb.New(e.PublishedAt)
-	v.PublishedAt = published_at
-	if edg := e.Edges.Video; edg != nil {
+	title := e.Title
+	v.Title = title
+	for _, edg := range e.Edges.Videos {
 		id := edg.ID
-		v.Video = &Video{
+		v.Videos = append(v.Videos, &Video{
 			Id: id,
-		}
+		})
 	}
 	return v, nil
 }
 
-// toProtoPatChatList transforms a list of ent type to a list of pb type
-func toProtoPatChatList(e []*ent.PatChat) ([]*PatChat, error) {
-	var pbList []*PatChat
+// toProtoVideoTagList transforms a list of ent type to a list of pb type
+func toProtoVideoTagList(e []*ent.VideoTag) ([]*VideoTag, error) {
+	var pbList []*VideoTag
 	for _, entEntity := range e {
-		pbEntity, err := toProtoPatChat(entEntity)
+		pbEntity, err := toProtoVideoTag(entEntity)
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "internal error: %s", err)
 		}
@@ -66,17 +58,17 @@ func toProtoPatChatList(e []*ent.PatChat) ([]*PatChat, error) {
 	return pbList, nil
 }
 
-// Create implements PatChatServiceServer.Create
-func (svc *PatChatService) Create(ctx context.Context, req *CreatePatChatRequest) (*PatChat, error) {
-	patchat := req.GetPatChat()
-	m, err := svc.createBuilder(patchat)
+// Create implements VideoTagServiceServer.Create
+func (svc *VideoTagService) Create(ctx context.Context, req *CreateVideoTagRequest) (*VideoTag, error) {
+	videotag := req.GetVideoTag()
+	m, err := svc.createBuilder(videotag)
 	if err != nil {
 		return nil, err
 	}
 	res, err := m.Save(ctx)
 	switch {
 	case err == nil:
-		proto, err := toProtoPatChat(res)
+		proto, err := toProtoVideoTag(res)
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "internal error: %s", err)
 		}
@@ -91,20 +83,20 @@ func (svc *PatChatService) Create(ctx context.Context, req *CreatePatChatRequest
 
 }
 
-// Get implements PatChatServiceServer.Get
-func (svc *PatChatService) Get(ctx context.Context, req *GetPatChatRequest) (*PatChat, error) {
+// Get implements VideoTagServiceServer.Get
+func (svc *VideoTagService) Get(ctx context.Context, req *GetVideoTagRequest) (*VideoTag, error) {
 	var (
 		err error
-		get *ent.PatChat
+		get *ent.VideoTag
 	)
 	id := req.GetId()
 	switch req.GetView() {
-	case GetPatChatRequest_VIEW_UNSPECIFIED, GetPatChatRequest_BASIC:
-		get, err = svc.client.PatChat.Get(ctx, id)
-	case GetPatChatRequest_WITH_EDGE_IDS:
-		get, err = svc.client.PatChat.Query().
-			Where(patchat.ID(id)).
-			WithVideo(func(query *ent.VideoQuery) {
+	case GetVideoTagRequest_VIEW_UNSPECIFIED, GetVideoTagRequest_BASIC:
+		get, err = svc.client.VideoTag.Get(ctx, id)
+	case GetVideoTagRequest_WITH_EDGE_IDS:
+		get, err = svc.client.VideoTag.Query().
+			Where(videotag.ID(id)).
+			WithVideos(func(query *ent.VideoQuery) {
 				query.Select(video.FieldID)
 			}).
 			Only(ctx)
@@ -113,7 +105,7 @@ func (svc *PatChatService) Get(ctx context.Context, req *GetPatChatRequest) (*Pa
 	}
 	switch {
 	case err == nil:
-		return toProtoPatChat(get)
+		return toProtoVideoTag(get)
 	case ent.IsNotFound(err):
 		return nil, status.Errorf(codes.NotFound, "not found: %s", err)
 	default:
@@ -122,28 +114,22 @@ func (svc *PatChatService) Get(ctx context.Context, req *GetPatChatRequest) (*Pa
 
 }
 
-// Update implements PatChatServiceServer.Update
-func (svc *PatChatService) Update(ctx context.Context, req *UpdatePatChatRequest) (*PatChat, error) {
-	patchat := req.GetPatChat()
-	patchatID := patchat.GetId()
-	m := svc.client.PatChat.UpdateOneID(patchatID)
-	patchatFromFreechat := patchat.GetFromFreechat()
-	m.SetFromFreechat(patchatFromFreechat)
-	patchatIsNegative := patchat.GetIsNegative()
-	m.SetIsNegative(patchatIsNegative)
-	patchatMessage := patchat.GetMessage()
-	m.SetMessage(patchatMessage)
-	patchatPublishedAt := runtime.ExtractTime(patchat.GetPublishedAt())
-	m.SetPublishedAt(patchatPublishedAt)
-	if patchat.GetVideo() != nil {
-		patchatVideo := patchat.GetVideo().GetId()
-		m.SetVideoID(patchatVideo)
+// Update implements VideoTagServiceServer.Update
+func (svc *VideoTagService) Update(ctx context.Context, req *UpdateVideoTagRequest) (*VideoTag, error) {
+	videotag := req.GetVideoTag()
+	videotagID := videotag.GetId()
+	m := svc.client.VideoTag.UpdateOneID(videotagID)
+	videotagTitle := videotag.GetTitle()
+	m.SetTitle(videotagTitle)
+	for _, item := range videotag.GetVideos() {
+		videos := item.GetId()
+		m.AddVideoIDs(videos)
 	}
 
 	res, err := m.Save(ctx)
 	switch {
 	case err == nil:
-		proto, err := toProtoPatChat(res)
+		proto, err := toProtoVideoTag(res)
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "internal error: %s", err)
 		}
@@ -158,11 +144,11 @@ func (svc *PatChatService) Update(ctx context.Context, req *UpdatePatChatRequest
 
 }
 
-// Delete implements PatChatServiceServer.Delete
-func (svc *PatChatService) Delete(ctx context.Context, req *DeletePatChatRequest) (*empty.Empty, error) {
+// Delete implements VideoTagServiceServer.Delete
+func (svc *VideoTagService) Delete(ctx context.Context, req *DeleteVideoTagRequest) (*empty.Empty, error) {
 	var err error
 	id := req.GetId()
-	err = svc.client.PatChat.DeleteOneID(id).Exec(ctx)
+	err = svc.client.VideoTag.DeleteOneID(id).Exec(ctx)
 	switch {
 	case err == nil:
 		return &emptypb.Empty{}, nil
@@ -174,11 +160,11 @@ func (svc *PatChatService) Delete(ctx context.Context, req *DeletePatChatRequest
 
 }
 
-// List implements PatChatServiceServer.List
-func (svc *PatChatService) List(ctx context.Context, req *ListPatChatRequest) (*ListPatChatResponse, error) {
+// List implements VideoTagServiceServer.List
+func (svc *VideoTagService) List(ctx context.Context, req *ListVideoTagRequest) (*ListVideoTagResponse, error) {
 	var (
 		err      error
-		entList  []*ent.PatChat
+		entList  []*ent.VideoTag
 		pageSize int
 	)
 	pageSize = int(req.GetPageSize())
@@ -188,8 +174,8 @@ func (svc *PatChatService) List(ctx context.Context, req *ListPatChatRequest) (*
 	case pageSize == 0 || pageSize > entproto.MaxPageSize:
 		pageSize = entproto.MaxPageSize
 	}
-	listQuery := svc.client.PatChat.Query().
-		Order(ent.Desc(patchat.FieldID)).
+	listQuery := svc.client.VideoTag.Query().
+		Order(ent.Desc(videotag.FieldID)).
 		Limit(pageSize + 1)
 	if req.GetPageToken() != "" {
 		bytes, err := base64.StdEncoding.DecodeString(req.PageToken)
@@ -198,14 +184,14 @@ func (svc *PatChatService) List(ctx context.Context, req *ListPatChatRequest) (*
 		}
 		pageToken := string(bytes)
 		listQuery = listQuery.
-			Where(patchat.IDLTE(pageToken))
+			Where(videotag.IDLTE(pageToken))
 	}
 	switch req.GetView() {
-	case ListPatChatRequest_VIEW_UNSPECIFIED, ListPatChatRequest_BASIC:
+	case ListVideoTagRequest_VIEW_UNSPECIFIED, ListVideoTagRequest_BASIC:
 		entList, err = listQuery.All(ctx)
-	case ListPatChatRequest_WITH_EDGE_IDS:
+	case ListVideoTagRequest_WITH_EDGE_IDS:
 		entList, err = listQuery.
-			WithVideo(func(query *ent.VideoQuery) {
+			WithVideos(func(query *ent.VideoQuery) {
 				query.Select(video.FieldID)
 			}).
 			All(ctx)
@@ -218,12 +204,12 @@ func (svc *PatChatService) List(ctx context.Context, req *ListPatChatRequest) (*
 				[]byte(fmt.Sprintf("%v", entList[len(entList)-1].ID)))
 			entList = entList[:len(entList)-1]
 		}
-		protoList, err := toProtoPatChatList(entList)
+		protoList, err := toProtoVideoTagList(entList)
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "internal error: %s", err)
 		}
-		return &ListPatChatResponse{
-			PatChatList:   protoList,
+		return &ListVideoTagResponse{
+			VideoTagList:  protoList,
 			NextPageToken: nextPageToken,
 		}, nil
 	default:
@@ -232,30 +218,30 @@ func (svc *PatChatService) List(ctx context.Context, req *ListPatChatRequest) (*
 
 }
 
-// BatchCreate implements PatChatServiceServer.BatchCreate
-func (svc *PatChatService) BatchCreate(ctx context.Context, req *BatchCreatePatChatsRequest) (*BatchCreatePatChatsResponse, error) {
+// BatchCreate implements VideoTagServiceServer.BatchCreate
+func (svc *VideoTagService) BatchCreate(ctx context.Context, req *BatchCreateVideoTagsRequest) (*BatchCreateVideoTagsResponse, error) {
 	requests := req.GetRequests()
 	if len(requests) > entproto.MaxBatchCreateSize {
 		return nil, status.Errorf(codes.InvalidArgument, "batch size cannot be greater than %d", entproto.MaxBatchCreateSize)
 	}
-	bulk := make([]*ent.PatChatCreate, len(requests))
+	bulk := make([]*ent.VideoTagCreate, len(requests))
 	for i, req := range requests {
-		patchat := req.GetPatChat()
+		videotag := req.GetVideoTag()
 		var err error
-		bulk[i], err = svc.createBuilder(patchat)
+		bulk[i], err = svc.createBuilder(videotag)
 		if err != nil {
 			return nil, err
 		}
 	}
-	res, err := svc.client.PatChat.CreateBulk(bulk...).Save(ctx)
+	res, err := svc.client.VideoTag.CreateBulk(bulk...).Save(ctx)
 	switch {
 	case err == nil:
-		protoList, err := toProtoPatChatList(res)
+		protoList, err := toProtoVideoTagList(res)
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "internal error: %s", err)
 		}
-		return &BatchCreatePatChatsResponse{
-			PatChats: protoList,
+		return &BatchCreateVideoTagsResponse{
+			VideoTags: protoList,
 		}, nil
 	case sqlgraph.IsUniqueConstraintError(err):
 		return nil, status.Errorf(codes.AlreadyExists, "already exists: %s", err)
@@ -267,19 +253,13 @@ func (svc *PatChatService) BatchCreate(ctx context.Context, req *BatchCreatePatC
 
 }
 
-func (svc *PatChatService) createBuilder(patchat *PatChat) (*ent.PatChatCreate, error) {
-	m := svc.client.PatChat.Create()
-	patchatFromFreechat := patchat.GetFromFreechat()
-	m.SetFromFreechat(patchatFromFreechat)
-	patchatIsNegative := patchat.GetIsNegative()
-	m.SetIsNegative(patchatIsNegative)
-	patchatMessage := patchat.GetMessage()
-	m.SetMessage(patchatMessage)
-	patchatPublishedAt := runtime.ExtractTime(patchat.GetPublishedAt())
-	m.SetPublishedAt(patchatPublishedAt)
-	if patchat.GetVideo() != nil {
-		patchatVideo := patchat.GetVideo().GetId()
-		m.SetVideoID(patchatVideo)
+func (svc *VideoTagService) createBuilder(videotag *VideoTag) (*ent.VideoTagCreate, error) {
+	m := svc.client.VideoTag.Create()
+	videotagTitle := videotag.GetTitle()
+	m.SetTitle(videotagTitle)
+	for _, item := range videotag.GetVideos() {
+		videos := item.GetId()
+		m.AddVideoIDs(videos)
 	}
 	return m, nil
 }

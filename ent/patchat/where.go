@@ -90,6 +90,11 @@ func PublishedAt(v time.Time) predicate.PatChat {
 	return predicate.PatChat(sql.FieldEQ(FieldPublishedAt, v))
 }
 
+// FromFreechat applies equality check predicate on the "from_freechat" field. It's identical to FromFreechatEQ.
+func FromFreechat(v bool) predicate.PatChat {
+	return predicate.PatChat(sql.FieldEQ(FieldFromFreechat, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v time.Time) predicate.PatChat {
 	return predicate.PatChat(sql.FieldEQ(FieldCreatedAt, v))
@@ -288,6 +293,16 @@ func PublishedAtLT(v time.Time) predicate.PatChat {
 // PublishedAtLTE applies the LTE predicate on the "published_at" field.
 func PublishedAtLTE(v time.Time) predicate.PatChat {
 	return predicate.PatChat(sql.FieldLTE(FieldPublishedAt, v))
+}
+
+// FromFreechatEQ applies the EQ predicate on the "from_freechat" field.
+func FromFreechatEQ(v bool) predicate.PatChat {
+	return predicate.PatChat(sql.FieldEQ(FieldFromFreechat, v))
+}
+
+// FromFreechatNEQ applies the NEQ predicate on the "from_freechat" field.
+func FromFreechatNEQ(v bool) predicate.PatChat {
+	return predicate.PatChat(sql.FieldNEQ(FieldFromFreechat, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

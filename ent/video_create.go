@@ -16,6 +16,7 @@ import (
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotag"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotitlechange"
 )
 
@@ -283,19 +284,34 @@ func (vc *VideoCreate) AddVideoTitleChanges(v ...*VideoTitleChange) *VideoCreate
 	return vc.AddVideoTitleChangeIDs(ids...)
 }
 
-// AddPatChatIDs adds the "Pat_chats" edge to the PatChat entity by IDs.
+// AddPatChatIDs adds the "pat_chats" edge to the PatChat entity by IDs.
 func (vc *VideoCreate) AddPatChatIDs(ids ...string) *VideoCreate {
 	vc.mutation.AddPatChatIDs(ids...)
 	return vc
 }
 
-// AddPatChats adds the "Pat_chats" edges to the PatChat entity.
+// AddPatChats adds the "pat_chats" edges to the PatChat entity.
 func (vc *VideoCreate) AddPatChats(p ...*PatChat) *VideoCreate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
 	return vc.AddPatChatIDs(ids...)
+}
+
+// AddVideoTagIDs adds the "video_tags" edge to the VideoTag entity by IDs.
+func (vc *VideoCreate) AddVideoTagIDs(ids ...string) *VideoCreate {
+	vc.mutation.AddVideoTagIDs(ids...)
+	return vc
+}
+
+// AddVideoTags adds the "video_tags" edges to the VideoTag entity.
+func (vc *VideoCreate) AddVideoTags(v ...*VideoTag) *VideoCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vc.AddVideoTagIDs(ids...)
 }
 
 // Mutation returns the VideoMutation object of the builder.
@@ -588,6 +604,22 @@ func (vc *VideoCreate) createSpec() (*Video, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(patchat.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := vc.mutation.VideoTagsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   video.VideoTagsTable,
+			Columns: video.VideoTagsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(videotag.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

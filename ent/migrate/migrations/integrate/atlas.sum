@@ -1,4 +1,4 @@
-h1:KIiJGlchYfVf0/vPZNrk0anJshi8QmDAi+rOBTEctkk=
+h1:cTIVePZTGMlQWuJg/nSRpZxcvjgBzL8U+7+8L08pX/k=
 20231220082851_init.sql h1:CKRocXgRkYBEy6QLjDRd5gr75yoDSohM3FXi970JnsI=
 20231220082908_init_index.sql h1:qFXXyOym6/CiaUs5//Bb0viSPkI0V8MbV/fBwXNnJqk=
 20231225092715_add_stream_schedule_table.sql h1:2arO1ZeV86zo6QdtavyKMKZR68dXTTpnfG1oNG8EtGE=
@@ -6,3 +6,4 @@ h1:KIiJGlchYfVf0/vPZNrk0anJshi8QmDAi+rOBTEctkk=
 20240101152450_add_capture_permission_column.sql h1:UqQuNdySJtdeB8IXoIFMNuRPQp++fL9a4Xd6SKuswxI=
 20240101152928_modify_order_column_of_video_table.sql h1:t/kd3Ni/JCTM1mmygmNBp1u2W25gpgXxGmcFLf8NP/M=
 20240102100445_add_template_ambiguous.sql h1:nBt89Ci3t6+4YNjVq5BaZbhy1M4nN7o0KwP5p4zHY6k=
+20240102164516_add_video_tag_table.sql h1:qKxEFv2pzkEGX/I381WQhXzZL/Eq4QLT7BUjJ+XKm+Q=

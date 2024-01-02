@@ -59,6 +59,20 @@ func (pcc *PatChatCreate) SetPublishedAt(t time.Time) *PatChatCreate {
 	return pcc
 }
 
+// SetFromFreechat sets the "from_freechat" field.
+func (pcc *PatChatCreate) SetFromFreechat(b bool) *PatChatCreate {
+	pcc.mutation.SetFromFreechat(b)
+	return pcc
+}
+
+// SetNillableFromFreechat sets the "from_freechat" field if the given value is not nil.
+func (pcc *PatChatCreate) SetNillableFromFreechat(b *bool) *PatChatCreate {
+	if b != nil {
+		pcc.SetFromFreechat(*b)
+	}
+	return pcc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (pcc *PatChatCreate) SetCreatedAt(t time.Time) *PatChatCreate {
 	pcc.mutation.SetCreatedAt(t)
@@ -90,6 +104,14 @@ func (pcc *PatChatCreate) SetNillableID(s *string) *PatChatCreate {
 // SetVideoID sets the "video" edge to the Video entity by ID.
 func (pcc *PatChatCreate) SetVideoID(id string) *PatChatCreate {
 	pcc.mutation.SetVideoID(id)
+	return pcc
+}
+
+// SetNillableVideoID sets the "video" edge to the Video entity by ID if the given value is not nil.
+func (pcc *PatChatCreate) SetNillableVideoID(id *string) *PatChatCreate {
+	if id != nil {
+		pcc = pcc.SetVideoID(*id)
+	}
 	return pcc
 }
 
@@ -137,6 +159,10 @@ func (pcc *PatChatCreate) defaults() {
 		v := patchat.DefaultIsNegative
 		pcc.mutation.SetIsNegative(v)
 	}
+	if _, ok := pcc.mutation.FromFreechat(); !ok {
+		v := patchat.DefaultFromFreechat
+		pcc.mutation.SetFromFreechat(v)
+	}
 	if _, ok := pcc.mutation.CreatedAt(); !ok {
 		v := patchat.DefaultCreatedAt()
 		pcc.mutation.SetCreatedAt(v)
@@ -179,6 +205,9 @@ func (pcc *PatChatCreate) check() error {
 	if _, ok := pcc.mutation.PublishedAt(); !ok {
 		return &ValidationError{Name: "published_at", err: errors.New(`ent: missing required field "PatChat.published_at"`)}
 	}
+	if _, ok := pcc.mutation.FromFreechat(); !ok {
+		return &ValidationError{Name: "from_freechat", err: errors.New(`ent: missing required field "PatChat.from_freechat"`)}
+	}
 	if _, ok := pcc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "PatChat.created_at"`)}
 	}
@@ -186,9 +215,6 @@ func (pcc *PatChatCreate) check() error {
 		if err := patchat.IDValidator(v); err != nil {
 			return &ValidationError{Name: "id", err: fmt.Errorf(`ent: validator failed for field "PatChat.id": %w`, err)}
 		}
-	}
-	if _, ok := pcc.mutation.VideoID(); !ok {
-		return &ValidationError{Name: "video", err: errors.New(`ent: missing required edge "PatChat.video"`)}
 	}
 	return nil
 }
@@ -244,6 +270,10 @@ func (pcc *PatChatCreate) createSpec() (*PatChat, *sqlgraph.CreateSpec) {
 	if value, ok := pcc.mutation.PublishedAt(); ok {
 		_spec.SetField(patchat.FieldPublishedAt, field.TypeTime, value)
 		_node.PublishedAt = value
+	}
+	if value, ok := pcc.mutation.FromFreechat(); ok {
+		_spec.SetField(patchat.FieldFromFreechat, field.TypeBool, value)
+		_node.FromFreechat = value
 	}
 	if value, ok := pcc.mutation.CreatedAt(); ok {
 		_spec.SetField(patchat.FieldCreatedAt, field.TypeTime, value)

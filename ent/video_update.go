@@ -18,6 +18,7 @@ import (
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotag"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotitlechange"
 )
 
@@ -338,19 +339,34 @@ func (vu *VideoUpdate) AddVideoTitleChanges(v ...*VideoTitleChange) *VideoUpdate
 	return vu.AddVideoTitleChangeIDs(ids...)
 }
 
-// AddPatChatIDs adds the "Pat_chats" edge to the PatChat entity by IDs.
+// AddPatChatIDs adds the "pat_chats" edge to the PatChat entity by IDs.
 func (vu *VideoUpdate) AddPatChatIDs(ids ...string) *VideoUpdate {
 	vu.mutation.AddPatChatIDs(ids...)
 	return vu
 }
 
-// AddPatChats adds the "Pat_chats" edges to the PatChat entity.
+// AddPatChats adds the "pat_chats" edges to the PatChat entity.
 func (vu *VideoUpdate) AddPatChats(p ...*PatChat) *VideoUpdate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
 	return vu.AddPatChatIDs(ids...)
+}
+
+// AddVideoTagIDs adds the "video_tags" edge to the VideoTag entity by IDs.
+func (vu *VideoUpdate) AddVideoTagIDs(ids ...string) *VideoUpdate {
+	vu.mutation.AddVideoTagIDs(ids...)
+	return vu
+}
+
+// AddVideoTags adds the "video_tags" edges to the VideoTag entity.
+func (vu *VideoUpdate) AddVideoTags(v ...*VideoTag) *VideoUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vu.AddVideoTagIDs(ids...)
 }
 
 // Mutation returns the VideoMutation object of the builder.
@@ -448,25 +464,46 @@ func (vu *VideoUpdate) RemoveVideoTitleChanges(v ...*VideoTitleChange) *VideoUpd
 	return vu.RemoveVideoTitleChangeIDs(ids...)
 }
 
-// ClearPatChats clears all "Pat_chats" edges to the PatChat entity.
+// ClearPatChats clears all "pat_chats" edges to the PatChat entity.
 func (vu *VideoUpdate) ClearPatChats() *VideoUpdate {
 	vu.mutation.ClearPatChats()
 	return vu
 }
 
-// RemovePatChatIDs removes the "Pat_chats" edge to PatChat entities by IDs.
+// RemovePatChatIDs removes the "pat_chats" edge to PatChat entities by IDs.
 func (vu *VideoUpdate) RemovePatChatIDs(ids ...string) *VideoUpdate {
 	vu.mutation.RemovePatChatIDs(ids...)
 	return vu
 }
 
-// RemovePatChats removes "Pat_chats" edges to PatChat entities.
+// RemovePatChats removes "pat_chats" edges to PatChat entities.
 func (vu *VideoUpdate) RemovePatChats(p ...*PatChat) *VideoUpdate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
 	return vu.RemovePatChatIDs(ids...)
+}
+
+// ClearVideoTags clears all "video_tags" edges to the VideoTag entity.
+func (vu *VideoUpdate) ClearVideoTags() *VideoUpdate {
+	vu.mutation.ClearVideoTags()
+	return vu
+}
+
+// RemoveVideoTagIDs removes the "video_tags" edge to VideoTag entities by IDs.
+func (vu *VideoUpdate) RemoveVideoTagIDs(ids ...string) *VideoUpdate {
+	vu.mutation.RemoveVideoTagIDs(ids...)
+	return vu
+}
+
+// RemoveVideoTags removes "video_tags" edges to VideoTag entities.
+func (vu *VideoUpdate) RemoveVideoTags(v ...*VideoTag) *VideoUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vu.RemoveVideoTagIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -851,6 +888,51 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if vu.mutation.VideoTagsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   video.VideoTagsTable,
+			Columns: video.VideoTagsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(videotag.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vu.mutation.RemovedVideoTagsIDs(); len(nodes) > 0 && !vu.mutation.VideoTagsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   video.VideoTagsTable,
+			Columns: video.VideoTagsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(videotag.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vu.mutation.VideoTagsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   video.VideoTagsTable,
+			Columns: video.VideoTagsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(videotag.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, vu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{video.Label}
@@ -1175,19 +1257,34 @@ func (vuo *VideoUpdateOne) AddVideoTitleChanges(v ...*VideoTitleChange) *VideoUp
 	return vuo.AddVideoTitleChangeIDs(ids...)
 }
 
-// AddPatChatIDs adds the "Pat_chats" edge to the PatChat entity by IDs.
+// AddPatChatIDs adds the "pat_chats" edge to the PatChat entity by IDs.
 func (vuo *VideoUpdateOne) AddPatChatIDs(ids ...string) *VideoUpdateOne {
 	vuo.mutation.AddPatChatIDs(ids...)
 	return vuo
 }
 
-// AddPatChats adds the "Pat_chats" edges to the PatChat entity.
+// AddPatChats adds the "pat_chats" edges to the PatChat entity.
 func (vuo *VideoUpdateOne) AddPatChats(p ...*PatChat) *VideoUpdateOne {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
 	return vuo.AddPatChatIDs(ids...)
+}
+
+// AddVideoTagIDs adds the "video_tags" edge to the VideoTag entity by IDs.
+func (vuo *VideoUpdateOne) AddVideoTagIDs(ids ...string) *VideoUpdateOne {
+	vuo.mutation.AddVideoTagIDs(ids...)
+	return vuo
+}
+
+// AddVideoTags adds the "video_tags" edges to the VideoTag entity.
+func (vuo *VideoUpdateOne) AddVideoTags(v ...*VideoTag) *VideoUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vuo.AddVideoTagIDs(ids...)
 }
 
 // Mutation returns the VideoMutation object of the builder.
@@ -1285,25 +1382,46 @@ func (vuo *VideoUpdateOne) RemoveVideoTitleChanges(v ...*VideoTitleChange) *Vide
 	return vuo.RemoveVideoTitleChangeIDs(ids...)
 }
 
-// ClearPatChats clears all "Pat_chats" edges to the PatChat entity.
+// ClearPatChats clears all "pat_chats" edges to the PatChat entity.
 func (vuo *VideoUpdateOne) ClearPatChats() *VideoUpdateOne {
 	vuo.mutation.ClearPatChats()
 	return vuo
 }
 
-// RemovePatChatIDs removes the "Pat_chats" edge to PatChat entities by IDs.
+// RemovePatChatIDs removes the "pat_chats" edge to PatChat entities by IDs.
 func (vuo *VideoUpdateOne) RemovePatChatIDs(ids ...string) *VideoUpdateOne {
 	vuo.mutation.RemovePatChatIDs(ids...)
 	return vuo
 }
 
-// RemovePatChats removes "Pat_chats" edges to PatChat entities.
+// RemovePatChats removes "pat_chats" edges to PatChat entities.
 func (vuo *VideoUpdateOne) RemovePatChats(p ...*PatChat) *VideoUpdateOne {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
 	return vuo.RemovePatChatIDs(ids...)
+}
+
+// ClearVideoTags clears all "video_tags" edges to the VideoTag entity.
+func (vuo *VideoUpdateOne) ClearVideoTags() *VideoUpdateOne {
+	vuo.mutation.ClearVideoTags()
+	return vuo
+}
+
+// RemoveVideoTagIDs removes the "video_tags" edge to VideoTag entities by IDs.
+func (vuo *VideoUpdateOne) RemoveVideoTagIDs(ids ...string) *VideoUpdateOne {
+	vuo.mutation.RemoveVideoTagIDs(ids...)
+	return vuo
+}
+
+// RemoveVideoTags removes "video_tags" edges to VideoTag entities.
+func (vuo *VideoUpdateOne) RemoveVideoTags(v ...*VideoTag) *VideoUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vuo.RemoveVideoTagIDs(ids...)
 }
 
 // Where appends a list predicates to the VideoUpdate builder.
@@ -1711,6 +1829,51 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(patchat.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if vuo.mutation.VideoTagsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   video.VideoTagsTable,
+			Columns: video.VideoTagsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(videotag.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vuo.mutation.RemovedVideoTagsIDs(); len(nodes) > 0 && !vuo.mutation.VideoTagsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   video.VideoTagsTable,
+			Columns: video.VideoTagsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(videotag.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vuo.mutation.VideoTagsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   video.VideoTagsTable,
+			Columns: video.VideoTagsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(videotag.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

@@ -113,6 +113,20 @@ func (pcu *PatChatUpdate) SetNillablePublishedAt(t *time.Time) *PatChatUpdate {
 	return pcu
 }
 
+// SetFromFreechat sets the "from_freechat" field.
+func (pcu *PatChatUpdate) SetFromFreechat(b bool) *PatChatUpdate {
+	pcu.mutation.SetFromFreechat(b)
+	return pcu
+}
+
+// SetNillableFromFreechat sets the "from_freechat" field if the given value is not nil.
+func (pcu *PatChatUpdate) SetNillableFromFreechat(b *bool) *PatChatUpdate {
+	if b != nil {
+		pcu.SetFromFreechat(*b)
+	}
+	return pcu
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (pcu *PatChatUpdate) SetCreatedAt(t time.Time) *PatChatUpdate {
 	pcu.mutation.SetCreatedAt(t)
@@ -130,6 +144,14 @@ func (pcu *PatChatUpdate) SetNillableCreatedAt(t *time.Time) *PatChatUpdate {
 // SetVideoID sets the "video" edge to the Video entity by ID.
 func (pcu *PatChatUpdate) SetVideoID(id string) *PatChatUpdate {
 	pcu.mutation.SetVideoID(id)
+	return pcu
+}
+
+// SetNillableVideoID sets the "video" edge to the Video entity by ID if the given value is not nil.
+func (pcu *PatChatUpdate) SetNillableVideoID(id *string) *PatChatUpdate {
+	if id != nil {
+		pcu = pcu.SetVideoID(*id)
+	}
 	return pcu
 }
 
@@ -193,9 +215,6 @@ func (pcu *PatChatUpdate) check() error {
 			return &ValidationError{Name: "score", err: fmt.Errorf(`ent: validator failed for field "PatChat.score": %w`, err)}
 		}
 	}
-	if _, ok := pcu.mutation.VideoID(); pcu.mutation.VideoCleared() && !ok {
-		return errors.New(`ent: clearing a required unique edge "PatChat.video"`)
-	}
 	return nil
 }
 
@@ -231,6 +250,9 @@ func (pcu *PatChatUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := pcu.mutation.PublishedAt(); ok {
 		_spec.SetField(patchat.FieldPublishedAt, field.TypeTime, value)
+	}
+	if value, ok := pcu.mutation.FromFreechat(); ok {
+		_spec.SetField(patchat.FieldFromFreechat, field.TypeBool, value)
 	}
 	if value, ok := pcu.mutation.CreatedAt(); ok {
 		_spec.SetField(patchat.FieldCreatedAt, field.TypeTime, value)
@@ -368,6 +390,20 @@ func (pcuo *PatChatUpdateOne) SetNillablePublishedAt(t *time.Time) *PatChatUpdat
 	return pcuo
 }
 
+// SetFromFreechat sets the "from_freechat" field.
+func (pcuo *PatChatUpdateOne) SetFromFreechat(b bool) *PatChatUpdateOne {
+	pcuo.mutation.SetFromFreechat(b)
+	return pcuo
+}
+
+// SetNillableFromFreechat sets the "from_freechat" field if the given value is not nil.
+func (pcuo *PatChatUpdateOne) SetNillableFromFreechat(b *bool) *PatChatUpdateOne {
+	if b != nil {
+		pcuo.SetFromFreechat(*b)
+	}
+	return pcuo
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (pcuo *PatChatUpdateOne) SetCreatedAt(t time.Time) *PatChatUpdateOne {
 	pcuo.mutation.SetCreatedAt(t)
@@ -385,6 +421,14 @@ func (pcuo *PatChatUpdateOne) SetNillableCreatedAt(t *time.Time) *PatChatUpdateO
 // SetVideoID sets the "video" edge to the Video entity by ID.
 func (pcuo *PatChatUpdateOne) SetVideoID(id string) *PatChatUpdateOne {
 	pcuo.mutation.SetVideoID(id)
+	return pcuo
+}
+
+// SetNillableVideoID sets the "video" edge to the Video entity by ID if the given value is not nil.
+func (pcuo *PatChatUpdateOne) SetNillableVideoID(id *string) *PatChatUpdateOne {
+	if id != nil {
+		pcuo = pcuo.SetVideoID(*id)
+	}
 	return pcuo
 }
 
@@ -461,9 +505,6 @@ func (pcuo *PatChatUpdateOne) check() error {
 			return &ValidationError{Name: "score", err: fmt.Errorf(`ent: validator failed for field "PatChat.score": %w`, err)}
 		}
 	}
-	if _, ok := pcuo.mutation.VideoID(); pcuo.mutation.VideoCleared() && !ok {
-		return errors.New(`ent: clearing a required unique edge "PatChat.video"`)
-	}
 	return nil
 }
 
@@ -516,6 +557,9 @@ func (pcuo *PatChatUpdateOne) sqlSave(ctx context.Context) (_node *PatChat, err 
 	}
 	if value, ok := pcuo.mutation.PublishedAt(); ok {
 		_spec.SetField(patchat.FieldPublishedAt, field.TypeTime, value)
+	}
+	if value, ok := pcuo.mutation.FromFreechat(); ok {
+		_spec.SetField(patchat.FieldFromFreechat, field.TypeBool, value)
 	}
 	if value, ok := pcuo.mutation.CreatedAt(); ok {
 		_spec.SetField(patchat.FieldCreatedAt, field.TypeTime, value)

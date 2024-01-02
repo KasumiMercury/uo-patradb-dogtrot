@@ -22,6 +22,7 @@ import (
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videodisallowrange"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videoplayrange"
+	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotag"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/videotitlechange"
 )
 
@@ -44,6 +45,7 @@ const (
 	TypeVideo                       = "Video"
 	TypeVideoDisallowRange          = "VideoDisallowRange"
 	TypeVideoPlayRange              = "VideoPlayRange"
+	TypeVideoTag                    = "VideoTag"
 	TypeVideoTitleChange            = "VideoTitleChange"
 )
 
@@ -2590,6 +2592,7 @@ type PatChatMutation struct {
 	addscore      *float64
 	is_negative   *bool
 	published_at  *time.Time
+	from_freechat *bool
 	created_at    *time.Time
 	clearedFields map[string]struct{}
 	video         *string
@@ -2923,6 +2926,42 @@ func (m *PatChatMutation) ResetPublishedAt() {
 	m.published_at = nil
 }
 
+// SetFromFreechat sets the "from_freechat" field.
+func (m *PatChatMutation) SetFromFreechat(b bool) {
+	m.from_freechat = &b
+}
+
+// FromFreechat returns the value of the "from_freechat" field in the mutation.
+func (m *PatChatMutation) FromFreechat() (r bool, exists bool) {
+	v := m.from_freechat
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFromFreechat returns the old "from_freechat" field's value of the PatChat entity.
+// If the PatChat object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PatChatMutation) OldFromFreechat(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFromFreechat is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFromFreechat requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFromFreechat: %w", err)
+	}
+	return oldValue.FromFreechat, nil
+}
+
+// ResetFromFreechat resets all changes to the "from_freechat" field.
+func (m *PatChatMutation) ResetFromFreechat() {
+	m.from_freechat = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *PatChatMutation) SetCreatedAt(t time.Time) {
 	m.created_at = &t
@@ -3032,7 +3071,7 @@ func (m *PatChatMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PatChatMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
 	if m.message != nil {
 		fields = append(fields, patchat.FieldMessage)
 	}
@@ -3047,6 +3086,9 @@ func (m *PatChatMutation) Fields() []string {
 	}
 	if m.published_at != nil {
 		fields = append(fields, patchat.FieldPublishedAt)
+	}
+	if m.from_freechat != nil {
+		fields = append(fields, patchat.FieldFromFreechat)
 	}
 	if m.created_at != nil {
 		fields = append(fields, patchat.FieldCreatedAt)
@@ -3069,6 +3111,8 @@ func (m *PatChatMutation) Field(name string) (ent.Value, bool) {
 		return m.IsNegative()
 	case patchat.FieldPublishedAt:
 		return m.PublishedAt()
+	case patchat.FieldFromFreechat:
+		return m.FromFreechat()
 	case patchat.FieldCreatedAt:
 		return m.CreatedAt()
 	}
@@ -3090,6 +3134,8 @@ func (m *PatChatMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldIsNegative(ctx)
 	case patchat.FieldPublishedAt:
 		return m.OldPublishedAt(ctx)
+	case patchat.FieldFromFreechat:
+		return m.OldFromFreechat(ctx)
 	case patchat.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	}
@@ -3135,6 +3181,13 @@ func (m *PatChatMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPublishedAt(v)
+		return nil
+	case patchat.FieldFromFreechat:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFromFreechat(v)
 		return nil
 	case patchat.FieldCreatedAt:
 		v, ok := value.(time.Time)
@@ -3233,6 +3286,9 @@ func (m *PatChatMutation) ResetField(name string) error {
 		return nil
 	case patchat.FieldPublishedAt:
 		m.ResetPublishedAt()
+		return nil
+	case patchat.FieldFromFreechat:
+		m.ResetFromFreechat()
 		return nil
 	case patchat.FieldCreatedAt:
 		m.ResetCreatedAt()
@@ -4486,9 +4542,12 @@ type VideoMutation struct {
 	video_title_changes          map[string]struct{}
 	removedvideo_title_changes   map[string]struct{}
 	clearedvideo_title_changes   bool
-	_Pat_chats                   map[string]struct{}
-	removed_Pat_chats            map[string]struct{}
-	cleared_Pat_chats            bool
+	pat_chats                    map[string]struct{}
+	removedpat_chats             map[string]struct{}
+	clearedpat_chats             bool
+	video_tags                   map[string]struct{}
+	removedvideo_tags            map[string]struct{}
+	clearedvideo_tags            bool
 	done                         bool
 	oldValue                     func(context.Context) (*Video, error)
 	predicates                   []predicate.Video
@@ -5443,58 +5502,112 @@ func (m *VideoMutation) ResetVideoTitleChanges() {
 	m.removedvideo_title_changes = nil
 }
 
-// AddPatChatIDs adds the "Pat_chats" edge to the PatChat entity by ids.
+// AddPatChatIDs adds the "pat_chats" edge to the PatChat entity by ids.
 func (m *VideoMutation) AddPatChatIDs(ids ...string) {
-	if m._Pat_chats == nil {
-		m._Pat_chats = make(map[string]struct{})
+	if m.pat_chats == nil {
+		m.pat_chats = make(map[string]struct{})
 	}
 	for i := range ids {
-		m._Pat_chats[ids[i]] = struct{}{}
+		m.pat_chats[ids[i]] = struct{}{}
 	}
 }
 
-// ClearPatChats clears the "Pat_chats" edge to the PatChat entity.
+// ClearPatChats clears the "pat_chats" edge to the PatChat entity.
 func (m *VideoMutation) ClearPatChats() {
-	m.cleared_Pat_chats = true
+	m.clearedpat_chats = true
 }
 
-// PatChatsCleared reports if the "Pat_chats" edge to the PatChat entity was cleared.
+// PatChatsCleared reports if the "pat_chats" edge to the PatChat entity was cleared.
 func (m *VideoMutation) PatChatsCleared() bool {
-	return m.cleared_Pat_chats
+	return m.clearedpat_chats
 }
 
-// RemovePatChatIDs removes the "Pat_chats" edge to the PatChat entity by IDs.
+// RemovePatChatIDs removes the "pat_chats" edge to the PatChat entity by IDs.
 func (m *VideoMutation) RemovePatChatIDs(ids ...string) {
-	if m.removed_Pat_chats == nil {
-		m.removed_Pat_chats = make(map[string]struct{})
+	if m.removedpat_chats == nil {
+		m.removedpat_chats = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m._Pat_chats, ids[i])
-		m.removed_Pat_chats[ids[i]] = struct{}{}
+		delete(m.pat_chats, ids[i])
+		m.removedpat_chats[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedPatChats returns the removed IDs of the "Pat_chats" edge to the PatChat entity.
+// RemovedPatChats returns the removed IDs of the "pat_chats" edge to the PatChat entity.
 func (m *VideoMutation) RemovedPatChatsIDs() (ids []string) {
-	for id := range m.removed_Pat_chats {
+	for id := range m.removedpat_chats {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// PatChatsIDs returns the "Pat_chats" edge IDs in the mutation.
+// PatChatsIDs returns the "pat_chats" edge IDs in the mutation.
 func (m *VideoMutation) PatChatsIDs() (ids []string) {
-	for id := range m._Pat_chats {
+	for id := range m.pat_chats {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetPatChats resets all changes to the "Pat_chats" edge.
+// ResetPatChats resets all changes to the "pat_chats" edge.
 func (m *VideoMutation) ResetPatChats() {
-	m._Pat_chats = nil
-	m.cleared_Pat_chats = false
-	m.removed_Pat_chats = nil
+	m.pat_chats = nil
+	m.clearedpat_chats = false
+	m.removedpat_chats = nil
+}
+
+// AddVideoTagIDs adds the "video_tags" edge to the VideoTag entity by ids.
+func (m *VideoMutation) AddVideoTagIDs(ids ...string) {
+	if m.video_tags == nil {
+		m.video_tags = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.video_tags[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVideoTags clears the "video_tags" edge to the VideoTag entity.
+func (m *VideoMutation) ClearVideoTags() {
+	m.clearedvideo_tags = true
+}
+
+// VideoTagsCleared reports if the "video_tags" edge to the VideoTag entity was cleared.
+func (m *VideoMutation) VideoTagsCleared() bool {
+	return m.clearedvideo_tags
+}
+
+// RemoveVideoTagIDs removes the "video_tags" edge to the VideoTag entity by IDs.
+func (m *VideoMutation) RemoveVideoTagIDs(ids ...string) {
+	if m.removedvideo_tags == nil {
+		m.removedvideo_tags = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.video_tags, ids[i])
+		m.removedvideo_tags[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVideoTags returns the removed IDs of the "video_tags" edge to the VideoTag entity.
+func (m *VideoMutation) RemovedVideoTagsIDs() (ids []string) {
+	for id := range m.removedvideo_tags {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VideoTagsIDs returns the "video_tags" edge IDs in the mutation.
+func (m *VideoMutation) VideoTagsIDs() (ids []string) {
+	for id := range m.video_tags {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVideoTags resets all changes to the "video_tags" edge.
+func (m *VideoMutation) ResetVideoTags() {
+	m.video_tags = nil
+	m.clearedvideo_tags = false
+	m.removedvideo_tags = nil
 }
 
 // Where appends a list predicates to the VideoMutation builder.
@@ -5899,7 +6012,7 @@ func (m *VideoMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *VideoMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.descriptions != nil {
 		edges = append(edges, video.EdgeDescriptions)
 	}
@@ -5915,8 +6028,11 @@ func (m *VideoMutation) AddedEdges() []string {
 	if m.video_title_changes != nil {
 		edges = append(edges, video.EdgeVideoTitleChanges)
 	}
-	if m._Pat_chats != nil {
+	if m.pat_chats != nil {
 		edges = append(edges, video.EdgePatChats)
+	}
+	if m.video_tags != nil {
+		edges = append(edges, video.EdgeVideoTags)
 	}
 	return edges
 }
@@ -5954,8 +6070,14 @@ func (m *VideoMutation) AddedIDs(name string) []ent.Value {
 		}
 		return ids
 	case video.EdgePatChats:
-		ids := make([]ent.Value, 0, len(m._Pat_chats))
-		for id := range m._Pat_chats {
+		ids := make([]ent.Value, 0, len(m.pat_chats))
+		for id := range m.pat_chats {
+			ids = append(ids, id)
+		}
+		return ids
+	case video.EdgeVideoTags:
+		ids := make([]ent.Value, 0, len(m.video_tags))
+		for id := range m.video_tags {
 			ids = append(ids, id)
 		}
 		return ids
@@ -5965,7 +6087,7 @@ func (m *VideoMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *VideoMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedchannel != nil {
 		edges = append(edges, video.EdgeChannel)
 	}
@@ -5978,8 +6100,11 @@ func (m *VideoMutation) RemovedEdges() []string {
 	if m.removedvideo_title_changes != nil {
 		edges = append(edges, video.EdgeVideoTitleChanges)
 	}
-	if m.removed_Pat_chats != nil {
+	if m.removedpat_chats != nil {
 		edges = append(edges, video.EdgePatChats)
+	}
+	if m.removedvideo_tags != nil {
+		edges = append(edges, video.EdgeVideoTags)
 	}
 	return edges
 }
@@ -6013,8 +6138,14 @@ func (m *VideoMutation) RemovedIDs(name string) []ent.Value {
 		}
 		return ids
 	case video.EdgePatChats:
-		ids := make([]ent.Value, 0, len(m.removed_Pat_chats))
-		for id := range m.removed_Pat_chats {
+		ids := make([]ent.Value, 0, len(m.removedpat_chats))
+		for id := range m.removedpat_chats {
+			ids = append(ids, id)
+		}
+		return ids
+	case video.EdgeVideoTags:
+		ids := make([]ent.Value, 0, len(m.removedvideo_tags))
+		for id := range m.removedvideo_tags {
 			ids = append(ids, id)
 		}
 		return ids
@@ -6024,7 +6155,7 @@ func (m *VideoMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *VideoMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.cleareddescriptions {
 		edges = append(edges, video.EdgeDescriptions)
 	}
@@ -6040,8 +6171,11 @@ func (m *VideoMutation) ClearedEdges() []string {
 	if m.clearedvideo_title_changes {
 		edges = append(edges, video.EdgeVideoTitleChanges)
 	}
-	if m.cleared_Pat_chats {
+	if m.clearedpat_chats {
 		edges = append(edges, video.EdgePatChats)
+	}
+	if m.clearedvideo_tags {
+		edges = append(edges, video.EdgeVideoTags)
 	}
 	return edges
 }
@@ -6061,7 +6195,9 @@ func (m *VideoMutation) EdgeCleared(name string) bool {
 	case video.EdgeVideoTitleChanges:
 		return m.clearedvideo_title_changes
 	case video.EdgePatChats:
-		return m.cleared_Pat_chats
+		return m.clearedpat_chats
+	case video.EdgeVideoTags:
+		return m.clearedvideo_tags
 	}
 	return false
 }
@@ -6098,6 +6234,9 @@ func (m *VideoMutation) ResetEdge(name string) error {
 		return nil
 	case video.EdgePatChats:
 		m.ResetPatChats()
+		return nil
+	case video.EdgeVideoTags:
+		m.ResetVideoTags()
 		return nil
 	}
 	return fmt.Errorf("unknown Video edge %s", name)
@@ -7168,6 +7307,431 @@ func (m *VideoPlayRangeMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown VideoPlayRange edge %s", name)
+}
+
+// VideoTagMutation represents an operation that mutates the VideoTag nodes in the graph.
+type VideoTagMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *string
+	title         *string
+	clearedFields map[string]struct{}
+	videos        map[string]struct{}
+	removedvideos map[string]struct{}
+	clearedvideos bool
+	done          bool
+	oldValue      func(context.Context) (*VideoTag, error)
+	predicates    []predicate.VideoTag
+}
+
+var _ ent.Mutation = (*VideoTagMutation)(nil)
+
+// videotagOption allows management of the mutation configuration using functional options.
+type videotagOption func(*VideoTagMutation)
+
+// newVideoTagMutation creates new mutation for the VideoTag entity.
+func newVideoTagMutation(c config, op Op, opts ...videotagOption) *VideoTagMutation {
+	m := &VideoTagMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeVideoTag,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withVideoTagID sets the ID field of the mutation.
+func withVideoTagID(id string) videotagOption {
+	return func(m *VideoTagMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *VideoTag
+		)
+		m.oldValue = func(ctx context.Context) (*VideoTag, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().VideoTag.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withVideoTag sets the old VideoTag of the mutation.
+func withVideoTag(node *VideoTag) videotagOption {
+	return func(m *VideoTagMutation) {
+		m.oldValue = func(context.Context) (*VideoTag, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m VideoTagMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m VideoTagMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of VideoTag entities.
+func (m *VideoTagMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *VideoTagMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *VideoTagMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().VideoTag.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetTitle sets the "title" field.
+func (m *VideoTagMutation) SetTitle(s string) {
+	m.title = &s
+}
+
+// Title returns the value of the "title" field in the mutation.
+func (m *VideoTagMutation) Title() (r string, exists bool) {
+	v := m.title
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTitle returns the old "title" field's value of the VideoTag entity.
+// If the VideoTag object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VideoTagMutation) OldTitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTitle: %w", err)
+	}
+	return oldValue.Title, nil
+}
+
+// ResetTitle resets all changes to the "title" field.
+func (m *VideoTagMutation) ResetTitle() {
+	m.title = nil
+}
+
+// AddVideoIDs adds the "videos" edge to the Video entity by ids.
+func (m *VideoTagMutation) AddVideoIDs(ids ...string) {
+	if m.videos == nil {
+		m.videos = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.videos[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVideos clears the "videos" edge to the Video entity.
+func (m *VideoTagMutation) ClearVideos() {
+	m.clearedvideos = true
+}
+
+// VideosCleared reports if the "videos" edge to the Video entity was cleared.
+func (m *VideoTagMutation) VideosCleared() bool {
+	return m.clearedvideos
+}
+
+// RemoveVideoIDs removes the "videos" edge to the Video entity by IDs.
+func (m *VideoTagMutation) RemoveVideoIDs(ids ...string) {
+	if m.removedvideos == nil {
+		m.removedvideos = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.videos, ids[i])
+		m.removedvideos[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVideos returns the removed IDs of the "videos" edge to the Video entity.
+func (m *VideoTagMutation) RemovedVideosIDs() (ids []string) {
+	for id := range m.removedvideos {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VideosIDs returns the "videos" edge IDs in the mutation.
+func (m *VideoTagMutation) VideosIDs() (ids []string) {
+	for id := range m.videos {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVideos resets all changes to the "videos" edge.
+func (m *VideoTagMutation) ResetVideos() {
+	m.videos = nil
+	m.clearedvideos = false
+	m.removedvideos = nil
+}
+
+// Where appends a list predicates to the VideoTagMutation builder.
+func (m *VideoTagMutation) Where(ps ...predicate.VideoTag) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the VideoTagMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *VideoTagMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.VideoTag, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *VideoTagMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *VideoTagMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (VideoTag).
+func (m *VideoTagMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *VideoTagMutation) Fields() []string {
+	fields := make([]string, 0, 1)
+	if m.title != nil {
+		fields = append(fields, videotag.FieldTitle)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *VideoTagMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case videotag.FieldTitle:
+		return m.Title()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *VideoTagMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case videotag.FieldTitle:
+		return m.OldTitle(ctx)
+	}
+	return nil, fmt.Errorf("unknown VideoTag field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VideoTagMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case videotag.FieldTitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTitle(v)
+		return nil
+	}
+	return fmt.Errorf("unknown VideoTag field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *VideoTagMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *VideoTagMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VideoTagMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown VideoTag numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *VideoTagMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *VideoTagMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *VideoTagMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown VideoTag nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *VideoTagMutation) ResetField(name string) error {
+	switch name {
+	case videotag.FieldTitle:
+		m.ResetTitle()
+		return nil
+	}
+	return fmt.Errorf("unknown VideoTag field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *VideoTagMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.videos != nil {
+		edges = append(edges, videotag.EdgeVideos)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *VideoTagMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case videotag.EdgeVideos:
+		ids := make([]ent.Value, 0, len(m.videos))
+		for id := range m.videos {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *VideoTagMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removedvideos != nil {
+		edges = append(edges, videotag.EdgeVideos)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *VideoTagMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case videotag.EdgeVideos:
+		ids := make([]ent.Value, 0, len(m.removedvideos))
+		for id := range m.removedvideos {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *VideoTagMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedvideos {
+		edges = append(edges, videotag.EdgeVideos)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *VideoTagMutation) EdgeCleared(name string) bool {
+	switch name {
+	case videotag.EdgeVideos:
+		return m.clearedvideos
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *VideoTagMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown VideoTag unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *VideoTagMutation) ResetEdge(name string) error {
+	switch name {
+	case videotag.EdgeVideos:
+		m.ResetVideos()
+		return nil
+	}
+	return fmt.Errorf("unknown VideoTag edge %s", name)
 }
 
 // VideoTitleChangeMutation represents an operation that mutates the VideoTitleChange nodes in the graph.

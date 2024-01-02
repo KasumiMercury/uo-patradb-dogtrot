@@ -94,6 +94,10 @@ func init() {
 	description.DefaultUpdatedAt = descriptionDescUpdatedAt.Default.(func() time.Time)
 	// description.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	description.UpdateDefaultUpdatedAt = descriptionDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// descriptionDescTemplateConfidence is the schema descriptor for template_confidence field.
+	descriptionDescTemplateConfidence := descriptionFields[4].Descriptor()
+	// description.DefaultTemplateConfidence holds the default value on creation for the template_confidence field.
+	description.DefaultTemplateConfidence = descriptionDescTemplateConfidence.Default.(bool)
 	// descriptionDescID is the schema descriptor for id field.
 	descriptionDescID := descriptionMixinFields0[0].Descriptor()
 	// description.DefaultID holds the default value on creation for the id field.

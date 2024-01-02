@@ -156,6 +156,8 @@ message Description {
 
   google.protobuf.Timestamp updated_at = 4;
 
+  bool template_confidence = 8;
+
   Video video = 5;
 
   PeriodicDescriptionTemplate periodic_template = 6;

@@ -42,6 +42,7 @@ var (
 		{Name: "variable", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "template_confidence", Type: field.TypeBool, Default: true},
 		{Name: "periodic_id", Type: field.TypeString, Nullable: true, Size: 26},
 		{Name: "category_id", Type: field.TypeString, Nullable: true, Size: 26},
 		{Name: "video_id", Type: field.TypeString, Unique: true, Size: 26},
@@ -54,19 +55,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "descriptions_periodic_description_templates_periodic_template",
-				Columns:    []*schema.Column{DescriptionsColumns[5]},
+				Columns:    []*schema.Column{DescriptionsColumns[6]},
 				RefColumns: []*schema.Column{PeriodicDescriptionTemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "descriptions_category_description_templates_category_template",
-				Columns:    []*schema.Column{DescriptionsColumns[6]},
+				Columns:    []*schema.Column{DescriptionsColumns[7]},
 				RefColumns: []*schema.Column{CategoryDescriptionTemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "descriptions_videos_descriptions",
-				Columns:    []*schema.Column{DescriptionsColumns[7]},
+				Columns:    []*schema.Column{DescriptionsColumns[8]},
 				RefColumns: []*schema.Column{VideosColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

@@ -1218,6 +1218,7 @@ type DescriptionMutation struct {
 	variable                   *string
 	created_at                 *time.Time
 	updated_at                 *time.Time
+	template_confidence        *bool
 	clearedFields              map[string]struct{}
 	video                      *string
 	clearedvideo               bool
@@ -1494,6 +1495,42 @@ func (m *DescriptionMutation) ResetUpdatedAt() {
 	m.updated_at = nil
 }
 
+// SetTemplateConfidence sets the "template_confidence" field.
+func (m *DescriptionMutation) SetTemplateConfidence(b bool) {
+	m.template_confidence = &b
+}
+
+// TemplateConfidence returns the value of the "template_confidence" field in the mutation.
+func (m *DescriptionMutation) TemplateConfidence() (r bool, exists bool) {
+	v := m.template_confidence
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTemplateConfidence returns the old "template_confidence" field's value of the Description entity.
+// If the Description object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DescriptionMutation) OldTemplateConfidence(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTemplateConfidence is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTemplateConfidence requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTemplateConfidence: %w", err)
+	}
+	return oldValue.TemplateConfidence, nil
+}
+
+// ResetTemplateConfidence resets all changes to the "template_confidence" field.
+func (m *DescriptionMutation) ResetTemplateConfidence() {
+	m.template_confidence = nil
+}
+
 // SetVideoID sets the "video" edge to the Video entity by id.
 func (m *DescriptionMutation) SetVideoID(id string) {
 	m.video = &id
@@ -1699,7 +1736,7 @@ func (m *DescriptionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DescriptionMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m.raw != nil {
 		fields = append(fields, description.FieldRaw)
 	}
@@ -1711,6 +1748,9 @@ func (m *DescriptionMutation) Fields() []string {
 	}
 	if m.updated_at != nil {
 		fields = append(fields, description.FieldUpdatedAt)
+	}
+	if m.template_confidence != nil {
+		fields = append(fields, description.FieldTemplateConfidence)
 	}
 	return fields
 }
@@ -1728,6 +1768,8 @@ func (m *DescriptionMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedAt()
 	case description.FieldUpdatedAt:
 		return m.UpdatedAt()
+	case description.FieldTemplateConfidence:
+		return m.TemplateConfidence()
 	}
 	return nil, false
 }
@@ -1745,6 +1787,8 @@ func (m *DescriptionMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldCreatedAt(ctx)
 	case description.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
+	case description.FieldTemplateConfidence:
+		return m.OldTemplateConfidence(ctx)
 	}
 	return nil, fmt.Errorf("unknown Description field %s", name)
 }
@@ -1781,6 +1825,13 @@ func (m *DescriptionMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedAt(v)
+		return nil
+	case description.FieldTemplateConfidence:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTemplateConfidence(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Description field %s", name)
@@ -1851,6 +1902,9 @@ func (m *DescriptionMutation) ResetField(name string) error {
 		return nil
 	case description.FieldUpdatedAt:
 		m.ResetUpdatedAt()
+		return nil
+	case description.FieldTemplateConfidence:
+		m.ResetTemplateConfidence()
 		return nil
 	}
 	return fmt.Errorf("unknown Description field %s", name)

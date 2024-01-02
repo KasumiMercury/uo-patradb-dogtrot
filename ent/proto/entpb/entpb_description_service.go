@@ -41,6 +41,8 @@ func toProtoDescription(e *ent.Description) (*Description, error) {
 	v.Id = id
 	raw := e.Raw
 	v.Raw = raw
+	template_confidence := e.TemplateConfidence
+	v.TemplateConfidence = template_confidence
 	updated_at := timestamppb.New(e.UpdatedAt)
 	v.UpdatedAt = updated_at
 	variable := wrapperspb.String(e.Variable)
@@ -148,6 +150,8 @@ func (svc *DescriptionService) Update(ctx context.Context, req *UpdateDescriptio
 	m := svc.client.Description.UpdateOneID(descriptionID)
 	descriptionRaw := description.GetRaw()
 	m.SetRaw(descriptionRaw)
+	descriptionTemplateConfidence := description.GetTemplateConfidence()
+	m.SetTemplateConfidence(descriptionTemplateConfidence)
 	descriptionUpdatedAt := runtime.ExtractTime(description.GetUpdatedAt())
 	m.SetUpdatedAt(descriptionUpdatedAt)
 	if description.GetVariable() != nil {
@@ -304,6 +308,8 @@ func (svc *DescriptionService) createBuilder(description *Description) (*ent.Des
 	m := svc.client.Description.Create()
 	descriptionRaw := description.GetRaw()
 	m.SetRaw(descriptionRaw)
+	descriptionTemplateConfidence := description.GetTemplateConfidence()
+	m.SetTemplateConfidence(descriptionTemplateConfidence)
 	descriptionUpdatedAt := runtime.ExtractTime(description.GetUpdatedAt())
 	m.SetUpdatedAt(descriptionUpdatedAt)
 	if description.GetVariable() != nil {

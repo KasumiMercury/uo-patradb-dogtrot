@@ -29,6 +29,7 @@ func (Description) Fields() []ent.Field {
 		field.String("variable").Optional().Annotations(entproto.Field(3)),
 		field.Time("created_at").Default(func() time.Time { return time.Now() }).Annotations(entproto.Skip()),
 		field.Time("updated_at").Default(func() time.Time { return time.Now() }).UpdateDefault(func() time.Time { return time.Now() }).Annotations(entproto.Field(4)),
+		field.Bool("template_confidence").Default(true).Annotations(entproto.Field(8)),
 	}
 }
 

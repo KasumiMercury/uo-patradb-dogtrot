@@ -86,6 +86,20 @@ func (du *DescriptionUpdate) SetUpdatedAt(t time.Time) *DescriptionUpdate {
 	return du
 }
 
+// SetTemplateConfidence sets the "template_confidence" field.
+func (du *DescriptionUpdate) SetTemplateConfidence(b bool) *DescriptionUpdate {
+	du.mutation.SetTemplateConfidence(b)
+	return du
+}
+
+// SetNillableTemplateConfidence sets the "template_confidence" field if the given value is not nil.
+func (du *DescriptionUpdate) SetNillableTemplateConfidence(b *bool) *DescriptionUpdate {
+	if b != nil {
+		du.SetTemplateConfidence(*b)
+	}
+	return du
+}
+
 // SetVideoID sets the "video" edge to the Video entity by ID.
 func (du *DescriptionUpdate) SetVideoID(id string) *DescriptionUpdate {
 	du.mutation.SetVideoID(id)
@@ -269,6 +283,9 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := du.mutation.UpdatedAt(); ok {
 		_spec.SetField(description.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := du.mutation.TemplateConfidence(); ok {
+		_spec.SetField(description.FieldTemplateConfidence, field.TypeBool, value)
 	}
 	if du.mutation.VideoCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -473,6 +490,20 @@ func (duo *DescriptionUpdateOne) SetNillableCreatedAt(t *time.Time) *Description
 // SetUpdatedAt sets the "updated_at" field.
 func (duo *DescriptionUpdateOne) SetUpdatedAt(t time.Time) *DescriptionUpdateOne {
 	duo.mutation.SetUpdatedAt(t)
+	return duo
+}
+
+// SetTemplateConfidence sets the "template_confidence" field.
+func (duo *DescriptionUpdateOne) SetTemplateConfidence(b bool) *DescriptionUpdateOne {
+	duo.mutation.SetTemplateConfidence(b)
+	return duo
+}
+
+// SetNillableTemplateConfidence sets the "template_confidence" field if the given value is not nil.
+func (duo *DescriptionUpdateOne) SetNillableTemplateConfidence(b *bool) *DescriptionUpdateOne {
+	if b != nil {
+		duo.SetTemplateConfidence(*b)
+	}
 	return duo
 }
 
@@ -689,6 +720,9 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 	}
 	if value, ok := duo.mutation.UpdatedAt(); ok {
 		_spec.SetField(description.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := duo.mutation.TemplateConfidence(); ok {
+		_spec.SetField(description.FieldTemplateConfidence, field.TypeBool, value)
 	}
 	if duo.mutation.VideoCleared() {
 		edge := &sqlgraph.EdgeSpec{

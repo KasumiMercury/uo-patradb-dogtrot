@@ -85,6 +85,11 @@ func UpdatedAt(v time.Time) predicate.Description {
 	return predicate.Description(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
+// TemplateConfidence applies equality check predicate on the "template_confidence" field. It's identical to TemplateConfidenceEQ.
+func TemplateConfidence(v bool) predicate.Description {
+	return predicate.Description(sql.FieldEQ(FieldTemplateConfidence, v))
+}
+
 // RawEQ applies the EQ predicate on the "raw" field.
 func RawEQ(v string) predicate.Description {
 	return predicate.Description(sql.FieldEQ(FieldRaw, v))
@@ -303,6 +308,16 @@ func UpdatedAtLT(v time.Time) predicate.Description {
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
 func UpdatedAtLTE(v time.Time) predicate.Description {
 	return predicate.Description(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// TemplateConfidenceEQ applies the EQ predicate on the "template_confidence" field.
+func TemplateConfidenceEQ(v bool) predicate.Description {
+	return predicate.Description(sql.FieldEQ(FieldTemplateConfidence, v))
+}
+
+// TemplateConfidenceNEQ applies the NEQ predicate on the "template_confidence" field.
+func TemplateConfidenceNEQ(v bool) predicate.Description {
+	return predicate.Description(sql.FieldNEQ(FieldTemplateConfidence, v))
 }
 
 // HasVideo applies the HasEdge predicate on the "video" edge.

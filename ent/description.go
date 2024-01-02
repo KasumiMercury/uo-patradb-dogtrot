@@ -28,6 +28,8 @@ type Description struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// TemplateConfidence holds the value of the "template_confidence" field.
+	TemplateConfidence bool `json:"template_confidence,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DescriptionQuery when eager-loading is set.
 	Edges        DescriptionEdges `json:"edges"`
@@ -105,6 +107,8 @@ func (*Description) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case description.FieldTemplateConfidence:
+			values[i] = new(sql.NullBool)
 		case description.FieldID, description.FieldRaw, description.FieldVariable:
 			values[i] = new(sql.NullString)
 		case description.FieldCreatedAt, description.FieldUpdatedAt:
@@ -159,6 +163,12 @@ func (d *Description) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				d.UpdatedAt = value.Time
+			}
+		case description.FieldTemplateConfidence:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field template_confidence", values[i])
+			} else if value.Valid {
+				d.TemplateConfidence = value.Bool
 			}
 		case description.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -248,6 +258,9 @@ func (d *Description) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(d.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("template_confidence=")
+	builder.WriteString(fmt.Sprintf("%v", d.TemplateConfidence))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -22,6 +22,8 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldTemplateConfidence holds the string denoting the template_confidence field in the database.
+	FieldTemplateConfidence = "template_confidence"
 	// EdgeVideo holds the string denoting the video edge name in mutations.
 	EdgeVideo = "video"
 	// EdgePeriodicTemplate holds the string denoting the periodic_template edge name in mutations.
@@ -69,6 +71,7 @@ var Columns = []string{
 	FieldVariable,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldTemplateConfidence,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "descriptions"
@@ -103,6 +106,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultTemplateConfidence holds the default value on creation for the "template_confidence" field.
+	DefaultTemplateConfidence bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
@@ -135,6 +140,11 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByTemplateConfidence orders the results by the template_confidence field.
+func ByTemplateConfidence(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTemplateConfidence, opts...).ToFunc()
 }
 
 // ByVideoField orders the results by video field.

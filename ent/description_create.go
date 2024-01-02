@@ -72,6 +72,20 @@ func (dc *DescriptionCreate) SetNillableUpdatedAt(t *time.Time) *DescriptionCrea
 	return dc
 }
 
+// SetTemplateConfidence sets the "template_confidence" field.
+func (dc *DescriptionCreate) SetTemplateConfidence(b bool) *DescriptionCreate {
+	dc.mutation.SetTemplateConfidence(b)
+	return dc
+}
+
+// SetNillableTemplateConfidence sets the "template_confidence" field if the given value is not nil.
+func (dc *DescriptionCreate) SetNillableTemplateConfidence(b *bool) *DescriptionCreate {
+	if b != nil {
+		dc.SetTemplateConfidence(*b)
+	}
+	return dc
+}
+
 // SetID sets the "id" field.
 func (dc *DescriptionCreate) SetID(s string) *DescriptionCreate {
 	dc.mutation.SetID(s)
@@ -193,6 +207,10 @@ func (dc *DescriptionCreate) defaults() {
 		v := description.DefaultUpdatedAt()
 		dc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := dc.mutation.TemplateConfidence(); !ok {
+		v := description.DefaultTemplateConfidence
+		dc.mutation.SetTemplateConfidence(v)
+	}
 	if _, ok := dc.mutation.ID(); !ok {
 		v := description.DefaultID()
 		dc.mutation.SetID(v)
@@ -214,6 +232,9 @@ func (dc *DescriptionCreate) check() error {
 	}
 	if _, ok := dc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Description.updated_at"`)}
+	}
+	if _, ok := dc.mutation.TemplateConfidence(); !ok {
+		return &ValidationError{Name: "template_confidence", err: errors.New(`ent: missing required field "Description.template_confidence"`)}
 	}
 	if v, ok := dc.mutation.ID(); ok {
 		if err := description.IDValidator(v); err != nil {
@@ -273,6 +294,10 @@ func (dc *DescriptionCreate) createSpec() (*Description, *sqlgraph.CreateSpec) {
 	if value, ok := dc.mutation.UpdatedAt(); ok {
 		_spec.SetField(description.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := dc.mutation.TemplateConfidence(); ok {
+		_spec.SetField(description.FieldTemplateConfidence, field.TypeBool, value)
+		_node.TemplateConfidence = value
 	}
 	if nodes := dc.mutation.VideoIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

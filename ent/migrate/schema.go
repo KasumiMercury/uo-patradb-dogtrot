@@ -42,7 +42,7 @@ var (
 		{Name: "variable", Type: field.TypeString, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "template_confidence", Type: field.TypeBool, Default: true},
+		{Name: "template_confidence", Type: field.TypeBool, Default: false},
 		{Name: "periodic_id", Type: field.TypeString, Nullable: true, Size: 26},
 		{Name: "category_id", Type: field.TypeString, Nullable: true, Size: 26},
 		{Name: "video_id", Type: field.TypeString, Unique: true, Size: 26},

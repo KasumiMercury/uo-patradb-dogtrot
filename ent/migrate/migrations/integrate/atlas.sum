@@ -1,4 +1,4 @@
-h1:aP4QwknfWWSfr2bkqa1/lHDDwLfHJf2Si7zMuy+z2E8=
+h1:D4oB8sN0lpGgOWQE5dJBr2TatOcOtoR2z2FowEYKDj4=
 20231220082851_init.sql h1:CKRocXgRkYBEy6QLjDRd5gr75yoDSohM3FXi970JnsI=
 20231220082908_init_index.sql h1:qFXXyOym6/CiaUs5//Bb0viSPkI0V8MbV/fBwXNnJqk=
 20231225092715_add_stream_schedule_table.sql h1:2arO1ZeV86zo6QdtavyKMKZR68dXTTpnfG1oNG8EtGE=
@@ -9,3 +9,4 @@ h1:aP4QwknfWWSfr2bkqa1/lHDDwLfHJf2Si7zMuy+z2E8=
 20240102164516_add_video_tag_table.sql h1:qKxEFv2pzkEGX/I381WQhXzZL/Eq4QLT7BUjJ+XKm+Q=
 20240102164834_modify_order_column_of_pat_chat_table.sql h1:IGRaqVociCc5ZdqLFAlsnpfpJfDarABhc21DwcStZ48=
 20240103161245_modify_video_tag_title.sql h1:KnnQTHgHjsLjFEEtE9QqHX743Jte37juGL24Gb2Nyos=
+20240103162451_unique_video_tag.sql h1:sV9M1Kh6h0N7Guzy+EqNf4ocr0TqkUq1QZa6gYfjfuU=

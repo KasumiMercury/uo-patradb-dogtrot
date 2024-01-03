@@ -226,7 +226,7 @@ var (
 	// VideoTagsColumns holds the columns for the "video_tags" table.
 	VideoTagsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
-		{Name: "title", Type: field.TypeString, Size: 50},
+		{Name: "title", Type: field.TypeString, Unique: true, Size: 50},
 	}
 	// VideoTagsTable holds the schema information for the "video_tags" table.
 	VideoTagsTable = &schema.Table{

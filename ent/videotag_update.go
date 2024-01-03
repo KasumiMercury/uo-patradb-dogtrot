@@ -42,6 +42,20 @@ func (vtu *VideoTagUpdate) SetNillableTitle(s *string) *VideoTagUpdate {
 	return vtu
 }
 
+// SetNormalizedTitle sets the "normalized_title" field.
+func (vtu *VideoTagUpdate) SetNormalizedTitle(s string) *VideoTagUpdate {
+	vtu.mutation.SetNormalizedTitle(s)
+	return vtu
+}
+
+// SetNillableNormalizedTitle sets the "normalized_title" field if the given value is not nil.
+func (vtu *VideoTagUpdate) SetNillableNormalizedTitle(s *string) *VideoTagUpdate {
+	if s != nil {
+		vtu.SetNormalizedTitle(*s)
+	}
+	return vtu
+}
+
 // AddVideoIDs adds the "videos" edge to the Video entity by IDs.
 func (vtu *VideoTagUpdate) AddVideoIDs(ids ...string) *VideoTagUpdate {
 	vtu.mutation.AddVideoIDs(ids...)
@@ -117,6 +131,11 @@ func (vtu *VideoTagUpdate) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "VideoTag.title": %w`, err)}
 		}
 	}
+	if v, ok := vtu.mutation.NormalizedTitle(); ok {
+		if err := videotag.NormalizedTitleValidator(v); err != nil {
+			return &ValidationError{Name: "normalized_title", err: fmt.Errorf(`ent: validator failed for field "VideoTag.normalized_title": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -134,6 +153,9 @@ func (vtu *VideoTagUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := vtu.mutation.Title(); ok {
 		_spec.SetField(videotag.FieldTitle, field.TypeString, value)
+	}
+	if value, ok := vtu.mutation.NormalizedTitle(); ok {
+		_spec.SetField(videotag.FieldNormalizedTitle, field.TypeString, value)
 	}
 	if vtu.mutation.VideosCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -210,6 +232,20 @@ func (vtuo *VideoTagUpdateOne) SetTitle(s string) *VideoTagUpdateOne {
 func (vtuo *VideoTagUpdateOne) SetNillableTitle(s *string) *VideoTagUpdateOne {
 	if s != nil {
 		vtuo.SetTitle(*s)
+	}
+	return vtuo
+}
+
+// SetNormalizedTitle sets the "normalized_title" field.
+func (vtuo *VideoTagUpdateOne) SetNormalizedTitle(s string) *VideoTagUpdateOne {
+	vtuo.mutation.SetNormalizedTitle(s)
+	return vtuo
+}
+
+// SetNillableNormalizedTitle sets the "normalized_title" field if the given value is not nil.
+func (vtuo *VideoTagUpdateOne) SetNillableNormalizedTitle(s *string) *VideoTagUpdateOne {
+	if s != nil {
+		vtuo.SetNormalizedTitle(*s)
 	}
 	return vtuo
 }
@@ -302,6 +338,11 @@ func (vtuo *VideoTagUpdateOne) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "VideoTag.title": %w`, err)}
 		}
 	}
+	if v, ok := vtuo.mutation.NormalizedTitle(); ok {
+		if err := videotag.NormalizedTitleValidator(v); err != nil {
+			return &ValidationError{Name: "normalized_title", err: fmt.Errorf(`ent: validator failed for field "VideoTag.normalized_title": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -336,6 +377,9 @@ func (vtuo *VideoTagUpdateOne) sqlSave(ctx context.Context) (_node *VideoTag, er
 	}
 	if value, ok := vtuo.mutation.Title(); ok {
 		_spec.SetField(videotag.FieldTitle, field.TypeString, value)
+	}
+	if value, ok := vtuo.mutation.NormalizedTitle(); ok {
+		_spec.SetField(videotag.FieldNormalizedTitle, field.TypeString, value)
 	}
 	if vtuo.mutation.VideosCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -26,6 +26,7 @@ func (VideoTag) Mixin() []ent.Mixin {
 func (VideoTag) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("title").MaxLen(50).Unique().Annotations(entproto.Field(2)),
+		field.String("normalized_title").MaxLen(50).Unique().Annotations(entproto.Skip()),
 	}
 }
 

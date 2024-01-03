@@ -26,6 +26,12 @@ func (vtc *VideoTagCreate) SetTitle(s string) *VideoTagCreate {
 	return vtc
 }
 
+// SetNormalizedTitle sets the "normalized_title" field.
+func (vtc *VideoTagCreate) SetNormalizedTitle(s string) *VideoTagCreate {
+	vtc.mutation.SetNormalizedTitle(s)
+	return vtc
+}
+
 // SetID sets the "id" field.
 func (vtc *VideoTagCreate) SetID(s string) *VideoTagCreate {
 	vtc.mutation.SetID(s)
@@ -106,6 +112,14 @@ func (vtc *VideoTagCreate) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "VideoTag.title": %w`, err)}
 		}
 	}
+	if _, ok := vtc.mutation.NormalizedTitle(); !ok {
+		return &ValidationError{Name: "normalized_title", err: errors.New(`ent: missing required field "VideoTag.normalized_title"`)}
+	}
+	if v, ok := vtc.mutation.NormalizedTitle(); ok {
+		if err := videotag.NormalizedTitleValidator(v); err != nil {
+			return &ValidationError{Name: "normalized_title", err: fmt.Errorf(`ent: validator failed for field "VideoTag.normalized_title": %w`, err)}
+		}
+	}
 	if v, ok := vtc.mutation.ID(); ok {
 		if err := videotag.IDValidator(v); err != nil {
 			return &ValidationError{Name: "id", err: fmt.Errorf(`ent: validator failed for field "VideoTag.id": %w`, err)}
@@ -149,6 +163,10 @@ func (vtc *VideoTagCreate) createSpec() (*VideoTag, *sqlgraph.CreateSpec) {
 	if value, ok := vtc.mutation.Title(); ok {
 		_spec.SetField(videotag.FieldTitle, field.TypeString, value)
 		_node.Title = value
+	}
+	if value, ok := vtc.mutation.NormalizedTitle(); ok {
+		_spec.SetField(videotag.FieldNormalizedTitle, field.TypeString, value)
+		_node.NormalizedTitle = value
 	}
 	if nodes := vtc.mutation.VideosIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

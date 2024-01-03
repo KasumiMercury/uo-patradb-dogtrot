@@ -297,6 +297,10 @@ func init() {
 	videotagDescTitle := videotagFields[0].Descriptor()
 	// videotag.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	videotag.TitleValidator = videotagDescTitle.Validators[0].(func(string) error)
+	// videotagDescNormalizedTitle is the schema descriptor for normalized_title field.
+	videotagDescNormalizedTitle := videotagFields[1].Descriptor()
+	// videotag.NormalizedTitleValidator is a validator for the "normalized_title" field. It is called by the builders before save.
+	videotag.NormalizedTitleValidator = videotagDescNormalizedTitle.Validators[0].(func(string) error)
 	// videotagDescID is the schema descriptor for id field.
 	videotagDescID := videotagMixinFields0[0].Descriptor()
 	// videotag.DefaultID holds the default value on creation for the id field.

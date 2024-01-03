@@ -7312,17 +7312,18 @@ func (m *VideoPlayRangeMutation) ResetEdge(name string) error {
 // VideoTagMutation represents an operation that mutates the VideoTag nodes in the graph.
 type VideoTagMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *string
-	title         *string
-	clearedFields map[string]struct{}
-	videos        map[string]struct{}
-	removedvideos map[string]struct{}
-	clearedvideos bool
-	done          bool
-	oldValue      func(context.Context) (*VideoTag, error)
-	predicates    []predicate.VideoTag
+	op               Op
+	typ              string
+	id               *string
+	title            *string
+	normalized_title *string
+	clearedFields    map[string]struct{}
+	videos           map[string]struct{}
+	removedvideos    map[string]struct{}
+	clearedvideos    bool
+	done             bool
+	oldValue         func(context.Context) (*VideoTag, error)
+	predicates       []predicate.VideoTag
 }
 
 var _ ent.Mutation = (*VideoTagMutation)(nil)
@@ -7465,6 +7466,42 @@ func (m *VideoTagMutation) ResetTitle() {
 	m.title = nil
 }
 
+// SetNormalizedTitle sets the "normalized_title" field.
+func (m *VideoTagMutation) SetNormalizedTitle(s string) {
+	m.normalized_title = &s
+}
+
+// NormalizedTitle returns the value of the "normalized_title" field in the mutation.
+func (m *VideoTagMutation) NormalizedTitle() (r string, exists bool) {
+	v := m.normalized_title
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNormalizedTitle returns the old "normalized_title" field's value of the VideoTag entity.
+// If the VideoTag object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VideoTagMutation) OldNormalizedTitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNormalizedTitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNormalizedTitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNormalizedTitle: %w", err)
+	}
+	return oldValue.NormalizedTitle, nil
+}
+
+// ResetNormalizedTitle resets all changes to the "normalized_title" field.
+func (m *VideoTagMutation) ResetNormalizedTitle() {
+	m.normalized_title = nil
+}
+
 // AddVideoIDs adds the "videos" edge to the Video entity by ids.
 func (m *VideoTagMutation) AddVideoIDs(ids ...string) {
 	if m.videos == nil {
@@ -7553,9 +7590,12 @@ func (m *VideoTagMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *VideoTagMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m.title != nil {
 		fields = append(fields, videotag.FieldTitle)
+	}
+	if m.normalized_title != nil {
+		fields = append(fields, videotag.FieldNormalizedTitle)
 	}
 	return fields
 }
@@ -7567,6 +7607,8 @@ func (m *VideoTagMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case videotag.FieldTitle:
 		return m.Title()
+	case videotag.FieldNormalizedTitle:
+		return m.NormalizedTitle()
 	}
 	return nil, false
 }
@@ -7578,6 +7620,8 @@ func (m *VideoTagMutation) OldField(ctx context.Context, name string) (ent.Value
 	switch name {
 	case videotag.FieldTitle:
 		return m.OldTitle(ctx)
+	case videotag.FieldNormalizedTitle:
+		return m.OldNormalizedTitle(ctx)
 	}
 	return nil, fmt.Errorf("unknown VideoTag field %s", name)
 }
@@ -7593,6 +7637,13 @@ func (m *VideoTagMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTitle(v)
+		return nil
+	case videotag.FieldNormalizedTitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNormalizedTitle(v)
 		return nil
 	}
 	return fmt.Errorf("unknown VideoTag field %s", name)
@@ -7645,6 +7696,9 @@ func (m *VideoTagMutation) ResetField(name string) error {
 	switch name {
 	case videotag.FieldTitle:
 		m.ResetTitle()
+		return nil
+	case videotag.FieldNormalizedTitle:
+		m.ResetNormalizedTitle()
 		return nil
 	}
 	return fmt.Errorf("unknown VideoTag field %s", name)

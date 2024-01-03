@@ -14,6 +14,8 @@ const (
 	FieldID = "id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
+	// FieldNormalizedTitle holds the string denoting the normalized_title field in the database.
+	FieldNormalizedTitle = "normalized_title"
 	// EdgeVideos holds the string denoting the videos edge name in mutations.
 	EdgeVideos = "videos"
 	// Table holds the table name of the videotag in the database.
@@ -29,6 +31,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldTitle,
+	FieldNormalizedTitle,
 }
 
 var (
@@ -50,6 +53,8 @@ func ValidColumn(column string) bool {
 var (
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
+	// NormalizedTitleValidator is a validator for the "normalized_title" field. It is called by the builders before save.
+	NormalizedTitleValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
@@ -67,6 +72,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByTitle orders the results by the title field.
 func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
+}
+
+// ByNormalizedTitle orders the results by the normalized_title field.
+func ByNormalizedTitle(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNormalizedTitle, opts...).ToFunc()
 }
 
 // ByVideosCount orders the results by videos count.

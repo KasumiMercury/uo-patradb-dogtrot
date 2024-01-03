@@ -68,6 +68,11 @@ func Title(v string) predicate.VideoTag {
 	return predicate.VideoTag(sql.FieldEQ(FieldTitle, v))
 }
 
+// NormalizedTitle applies equality check predicate on the "normalized_title" field. It's identical to NormalizedTitleEQ.
+func NormalizedTitle(v string) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldEQ(FieldNormalizedTitle, v))
+}
+
 // TitleEQ applies the EQ predicate on the "title" field.
 func TitleEQ(v string) predicate.VideoTag {
 	return predicate.VideoTag(sql.FieldEQ(FieldTitle, v))
@@ -131,6 +136,71 @@ func TitleEqualFold(v string) predicate.VideoTag {
 // TitleContainsFold applies the ContainsFold predicate on the "title" field.
 func TitleContainsFold(v string) predicate.VideoTag {
 	return predicate.VideoTag(sql.FieldContainsFold(FieldTitle, v))
+}
+
+// NormalizedTitleEQ applies the EQ predicate on the "normalized_title" field.
+func NormalizedTitleEQ(v string) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldEQ(FieldNormalizedTitle, v))
+}
+
+// NormalizedTitleNEQ applies the NEQ predicate on the "normalized_title" field.
+func NormalizedTitleNEQ(v string) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldNEQ(FieldNormalizedTitle, v))
+}
+
+// NormalizedTitleIn applies the In predicate on the "normalized_title" field.
+func NormalizedTitleIn(vs ...string) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldIn(FieldNormalizedTitle, vs...))
+}
+
+// NormalizedTitleNotIn applies the NotIn predicate on the "normalized_title" field.
+func NormalizedTitleNotIn(vs ...string) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldNotIn(FieldNormalizedTitle, vs...))
+}
+
+// NormalizedTitleGT applies the GT predicate on the "normalized_title" field.
+func NormalizedTitleGT(v string) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldGT(FieldNormalizedTitle, v))
+}
+
+// NormalizedTitleGTE applies the GTE predicate on the "normalized_title" field.
+func NormalizedTitleGTE(v string) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldGTE(FieldNormalizedTitle, v))
+}
+
+// NormalizedTitleLT applies the LT predicate on the "normalized_title" field.
+func NormalizedTitleLT(v string) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldLT(FieldNormalizedTitle, v))
+}
+
+// NormalizedTitleLTE applies the LTE predicate on the "normalized_title" field.
+func NormalizedTitleLTE(v string) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldLTE(FieldNormalizedTitle, v))
+}
+
+// NormalizedTitleContains applies the Contains predicate on the "normalized_title" field.
+func NormalizedTitleContains(v string) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldContains(FieldNormalizedTitle, v))
+}
+
+// NormalizedTitleHasPrefix applies the HasPrefix predicate on the "normalized_title" field.
+func NormalizedTitleHasPrefix(v string) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldHasPrefix(FieldNormalizedTitle, v))
+}
+
+// NormalizedTitleHasSuffix applies the HasSuffix predicate on the "normalized_title" field.
+func NormalizedTitleHasSuffix(v string) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldHasSuffix(FieldNormalizedTitle, v))
+}
+
+// NormalizedTitleEqualFold applies the EqualFold predicate on the "normalized_title" field.
+func NormalizedTitleEqualFold(v string) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldEqualFold(FieldNormalizedTitle, v))
+}
+
+// NormalizedTitleContainsFold applies the ContainsFold predicate on the "normalized_title" field.
+func NormalizedTitleContainsFold(v string) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldContainsFold(FieldNormalizedTitle, v))
 }
 
 // HasVideos applies the HasEdge predicate on the "videos" edge.

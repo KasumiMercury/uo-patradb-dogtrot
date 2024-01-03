@@ -18,6 +18,8 @@ type VideoTag struct {
 	ID string `json:"id,omitempty"`
 	// Title holds the value of the "title" field.
 	Title string `json:"title,omitempty"`
+	// NormalizedTitle holds the value of the "normalized_title" field.
+	NormalizedTitle string `json:"normalized_title,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the VideoTagQuery when eager-loading is set.
 	Edges        VideoTagEdges `json:"edges"`
@@ -47,7 +49,7 @@ func (*VideoTag) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case videotag.FieldID, videotag.FieldTitle:
+		case videotag.FieldID, videotag.FieldTitle, videotag.FieldNormalizedTitle:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -75,6 +77,12 @@ func (vt *VideoTag) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
 				vt.Title = value.String
+			}
+		case videotag.FieldNormalizedTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field normalized_title", values[i])
+			} else if value.Valid {
+				vt.NormalizedTitle = value.String
 			}
 		default:
 			vt.selectValues.Set(columns[i], values[i])
@@ -119,6 +127,9 @@ func (vt *VideoTag) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", vt.ID))
 	builder.WriteString("title=")
 	builder.WriteString(vt.Title)
+	builder.WriteString(", ")
+	builder.WriteString("normalized_title=")
+	builder.WriteString(vt.NormalizedTitle)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -9,7 +9,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/categorydescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodicdescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
@@ -20,21 +19,22 @@ type Description struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID string `json:"id,omitempty"`
+	// SourceID holds the value of the "source_id" field.
+	SourceID string `json:"source_id,omitempty"`
 	// Raw holds the value of the "raw" field.
 	Raw string `json:"raw,omitempty"`
 	// Variable holds the value of the "variable" field.
 	Variable string `json:"variable,omitempty"`
+	// TemplateConfidence holds the value of the "template_confidence" field.
+	TemplateConfidence bool `json:"template_confidence,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// TemplateConfidence holds the value of the "template_confidence" field.
-	TemplateConfidence bool `json:"template_confidence,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DescriptionQuery when eager-loading is set.
 	Edges        DescriptionEdges `json:"edges"`
 	periodic_id  *string
-	category_id  *string
 	video_id     *string
 	selectValues sql.SelectValues
 }
@@ -45,13 +45,11 @@ type DescriptionEdges struct {
 	Video *Video `json:"video,omitempty"`
 	// PeriodicTemplate holds the value of the periodic_template edge.
 	PeriodicTemplate *PeriodicDescriptionTemplate `json:"periodic_template,omitempty"`
-	// CategoryTemplate holds the value of the category_template edge.
-	CategoryTemplate *CategoryDescriptionTemplate `json:"category_template,omitempty"`
 	// DescriptionChanges holds the value of the description_changes edge.
 	DescriptionChanges []*DescriptionChange `json:"description_changes,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [3]bool
 }
 
 // VideoOrErr returns the Video value or an error if the edge
@@ -80,23 +78,10 @@ func (e DescriptionEdges) PeriodicTemplateOrErr() (*PeriodicDescriptionTemplate,
 	return nil, &NotLoadedError{edge: "periodic_template"}
 }
 
-// CategoryTemplateOrErr returns the CategoryTemplate value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e DescriptionEdges) CategoryTemplateOrErr() (*CategoryDescriptionTemplate, error) {
-	if e.loadedTypes[2] {
-		if e.CategoryTemplate == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: categorydescriptiontemplate.Label}
-		}
-		return e.CategoryTemplate, nil
-	}
-	return nil, &NotLoadedError{edge: "category_template"}
-}
-
 // DescriptionChangesOrErr returns the DescriptionChanges value or an error if the edge
 // was not loaded in eager-loading.
 func (e DescriptionEdges) DescriptionChangesOrErr() ([]*DescriptionChange, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[2] {
 		return e.DescriptionChanges, nil
 	}
 	return nil, &NotLoadedError{edge: "description_changes"}
@@ -109,15 +94,13 @@ func (*Description) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case description.FieldTemplateConfidence:
 			values[i] = new(sql.NullBool)
-		case description.FieldID, description.FieldRaw, description.FieldVariable:
+		case description.FieldID, description.FieldSourceID, description.FieldRaw, description.FieldVariable:
 			values[i] = new(sql.NullString)
 		case description.FieldCreatedAt, description.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		case description.ForeignKeys[0]: // periodic_id
 			values[i] = new(sql.NullString)
-		case description.ForeignKeys[1]: // category_id
-			values[i] = new(sql.NullString)
-		case description.ForeignKeys[2]: // video_id
+		case description.ForeignKeys[1]: // video_id
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -140,6 +123,12 @@ func (d *Description) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				d.ID = value.String
 			}
+		case description.FieldSourceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_id", values[i])
+			} else if value.Valid {
+				d.SourceID = value.String
+			}
 		case description.FieldRaw:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field raw", values[i])
@@ -151,6 +140,12 @@ func (d *Description) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field variable", values[i])
 			} else if value.Valid {
 				d.Variable = value.String
+			}
+		case description.FieldTemplateConfidence:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field template_confidence", values[i])
+			} else if value.Valid {
+				d.TemplateConfidence = value.Bool
 			}
 		case description.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -164,12 +159,6 @@ func (d *Description) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				d.UpdatedAt = value.Time
 			}
-		case description.FieldTemplateConfidence:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field template_confidence", values[i])
-			} else if value.Valid {
-				d.TemplateConfidence = value.Bool
-			}
 		case description.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field periodic_id", values[i])
@@ -178,13 +167,6 @@ func (d *Description) assignValues(columns []string, values []any) error {
 				*d.periodic_id = value.String
 			}
 		case description.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field category_id", values[i])
-			} else if value.Valid {
-				d.category_id = new(string)
-				*d.category_id = value.String
-			}
-		case description.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field video_id", values[i])
 			} else if value.Valid {
@@ -212,11 +194,6 @@ func (d *Description) QueryVideo() *VideoQuery {
 // QueryPeriodicTemplate queries the "periodic_template" edge of the Description entity.
 func (d *Description) QueryPeriodicTemplate() *PeriodicDescriptionTemplateQuery {
 	return NewDescriptionClient(d.config).QueryPeriodicTemplate(d)
-}
-
-// QueryCategoryTemplate queries the "category_template" edge of the Description entity.
-func (d *Description) QueryCategoryTemplate() *CategoryDescriptionTemplateQuery {
-	return NewDescriptionClient(d.config).QueryCategoryTemplate(d)
 }
 
 // QueryDescriptionChanges queries the "description_changes" edge of the Description entity.
@@ -247,20 +224,23 @@ func (d *Description) String() string {
 	var builder strings.Builder
 	builder.WriteString("Description(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", d.ID))
+	builder.WriteString("source_id=")
+	builder.WriteString(d.SourceID)
+	builder.WriteString(", ")
 	builder.WriteString("raw=")
 	builder.WriteString(d.Raw)
 	builder.WriteString(", ")
 	builder.WriteString("variable=")
 	builder.WriteString(d.Variable)
 	builder.WriteString(", ")
+	builder.WriteString("template_confidence=")
+	builder.WriteString(fmt.Sprintf("%v", d.TemplateConfidence))
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(d.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(d.UpdatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("template_confidence=")
-	builder.WriteString(fmt.Sprintf("%v", d.TemplateConfidence))
 	builder.WriteByte(')')
 	return builder.String()
 }

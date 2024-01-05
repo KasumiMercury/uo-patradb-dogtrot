@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/categorydescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/descriptionchange"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodicdescriptiontemplate"
@@ -29,6 +28,20 @@ type DescriptionUpdate struct {
 // Where appends a list predicates to the DescriptionUpdate builder.
 func (du *DescriptionUpdate) Where(ps ...predicate.Description) *DescriptionUpdate {
 	du.mutation.Where(ps...)
+	return du
+}
+
+// SetSourceID sets the "source_id" field.
+func (du *DescriptionUpdate) SetSourceID(s string) *DescriptionUpdate {
+	du.mutation.SetSourceID(s)
+	return du
+}
+
+// SetNillableSourceID sets the "source_id" field if the given value is not nil.
+func (du *DescriptionUpdate) SetNillableSourceID(s *string) *DescriptionUpdate {
+	if s != nil {
+		du.SetSourceID(*s)
+	}
 	return du
 }
 
@@ -66,6 +79,20 @@ func (du *DescriptionUpdate) ClearVariable() *DescriptionUpdate {
 	return du
 }
 
+// SetTemplateConfidence sets the "template_confidence" field.
+func (du *DescriptionUpdate) SetTemplateConfidence(b bool) *DescriptionUpdate {
+	du.mutation.SetTemplateConfidence(b)
+	return du
+}
+
+// SetNillableTemplateConfidence sets the "template_confidence" field if the given value is not nil.
+func (du *DescriptionUpdate) SetNillableTemplateConfidence(b *bool) *DescriptionUpdate {
+	if b != nil {
+		du.SetTemplateConfidence(*b)
+	}
+	return du
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (du *DescriptionUpdate) SetCreatedAt(t time.Time) *DescriptionUpdate {
 	du.mutation.SetCreatedAt(t)
@@ -83,20 +110,6 @@ func (du *DescriptionUpdate) SetNillableCreatedAt(t *time.Time) *DescriptionUpda
 // SetUpdatedAt sets the "updated_at" field.
 func (du *DescriptionUpdate) SetUpdatedAt(t time.Time) *DescriptionUpdate {
 	du.mutation.SetUpdatedAt(t)
-	return du
-}
-
-// SetTemplateConfidence sets the "template_confidence" field.
-func (du *DescriptionUpdate) SetTemplateConfidence(b bool) *DescriptionUpdate {
-	du.mutation.SetTemplateConfidence(b)
-	return du
-}
-
-// SetNillableTemplateConfidence sets the "template_confidence" field if the given value is not nil.
-func (du *DescriptionUpdate) SetNillableTemplateConfidence(b *bool) *DescriptionUpdate {
-	if b != nil {
-		du.SetTemplateConfidence(*b)
-	}
 	return du
 }
 
@@ -130,25 +143,6 @@ func (du *DescriptionUpdate) SetPeriodicTemplate(p *PeriodicDescriptionTemplate)
 	return du.SetPeriodicTemplateID(p.ID)
 }
 
-// SetCategoryTemplateID sets the "category_template" edge to the CategoryDescriptionTemplate entity by ID.
-func (du *DescriptionUpdate) SetCategoryTemplateID(id string) *DescriptionUpdate {
-	du.mutation.SetCategoryTemplateID(id)
-	return du
-}
-
-// SetNillableCategoryTemplateID sets the "category_template" edge to the CategoryDescriptionTemplate entity by ID if the given value is not nil.
-func (du *DescriptionUpdate) SetNillableCategoryTemplateID(id *string) *DescriptionUpdate {
-	if id != nil {
-		du = du.SetCategoryTemplateID(*id)
-	}
-	return du
-}
-
-// SetCategoryTemplate sets the "category_template" edge to the CategoryDescriptionTemplate entity.
-func (du *DescriptionUpdate) SetCategoryTemplate(c *CategoryDescriptionTemplate) *DescriptionUpdate {
-	return du.SetCategoryTemplateID(c.ID)
-}
-
 // AddDescriptionChangeIDs adds the "description_changes" edge to the DescriptionChange entity by IDs.
 func (du *DescriptionUpdate) AddDescriptionChangeIDs(ids ...string) *DescriptionUpdate {
 	du.mutation.AddDescriptionChangeIDs(ids...)
@@ -178,12 +172,6 @@ func (du *DescriptionUpdate) ClearVideo() *DescriptionUpdate {
 // ClearPeriodicTemplate clears the "periodic_template" edge to the PeriodicDescriptionTemplate entity.
 func (du *DescriptionUpdate) ClearPeriodicTemplate() *DescriptionUpdate {
 	du.mutation.ClearPeriodicTemplate()
-	return du
-}
-
-// ClearCategoryTemplate clears the "category_template" edge to the CategoryDescriptionTemplate entity.
-func (du *DescriptionUpdate) ClearCategoryTemplate() *DescriptionUpdate {
-	du.mutation.ClearCategoryTemplate()
 	return du
 }
 
@@ -246,6 +234,11 @@ func (du *DescriptionUpdate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (du *DescriptionUpdate) check() error {
+	if v, ok := du.mutation.SourceID(); ok {
+		if err := description.SourceIDValidator(v); err != nil {
+			return &ValidationError{Name: "source_id", err: fmt.Errorf(`ent: validator failed for field "Description.source_id": %w`, err)}
+		}
+	}
 	if v, ok := du.mutation.Raw(); ok {
 		if err := description.RawValidator(v); err != nil {
 			return &ValidationError{Name: "raw", err: fmt.Errorf(`ent: validator failed for field "Description.raw": %w`, err)}
@@ -269,6 +262,9 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := du.mutation.SourceID(); ok {
+		_spec.SetField(description.FieldSourceID, field.TypeString, value)
+	}
 	if value, ok := du.mutation.Raw(); ok {
 		_spec.SetField(description.FieldRaw, field.TypeString, value)
 	}
@@ -278,14 +274,14 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if du.mutation.VariableCleared() {
 		_spec.ClearField(description.FieldVariable, field.TypeString)
 	}
+	if value, ok := du.mutation.TemplateConfidence(); ok {
+		_spec.SetField(description.FieldTemplateConfidence, field.TypeBool, value)
+	}
 	if value, ok := du.mutation.CreatedAt(); ok {
 		_spec.SetField(description.FieldCreatedAt, field.TypeTime, value)
 	}
 	if value, ok := du.mutation.UpdatedAt(); ok {
 		_spec.SetField(description.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if value, ok := du.mutation.TemplateConfidence(); ok {
-		_spec.SetField(description.FieldTemplateConfidence, field.TypeBool, value)
 	}
 	if du.mutation.VideoCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -338,35 +334,6 @@ func (du *DescriptionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(periodicdescriptiontemplate.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if du.mutation.CategoryTemplateCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   description.CategoryTemplateTable,
-			Columns: []string{description.CategoryTemplateColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(categorydescriptiontemplate.FieldID, field.TypeString),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := du.mutation.CategoryTemplateIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   description.CategoryTemplateTable,
-			Columns: []string{description.CategoryTemplateColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(categorydescriptiontemplate.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -439,6 +406,20 @@ type DescriptionUpdateOne struct {
 	mutation *DescriptionMutation
 }
 
+// SetSourceID sets the "source_id" field.
+func (duo *DescriptionUpdateOne) SetSourceID(s string) *DescriptionUpdateOne {
+	duo.mutation.SetSourceID(s)
+	return duo
+}
+
+// SetNillableSourceID sets the "source_id" field if the given value is not nil.
+func (duo *DescriptionUpdateOne) SetNillableSourceID(s *string) *DescriptionUpdateOne {
+	if s != nil {
+		duo.SetSourceID(*s)
+	}
+	return duo
+}
+
 // SetRaw sets the "raw" field.
 func (duo *DescriptionUpdateOne) SetRaw(s string) *DescriptionUpdateOne {
 	duo.mutation.SetRaw(s)
@@ -473,6 +454,20 @@ func (duo *DescriptionUpdateOne) ClearVariable() *DescriptionUpdateOne {
 	return duo
 }
 
+// SetTemplateConfidence sets the "template_confidence" field.
+func (duo *DescriptionUpdateOne) SetTemplateConfidence(b bool) *DescriptionUpdateOne {
+	duo.mutation.SetTemplateConfidence(b)
+	return duo
+}
+
+// SetNillableTemplateConfidence sets the "template_confidence" field if the given value is not nil.
+func (duo *DescriptionUpdateOne) SetNillableTemplateConfidence(b *bool) *DescriptionUpdateOne {
+	if b != nil {
+		duo.SetTemplateConfidence(*b)
+	}
+	return duo
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (duo *DescriptionUpdateOne) SetCreatedAt(t time.Time) *DescriptionUpdateOne {
 	duo.mutation.SetCreatedAt(t)
@@ -490,20 +485,6 @@ func (duo *DescriptionUpdateOne) SetNillableCreatedAt(t *time.Time) *Description
 // SetUpdatedAt sets the "updated_at" field.
 func (duo *DescriptionUpdateOne) SetUpdatedAt(t time.Time) *DescriptionUpdateOne {
 	duo.mutation.SetUpdatedAt(t)
-	return duo
-}
-
-// SetTemplateConfidence sets the "template_confidence" field.
-func (duo *DescriptionUpdateOne) SetTemplateConfidence(b bool) *DescriptionUpdateOne {
-	duo.mutation.SetTemplateConfidence(b)
-	return duo
-}
-
-// SetNillableTemplateConfidence sets the "template_confidence" field if the given value is not nil.
-func (duo *DescriptionUpdateOne) SetNillableTemplateConfidence(b *bool) *DescriptionUpdateOne {
-	if b != nil {
-		duo.SetTemplateConfidence(*b)
-	}
 	return duo
 }
 
@@ -537,25 +518,6 @@ func (duo *DescriptionUpdateOne) SetPeriodicTemplate(p *PeriodicDescriptionTempl
 	return duo.SetPeriodicTemplateID(p.ID)
 }
 
-// SetCategoryTemplateID sets the "category_template" edge to the CategoryDescriptionTemplate entity by ID.
-func (duo *DescriptionUpdateOne) SetCategoryTemplateID(id string) *DescriptionUpdateOne {
-	duo.mutation.SetCategoryTemplateID(id)
-	return duo
-}
-
-// SetNillableCategoryTemplateID sets the "category_template" edge to the CategoryDescriptionTemplate entity by ID if the given value is not nil.
-func (duo *DescriptionUpdateOne) SetNillableCategoryTemplateID(id *string) *DescriptionUpdateOne {
-	if id != nil {
-		duo = duo.SetCategoryTemplateID(*id)
-	}
-	return duo
-}
-
-// SetCategoryTemplate sets the "category_template" edge to the CategoryDescriptionTemplate entity.
-func (duo *DescriptionUpdateOne) SetCategoryTemplate(c *CategoryDescriptionTemplate) *DescriptionUpdateOne {
-	return duo.SetCategoryTemplateID(c.ID)
-}
-
 // AddDescriptionChangeIDs adds the "description_changes" edge to the DescriptionChange entity by IDs.
 func (duo *DescriptionUpdateOne) AddDescriptionChangeIDs(ids ...string) *DescriptionUpdateOne {
 	duo.mutation.AddDescriptionChangeIDs(ids...)
@@ -585,12 +547,6 @@ func (duo *DescriptionUpdateOne) ClearVideo() *DescriptionUpdateOne {
 // ClearPeriodicTemplate clears the "periodic_template" edge to the PeriodicDescriptionTemplate entity.
 func (duo *DescriptionUpdateOne) ClearPeriodicTemplate() *DescriptionUpdateOne {
 	duo.mutation.ClearPeriodicTemplate()
-	return duo
-}
-
-// ClearCategoryTemplate clears the "category_template" edge to the CategoryDescriptionTemplate entity.
-func (duo *DescriptionUpdateOne) ClearCategoryTemplate() *DescriptionUpdateOne {
-	duo.mutation.ClearCategoryTemplate()
 	return duo
 }
 
@@ -666,6 +622,11 @@ func (duo *DescriptionUpdateOne) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (duo *DescriptionUpdateOne) check() error {
+	if v, ok := duo.mutation.SourceID(); ok {
+		if err := description.SourceIDValidator(v); err != nil {
+			return &ValidationError{Name: "source_id", err: fmt.Errorf(`ent: validator failed for field "Description.source_id": %w`, err)}
+		}
+	}
 	if v, ok := duo.mutation.Raw(); ok {
 		if err := description.RawValidator(v); err != nil {
 			return &ValidationError{Name: "raw", err: fmt.Errorf(`ent: validator failed for field "Description.raw": %w`, err)}
@@ -706,6 +667,9 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 			}
 		}
 	}
+	if value, ok := duo.mutation.SourceID(); ok {
+		_spec.SetField(description.FieldSourceID, field.TypeString, value)
+	}
 	if value, ok := duo.mutation.Raw(); ok {
 		_spec.SetField(description.FieldRaw, field.TypeString, value)
 	}
@@ -715,14 +679,14 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 	if duo.mutation.VariableCleared() {
 		_spec.ClearField(description.FieldVariable, field.TypeString)
 	}
+	if value, ok := duo.mutation.TemplateConfidence(); ok {
+		_spec.SetField(description.FieldTemplateConfidence, field.TypeBool, value)
+	}
 	if value, ok := duo.mutation.CreatedAt(); ok {
 		_spec.SetField(description.FieldCreatedAt, field.TypeTime, value)
 	}
 	if value, ok := duo.mutation.UpdatedAt(); ok {
 		_spec.SetField(description.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if value, ok := duo.mutation.TemplateConfidence(); ok {
-		_spec.SetField(description.FieldTemplateConfidence, field.TypeBool, value)
 	}
 	if duo.mutation.VideoCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -775,35 +739,6 @@ func (duo *DescriptionUpdateOne) sqlSave(ctx context.Context) (_node *Descriptio
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(periodicdescriptiontemplate.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if duo.mutation.CategoryTemplateCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   description.CategoryTemplateTable,
-			Columns: []string{description.CategoryTemplateColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(categorydescriptiontemplate.FieldID, field.TypeString),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := duo.mutation.CategoryTemplateIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   description.CategoryTemplateTable,
-			Columns: []string{description.CategoryTemplateColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(categorydescriptiontemplate.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

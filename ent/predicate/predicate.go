@@ -6,9 +6,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// CategoryDescriptionTemplate is the predicate function for categorydescriptiontemplate builders.
-type CategoryDescriptionTemplate func(*sql.Selector)
-
 // Channel is the predicate function for channel builders.
 type Channel func(*sql.Selector)
 

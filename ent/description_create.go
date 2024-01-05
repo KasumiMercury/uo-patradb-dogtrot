@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/categorydescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/descriptionchange"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodicdescriptiontemplate"
@@ -22,6 +21,12 @@ type DescriptionCreate struct {
 	config
 	mutation *DescriptionMutation
 	hooks    []Hook
+}
+
+// SetSourceID sets the "source_id" field.
+func (dc *DescriptionCreate) SetSourceID(s string) *DescriptionCreate {
+	dc.mutation.SetSourceID(s)
+	return dc
 }
 
 // SetRaw sets the "raw" field.
@@ -40,6 +45,20 @@ func (dc *DescriptionCreate) SetVariable(s string) *DescriptionCreate {
 func (dc *DescriptionCreate) SetNillableVariable(s *string) *DescriptionCreate {
 	if s != nil {
 		dc.SetVariable(*s)
+	}
+	return dc
+}
+
+// SetTemplateConfidence sets the "template_confidence" field.
+func (dc *DescriptionCreate) SetTemplateConfidence(b bool) *DescriptionCreate {
+	dc.mutation.SetTemplateConfidence(b)
+	return dc
+}
+
+// SetNillableTemplateConfidence sets the "template_confidence" field if the given value is not nil.
+func (dc *DescriptionCreate) SetNillableTemplateConfidence(b *bool) *DescriptionCreate {
+	if b != nil {
+		dc.SetTemplateConfidence(*b)
 	}
 	return dc
 }
@@ -68,20 +87,6 @@ func (dc *DescriptionCreate) SetUpdatedAt(t time.Time) *DescriptionCreate {
 func (dc *DescriptionCreate) SetNillableUpdatedAt(t *time.Time) *DescriptionCreate {
 	if t != nil {
 		dc.SetUpdatedAt(*t)
-	}
-	return dc
-}
-
-// SetTemplateConfidence sets the "template_confidence" field.
-func (dc *DescriptionCreate) SetTemplateConfidence(b bool) *DescriptionCreate {
-	dc.mutation.SetTemplateConfidence(b)
-	return dc
-}
-
-// SetNillableTemplateConfidence sets the "template_confidence" field if the given value is not nil.
-func (dc *DescriptionCreate) SetNillableTemplateConfidence(b *bool) *DescriptionCreate {
-	if b != nil {
-		dc.SetTemplateConfidence(*b)
 	}
 	return dc
 }
@@ -128,25 +133,6 @@ func (dc *DescriptionCreate) SetNillablePeriodicTemplateID(id *string) *Descript
 // SetPeriodicTemplate sets the "periodic_template" edge to the PeriodicDescriptionTemplate entity.
 func (dc *DescriptionCreate) SetPeriodicTemplate(p *PeriodicDescriptionTemplate) *DescriptionCreate {
 	return dc.SetPeriodicTemplateID(p.ID)
-}
-
-// SetCategoryTemplateID sets the "category_template" edge to the CategoryDescriptionTemplate entity by ID.
-func (dc *DescriptionCreate) SetCategoryTemplateID(id string) *DescriptionCreate {
-	dc.mutation.SetCategoryTemplateID(id)
-	return dc
-}
-
-// SetNillableCategoryTemplateID sets the "category_template" edge to the CategoryDescriptionTemplate entity by ID if the given value is not nil.
-func (dc *DescriptionCreate) SetNillableCategoryTemplateID(id *string) *DescriptionCreate {
-	if id != nil {
-		dc = dc.SetCategoryTemplateID(*id)
-	}
-	return dc
-}
-
-// SetCategoryTemplate sets the "category_template" edge to the CategoryDescriptionTemplate entity.
-func (dc *DescriptionCreate) SetCategoryTemplate(c *CategoryDescriptionTemplate) *DescriptionCreate {
-	return dc.SetCategoryTemplateID(c.ID)
 }
 
 // AddDescriptionChangeIDs adds the "description_changes" edge to the DescriptionChange entity by IDs.
@@ -199,6 +185,10 @@ func (dc *DescriptionCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (dc *DescriptionCreate) defaults() {
+	if _, ok := dc.mutation.TemplateConfidence(); !ok {
+		v := description.DefaultTemplateConfidence
+		dc.mutation.SetTemplateConfidence(v)
+	}
 	if _, ok := dc.mutation.CreatedAt(); !ok {
 		v := description.DefaultCreatedAt()
 		dc.mutation.SetCreatedAt(v)
@@ -206,10 +196,6 @@ func (dc *DescriptionCreate) defaults() {
 	if _, ok := dc.mutation.UpdatedAt(); !ok {
 		v := description.DefaultUpdatedAt()
 		dc.mutation.SetUpdatedAt(v)
-	}
-	if _, ok := dc.mutation.TemplateConfidence(); !ok {
-		v := description.DefaultTemplateConfidence
-		dc.mutation.SetTemplateConfidence(v)
 	}
 	if _, ok := dc.mutation.ID(); !ok {
 		v := description.DefaultID()
@@ -219,6 +205,14 @@ func (dc *DescriptionCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (dc *DescriptionCreate) check() error {
+	if _, ok := dc.mutation.SourceID(); !ok {
+		return &ValidationError{Name: "source_id", err: errors.New(`ent: missing required field "Description.source_id"`)}
+	}
+	if v, ok := dc.mutation.SourceID(); ok {
+		if err := description.SourceIDValidator(v); err != nil {
+			return &ValidationError{Name: "source_id", err: fmt.Errorf(`ent: validator failed for field "Description.source_id": %w`, err)}
+		}
+	}
 	if _, ok := dc.mutation.Raw(); !ok {
 		return &ValidationError{Name: "raw", err: errors.New(`ent: missing required field "Description.raw"`)}
 	}
@@ -227,14 +221,14 @@ func (dc *DescriptionCreate) check() error {
 			return &ValidationError{Name: "raw", err: fmt.Errorf(`ent: validator failed for field "Description.raw": %w`, err)}
 		}
 	}
+	if _, ok := dc.mutation.TemplateConfidence(); !ok {
+		return &ValidationError{Name: "template_confidence", err: errors.New(`ent: missing required field "Description.template_confidence"`)}
+	}
 	if _, ok := dc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Description.created_at"`)}
 	}
 	if _, ok := dc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Description.updated_at"`)}
-	}
-	if _, ok := dc.mutation.TemplateConfidence(); !ok {
-		return &ValidationError{Name: "template_confidence", err: errors.New(`ent: missing required field "Description.template_confidence"`)}
 	}
 	if v, ok := dc.mutation.ID(); ok {
 		if err := description.IDValidator(v); err != nil {
@@ -279,6 +273,10 @@ func (dc *DescriptionCreate) createSpec() (*Description, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
+	if value, ok := dc.mutation.SourceID(); ok {
+		_spec.SetField(description.FieldSourceID, field.TypeString, value)
+		_node.SourceID = value
+	}
 	if value, ok := dc.mutation.Raw(); ok {
 		_spec.SetField(description.FieldRaw, field.TypeString, value)
 		_node.Raw = value
@@ -287,6 +285,10 @@ func (dc *DescriptionCreate) createSpec() (*Description, *sqlgraph.CreateSpec) {
 		_spec.SetField(description.FieldVariable, field.TypeString, value)
 		_node.Variable = value
 	}
+	if value, ok := dc.mutation.TemplateConfidence(); ok {
+		_spec.SetField(description.FieldTemplateConfidence, field.TypeBool, value)
+		_node.TemplateConfidence = value
+	}
 	if value, ok := dc.mutation.CreatedAt(); ok {
 		_spec.SetField(description.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -294,10 +296,6 @@ func (dc *DescriptionCreate) createSpec() (*Description, *sqlgraph.CreateSpec) {
 	if value, ok := dc.mutation.UpdatedAt(); ok {
 		_spec.SetField(description.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
-	}
-	if value, ok := dc.mutation.TemplateConfidence(); ok {
-		_spec.SetField(description.FieldTemplateConfidence, field.TypeBool, value)
-		_node.TemplateConfidence = value
 	}
 	if nodes := dc.mutation.VideoIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -331,23 +329,6 @@ func (dc *DescriptionCreate) createSpec() (*Description, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.periodic_id = &nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := dc.mutation.CategoryTemplateIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   description.CategoryTemplateTable,
-			Columns: []string{description.CategoryTemplateColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(categorydescriptiontemplate.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.category_id = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := dc.mutation.DescriptionChangesIDs(); len(nodes) > 0 {

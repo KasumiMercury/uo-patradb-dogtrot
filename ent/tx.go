@@ -12,8 +12,6 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
-	// CategoryDescriptionTemplate is the client for interacting with the CategoryDescriptionTemplate builders.
-	CategoryDescriptionTemplate *CategoryDescriptionTemplateClient
 	// Channel is the client for interacting with the Channel builders.
 	Channel *ChannelClient
 	// Description is the client for interacting with the Description builders.
@@ -167,7 +165,6 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
-	tx.CategoryDescriptionTemplate = NewCategoryDescriptionTemplateClient(tx.config)
 	tx.Channel = NewChannelClient(tx.config)
 	tx.Description = NewDescriptionClient(tx.config)
 	tx.DescriptionChange = NewDescriptionChangeClient(tx.config)
@@ -188,7 +185,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: CategoryDescriptionTemplate.QueryXXX(), the query will be executed
+// applies a query, for example: Channel.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

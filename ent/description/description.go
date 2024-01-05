@@ -14,22 +14,22 @@ const (
 	Label = "description"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldSourceID holds the string denoting the source_id field in the database.
+	FieldSourceID = "source_id"
 	// FieldRaw holds the string denoting the raw field in the database.
 	FieldRaw = "raw"
 	// FieldVariable holds the string denoting the variable field in the database.
 	FieldVariable = "variable"
+	// FieldTemplateConfidence holds the string denoting the template_confidence field in the database.
+	FieldTemplateConfidence = "template_confidence"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
-	// FieldTemplateConfidence holds the string denoting the template_confidence field in the database.
-	FieldTemplateConfidence = "template_confidence"
 	// EdgeVideo holds the string denoting the video edge name in mutations.
 	EdgeVideo = "video"
 	// EdgePeriodicTemplate holds the string denoting the periodic_template edge name in mutations.
 	EdgePeriodicTemplate = "periodic_template"
-	// EdgeCategoryTemplate holds the string denoting the category_template edge name in mutations.
-	EdgeCategoryTemplate = "category_template"
 	// EdgeDescriptionChanges holds the string denoting the description_changes edge name in mutations.
 	EdgeDescriptionChanges = "description_changes"
 	// Table holds the table name of the description in the database.
@@ -48,13 +48,6 @@ const (
 	PeriodicTemplateInverseTable = "periodic_description_templates"
 	// PeriodicTemplateColumn is the table column denoting the periodic_template relation/edge.
 	PeriodicTemplateColumn = "periodic_id"
-	// CategoryTemplateTable is the table that holds the category_template relation/edge.
-	CategoryTemplateTable = "descriptions"
-	// CategoryTemplateInverseTable is the table name for the CategoryDescriptionTemplate entity.
-	// It exists in this package in order to avoid circular dependency with the "categorydescriptiontemplate" package.
-	CategoryTemplateInverseTable = "category_description_templates"
-	// CategoryTemplateColumn is the table column denoting the category_template relation/edge.
-	CategoryTemplateColumn = "category_id"
 	// DescriptionChangesTable is the table that holds the description_changes relation/edge.
 	DescriptionChangesTable = "description_changes"
 	// DescriptionChangesInverseTable is the table name for the DescriptionChange entity.
@@ -67,18 +60,18 @@ const (
 // Columns holds all SQL columns for description fields.
 var Columns = []string{
 	FieldID,
+	FieldSourceID,
 	FieldRaw,
 	FieldVariable,
+	FieldTemplateConfidence,
 	FieldCreatedAt,
 	FieldUpdatedAt,
-	FieldTemplateConfidence,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "descriptions"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"periodic_id",
-	"category_id",
 	"video_id",
 }
 
@@ -98,16 +91,18 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// SourceIDValidator is a validator for the "source_id" field. It is called by the builders before save.
+	SourceIDValidator func(string) error
 	// RawValidator is a validator for the "raw" field. It is called by the builders before save.
 	RawValidator func(string) error
+	// DefaultTemplateConfidence holds the default value on creation for the "template_confidence" field.
+	DefaultTemplateConfidence bool
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DefaultTemplateConfidence holds the default value on creation for the "template_confidence" field.
-	DefaultTemplateConfidence bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
@@ -122,6 +117,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
+// BySourceID orders the results by the source_id field.
+func BySourceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceID, opts...).ToFunc()
+}
+
 // ByRaw orders the results by the raw field.
 func ByRaw(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRaw, opts...).ToFunc()
@@ -132,6 +132,11 @@ func ByVariable(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVariable, opts...).ToFunc()
 }
 
+// ByTemplateConfidence orders the results by the template_confidence field.
+func ByTemplateConfidence(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTemplateConfidence, opts...).ToFunc()
+}
+
 // ByCreatedAt orders the results by the created_at field.
 func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
@@ -140,11 +145,6 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
-}
-
-// ByTemplateConfidence orders the results by the template_confidence field.
-func ByTemplateConfidence(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTemplateConfidence, opts...).ToFunc()
 }
 
 // ByVideoField orders the results by video field.
@@ -158,13 +158,6 @@ func ByVideoField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByPeriodicTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newPeriodicTemplateStep(), sql.OrderByField(field, opts...))
-	}
-}
-
-// ByCategoryTemplateField orders the results by category_template field.
-func ByCategoryTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newCategoryTemplateStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -193,13 +186,6 @@ func newPeriodicTemplateStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PeriodicTemplateInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, PeriodicTemplateTable, PeriodicTemplateColumn),
-	)
-}
-func newCategoryTemplateStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(CategoryTemplateInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, CategoryTemplateTable, CategoryTemplateColumn),
 	)
 }
 func newDescriptionChangesStep() *sqlgraph.Step {

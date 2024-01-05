@@ -11,7 +11,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/categorydescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/descriptionchange"
@@ -35,7 +34,6 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeCategoryDescriptionTemplate = "CategoryDescriptionTemplate"
 	TypeChannel                     = "Channel"
 	TypeDescription                 = "Description"
 	TypeDescriptionChange           = "DescriptionChange"
@@ -48,580 +46,6 @@ const (
 	TypeVideoTag                    = "VideoTag"
 	TypeVideoTitleChange            = "VideoTitleChange"
 )
-
-// CategoryDescriptionTemplateMutation represents an operation that mutates the CategoryDescriptionTemplate nodes in the graph.
-type CategoryDescriptionTemplateMutation struct {
-	config
-	op                  Op
-	typ                 string
-	id                  *string
-	text                *string
-	start_use_at        *time.Time
-	last_use_at         *time.Time
-	clearedFields       map[string]struct{}
-	descriptions        map[string]struct{}
-	removeddescriptions map[string]struct{}
-	cleareddescriptions bool
-	done                bool
-	oldValue            func(context.Context) (*CategoryDescriptionTemplate, error)
-	predicates          []predicate.CategoryDescriptionTemplate
-}
-
-var _ ent.Mutation = (*CategoryDescriptionTemplateMutation)(nil)
-
-// categorydescriptiontemplateOption allows management of the mutation configuration using functional options.
-type categorydescriptiontemplateOption func(*CategoryDescriptionTemplateMutation)
-
-// newCategoryDescriptionTemplateMutation creates new mutation for the CategoryDescriptionTemplate entity.
-func newCategoryDescriptionTemplateMutation(c config, op Op, opts ...categorydescriptiontemplateOption) *CategoryDescriptionTemplateMutation {
-	m := &CategoryDescriptionTemplateMutation{
-		config:        c,
-		op:            op,
-		typ:           TypeCategoryDescriptionTemplate,
-		clearedFields: make(map[string]struct{}),
-	}
-	for _, opt := range opts {
-		opt(m)
-	}
-	return m
-}
-
-// withCategoryDescriptionTemplateID sets the ID field of the mutation.
-func withCategoryDescriptionTemplateID(id string) categorydescriptiontemplateOption {
-	return func(m *CategoryDescriptionTemplateMutation) {
-		var (
-			err   error
-			once  sync.Once
-			value *CategoryDescriptionTemplate
-		)
-		m.oldValue = func(ctx context.Context) (*CategoryDescriptionTemplate, error) {
-			once.Do(func() {
-				if m.done {
-					err = errors.New("querying old values post mutation is not allowed")
-				} else {
-					value, err = m.Client().CategoryDescriptionTemplate.Get(ctx, id)
-				}
-			})
-			return value, err
-		}
-		m.id = &id
-	}
-}
-
-// withCategoryDescriptionTemplate sets the old CategoryDescriptionTemplate of the mutation.
-func withCategoryDescriptionTemplate(node *CategoryDescriptionTemplate) categorydescriptiontemplateOption {
-	return func(m *CategoryDescriptionTemplateMutation) {
-		m.oldValue = func(context.Context) (*CategoryDescriptionTemplate, error) {
-			return node, nil
-		}
-		m.id = &node.ID
-	}
-}
-
-// Client returns a new `ent.Client` from the mutation. If the mutation was
-// executed in a transaction (ent.Tx), a transactional client is returned.
-func (m CategoryDescriptionTemplateMutation) Client() *Client {
-	client := &Client{config: m.config}
-	client.init()
-	return client
-}
-
-// Tx returns an `ent.Tx` for mutations that were executed in transactions;
-// it returns an error otherwise.
-func (m CategoryDescriptionTemplateMutation) Tx() (*Tx, error) {
-	if _, ok := m.driver.(*txDriver); !ok {
-		return nil, errors.New("ent: mutation is not running in a transaction")
-	}
-	tx := &Tx{config: m.config}
-	tx.init()
-	return tx, nil
-}
-
-// SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of CategoryDescriptionTemplate entities.
-func (m *CategoryDescriptionTemplateMutation) SetID(id string) {
-	m.id = &id
-}
-
-// ID returns the ID value in the mutation. Note that the ID is only available
-// if it was provided to the builder or after it was returned from the database.
-func (m *CategoryDescriptionTemplateMutation) ID() (id string, exists bool) {
-	if m.id == nil {
-		return
-	}
-	return *m.id, true
-}
-
-// IDs queries the database and returns the entity ids that match the mutation's predicate.
-// That means, if the mutation is applied within a transaction with an isolation level such
-// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
-// or updated by the mutation.
-func (m *CategoryDescriptionTemplateMutation) IDs(ctx context.Context) ([]string, error) {
-	switch {
-	case m.op.Is(OpUpdateOne | OpDeleteOne):
-		id, exists := m.ID()
-		if exists {
-			return []string{id}, nil
-		}
-		fallthrough
-	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().CategoryDescriptionTemplate.Query().Where(m.predicates...).IDs(ctx)
-	default:
-		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
-	}
-}
-
-// SetText sets the "text" field.
-func (m *CategoryDescriptionTemplateMutation) SetText(s string) {
-	m.text = &s
-}
-
-// Text returns the value of the "text" field in the mutation.
-func (m *CategoryDescriptionTemplateMutation) Text() (r string, exists bool) {
-	v := m.text
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldText returns the old "text" field's value of the CategoryDescriptionTemplate entity.
-// If the CategoryDescriptionTemplate object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CategoryDescriptionTemplateMutation) OldText(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldText is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldText requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldText: %w", err)
-	}
-	return oldValue.Text, nil
-}
-
-// ResetText resets all changes to the "text" field.
-func (m *CategoryDescriptionTemplateMutation) ResetText() {
-	m.text = nil
-}
-
-// SetStartUseAt sets the "start_use_at" field.
-func (m *CategoryDescriptionTemplateMutation) SetStartUseAt(t time.Time) {
-	m.start_use_at = &t
-}
-
-// StartUseAt returns the value of the "start_use_at" field in the mutation.
-func (m *CategoryDescriptionTemplateMutation) StartUseAt() (r time.Time, exists bool) {
-	v := m.start_use_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldStartUseAt returns the old "start_use_at" field's value of the CategoryDescriptionTemplate entity.
-// If the CategoryDescriptionTemplate object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CategoryDescriptionTemplateMutation) OldStartUseAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldStartUseAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldStartUseAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldStartUseAt: %w", err)
-	}
-	return oldValue.StartUseAt, nil
-}
-
-// ClearStartUseAt clears the value of the "start_use_at" field.
-func (m *CategoryDescriptionTemplateMutation) ClearStartUseAt() {
-	m.start_use_at = nil
-	m.clearedFields[categorydescriptiontemplate.FieldStartUseAt] = struct{}{}
-}
-
-// StartUseAtCleared returns if the "start_use_at" field was cleared in this mutation.
-func (m *CategoryDescriptionTemplateMutation) StartUseAtCleared() bool {
-	_, ok := m.clearedFields[categorydescriptiontemplate.FieldStartUseAt]
-	return ok
-}
-
-// ResetStartUseAt resets all changes to the "start_use_at" field.
-func (m *CategoryDescriptionTemplateMutation) ResetStartUseAt() {
-	m.start_use_at = nil
-	delete(m.clearedFields, categorydescriptiontemplate.FieldStartUseAt)
-}
-
-// SetLastUseAt sets the "last_use_at" field.
-func (m *CategoryDescriptionTemplateMutation) SetLastUseAt(t time.Time) {
-	m.last_use_at = &t
-}
-
-// LastUseAt returns the value of the "last_use_at" field in the mutation.
-func (m *CategoryDescriptionTemplateMutation) LastUseAt() (r time.Time, exists bool) {
-	v := m.last_use_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldLastUseAt returns the old "last_use_at" field's value of the CategoryDescriptionTemplate entity.
-// If the CategoryDescriptionTemplate object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CategoryDescriptionTemplateMutation) OldLastUseAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldLastUseAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldLastUseAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldLastUseAt: %w", err)
-	}
-	return oldValue.LastUseAt, nil
-}
-
-// ClearLastUseAt clears the value of the "last_use_at" field.
-func (m *CategoryDescriptionTemplateMutation) ClearLastUseAt() {
-	m.last_use_at = nil
-	m.clearedFields[categorydescriptiontemplate.FieldLastUseAt] = struct{}{}
-}
-
-// LastUseAtCleared returns if the "last_use_at" field was cleared in this mutation.
-func (m *CategoryDescriptionTemplateMutation) LastUseAtCleared() bool {
-	_, ok := m.clearedFields[categorydescriptiontemplate.FieldLastUseAt]
-	return ok
-}
-
-// ResetLastUseAt resets all changes to the "last_use_at" field.
-func (m *CategoryDescriptionTemplateMutation) ResetLastUseAt() {
-	m.last_use_at = nil
-	delete(m.clearedFields, categorydescriptiontemplate.FieldLastUseAt)
-}
-
-// AddDescriptionIDs adds the "descriptions" edge to the Description entity by ids.
-func (m *CategoryDescriptionTemplateMutation) AddDescriptionIDs(ids ...string) {
-	if m.descriptions == nil {
-		m.descriptions = make(map[string]struct{})
-	}
-	for i := range ids {
-		m.descriptions[ids[i]] = struct{}{}
-	}
-}
-
-// ClearDescriptions clears the "descriptions" edge to the Description entity.
-func (m *CategoryDescriptionTemplateMutation) ClearDescriptions() {
-	m.cleareddescriptions = true
-}
-
-// DescriptionsCleared reports if the "descriptions" edge to the Description entity was cleared.
-func (m *CategoryDescriptionTemplateMutation) DescriptionsCleared() bool {
-	return m.cleareddescriptions
-}
-
-// RemoveDescriptionIDs removes the "descriptions" edge to the Description entity by IDs.
-func (m *CategoryDescriptionTemplateMutation) RemoveDescriptionIDs(ids ...string) {
-	if m.removeddescriptions == nil {
-		m.removeddescriptions = make(map[string]struct{})
-	}
-	for i := range ids {
-		delete(m.descriptions, ids[i])
-		m.removeddescriptions[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedDescriptions returns the removed IDs of the "descriptions" edge to the Description entity.
-func (m *CategoryDescriptionTemplateMutation) RemovedDescriptionsIDs() (ids []string) {
-	for id := range m.removeddescriptions {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// DescriptionsIDs returns the "descriptions" edge IDs in the mutation.
-func (m *CategoryDescriptionTemplateMutation) DescriptionsIDs() (ids []string) {
-	for id := range m.descriptions {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetDescriptions resets all changes to the "descriptions" edge.
-func (m *CategoryDescriptionTemplateMutation) ResetDescriptions() {
-	m.descriptions = nil
-	m.cleareddescriptions = false
-	m.removeddescriptions = nil
-}
-
-// Where appends a list predicates to the CategoryDescriptionTemplateMutation builder.
-func (m *CategoryDescriptionTemplateMutation) Where(ps ...predicate.CategoryDescriptionTemplate) {
-	m.predicates = append(m.predicates, ps...)
-}
-
-// WhereP appends storage-level predicates to the CategoryDescriptionTemplateMutation builder. Using this method,
-// users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *CategoryDescriptionTemplateMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.CategoryDescriptionTemplate, len(ps))
-	for i := range ps {
-		p[i] = ps[i]
-	}
-	m.Where(p...)
-}
-
-// Op returns the operation name.
-func (m *CategoryDescriptionTemplateMutation) Op() Op {
-	return m.op
-}
-
-// SetOp allows setting the mutation operation.
-func (m *CategoryDescriptionTemplateMutation) SetOp(op Op) {
-	m.op = op
-}
-
-// Type returns the node type of this mutation (CategoryDescriptionTemplate).
-func (m *CategoryDescriptionTemplateMutation) Type() string {
-	return m.typ
-}
-
-// Fields returns all fields that were changed during this mutation. Note that in
-// order to get all numeric fields that were incremented/decremented, call
-// AddedFields().
-func (m *CategoryDescriptionTemplateMutation) Fields() []string {
-	fields := make([]string, 0, 3)
-	if m.text != nil {
-		fields = append(fields, categorydescriptiontemplate.FieldText)
-	}
-	if m.start_use_at != nil {
-		fields = append(fields, categorydescriptiontemplate.FieldStartUseAt)
-	}
-	if m.last_use_at != nil {
-		fields = append(fields, categorydescriptiontemplate.FieldLastUseAt)
-	}
-	return fields
-}
-
-// Field returns the value of a field with the given name. The second boolean
-// return value indicates that this field was not set, or was not defined in the
-// schema.
-func (m *CategoryDescriptionTemplateMutation) Field(name string) (ent.Value, bool) {
-	switch name {
-	case categorydescriptiontemplate.FieldText:
-		return m.Text()
-	case categorydescriptiontemplate.FieldStartUseAt:
-		return m.StartUseAt()
-	case categorydescriptiontemplate.FieldLastUseAt:
-		return m.LastUseAt()
-	}
-	return nil, false
-}
-
-// OldField returns the old value of the field from the database. An error is
-// returned if the mutation operation is not UpdateOne, or the query to the
-// database failed.
-func (m *CategoryDescriptionTemplateMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
-	switch name {
-	case categorydescriptiontemplate.FieldText:
-		return m.OldText(ctx)
-	case categorydescriptiontemplate.FieldStartUseAt:
-		return m.OldStartUseAt(ctx)
-	case categorydescriptiontemplate.FieldLastUseAt:
-		return m.OldLastUseAt(ctx)
-	}
-	return nil, fmt.Errorf("unknown CategoryDescriptionTemplate field %s", name)
-}
-
-// SetField sets the value of a field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *CategoryDescriptionTemplateMutation) SetField(name string, value ent.Value) error {
-	switch name {
-	case categorydescriptiontemplate.FieldText:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetText(v)
-		return nil
-	case categorydescriptiontemplate.FieldStartUseAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetStartUseAt(v)
-		return nil
-	case categorydescriptiontemplate.FieldLastUseAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetLastUseAt(v)
-		return nil
-	}
-	return fmt.Errorf("unknown CategoryDescriptionTemplate field %s", name)
-}
-
-// AddedFields returns all numeric fields that were incremented/decremented during
-// this mutation.
-func (m *CategoryDescriptionTemplateMutation) AddedFields() []string {
-	return nil
-}
-
-// AddedField returns the numeric value that was incremented/decremented on a field
-// with the given name. The second boolean return value indicates that this field
-// was not set, or was not defined in the schema.
-func (m *CategoryDescriptionTemplateMutation) AddedField(name string) (ent.Value, bool) {
-	return nil, false
-}
-
-// AddField adds the value to the field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *CategoryDescriptionTemplateMutation) AddField(name string, value ent.Value) error {
-	switch name {
-	}
-	return fmt.Errorf("unknown CategoryDescriptionTemplate numeric field %s", name)
-}
-
-// ClearedFields returns all nullable fields that were cleared during this
-// mutation.
-func (m *CategoryDescriptionTemplateMutation) ClearedFields() []string {
-	var fields []string
-	if m.FieldCleared(categorydescriptiontemplate.FieldStartUseAt) {
-		fields = append(fields, categorydescriptiontemplate.FieldStartUseAt)
-	}
-	if m.FieldCleared(categorydescriptiontemplate.FieldLastUseAt) {
-		fields = append(fields, categorydescriptiontemplate.FieldLastUseAt)
-	}
-	return fields
-}
-
-// FieldCleared returns a boolean indicating if a field with the given name was
-// cleared in this mutation.
-func (m *CategoryDescriptionTemplateMutation) FieldCleared(name string) bool {
-	_, ok := m.clearedFields[name]
-	return ok
-}
-
-// ClearField clears the value of the field with the given name. It returns an
-// error if the field is not defined in the schema.
-func (m *CategoryDescriptionTemplateMutation) ClearField(name string) error {
-	switch name {
-	case categorydescriptiontemplate.FieldStartUseAt:
-		m.ClearStartUseAt()
-		return nil
-	case categorydescriptiontemplate.FieldLastUseAt:
-		m.ClearLastUseAt()
-		return nil
-	}
-	return fmt.Errorf("unknown CategoryDescriptionTemplate nullable field %s", name)
-}
-
-// ResetField resets all changes in the mutation for the field with the given name.
-// It returns an error if the field is not defined in the schema.
-func (m *CategoryDescriptionTemplateMutation) ResetField(name string) error {
-	switch name {
-	case categorydescriptiontemplate.FieldText:
-		m.ResetText()
-		return nil
-	case categorydescriptiontemplate.FieldStartUseAt:
-		m.ResetStartUseAt()
-		return nil
-	case categorydescriptiontemplate.FieldLastUseAt:
-		m.ResetLastUseAt()
-		return nil
-	}
-	return fmt.Errorf("unknown CategoryDescriptionTemplate field %s", name)
-}
-
-// AddedEdges returns all edge names that were set/added in this mutation.
-func (m *CategoryDescriptionTemplateMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.descriptions != nil {
-		edges = append(edges, categorydescriptiontemplate.EdgeDescriptions)
-	}
-	return edges
-}
-
-// AddedIDs returns all IDs (to other nodes) that were added for the given edge
-// name in this mutation.
-func (m *CategoryDescriptionTemplateMutation) AddedIDs(name string) []ent.Value {
-	switch name {
-	case categorydescriptiontemplate.EdgeDescriptions:
-		ids := make([]ent.Value, 0, len(m.descriptions))
-		for id := range m.descriptions {
-			ids = append(ids, id)
-		}
-		return ids
-	}
-	return nil
-}
-
-// RemovedEdges returns all edge names that were removed in this mutation.
-func (m *CategoryDescriptionTemplateMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.removeddescriptions != nil {
-		edges = append(edges, categorydescriptiontemplate.EdgeDescriptions)
-	}
-	return edges
-}
-
-// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
-// the given name in this mutation.
-func (m *CategoryDescriptionTemplateMutation) RemovedIDs(name string) []ent.Value {
-	switch name {
-	case categorydescriptiontemplate.EdgeDescriptions:
-		ids := make([]ent.Value, 0, len(m.removeddescriptions))
-		for id := range m.removeddescriptions {
-			ids = append(ids, id)
-		}
-		return ids
-	}
-	return nil
-}
-
-// ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *CategoryDescriptionTemplateMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.cleareddescriptions {
-		edges = append(edges, categorydescriptiontemplate.EdgeDescriptions)
-	}
-	return edges
-}
-
-// EdgeCleared returns a boolean which indicates if the edge with the given name
-// was cleared in this mutation.
-func (m *CategoryDescriptionTemplateMutation) EdgeCleared(name string) bool {
-	switch name {
-	case categorydescriptiontemplate.EdgeDescriptions:
-		return m.cleareddescriptions
-	}
-	return false
-}
-
-// ClearEdge clears the value of the edge with the given name. It returns an error
-// if that edge is not defined in the schema.
-func (m *CategoryDescriptionTemplateMutation) ClearEdge(name string) error {
-	switch name {
-	}
-	return fmt.Errorf("unknown CategoryDescriptionTemplate unique edge %s", name)
-}
-
-// ResetEdge resets all changes to the edge with the given name in this mutation.
-// It returns an error if the edge is not defined in the schema.
-func (m *CategoryDescriptionTemplateMutation) ResetEdge(name string) error {
-	switch name {
-	case categorydescriptiontemplate.EdgeDescriptions:
-		m.ResetDescriptions()
-		return nil
-	}
-	return fmt.Errorf("unknown CategoryDescriptionTemplate edge %s", name)
-}
 
 // ChannelMutation represents an operation that mutates the Channel nodes in the graph.
 type ChannelMutation struct {
@@ -1216,18 +640,17 @@ type DescriptionMutation struct {
 	op                         Op
 	typ                        string
 	id                         *string
+	source_id                  *string
 	raw                        *string
 	variable                   *string
+	template_confidence        *bool
 	created_at                 *time.Time
 	updated_at                 *time.Time
-	template_confidence        *bool
 	clearedFields              map[string]struct{}
 	video                      *string
 	clearedvideo               bool
 	periodic_template          *string
 	clearedperiodic_template   bool
-	category_template          *string
-	clearedcategory_template   bool
 	description_changes        map[string]struct{}
 	removeddescription_changes map[string]struct{}
 	cleareddescription_changes bool
@@ -1340,6 +763,42 @@ func (m *DescriptionMutation) IDs(ctx context.Context) ([]string, error) {
 	}
 }
 
+// SetSourceID sets the "source_id" field.
+func (m *DescriptionMutation) SetSourceID(s string) {
+	m.source_id = &s
+}
+
+// SourceID returns the value of the "source_id" field in the mutation.
+func (m *DescriptionMutation) SourceID() (r string, exists bool) {
+	v := m.source_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceID returns the old "source_id" field's value of the Description entity.
+// If the Description object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DescriptionMutation) OldSourceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceID: %w", err)
+	}
+	return oldValue.SourceID, nil
+}
+
+// ResetSourceID resets all changes to the "source_id" field.
+func (m *DescriptionMutation) ResetSourceID() {
+	m.source_id = nil
+}
+
 // SetRaw sets the "raw" field.
 func (m *DescriptionMutation) SetRaw(s string) {
 	m.raw = &s
@@ -1425,6 +884,42 @@ func (m *DescriptionMutation) ResetVariable() {
 	delete(m.clearedFields, description.FieldVariable)
 }
 
+// SetTemplateConfidence sets the "template_confidence" field.
+func (m *DescriptionMutation) SetTemplateConfidence(b bool) {
+	m.template_confidence = &b
+}
+
+// TemplateConfidence returns the value of the "template_confidence" field in the mutation.
+func (m *DescriptionMutation) TemplateConfidence() (r bool, exists bool) {
+	v := m.template_confidence
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTemplateConfidence returns the old "template_confidence" field's value of the Description entity.
+// If the Description object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DescriptionMutation) OldTemplateConfidence(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTemplateConfidence is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTemplateConfidence requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTemplateConfidence: %w", err)
+	}
+	return oldValue.TemplateConfidence, nil
+}
+
+// ResetTemplateConfidence resets all changes to the "template_confidence" field.
+func (m *DescriptionMutation) ResetTemplateConfidence() {
+	m.template_confidence = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *DescriptionMutation) SetCreatedAt(t time.Time) {
 	m.created_at = &t
@@ -1495,42 +990,6 @@ func (m *DescriptionMutation) OldUpdatedAt(ctx context.Context) (v time.Time, er
 // ResetUpdatedAt resets all changes to the "updated_at" field.
 func (m *DescriptionMutation) ResetUpdatedAt() {
 	m.updated_at = nil
-}
-
-// SetTemplateConfidence sets the "template_confidence" field.
-func (m *DescriptionMutation) SetTemplateConfidence(b bool) {
-	m.template_confidence = &b
-}
-
-// TemplateConfidence returns the value of the "template_confidence" field in the mutation.
-func (m *DescriptionMutation) TemplateConfidence() (r bool, exists bool) {
-	v := m.template_confidence
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldTemplateConfidence returns the old "template_confidence" field's value of the Description entity.
-// If the Description object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DescriptionMutation) OldTemplateConfidence(ctx context.Context) (v bool, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldTemplateConfidence is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldTemplateConfidence requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldTemplateConfidence: %w", err)
-	}
-	return oldValue.TemplateConfidence, nil
-}
-
-// ResetTemplateConfidence resets all changes to the "template_confidence" field.
-func (m *DescriptionMutation) ResetTemplateConfidence() {
-	m.template_confidence = nil
 }
 
 // SetVideoID sets the "video" edge to the Video entity by id.
@@ -1609,45 +1068,6 @@ func (m *DescriptionMutation) PeriodicTemplateIDs() (ids []string) {
 func (m *DescriptionMutation) ResetPeriodicTemplate() {
 	m.periodic_template = nil
 	m.clearedperiodic_template = false
-}
-
-// SetCategoryTemplateID sets the "category_template" edge to the CategoryDescriptionTemplate entity by id.
-func (m *DescriptionMutation) SetCategoryTemplateID(id string) {
-	m.category_template = &id
-}
-
-// ClearCategoryTemplate clears the "category_template" edge to the CategoryDescriptionTemplate entity.
-func (m *DescriptionMutation) ClearCategoryTemplate() {
-	m.clearedcategory_template = true
-}
-
-// CategoryTemplateCleared reports if the "category_template" edge to the CategoryDescriptionTemplate entity was cleared.
-func (m *DescriptionMutation) CategoryTemplateCleared() bool {
-	return m.clearedcategory_template
-}
-
-// CategoryTemplateID returns the "category_template" edge ID in the mutation.
-func (m *DescriptionMutation) CategoryTemplateID() (id string, exists bool) {
-	if m.category_template != nil {
-		return *m.category_template, true
-	}
-	return
-}
-
-// CategoryTemplateIDs returns the "category_template" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// CategoryTemplateID instead. It exists only for internal usage by the builders.
-func (m *DescriptionMutation) CategoryTemplateIDs() (ids []string) {
-	if id := m.category_template; id != nil {
-		ids = append(ids, *id)
-	}
-	return
-}
-
-// ResetCategoryTemplate resets all changes to the "category_template" edge.
-func (m *DescriptionMutation) ResetCategoryTemplate() {
-	m.category_template = nil
-	m.clearedcategory_template = false
 }
 
 // AddDescriptionChangeIDs adds the "description_changes" edge to the DescriptionChange entity by ids.
@@ -1738,21 +1158,24 @@ func (m *DescriptionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DescriptionMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 6)
+	if m.source_id != nil {
+		fields = append(fields, description.FieldSourceID)
+	}
 	if m.raw != nil {
 		fields = append(fields, description.FieldRaw)
 	}
 	if m.variable != nil {
 		fields = append(fields, description.FieldVariable)
 	}
+	if m.template_confidence != nil {
+		fields = append(fields, description.FieldTemplateConfidence)
+	}
 	if m.created_at != nil {
 		fields = append(fields, description.FieldCreatedAt)
 	}
 	if m.updated_at != nil {
 		fields = append(fields, description.FieldUpdatedAt)
-	}
-	if m.template_confidence != nil {
-		fields = append(fields, description.FieldTemplateConfidence)
 	}
 	return fields
 }
@@ -1762,16 +1185,18 @@ func (m *DescriptionMutation) Fields() []string {
 // schema.
 func (m *DescriptionMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case description.FieldSourceID:
+		return m.SourceID()
 	case description.FieldRaw:
 		return m.Raw()
 	case description.FieldVariable:
 		return m.Variable()
+	case description.FieldTemplateConfidence:
+		return m.TemplateConfidence()
 	case description.FieldCreatedAt:
 		return m.CreatedAt()
 	case description.FieldUpdatedAt:
 		return m.UpdatedAt()
-	case description.FieldTemplateConfidence:
-		return m.TemplateConfidence()
 	}
 	return nil, false
 }
@@ -1781,16 +1206,18 @@ func (m *DescriptionMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *DescriptionMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case description.FieldSourceID:
+		return m.OldSourceID(ctx)
 	case description.FieldRaw:
 		return m.OldRaw(ctx)
 	case description.FieldVariable:
 		return m.OldVariable(ctx)
+	case description.FieldTemplateConfidence:
+		return m.OldTemplateConfidence(ctx)
 	case description.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case description.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
-	case description.FieldTemplateConfidence:
-		return m.OldTemplateConfidence(ctx)
 	}
 	return nil, fmt.Errorf("unknown Description field %s", name)
 }
@@ -1800,6 +1227,13 @@ func (m *DescriptionMutation) OldField(ctx context.Context, name string) (ent.Va
 // type.
 func (m *DescriptionMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case description.FieldSourceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceID(v)
+		return nil
 	case description.FieldRaw:
 		v, ok := value.(string)
 		if !ok {
@@ -1814,6 +1248,13 @@ func (m *DescriptionMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetVariable(v)
 		return nil
+	case description.FieldTemplateConfidence:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTemplateConfidence(v)
+		return nil
 	case description.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -1827,13 +1268,6 @@ func (m *DescriptionMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedAt(v)
-		return nil
-	case description.FieldTemplateConfidence:
-		v, ok := value.(bool)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetTemplateConfidence(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Description field %s", name)
@@ -1893,11 +1327,17 @@ func (m *DescriptionMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *DescriptionMutation) ResetField(name string) error {
 	switch name {
+	case description.FieldSourceID:
+		m.ResetSourceID()
+		return nil
 	case description.FieldRaw:
 		m.ResetRaw()
 		return nil
 	case description.FieldVariable:
 		m.ResetVariable()
+		return nil
+	case description.FieldTemplateConfidence:
+		m.ResetTemplateConfidence()
 		return nil
 	case description.FieldCreatedAt:
 		m.ResetCreatedAt()
@@ -1905,24 +1345,18 @@ func (m *DescriptionMutation) ResetField(name string) error {
 	case description.FieldUpdatedAt:
 		m.ResetUpdatedAt()
 		return nil
-	case description.FieldTemplateConfidence:
-		m.ResetTemplateConfidence()
-		return nil
 	}
 	return fmt.Errorf("unknown Description field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *DescriptionMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 3)
 	if m.video != nil {
 		edges = append(edges, description.EdgeVideo)
 	}
 	if m.periodic_template != nil {
 		edges = append(edges, description.EdgePeriodicTemplate)
-	}
-	if m.category_template != nil {
-		edges = append(edges, description.EdgeCategoryTemplate)
 	}
 	if m.description_changes != nil {
 		edges = append(edges, description.EdgeDescriptionChanges)
@@ -1942,10 +1376,6 @@ func (m *DescriptionMutation) AddedIDs(name string) []ent.Value {
 		if id := m.periodic_template; id != nil {
 			return []ent.Value{*id}
 		}
-	case description.EdgeCategoryTemplate:
-		if id := m.category_template; id != nil {
-			return []ent.Value{*id}
-		}
 	case description.EdgeDescriptionChanges:
 		ids := make([]ent.Value, 0, len(m.description_changes))
 		for id := range m.description_changes {
@@ -1958,7 +1388,7 @@ func (m *DescriptionMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *DescriptionMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 3)
 	if m.removeddescription_changes != nil {
 		edges = append(edges, description.EdgeDescriptionChanges)
 	}
@@ -1981,15 +1411,12 @@ func (m *DescriptionMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *DescriptionMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 3)
 	if m.clearedvideo {
 		edges = append(edges, description.EdgeVideo)
 	}
 	if m.clearedperiodic_template {
 		edges = append(edges, description.EdgePeriodicTemplate)
-	}
-	if m.clearedcategory_template {
-		edges = append(edges, description.EdgeCategoryTemplate)
 	}
 	if m.cleareddescription_changes {
 		edges = append(edges, description.EdgeDescriptionChanges)
@@ -2005,8 +1432,6 @@ func (m *DescriptionMutation) EdgeCleared(name string) bool {
 		return m.clearedvideo
 	case description.EdgePeriodicTemplate:
 		return m.clearedperiodic_template
-	case description.EdgeCategoryTemplate:
-		return m.clearedcategory_template
 	case description.EdgeDescriptionChanges:
 		return m.cleareddescription_changes
 	}
@@ -2023,9 +1448,6 @@ func (m *DescriptionMutation) ClearEdge(name string) error {
 	case description.EdgePeriodicTemplate:
 		m.ClearPeriodicTemplate()
 		return nil
-	case description.EdgeCategoryTemplate:
-		m.ClearCategoryTemplate()
-		return nil
 	}
 	return fmt.Errorf("unknown Description unique edge %s", name)
 }
@@ -2039,9 +1461,6 @@ func (m *DescriptionMutation) ResetEdge(name string) error {
 		return nil
 	case description.EdgePeriodicTemplate:
 		m.ResetPeriodicTemplate()
-		return nil
-	case description.EdgeCategoryTemplate:
-		m.ResetCategoryTemplate()
 		return nil
 	case description.EdgeDescriptionChanges:
 		m.ResetDescriptionChanges()

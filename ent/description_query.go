@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/categorydescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/descriptionchange"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodicdescriptiontemplate"
@@ -28,7 +27,6 @@ type DescriptionQuery struct {
 	predicates             []predicate.Description
 	withVideo              *VideoQuery
 	withPeriodicTemplate   *PeriodicDescriptionTemplateQuery
-	withCategoryTemplate   *CategoryDescriptionTemplateQuery
 	withDescriptionChanges *DescriptionChangeQuery
 	withFKs                bool
 	// intermediate query (i.e. traversal path).
@@ -104,28 +102,6 @@ func (dq *DescriptionQuery) QueryPeriodicTemplate() *PeriodicDescriptionTemplate
 			sqlgraph.From(description.Table, description.FieldID, selector),
 			sqlgraph.To(periodicdescriptiontemplate.Table, periodicdescriptiontemplate.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, description.PeriodicTemplateTable, description.PeriodicTemplateColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryCategoryTemplate chains the current query on the "category_template" edge.
-func (dq *DescriptionQuery) QueryCategoryTemplate() *CategoryDescriptionTemplateQuery {
-	query := (&CategoryDescriptionTemplateClient{config: dq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := dq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := dq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(description.Table, description.FieldID, selector),
-			sqlgraph.To(categorydescriptiontemplate.Table, categorydescriptiontemplate.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, description.CategoryTemplateTable, description.CategoryTemplateColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
 		return fromU, nil
@@ -349,7 +325,6 @@ func (dq *DescriptionQuery) Clone() *DescriptionQuery {
 		predicates:             append([]predicate.Description{}, dq.predicates...),
 		withVideo:              dq.withVideo.Clone(),
 		withPeriodicTemplate:   dq.withPeriodicTemplate.Clone(),
-		withCategoryTemplate:   dq.withCategoryTemplate.Clone(),
 		withDescriptionChanges: dq.withDescriptionChanges.Clone(),
 		// clone intermediate query.
 		sql:  dq.sql.Clone(),
@@ -379,17 +354,6 @@ func (dq *DescriptionQuery) WithPeriodicTemplate(opts ...func(*PeriodicDescripti
 	return dq
 }
 
-// WithCategoryTemplate tells the query-builder to eager-load the nodes that are connected to
-// the "category_template" edge. The optional arguments are used to configure the query builder of the edge.
-func (dq *DescriptionQuery) WithCategoryTemplate(opts ...func(*CategoryDescriptionTemplateQuery)) *DescriptionQuery {
-	query := (&CategoryDescriptionTemplateClient{config: dq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	dq.withCategoryTemplate = query
-	return dq
-}
-
 // WithDescriptionChanges tells the query-builder to eager-load the nodes that are connected to
 // the "description_changes" edge. The optional arguments are used to configure the query builder of the edge.
 func (dq *DescriptionQuery) WithDescriptionChanges(opts ...func(*DescriptionChangeQuery)) *DescriptionQuery {
@@ -407,12 +371,12 @@ func (dq *DescriptionQuery) WithDescriptionChanges(opts ...func(*DescriptionChan
 // Example:
 //
 //	var v []struct {
-//		Raw string `json:"raw,omitempty"`
+//		SourceID string `json:"source_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Description.Query().
-//		GroupBy(description.FieldRaw).
+//		GroupBy(description.FieldSourceID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (dq *DescriptionQuery) GroupBy(field string, fields ...string) *DescriptionGroupBy {
@@ -430,11 +394,11 @@ func (dq *DescriptionQuery) GroupBy(field string, fields ...string) *Description
 // Example:
 //
 //	var v []struct {
-//		Raw string `json:"raw,omitempty"`
+//		SourceID string `json:"source_id,omitempty"`
 //	}
 //
 //	client.Description.Query().
-//		Select(description.FieldRaw).
+//		Select(description.FieldSourceID).
 //		Scan(ctx, &v)
 func (dq *DescriptionQuery) Select(fields ...string) *DescriptionSelect {
 	dq.ctx.Fields = append(dq.ctx.Fields, fields...)
@@ -480,14 +444,13 @@ func (dq *DescriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*Description{}
 		withFKs     = dq.withFKs
 		_spec       = dq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [3]bool{
 			dq.withVideo != nil,
 			dq.withPeriodicTemplate != nil,
-			dq.withCategoryTemplate != nil,
 			dq.withDescriptionChanges != nil,
 		}
 	)
-	if dq.withVideo != nil || dq.withPeriodicTemplate != nil || dq.withCategoryTemplate != nil {
+	if dq.withVideo != nil || dq.withPeriodicTemplate != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -520,12 +483,6 @@ func (dq *DescriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	if query := dq.withPeriodicTemplate; query != nil {
 		if err := dq.loadPeriodicTemplate(ctx, query, nodes, nil,
 			func(n *Description, e *PeriodicDescriptionTemplate) { n.Edges.PeriodicTemplate = e }); err != nil {
-			return nil, err
-		}
-	}
-	if query := dq.withCategoryTemplate; query != nil {
-		if err := dq.loadCategoryTemplate(ctx, query, nodes, nil,
-			func(n *Description, e *CategoryDescriptionTemplate) { n.Edges.CategoryTemplate = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -598,38 +555,6 @@ func (dq *DescriptionQuery) loadPeriodicTemplate(ctx context.Context, query *Per
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "periodic_id" returned %v`, n.ID)
-		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
-	}
-	return nil
-}
-func (dq *DescriptionQuery) loadCategoryTemplate(ctx context.Context, query *CategoryDescriptionTemplateQuery, nodes []*Description, init func(*Description), assign func(*Description, *CategoryDescriptionTemplate)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*Description)
-	for i := range nodes {
-		if nodes[i].category_id == nil {
-			continue
-		}
-		fk := *nodes[i].category_id
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
-	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(categorydescriptiontemplate.IDIn(ids...))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "category_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

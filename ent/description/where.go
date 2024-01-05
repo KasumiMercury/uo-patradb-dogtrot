@@ -65,6 +65,11 @@ func IDContainsFold(id string) predicate.Description {
 	return predicate.Description(sql.FieldContainsFold(FieldID, id))
 }
 
+// SourceID applies equality check predicate on the "source_id" field. It's identical to SourceIDEQ.
+func SourceID(v string) predicate.Description {
+	return predicate.Description(sql.FieldEQ(FieldSourceID, v))
+}
+
 // Raw applies equality check predicate on the "raw" field. It's identical to RawEQ.
 func Raw(v string) predicate.Description {
 	return predicate.Description(sql.FieldEQ(FieldRaw, v))
@@ -73,6 +78,11 @@ func Raw(v string) predicate.Description {
 // Variable applies equality check predicate on the "variable" field. It's identical to VariableEQ.
 func Variable(v string) predicate.Description {
 	return predicate.Description(sql.FieldEQ(FieldVariable, v))
+}
+
+// TemplateConfidence applies equality check predicate on the "template_confidence" field. It's identical to TemplateConfidenceEQ.
+func TemplateConfidence(v bool) predicate.Description {
+	return predicate.Description(sql.FieldEQ(FieldTemplateConfidence, v))
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
@@ -85,9 +95,69 @@ func UpdatedAt(v time.Time) predicate.Description {
 	return predicate.Description(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
-// TemplateConfidence applies equality check predicate on the "template_confidence" field. It's identical to TemplateConfidenceEQ.
-func TemplateConfidence(v bool) predicate.Description {
-	return predicate.Description(sql.FieldEQ(FieldTemplateConfidence, v))
+// SourceIDEQ applies the EQ predicate on the "source_id" field.
+func SourceIDEQ(v string) predicate.Description {
+	return predicate.Description(sql.FieldEQ(FieldSourceID, v))
+}
+
+// SourceIDNEQ applies the NEQ predicate on the "source_id" field.
+func SourceIDNEQ(v string) predicate.Description {
+	return predicate.Description(sql.FieldNEQ(FieldSourceID, v))
+}
+
+// SourceIDIn applies the In predicate on the "source_id" field.
+func SourceIDIn(vs ...string) predicate.Description {
+	return predicate.Description(sql.FieldIn(FieldSourceID, vs...))
+}
+
+// SourceIDNotIn applies the NotIn predicate on the "source_id" field.
+func SourceIDNotIn(vs ...string) predicate.Description {
+	return predicate.Description(sql.FieldNotIn(FieldSourceID, vs...))
+}
+
+// SourceIDGT applies the GT predicate on the "source_id" field.
+func SourceIDGT(v string) predicate.Description {
+	return predicate.Description(sql.FieldGT(FieldSourceID, v))
+}
+
+// SourceIDGTE applies the GTE predicate on the "source_id" field.
+func SourceIDGTE(v string) predicate.Description {
+	return predicate.Description(sql.FieldGTE(FieldSourceID, v))
+}
+
+// SourceIDLT applies the LT predicate on the "source_id" field.
+func SourceIDLT(v string) predicate.Description {
+	return predicate.Description(sql.FieldLT(FieldSourceID, v))
+}
+
+// SourceIDLTE applies the LTE predicate on the "source_id" field.
+func SourceIDLTE(v string) predicate.Description {
+	return predicate.Description(sql.FieldLTE(FieldSourceID, v))
+}
+
+// SourceIDContains applies the Contains predicate on the "source_id" field.
+func SourceIDContains(v string) predicate.Description {
+	return predicate.Description(sql.FieldContains(FieldSourceID, v))
+}
+
+// SourceIDHasPrefix applies the HasPrefix predicate on the "source_id" field.
+func SourceIDHasPrefix(v string) predicate.Description {
+	return predicate.Description(sql.FieldHasPrefix(FieldSourceID, v))
+}
+
+// SourceIDHasSuffix applies the HasSuffix predicate on the "source_id" field.
+func SourceIDHasSuffix(v string) predicate.Description {
+	return predicate.Description(sql.FieldHasSuffix(FieldSourceID, v))
+}
+
+// SourceIDEqualFold applies the EqualFold predicate on the "source_id" field.
+func SourceIDEqualFold(v string) predicate.Description {
+	return predicate.Description(sql.FieldEqualFold(FieldSourceID, v))
+}
+
+// SourceIDContainsFold applies the ContainsFold predicate on the "source_id" field.
+func SourceIDContainsFold(v string) predicate.Description {
+	return predicate.Description(sql.FieldContainsFold(FieldSourceID, v))
 }
 
 // RawEQ applies the EQ predicate on the "raw" field.
@@ -230,6 +300,16 @@ func VariableContainsFold(v string) predicate.Description {
 	return predicate.Description(sql.FieldContainsFold(FieldVariable, v))
 }
 
+// TemplateConfidenceEQ applies the EQ predicate on the "template_confidence" field.
+func TemplateConfidenceEQ(v bool) predicate.Description {
+	return predicate.Description(sql.FieldEQ(FieldTemplateConfidence, v))
+}
+
+// TemplateConfidenceNEQ applies the NEQ predicate on the "template_confidence" field.
+func TemplateConfidenceNEQ(v bool) predicate.Description {
+	return predicate.Description(sql.FieldNEQ(FieldTemplateConfidence, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Description {
 	return predicate.Description(sql.FieldEQ(FieldCreatedAt, v))
@@ -310,16 +390,6 @@ func UpdatedAtLTE(v time.Time) predicate.Description {
 	return predicate.Description(sql.FieldLTE(FieldUpdatedAt, v))
 }
 
-// TemplateConfidenceEQ applies the EQ predicate on the "template_confidence" field.
-func TemplateConfidenceEQ(v bool) predicate.Description {
-	return predicate.Description(sql.FieldEQ(FieldTemplateConfidence, v))
-}
-
-// TemplateConfidenceNEQ applies the NEQ predicate on the "template_confidence" field.
-func TemplateConfidenceNEQ(v bool) predicate.Description {
-	return predicate.Description(sql.FieldNEQ(FieldTemplateConfidence, v))
-}
-
 // HasVideo applies the HasEdge predicate on the "video" edge.
 func HasVideo() predicate.Description {
 	return predicate.Description(func(s *sql.Selector) {
@@ -358,29 +428,6 @@ func HasPeriodicTemplate() predicate.Description {
 func HasPeriodicTemplateWith(preds ...predicate.PeriodicDescriptionTemplate) predicate.Description {
 	return predicate.Description(func(s *sql.Selector) {
 		step := newPeriodicTemplateStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasCategoryTemplate applies the HasEdge predicate on the "category_template" edge.
-func HasCategoryTemplate() predicate.Description {
-	return predicate.Description(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, CategoryTemplateTable, CategoryTemplateColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasCategoryTemplateWith applies the HasEdge predicate on the "category_template" edge with a given conditions (other predicates).
-func HasCategoryTemplateWith(preds ...predicate.CategoryDescriptionTemplate) predicate.Description {
-	return predicate.Description(func(s *sql.Selector) {
-		step := newCategoryTemplateStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

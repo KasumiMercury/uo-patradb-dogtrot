@@ -5,7 +5,6 @@ package ent
 import (
 	"time"
 
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/categorydescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/descriptionchange"
@@ -24,17 +23,6 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
-	categorydescriptiontemplateMixin := schema.CategoryDescriptionTemplate{}.Mixin()
-	categorydescriptiontemplateMixinFields0 := categorydescriptiontemplateMixin[0].Fields()
-	_ = categorydescriptiontemplateMixinFields0
-	categorydescriptiontemplateFields := schema.CategoryDescriptionTemplate{}.Fields()
-	_ = categorydescriptiontemplateFields
-	// categorydescriptiontemplateDescID is the schema descriptor for id field.
-	categorydescriptiontemplateDescID := categorydescriptiontemplateMixinFields0[0].Descriptor()
-	// categorydescriptiontemplate.DefaultID holds the default value on creation for the id field.
-	categorydescriptiontemplate.DefaultID = categorydescriptiontemplateDescID.Default.(func() string)
-	// categorydescriptiontemplate.IDValidator is a validator for the "id" field. It is called by the builders before save.
-	categorydescriptiontemplate.IDValidator = categorydescriptiontemplateDescID.Validators[0].(func(string) error)
 	channelMixin := schema.Channel{}.Mixin()
 	channelMixinFields0 := channelMixin[0].Fields()
 	_ = channelMixinFields0
@@ -81,24 +69,28 @@ func init() {
 	_ = descriptionMixinFields0
 	descriptionFields := schema.Description{}.Fields()
 	_ = descriptionFields
+	// descriptionDescSourceID is the schema descriptor for source_id field.
+	descriptionDescSourceID := descriptionFields[0].Descriptor()
+	// description.SourceIDValidator is a validator for the "source_id" field. It is called by the builders before save.
+	description.SourceIDValidator = descriptionDescSourceID.Validators[0].(func(string) error)
 	// descriptionDescRaw is the schema descriptor for raw field.
-	descriptionDescRaw := descriptionFields[0].Descriptor()
+	descriptionDescRaw := descriptionFields[1].Descriptor()
 	// description.RawValidator is a validator for the "raw" field. It is called by the builders before save.
 	description.RawValidator = descriptionDescRaw.Validators[0].(func(string) error)
+	// descriptionDescTemplateConfidence is the schema descriptor for template_confidence field.
+	descriptionDescTemplateConfidence := descriptionFields[3].Descriptor()
+	// description.DefaultTemplateConfidence holds the default value on creation for the template_confidence field.
+	description.DefaultTemplateConfidence = descriptionDescTemplateConfidence.Default.(bool)
 	// descriptionDescCreatedAt is the schema descriptor for created_at field.
-	descriptionDescCreatedAt := descriptionFields[2].Descriptor()
+	descriptionDescCreatedAt := descriptionFields[4].Descriptor()
 	// description.DefaultCreatedAt holds the default value on creation for the created_at field.
 	description.DefaultCreatedAt = descriptionDescCreatedAt.Default.(func() time.Time)
 	// descriptionDescUpdatedAt is the schema descriptor for updated_at field.
-	descriptionDescUpdatedAt := descriptionFields[3].Descriptor()
+	descriptionDescUpdatedAt := descriptionFields[5].Descriptor()
 	// description.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	description.DefaultUpdatedAt = descriptionDescUpdatedAt.Default.(func() time.Time)
 	// description.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	description.UpdateDefaultUpdatedAt = descriptionDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// descriptionDescTemplateConfidence is the schema descriptor for template_confidence field.
-	descriptionDescTemplateConfidence := descriptionFields[4].Descriptor()
-	// description.DefaultTemplateConfidence holds the default value on creation for the template_confidence field.
-	description.DefaultTemplateConfidence = descriptionDescTemplateConfidence.Default.(bool)
 	// descriptionDescID is the schema descriptor for id field.
 	descriptionDescID := descriptionMixinFields0[0].Descriptor()
 	// description.DefaultID holds the default value on creation for the id field.

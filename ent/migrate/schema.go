@@ -8,19 +8,6 @@ import (
 )
 
 var (
-	// CategoryDescriptionTemplatesColumns holds the columns for the "category_description_templates" table.
-	CategoryDescriptionTemplatesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString, Size: 26},
-		{Name: "text", Type: field.TypeString},
-		{Name: "start_use_at", Type: field.TypeTime, Nullable: true},
-		{Name: "last_use_at", Type: field.TypeTime, Nullable: true},
-	}
-	// CategoryDescriptionTemplatesTable holds the schema information for the "category_description_templates" table.
-	CategoryDescriptionTemplatesTable = &schema.Table{
-		Name:       "category_description_templates",
-		Columns:    CategoryDescriptionTemplatesColumns,
-		PrimaryKey: []*schema.Column{CategoryDescriptionTemplatesColumns[0]},
-	}
 	// ChannelsColumns holds the columns for the "channels" table.
 	ChannelsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
@@ -38,13 +25,13 @@ var (
 	// DescriptionsColumns holds the columns for the "descriptions" table.
 	DescriptionsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
+		{Name: "source_id", Type: field.TypeString, Unique: true, Size: 12},
 		{Name: "raw", Type: field.TypeString, Size: 5000},
 		{Name: "variable", Type: field.TypeString, Nullable: true},
+		{Name: "template_confidence", Type: field.TypeBool, Default: false},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "template_confidence", Type: field.TypeBool, Default: false},
 		{Name: "periodic_id", Type: field.TypeString, Nullable: true, Size: 26},
-		{Name: "category_id", Type: field.TypeString, Nullable: true, Size: 26},
 		{Name: "video_id", Type: field.TypeString, Unique: true, Size: 26},
 	}
 	// DescriptionsTable holds the schema information for the "descriptions" table.
@@ -55,14 +42,8 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "descriptions_periodic_description_templates_periodic_template",
-				Columns:    []*schema.Column{DescriptionsColumns[6]},
-				RefColumns: []*schema.Column{PeriodicDescriptionTemplatesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "descriptions_category_description_templates_category_template",
 				Columns:    []*schema.Column{DescriptionsColumns[7]},
-				RefColumns: []*schema.Column{CategoryDescriptionTemplatesColumns[0]},
+				RefColumns: []*schema.Column{PeriodicDescriptionTemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -315,7 +296,6 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		CategoryDescriptionTemplatesTable,
 		ChannelsTable,
 		DescriptionsTable,
 		DescriptionChangesTable,
@@ -334,8 +314,7 @@ var (
 
 func init() {
 	DescriptionsTable.ForeignKeys[0].RefTable = PeriodicDescriptionTemplatesTable
-	DescriptionsTable.ForeignKeys[1].RefTable = CategoryDescriptionTemplatesTable
-	DescriptionsTable.ForeignKeys[2].RefTable = VideosTable
+	DescriptionsTable.ForeignKeys[1].RefTable = VideosTable
 	DescriptionChangesTable.ForeignKeys[0].RefTable = DescriptionsTable
 	PatChatsTable.ForeignKeys[0].RefTable = VideosTable
 	StreamSchedulesTable.ForeignKeys[0].RefTable = VideosTable

@@ -15,7 +15,6 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/categorydescriptiontemplate"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/channel"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
 	"github.com/KasumiMercury/uo-patradb-dogtrot/ent/descriptionchange"
@@ -34,8 +33,6 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
-	// CategoryDescriptionTemplate is the client for interacting with the CategoryDescriptionTemplate builders.
-	CategoryDescriptionTemplate *CategoryDescriptionTemplateClient
 	// Channel is the client for interacting with the Channel builders.
 	Channel *ChannelClient
 	// Description is the client for interacting with the Description builders.
@@ -69,7 +66,6 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
-	c.CategoryDescriptionTemplate = NewCategoryDescriptionTemplateClient(c.config)
 	c.Channel = NewChannelClient(c.config)
 	c.Description = NewDescriptionClient(c.config)
 	c.DescriptionChange = NewDescriptionChangeClient(c.config)
@@ -173,7 +169,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		ctx:                         ctx,
 		config:                      cfg,
-		CategoryDescriptionTemplate: NewCategoryDescriptionTemplateClient(cfg),
 		Channel:                     NewChannelClient(cfg),
 		Description:                 NewDescriptionClient(cfg),
 		DescriptionChange:           NewDescriptionChangeClient(cfg),
@@ -204,7 +199,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		ctx:                         ctx,
 		config:                      cfg,
-		CategoryDescriptionTemplate: NewCategoryDescriptionTemplateClient(cfg),
 		Channel:                     NewChannelClient(cfg),
 		Description:                 NewDescriptionClient(cfg),
 		DescriptionChange:           NewDescriptionChangeClient(cfg),
@@ -222,7 +216,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		CategoryDescriptionTemplate.
+//		Channel.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -245,9 +239,9 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.CategoryDescriptionTemplate, c.Channel, c.Description, c.DescriptionChange,
-		c.PatChat, c.PeriodicDescriptionTemplate, c.StreamSchedule, c.Video,
-		c.VideoDisallowRange, c.VideoPlayRange, c.VideoTag, c.VideoTitleChange,
+		c.Channel, c.Description, c.DescriptionChange, c.PatChat,
+		c.PeriodicDescriptionTemplate, c.StreamSchedule, c.Video, c.VideoDisallowRange,
+		c.VideoPlayRange, c.VideoTag, c.VideoTitleChange,
 	} {
 		n.Use(hooks...)
 	}
@@ -257,9 +251,9 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.CategoryDescriptionTemplate, c.Channel, c.Description, c.DescriptionChange,
-		c.PatChat, c.PeriodicDescriptionTemplate, c.StreamSchedule, c.Video,
-		c.VideoDisallowRange, c.VideoPlayRange, c.VideoTag, c.VideoTitleChange,
+		c.Channel, c.Description, c.DescriptionChange, c.PatChat,
+		c.PeriodicDescriptionTemplate, c.StreamSchedule, c.Video, c.VideoDisallowRange,
+		c.VideoPlayRange, c.VideoTag, c.VideoTitleChange,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -268,8 +262,6 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
-	case *CategoryDescriptionTemplateMutation:
-		return c.CategoryDescriptionTemplate.mutate(ctx, m)
 	case *ChannelMutation:
 		return c.Channel.mutate(ctx, m)
 	case *DescriptionMutation:
@@ -294,155 +286,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.VideoTitleChange.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
-	}
-}
-
-// CategoryDescriptionTemplateClient is a client for the CategoryDescriptionTemplate schema.
-type CategoryDescriptionTemplateClient struct {
-	config
-}
-
-// NewCategoryDescriptionTemplateClient returns a client for the CategoryDescriptionTemplate from the given config.
-func NewCategoryDescriptionTemplateClient(c config) *CategoryDescriptionTemplateClient {
-	return &CategoryDescriptionTemplateClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `categorydescriptiontemplate.Hooks(f(g(h())))`.
-func (c *CategoryDescriptionTemplateClient) Use(hooks ...Hook) {
-	c.hooks.CategoryDescriptionTemplate = append(c.hooks.CategoryDescriptionTemplate, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `categorydescriptiontemplate.Intercept(f(g(h())))`.
-func (c *CategoryDescriptionTemplateClient) Intercept(interceptors ...Interceptor) {
-	c.inters.CategoryDescriptionTemplate = append(c.inters.CategoryDescriptionTemplate, interceptors...)
-}
-
-// Create returns a builder for creating a CategoryDescriptionTemplate entity.
-func (c *CategoryDescriptionTemplateClient) Create() *CategoryDescriptionTemplateCreate {
-	mutation := newCategoryDescriptionTemplateMutation(c.config, OpCreate)
-	return &CategoryDescriptionTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of CategoryDescriptionTemplate entities.
-func (c *CategoryDescriptionTemplateClient) CreateBulk(builders ...*CategoryDescriptionTemplateCreate) *CategoryDescriptionTemplateCreateBulk {
-	return &CategoryDescriptionTemplateCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *CategoryDescriptionTemplateClient) MapCreateBulk(slice any, setFunc func(*CategoryDescriptionTemplateCreate, int)) *CategoryDescriptionTemplateCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &CategoryDescriptionTemplateCreateBulk{err: fmt.Errorf("calling to CategoryDescriptionTemplateClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*CategoryDescriptionTemplateCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &CategoryDescriptionTemplateCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for CategoryDescriptionTemplate.
-func (c *CategoryDescriptionTemplateClient) Update() *CategoryDescriptionTemplateUpdate {
-	mutation := newCategoryDescriptionTemplateMutation(c.config, OpUpdate)
-	return &CategoryDescriptionTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *CategoryDescriptionTemplateClient) UpdateOne(cdt *CategoryDescriptionTemplate) *CategoryDescriptionTemplateUpdateOne {
-	mutation := newCategoryDescriptionTemplateMutation(c.config, OpUpdateOne, withCategoryDescriptionTemplate(cdt))
-	return &CategoryDescriptionTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *CategoryDescriptionTemplateClient) UpdateOneID(id string) *CategoryDescriptionTemplateUpdateOne {
-	mutation := newCategoryDescriptionTemplateMutation(c.config, OpUpdateOne, withCategoryDescriptionTemplateID(id))
-	return &CategoryDescriptionTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for CategoryDescriptionTemplate.
-func (c *CategoryDescriptionTemplateClient) Delete() *CategoryDescriptionTemplateDelete {
-	mutation := newCategoryDescriptionTemplateMutation(c.config, OpDelete)
-	return &CategoryDescriptionTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *CategoryDescriptionTemplateClient) DeleteOne(cdt *CategoryDescriptionTemplate) *CategoryDescriptionTemplateDeleteOne {
-	return c.DeleteOneID(cdt.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *CategoryDescriptionTemplateClient) DeleteOneID(id string) *CategoryDescriptionTemplateDeleteOne {
-	builder := c.Delete().Where(categorydescriptiontemplate.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &CategoryDescriptionTemplateDeleteOne{builder}
-}
-
-// Query returns a query builder for CategoryDescriptionTemplate.
-func (c *CategoryDescriptionTemplateClient) Query() *CategoryDescriptionTemplateQuery {
-	return &CategoryDescriptionTemplateQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeCategoryDescriptionTemplate},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a CategoryDescriptionTemplate entity by its id.
-func (c *CategoryDescriptionTemplateClient) Get(ctx context.Context, id string) (*CategoryDescriptionTemplate, error) {
-	return c.Query().Where(categorydescriptiontemplate.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *CategoryDescriptionTemplateClient) GetX(ctx context.Context, id string) *CategoryDescriptionTemplate {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryDescriptions queries the descriptions edge of a CategoryDescriptionTemplate.
-func (c *CategoryDescriptionTemplateClient) QueryDescriptions(cdt *CategoryDescriptionTemplate) *DescriptionQuery {
-	query := (&DescriptionClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := cdt.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(categorydescriptiontemplate.Table, categorydescriptiontemplate.FieldID, id),
-			sqlgraph.To(description.Table, description.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, categorydescriptiontemplate.DescriptionsTable, categorydescriptiontemplate.DescriptionsColumn),
-		)
-		fromV = sqlgraph.Neighbors(cdt.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *CategoryDescriptionTemplateClient) Hooks() []Hook {
-	return c.hooks.CategoryDescriptionTemplate
-}
-
-// Interceptors returns the client interceptors.
-func (c *CategoryDescriptionTemplateClient) Interceptors() []Interceptor {
-	return c.inters.CategoryDescriptionTemplate
-}
-
-func (c *CategoryDescriptionTemplateClient) mutate(ctx context.Context, m *CategoryDescriptionTemplateMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&CategoryDescriptionTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&CategoryDescriptionTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&CategoryDescriptionTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&CategoryDescriptionTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown CategoryDescriptionTemplate mutation op: %q", m.Op())
 	}
 }
 
@@ -728,22 +571,6 @@ func (c *DescriptionClient) QueryPeriodicTemplate(d *Description) *PeriodicDescr
 			sqlgraph.From(description.Table, description.FieldID, id),
 			sqlgraph.To(periodicdescriptiontemplate.Table, periodicdescriptiontemplate.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, description.PeriodicTemplateTable, description.PeriodicTemplateColumn),
-		)
-		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryCategoryTemplate queries the category_template edge of a Description.
-func (c *DescriptionClient) QueryCategoryTemplate(d *Description) *CategoryDescriptionTemplateQuery {
-	query := (&CategoryDescriptionTemplateClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := d.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(description.Table, description.FieldID, id),
-			sqlgraph.To(categorydescriptiontemplate.Table, categorydescriptiontemplate.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, description.CategoryTemplateTable, description.CategoryTemplateColumn),
 		)
 		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
 		return fromV, nil
@@ -2232,13 +2059,13 @@ func (c *VideoTitleChangeClient) mutate(ctx context.Context, m *VideoTitleChange
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		CategoryDescriptionTemplate, Channel, Description, DescriptionChange, PatChat,
-		PeriodicDescriptionTemplate, StreamSchedule, Video, VideoDisallowRange,
-		VideoPlayRange, VideoTag, VideoTitleChange []ent.Hook
+		Channel, Description, DescriptionChange, PatChat, PeriodicDescriptionTemplate,
+		StreamSchedule, Video, VideoDisallowRange, VideoPlayRange, VideoTag,
+		VideoTitleChange []ent.Hook
 	}
 	inters struct {
-		CategoryDescriptionTemplate, Channel, Description, DescriptionChange, PatChat,
-		PeriodicDescriptionTemplate, StreamSchedule, Video, VideoDisallowRange,
-		VideoPlayRange, VideoTag, VideoTitleChange []ent.Interceptor
+		Channel, Description, DescriptionChange, PatChat, PeriodicDescriptionTemplate,
+		StreamSchedule, Video, VideoDisallowRange, VideoPlayRange, VideoTag,
+		VideoTitleChange []ent.Interceptor
 	}
 )

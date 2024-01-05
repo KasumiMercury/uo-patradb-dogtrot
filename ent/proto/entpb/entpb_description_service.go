@@ -9,7 +9,6 @@ import (
 	sqlgraph "entgo.io/ent/dialect/sql/sqlgraph"
 	fmt "fmt"
 	ent "github.com/KasumiMercury/uo-patradb-dogtrot/ent"
-	categorydescriptiontemplate "github.com/KasumiMercury/uo-patradb-dogtrot/ent/categorydescriptiontemplate"
 	description "github.com/KasumiMercury/uo-patradb-dogtrot/ent/description"
 	periodicdescriptiontemplate "github.com/KasumiMercury/uo-patradb-dogtrot/ent/periodicdescriptiontemplate"
 	video "github.com/KasumiMercury/uo-patradb-dogtrot/ent/video"
@@ -41,18 +40,14 @@ func toProtoDescription(e *ent.Description) (*Description, error) {
 	v.Id = id
 	raw := e.Raw
 	v.Raw = raw
+	source_id := e.SourceID
+	v.SourceId = source_id
 	template_confidence := e.TemplateConfidence
 	v.TemplateConfidence = template_confidence
 	updated_at := timestamppb.New(e.UpdatedAt)
 	v.UpdatedAt = updated_at
 	variable := wrapperspb.String(e.Variable)
 	v.Variable = variable
-	if edg := e.Edges.CategoryTemplate; edg != nil {
-		id := edg.ID
-		v.CategoryTemplate = &CategoryDescriptionTemplate{
-			Id: id,
-		}
-	}
 	if edg := e.Edges.PeriodicTemplate; edg != nil {
 		id := edg.ID
 		v.PeriodicTemplate = &PeriodicDescriptionTemplate{
@@ -119,9 +114,6 @@ func (svc *DescriptionService) Get(ctx context.Context, req *GetDescriptionReque
 	case GetDescriptionRequest_WITH_EDGE_IDS:
 		get, err = svc.client.Description.Query().
 			Where(description.ID(id)).
-			WithCategoryTemplate(func(query *ent.CategoryDescriptionTemplateQuery) {
-				query.Select(categorydescriptiontemplate.FieldID)
-			}).
 			WithPeriodicTemplate(func(query *ent.PeriodicDescriptionTemplateQuery) {
 				query.Select(periodicdescriptiontemplate.FieldID)
 			}).
@@ -150,6 +142,8 @@ func (svc *DescriptionService) Update(ctx context.Context, req *UpdateDescriptio
 	m := svc.client.Description.UpdateOneID(descriptionID)
 	descriptionRaw := description.GetRaw()
 	m.SetRaw(descriptionRaw)
+	descriptionSourceID := description.GetSourceId()
+	m.SetSourceID(descriptionSourceID)
 	descriptionTemplateConfidence := description.GetTemplateConfidence()
 	m.SetTemplateConfidence(descriptionTemplateConfidence)
 	descriptionUpdatedAt := runtime.ExtractTime(description.GetUpdatedAt())
@@ -157,10 +151,6 @@ func (svc *DescriptionService) Update(ctx context.Context, req *UpdateDescriptio
 	if description.GetVariable() != nil {
 		descriptionVariable := description.GetVariable().GetValue()
 		m.SetVariable(descriptionVariable)
-	}
-	if description.GetCategoryTemplate() != nil {
-		descriptionCategoryTemplate := description.GetCategoryTemplate().GetId()
-		m.SetCategoryTemplateID(descriptionCategoryTemplate)
 	}
 	if description.GetPeriodicTemplate() != nil {
 		descriptionPeriodicTemplate := description.GetPeriodicTemplate().GetId()
@@ -236,9 +226,6 @@ func (svc *DescriptionService) List(ctx context.Context, req *ListDescriptionReq
 		entList, err = listQuery.All(ctx)
 	case ListDescriptionRequest_WITH_EDGE_IDS:
 		entList, err = listQuery.
-			WithCategoryTemplate(func(query *ent.CategoryDescriptionTemplateQuery) {
-				query.Select(categorydescriptiontemplate.FieldID)
-			}).
 			WithPeriodicTemplate(func(query *ent.PeriodicDescriptionTemplateQuery) {
 				query.Select(periodicdescriptiontemplate.FieldID)
 			}).
@@ -308,6 +295,8 @@ func (svc *DescriptionService) createBuilder(description *Description) (*ent.Des
 	m := svc.client.Description.Create()
 	descriptionRaw := description.GetRaw()
 	m.SetRaw(descriptionRaw)
+	descriptionSourceID := description.GetSourceId()
+	m.SetSourceID(descriptionSourceID)
 	descriptionTemplateConfidence := description.GetTemplateConfidence()
 	m.SetTemplateConfidence(descriptionTemplateConfidence)
 	descriptionUpdatedAt := runtime.ExtractTime(description.GetUpdatedAt())
@@ -315,10 +304,6 @@ func (svc *DescriptionService) createBuilder(description *Description) (*ent.Des
 	if description.GetVariable() != nil {
 		descriptionVariable := description.GetVariable().GetValue()
 		m.SetVariable(descriptionVariable)
-	}
-	if description.GetCategoryTemplate() != nil {
-		descriptionCategoryTemplate := description.GetCategoryTemplate().GetId()
-		m.SetCategoryTemplateID(descriptionCategoryTemplate)
 	}
 	if description.GetPeriodicTemplate() != nil {
 		descriptionPeriodicTemplate := description.GetPeriodicTemplate().GetId()

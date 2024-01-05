@@ -45,7 +45,7 @@ func (Description) Annotations() []schema.Annotation {
 // Edges of the Description.
 func (Description) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("video", Video.Type).Ref("descriptions").Unique().Required().Annotations(entproto.Field(5)),
+		edge.From("video", Video.Type).Ref("descriptions").Unique().Required().Annotations(entproto.Field(9)),
 		edge.To("periodic_template", PeriodicDescriptionTemplate.Type).Unique().StorageKey(edge.Column("periodic_id")).Annotations(entproto.Field(7)),
 		edge.To("description_changes", DescriptionChange.Type).StorageKey(edge.Column("description_id")).Annotations(entproto.Skip()),
 	}

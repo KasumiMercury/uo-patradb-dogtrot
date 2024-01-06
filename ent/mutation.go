@@ -4646,24 +4646,10 @@ func (m *VideoMutation) AddedNumbering() (r int, exists bool) {
 	return *v, true
 }
 
-// ClearNumbering clears the value of the "numbering" field.
-func (m *VideoMutation) ClearNumbering() {
-	m.numbering = nil
-	m.addnumbering = nil
-	m.clearedFields[video.FieldNumbering] = struct{}{}
-}
-
-// NumberingCleared returns if the "numbering" field was cleared in this mutation.
-func (m *VideoMutation) NumberingCleared() bool {
-	_, ok := m.clearedFields[video.FieldNumbering]
-	return ok
-}
-
 // ResetNumbering resets all changes to the "numbering" field.
 func (m *VideoMutation) ResetNumbering() {
 	m.numbering = nil
 	m.addnumbering = nil
-	delete(m.clearedFields, video.FieldNumbering)
 }
 
 // SetCreatedAt sets the "created_at" field.
@@ -5444,9 +5430,6 @@ func (m *VideoMutation) ClearedFields() []string {
 	if m.FieldCleared(video.FieldActualEndAt) {
 		fields = append(fields, video.FieldActualEndAt)
 	}
-	if m.FieldCleared(video.FieldNumbering) {
-		fields = append(fields, video.FieldNumbering)
-	}
 	return fields
 }
 
@@ -5475,9 +5458,6 @@ func (m *VideoMutation) ClearField(name string) error {
 		return nil
 	case video.FieldActualEndAt:
 		m.ClearActualEndAt()
-		return nil
-	case video.FieldNumbering:
-		m.ClearNumbering()
 		return nil
 	}
 	return fmt.Errorf("unknown Video nullable field %s", name)
@@ -7080,24 +7060,10 @@ func (m *VideoTagMutation) AddedSeriesNumbering() (r int, exists bool) {
 	return *v, true
 }
 
-// ClearSeriesNumbering clears the value of the "series_numbering" field.
-func (m *VideoTagMutation) ClearSeriesNumbering() {
-	m.series_numbering = nil
-	m.addseries_numbering = nil
-	m.clearedFields[videotag.FieldSeriesNumbering] = struct{}{}
-}
-
-// SeriesNumberingCleared returns if the "series_numbering" field was cleared in this mutation.
-func (m *VideoTagMutation) SeriesNumberingCleared() bool {
-	_, ok := m.clearedFields[videotag.FieldSeriesNumbering]
-	return ok
-}
-
 // ResetSeriesNumbering resets all changes to the "series_numbering" field.
 func (m *VideoTagMutation) ResetSeriesNumbering() {
 	m.series_numbering = nil
 	m.addseries_numbering = nil
-	delete(m.clearedFields, videotag.FieldSeriesNumbering)
 }
 
 // AddVideoIDs adds the "videos" edge to the Video entity by ids.
@@ -7301,11 +7267,7 @@ func (m *VideoTagMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *VideoTagMutation) ClearedFields() []string {
-	var fields []string
-	if m.FieldCleared(videotag.FieldSeriesNumbering) {
-		fields = append(fields, videotag.FieldSeriesNumbering)
-	}
-	return fields
+	return nil
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -7318,11 +7280,6 @@ func (m *VideoTagMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *VideoTagMutation) ClearField(name string) error {
-	switch name {
-	case videotag.FieldSeriesNumbering:
-		m.ClearSeriesNumbering()
-		return nil
-	}
 	return fmt.Errorf("unknown VideoTag nullable field %s", name)
 }
 

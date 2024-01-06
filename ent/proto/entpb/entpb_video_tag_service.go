@@ -14,7 +14,6 @@ import (
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
-	wrapperspb "google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 // VideoTagService implements VideoTagServiceServer
@@ -35,7 +34,7 @@ func toProtoVideoTag(e *ent.VideoTag) (*VideoTag, error) {
 	v := &VideoTag{}
 	id := e.ID
 	v.Id = id
-	series_numbering := wrapperspb.Int64(int64(e.SeriesNumbering))
+	series_numbering := int64(e.SeriesNumbering)
 	v.SeriesNumbering = series_numbering
 	title := e.Title
 	v.Title = title
@@ -122,10 +121,8 @@ func (svc *VideoTagService) Update(ctx context.Context, req *UpdateVideoTagReque
 	videotag := req.GetVideoTag()
 	videotagID := videotag.GetId()
 	m := svc.client.VideoTag.UpdateOneID(videotagID)
-	if videotag.GetSeriesNumbering() != nil {
-		videotagSeriesNumbering := int(videotag.GetSeriesNumbering().GetValue())
-		m.SetSeriesNumbering(videotagSeriesNumbering)
-	}
+	videotagSeriesNumbering := int(videotag.GetSeriesNumbering())
+	m.SetSeriesNumbering(videotagSeriesNumbering)
 	videotagTitle := videotag.GetTitle()
 	m.SetTitle(videotagTitle)
 	for _, item := range videotag.GetVideos() {
@@ -262,10 +259,8 @@ func (svc *VideoTagService) BatchCreate(ctx context.Context, req *BatchCreateVid
 
 func (svc *VideoTagService) createBuilder(videotag *VideoTag) (*ent.VideoTagCreate, error) {
 	m := svc.client.VideoTag.Create()
-	if videotag.GetSeriesNumbering() != nil {
-		videotagSeriesNumbering := int(videotag.GetSeriesNumbering().GetValue())
-		m.SetSeriesNumbering(videotagSeriesNumbering)
-	}
+	videotagSeriesNumbering := int(videotag.GetSeriesNumbering())
+	m.SetSeriesNumbering(videotagSeriesNumbering)
 	videotagTitle := videotag.GetTitle()
 	m.SetTitle(videotagTitle)
 	for _, item := range videotag.GetVideos() {

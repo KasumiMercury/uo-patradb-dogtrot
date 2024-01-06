@@ -77,12 +77,6 @@ func (vtu *VideoTagUpdate) AddSeriesNumbering(i int) *VideoTagUpdate {
 	return vtu
 }
 
-// ClearSeriesNumbering clears the value of the "series_numbering" field.
-func (vtu *VideoTagUpdate) ClearSeriesNumbering() *VideoTagUpdate {
-	vtu.mutation.ClearSeriesNumbering()
-	return vtu
-}
-
 // AddVideoIDs adds the "videos" edge to the Video entity by IDs.
 func (vtu *VideoTagUpdate) AddVideoIDs(ids ...string) *VideoTagUpdate {
 	vtu.mutation.AddVideoIDs(ids...)
@@ -195,9 +189,6 @@ func (vtu *VideoTagUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := vtu.mutation.AddedSeriesNumbering(); ok {
 		_spec.AddField(videotag.FieldSeriesNumbering, field.TypeInt, value)
 	}
-	if vtu.mutation.SeriesNumberingCleared() {
-		_spec.ClearField(videotag.FieldSeriesNumbering, field.TypeInt)
-	}
 	if vtu.mutation.VideosCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -309,12 +300,6 @@ func (vtuo *VideoTagUpdateOne) SetNillableSeriesNumbering(i *int) *VideoTagUpdat
 // AddSeriesNumbering adds i to the "series_numbering" field.
 func (vtuo *VideoTagUpdateOne) AddSeriesNumbering(i int) *VideoTagUpdateOne {
 	vtuo.mutation.AddSeriesNumbering(i)
-	return vtuo
-}
-
-// ClearSeriesNumbering clears the value of the "series_numbering" field.
-func (vtuo *VideoTagUpdateOne) ClearSeriesNumbering() *VideoTagUpdateOne {
-	vtuo.mutation.ClearSeriesNumbering()
 	return vtuo
 }
 
@@ -459,9 +444,6 @@ func (vtuo *VideoTagUpdateOne) sqlSave(ctx context.Context) (_node *VideoTag, er
 	}
 	if value, ok := vtuo.mutation.AddedSeriesNumbering(); ok {
 		_spec.AddField(videotag.FieldSeriesNumbering, field.TypeInt, value)
-	}
-	if vtuo.mutation.SeriesNumberingCleared() {
-		_spec.ClearField(videotag.FieldSeriesNumbering, field.TypeInt)
 	}
 	if vtuo.mutation.VideosCleared() {
 		edge := &sqlgraph.EdgeSpec{

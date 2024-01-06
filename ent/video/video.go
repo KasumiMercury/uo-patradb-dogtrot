@@ -159,6 +159,8 @@ var (
 	DefaultHasTimeRange bool
 	// DefaultCapturePermission holds the default value on creation for the "capture_permission" field.
 	DefaultCapturePermission bool
+	// DefaultNumbering holds the default value on creation for the "numbering" field.
+	DefaultNumbering int
 	// NumberingValidator is a validator for the "numbering" field. It is called by the builders before save.
 	NumberingValidator func(int) error
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.

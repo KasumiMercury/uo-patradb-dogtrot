@@ -248,16 +248,6 @@ func SeriesNumberingLTE(v int) predicate.VideoTag {
 	return predicate.VideoTag(sql.FieldLTE(FieldSeriesNumbering, v))
 }
 
-// SeriesNumberingIsNil applies the IsNil predicate on the "series_numbering" field.
-func SeriesNumberingIsNil() predicate.VideoTag {
-	return predicate.VideoTag(sql.FieldIsNull(FieldSeriesNumbering))
-}
-
-// SeriesNumberingNotNil applies the NotNil predicate on the "series_numbering" field.
-func SeriesNumberingNotNil() predicate.VideoTag {
-	return predicate.VideoTag(sql.FieldNotNull(FieldSeriesNumbering))
-}
-
 // HasVideos applies the HasEdge predicate on the "videos" edge.
 func HasVideos() predicate.VideoTag {
 	return predicate.VideoTag(func(s *sql.Selector) {

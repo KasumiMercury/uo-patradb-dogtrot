@@ -50,7 +50,7 @@ func toProtoVideo(e *ent.Video) (*Video, error) {
 	v.Id = id
 	is_collaboration := e.IsCollaboration
 	v.IsCollaboration = is_collaboration
-	numbering := wrapperspb.Int64(int64(e.Numbering))
+	numbering := int64(e.Numbering)
 	v.Numbering = numbering
 	published_at := timestamppb.New(e.PublishedAt)
 	v.PublishedAt = published_at
@@ -174,10 +174,8 @@ func (svc *VideoService) Update(ctx context.Context, req *UpdateVideoRequest) (*
 	m.SetHasTimeRange(videoHasTimeRange)
 	videoIsCollaboration := video.GetIsCollaboration()
 	m.SetIsCollaboration(videoIsCollaboration)
-	if video.GetNumbering() != nil {
-		videoNumbering := int(video.GetNumbering().GetValue())
-		m.SetNumbering(videoNumbering)
-	}
+	videoNumbering := int(video.GetNumbering())
+	m.SetNumbering(videoNumbering)
 	videoPublishedAt := runtime.ExtractTime(video.GetPublishedAt())
 	m.SetPublishedAt(videoPublishedAt)
 	if video.GetScheduledAt() != nil {
@@ -351,10 +349,8 @@ func (svc *VideoService) createBuilder(video *Video) (*ent.VideoCreate, error) {
 	m.SetHasTimeRange(videoHasTimeRange)
 	videoIsCollaboration := video.GetIsCollaboration()
 	m.SetIsCollaboration(videoIsCollaboration)
-	if video.GetNumbering() != nil {
-		videoNumbering := int(video.GetNumbering().GetValue())
-		m.SetNumbering(videoNumbering)
-	}
+	videoNumbering := int(video.GetNumbering())
+	m.SetNumbering(videoNumbering)
 	videoPublishedAt := runtime.ExtractTime(video.GetPublishedAt())
 	m.SetPublishedAt(videoPublishedAt)
 	if video.GetScheduledAt() != nil {

@@ -375,6 +375,10 @@ func (vc *VideoCreate) defaults() {
 		v := video.DefaultCapturePermission
 		vc.mutation.SetCapturePermission(v)
 	}
+	if _, ok := vc.mutation.Numbering(); !ok {
+		v := video.DefaultNumbering
+		vc.mutation.SetNumbering(v)
+	}
 	if _, ok := vc.mutation.CreatedAt(); !ok {
 		v := video.DefaultCreatedAt()
 		vc.mutation.SetCreatedAt(v)
@@ -426,6 +430,9 @@ func (vc *VideoCreate) check() error {
 	}
 	if _, ok := vc.mutation.PublishedAt(); !ok {
 		return &ValidationError{Name: "published_at", err: errors.New(`ent: missing required field "Video.published_at"`)}
+	}
+	if _, ok := vc.mutation.Numbering(); !ok {
+		return &ValidationError{Name: "numbering", err: errors.New(`ent: missing required field "Video.numbering"`)}
 	}
 	if v, ok := vc.mutation.Numbering(); ok {
 		if err := video.NumberingValidator(v); err != nil {

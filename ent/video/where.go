@@ -720,16 +720,6 @@ func NumberingLTE(v int) predicate.Video {
 	return predicate.Video(sql.FieldLTE(FieldNumbering, v))
 }
 
-// NumberingIsNil applies the IsNil predicate on the "numbering" field.
-func NumberingIsNil() predicate.Video {
-	return predicate.Video(sql.FieldIsNull(FieldNumbering))
-}
-
-// NumberingNotNil applies the NotNil predicate on the "numbering" field.
-func NumberingNotNil() predicate.Video {
-	return predicate.Video(sql.FieldNotNull(FieldNumbering))
-}
-
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Video {
 	return predicate.Video(sql.FieldEQ(FieldCreatedAt, v))

@@ -153,7 +153,7 @@ var (
 		{Name: "actual_start_at", Type: field.TypeTime, Nullable: true},
 		{Name: "actual_end_at", Type: field.TypeTime, Nullable: true},
 		{Name: "published_at", Type: field.TypeTime},
-		{Name: "numbering", Type: field.TypeInt, Nullable: true},
+		{Name: "numbering", Type: field.TypeInt, Default: 1, SchemaType: map[string]string{"mysql": "TINYINT"}},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 	}
@@ -210,7 +210,7 @@ var (
 		{Name: "id", Type: field.TypeString, Size: 26},
 		{Name: "title", Type: field.TypeString, Size: 50},
 		{Name: "normalized_title", Type: field.TypeString, Unique: true, Size: 50},
-		{Name: "series_numbering", Type: field.TypeInt, Nullable: true},
+		{Name: "series_numbering", Type: field.TypeInt, Default: 1, SchemaType: map[string]string{"mysql": "TINYINT"}},
 	}
 	// VideoTagsTable holds the schema information for the "video_tags" table.
 	VideoTagsTable = &schema.Table{

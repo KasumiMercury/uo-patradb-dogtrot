@@ -384,7 +384,7 @@ message Video {
 
   google.protobuf.Timestamp published_at = 12;
 
-  google.protobuf.Int64Value numbering = 13;
+  int64 numbering = 13;
 
   google.protobuf.Timestamp updated_at = 14;
 
@@ -470,7 +470,7 @@ message VideoTag {
 
   string title = 2;
 
-  google.protobuf.Int64Value series_numbering = 4;
+  int64 series_numbering = 4;
 
   repeated Video videos = 3;
 }

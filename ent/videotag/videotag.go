@@ -58,6 +58,8 @@ var (
 	TitleValidator func(string) error
 	// NormalizedTitleValidator is a validator for the "normalized_title" field. It is called by the builders before save.
 	NormalizedTitleValidator func(string) error
+	// DefaultSeriesNumbering holds the default value on creation for the "series_numbering" field.
+	DefaultSeriesNumbering int
 	// SeriesNumberingValidator is a validator for the "series_numbering" field. It is called by the builders before save.
 	SeriesNumberingValidator func(int) error
 	// DefaultID holds the default value on creation for the "id" field.

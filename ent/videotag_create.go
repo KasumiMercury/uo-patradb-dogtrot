@@ -110,6 +110,10 @@ func (vtc *VideoTagCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (vtc *VideoTagCreate) defaults() {
+	if _, ok := vtc.mutation.SeriesNumbering(); !ok {
+		v := videotag.DefaultSeriesNumbering
+		vtc.mutation.SetSeriesNumbering(v)
+	}
 	if _, ok := vtc.mutation.ID(); !ok {
 		v := videotag.DefaultID()
 		vtc.mutation.SetID(v)
@@ -133,6 +137,9 @@ func (vtc *VideoTagCreate) check() error {
 		if err := videotag.NormalizedTitleValidator(v); err != nil {
 			return &ValidationError{Name: "normalized_title", err: fmt.Errorf(`ent: validator failed for field "VideoTag.normalized_title": %w`, err)}
 		}
+	}
+	if _, ok := vtc.mutation.SeriesNumbering(); !ok {
+		return &ValidationError{Name: "series_numbering", err: errors.New(`ent: missing required field "VideoTag.series_numbering"`)}
 	}
 	if v, ok := vtc.mutation.SeriesNumbering(); ok {
 		if err := videotag.SeriesNumberingValidator(v); err != nil {

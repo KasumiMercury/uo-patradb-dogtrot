@@ -37,7 +37,10 @@ func (Video) Fields() []ent.Field {
 		field.Time("actual_start_at").Optional().Annotations(entproto.Field(10)),
 		field.Time("actual_end_at").Optional().Annotations(entproto.Field(11)),
 		field.Time("published_at").Annotations(entproto.Field(12)),
-		field.Int("numbering").Optional().Positive().Annotations(entproto.Field(13)),
+		field.Int("numbering").Default(1).Positive().SchemaType(
+			map[string]string{
+				"mysql": "TINYINT",
+			}).Annotations(entproto.Field(13)),
 		field.Time("created_at").Default(func() time.Time { return time.Now() }).Annotations(entproto.Skip()),
 		field.Time("updated_at").Default(func() time.Time { return time.Now() }).UpdateDefault(func() time.Time { return time.Now() }).Annotations(entproto.Field(14)),
 	}

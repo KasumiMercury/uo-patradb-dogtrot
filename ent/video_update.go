@@ -261,12 +261,6 @@ func (vu *VideoUpdate) AddNumbering(i int) *VideoUpdate {
 	return vu
 }
 
-// ClearNumbering clears the value of the "numbering" field.
-func (vu *VideoUpdate) ClearNumbering() *VideoUpdate {
-	vu.mutation.ClearNumbering()
-	return vu
-}
-
 // SetCreatedAt sets the "created_at" field.
 func (vu *VideoUpdate) SetCreatedAt(t time.Time) *VideoUpdate {
 	vu.mutation.SetCreatedAt(t)
@@ -665,9 +659,6 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := vu.mutation.AddedNumbering(); ok {
 		_spec.AddField(video.FieldNumbering, field.TypeInt, value)
-	}
-	if vu.mutation.NumberingCleared() {
-		_spec.ClearField(video.FieldNumbering, field.TypeInt)
 	}
 	if value, ok := vu.mutation.CreatedAt(); ok {
 		_spec.SetField(video.FieldCreatedAt, field.TypeTime, value)
@@ -1220,12 +1211,6 @@ func (vuo *VideoUpdateOne) AddNumbering(i int) *VideoUpdateOne {
 	return vuo
 }
 
-// ClearNumbering clears the value of the "numbering" field.
-func (vuo *VideoUpdateOne) ClearNumbering() *VideoUpdateOne {
-	vuo.mutation.ClearNumbering()
-	return vuo
-}
-
 // SetCreatedAt sets the "created_at" field.
 func (vuo *VideoUpdateOne) SetCreatedAt(t time.Time) *VideoUpdateOne {
 	vuo.mutation.SetCreatedAt(t)
@@ -1654,9 +1639,6 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 	}
 	if value, ok := vuo.mutation.AddedNumbering(); ok {
 		_spec.AddField(video.FieldNumbering, field.TypeInt, value)
-	}
-	if vuo.mutation.NumberingCleared() {
-		_spec.ClearField(video.FieldNumbering, field.TypeInt)
 	}
 	if value, ok := vuo.mutation.CreatedAt(); ok {
 		_spec.SetField(video.FieldCreatedAt, field.TypeTime, value)

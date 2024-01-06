@@ -226,6 +226,8 @@ func init() {
 	video.DefaultCapturePermission = videoDescCapturePermission.Default.(bool)
 	// videoDescNumbering is the schema descriptor for numbering field.
 	videoDescNumbering := videoFields[12].Descriptor()
+	// video.DefaultNumbering holds the default value on creation for the numbering field.
+	video.DefaultNumbering = videoDescNumbering.Default.(int)
 	// video.NumberingValidator is a validator for the "numbering" field. It is called by the builders before save.
 	video.NumberingValidator = videoDescNumbering.Validators[0].(func(int) error)
 	// videoDescCreatedAt is the schema descriptor for created_at field.
@@ -299,6 +301,8 @@ func init() {
 	videotag.NormalizedTitleValidator = videotagDescNormalizedTitle.Validators[0].(func(string) error)
 	// videotagDescSeriesNumbering is the schema descriptor for series_numbering field.
 	videotagDescSeriesNumbering := videotagFields[2].Descriptor()
+	// videotag.DefaultSeriesNumbering holds the default value on creation for the series_numbering field.
+	videotag.DefaultSeriesNumbering = videotagDescSeriesNumbering.Default.(int)
 	// videotag.SeriesNumberingValidator is a validator for the "series_numbering" field. It is called by the builders before save.
 	videotag.SeriesNumberingValidator = videotagDescSeriesNumbering.Validators[0].(func(int) error)
 	// videotagDescID is the schema descriptor for id field.

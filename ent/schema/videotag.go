@@ -27,7 +27,10 @@ func (VideoTag) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("title").MaxLen(50).Annotations(entproto.Field(2)),
 		field.String("normalized_title").MaxLen(50).Unique().Annotations(entproto.Skip()),
-		field.Int("series_numbering").Optional().Positive().Annotations(entproto.Field(4)),
+		field.Int("series_numbering").Default(1).Positive().SchemaType(
+			map[string]string{
+				"mysql": "TINYINT",
+			}).Annotations(entproto.Field(4)),
 	}
 }
 

@@ -56,6 +56,33 @@ func (vtu *VideoTagUpdate) SetNillableNormalizedTitle(s *string) *VideoTagUpdate
 	return vtu
 }
 
+// SetSeriesNumbering sets the "series_numbering" field.
+func (vtu *VideoTagUpdate) SetSeriesNumbering(i int) *VideoTagUpdate {
+	vtu.mutation.ResetSeriesNumbering()
+	vtu.mutation.SetSeriesNumbering(i)
+	return vtu
+}
+
+// SetNillableSeriesNumbering sets the "series_numbering" field if the given value is not nil.
+func (vtu *VideoTagUpdate) SetNillableSeriesNumbering(i *int) *VideoTagUpdate {
+	if i != nil {
+		vtu.SetSeriesNumbering(*i)
+	}
+	return vtu
+}
+
+// AddSeriesNumbering adds i to the "series_numbering" field.
+func (vtu *VideoTagUpdate) AddSeriesNumbering(i int) *VideoTagUpdate {
+	vtu.mutation.AddSeriesNumbering(i)
+	return vtu
+}
+
+// ClearSeriesNumbering clears the value of the "series_numbering" field.
+func (vtu *VideoTagUpdate) ClearSeriesNumbering() *VideoTagUpdate {
+	vtu.mutation.ClearSeriesNumbering()
+	return vtu
+}
+
 // AddVideoIDs adds the "videos" edge to the Video entity by IDs.
 func (vtu *VideoTagUpdate) AddVideoIDs(ids ...string) *VideoTagUpdate {
 	vtu.mutation.AddVideoIDs(ids...)
@@ -136,6 +163,11 @@ func (vtu *VideoTagUpdate) check() error {
 			return &ValidationError{Name: "normalized_title", err: fmt.Errorf(`ent: validator failed for field "VideoTag.normalized_title": %w`, err)}
 		}
 	}
+	if v, ok := vtu.mutation.SeriesNumbering(); ok {
+		if err := videotag.SeriesNumberingValidator(v); err != nil {
+			return &ValidationError{Name: "series_numbering", err: fmt.Errorf(`ent: validator failed for field "VideoTag.series_numbering": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -156,6 +188,15 @@ func (vtu *VideoTagUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := vtu.mutation.NormalizedTitle(); ok {
 		_spec.SetField(videotag.FieldNormalizedTitle, field.TypeString, value)
+	}
+	if value, ok := vtu.mutation.SeriesNumbering(); ok {
+		_spec.SetField(videotag.FieldSeriesNumbering, field.TypeInt, value)
+	}
+	if value, ok := vtu.mutation.AddedSeriesNumbering(); ok {
+		_spec.AddField(videotag.FieldSeriesNumbering, field.TypeInt, value)
+	}
+	if vtu.mutation.SeriesNumberingCleared() {
+		_spec.ClearField(videotag.FieldSeriesNumbering, field.TypeInt)
 	}
 	if vtu.mutation.VideosCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -247,6 +288,33 @@ func (vtuo *VideoTagUpdateOne) SetNillableNormalizedTitle(s *string) *VideoTagUp
 	if s != nil {
 		vtuo.SetNormalizedTitle(*s)
 	}
+	return vtuo
+}
+
+// SetSeriesNumbering sets the "series_numbering" field.
+func (vtuo *VideoTagUpdateOne) SetSeriesNumbering(i int) *VideoTagUpdateOne {
+	vtuo.mutation.ResetSeriesNumbering()
+	vtuo.mutation.SetSeriesNumbering(i)
+	return vtuo
+}
+
+// SetNillableSeriesNumbering sets the "series_numbering" field if the given value is not nil.
+func (vtuo *VideoTagUpdateOne) SetNillableSeriesNumbering(i *int) *VideoTagUpdateOne {
+	if i != nil {
+		vtuo.SetSeriesNumbering(*i)
+	}
+	return vtuo
+}
+
+// AddSeriesNumbering adds i to the "series_numbering" field.
+func (vtuo *VideoTagUpdateOne) AddSeriesNumbering(i int) *VideoTagUpdateOne {
+	vtuo.mutation.AddSeriesNumbering(i)
+	return vtuo
+}
+
+// ClearSeriesNumbering clears the value of the "series_numbering" field.
+func (vtuo *VideoTagUpdateOne) ClearSeriesNumbering() *VideoTagUpdateOne {
+	vtuo.mutation.ClearSeriesNumbering()
 	return vtuo
 }
 
@@ -343,6 +411,11 @@ func (vtuo *VideoTagUpdateOne) check() error {
 			return &ValidationError{Name: "normalized_title", err: fmt.Errorf(`ent: validator failed for field "VideoTag.normalized_title": %w`, err)}
 		}
 	}
+	if v, ok := vtuo.mutation.SeriesNumbering(); ok {
+		if err := videotag.SeriesNumberingValidator(v); err != nil {
+			return &ValidationError{Name: "series_numbering", err: fmt.Errorf(`ent: validator failed for field "VideoTag.series_numbering": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -380,6 +453,15 @@ func (vtuo *VideoTagUpdateOne) sqlSave(ctx context.Context) (_node *VideoTag, er
 	}
 	if value, ok := vtuo.mutation.NormalizedTitle(); ok {
 		_spec.SetField(videotag.FieldNormalizedTitle, field.TypeString, value)
+	}
+	if value, ok := vtuo.mutation.SeriesNumbering(); ok {
+		_spec.SetField(videotag.FieldSeriesNumbering, field.TypeInt, value)
+	}
+	if value, ok := vtuo.mutation.AddedSeriesNumbering(); ok {
+		_spec.AddField(videotag.FieldSeriesNumbering, field.TypeInt, value)
+	}
+	if vtuo.mutation.SeriesNumberingCleared() {
+		_spec.ClearField(videotag.FieldSeriesNumbering, field.TypeInt)
 	}
 	if vtuo.mutation.VideosCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -125,6 +125,11 @@ func PublishedAt(v time.Time) predicate.Video {
 	return predicate.Video(sql.FieldEQ(FieldPublishedAt, v))
 }
 
+// Numbering applies equality check predicate on the "numbering" field. It's identical to NumberingEQ.
+func Numbering(v int) predicate.Video {
+	return predicate.Video(sql.FieldEQ(FieldNumbering, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v time.Time) predicate.Video {
 	return predicate.Video(sql.FieldEQ(FieldCreatedAt, v))
@@ -673,6 +678,56 @@ func PublishedAtLT(v time.Time) predicate.Video {
 // PublishedAtLTE applies the LTE predicate on the "published_at" field.
 func PublishedAtLTE(v time.Time) predicate.Video {
 	return predicate.Video(sql.FieldLTE(FieldPublishedAt, v))
+}
+
+// NumberingEQ applies the EQ predicate on the "numbering" field.
+func NumberingEQ(v int) predicate.Video {
+	return predicate.Video(sql.FieldEQ(FieldNumbering, v))
+}
+
+// NumberingNEQ applies the NEQ predicate on the "numbering" field.
+func NumberingNEQ(v int) predicate.Video {
+	return predicate.Video(sql.FieldNEQ(FieldNumbering, v))
+}
+
+// NumberingIn applies the In predicate on the "numbering" field.
+func NumberingIn(vs ...int) predicate.Video {
+	return predicate.Video(sql.FieldIn(FieldNumbering, vs...))
+}
+
+// NumberingNotIn applies the NotIn predicate on the "numbering" field.
+func NumberingNotIn(vs ...int) predicate.Video {
+	return predicate.Video(sql.FieldNotIn(FieldNumbering, vs...))
+}
+
+// NumberingGT applies the GT predicate on the "numbering" field.
+func NumberingGT(v int) predicate.Video {
+	return predicate.Video(sql.FieldGT(FieldNumbering, v))
+}
+
+// NumberingGTE applies the GTE predicate on the "numbering" field.
+func NumberingGTE(v int) predicate.Video {
+	return predicate.Video(sql.FieldGTE(FieldNumbering, v))
+}
+
+// NumberingLT applies the LT predicate on the "numbering" field.
+func NumberingLT(v int) predicate.Video {
+	return predicate.Video(sql.FieldLT(FieldNumbering, v))
+}
+
+// NumberingLTE applies the LTE predicate on the "numbering" field.
+func NumberingLTE(v int) predicate.Video {
+	return predicate.Video(sql.FieldLTE(FieldNumbering, v))
+}
+
+// NumberingIsNil applies the IsNil predicate on the "numbering" field.
+func NumberingIsNil() predicate.Video {
+	return predicate.Video(sql.FieldIsNull(FieldNumbering))
+}
+
+// NumberingNotNil applies the NotNil predicate on the "numbering" field.
+func NumberingNotNil() predicate.Video {
+	return predicate.Video(sql.FieldNotNull(FieldNumbering))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

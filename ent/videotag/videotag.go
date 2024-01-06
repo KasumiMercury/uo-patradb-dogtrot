@@ -16,6 +16,8 @@ const (
 	FieldTitle = "title"
 	// FieldNormalizedTitle holds the string denoting the normalized_title field in the database.
 	FieldNormalizedTitle = "normalized_title"
+	// FieldSeriesNumbering holds the string denoting the series_numbering field in the database.
+	FieldSeriesNumbering = "series_numbering"
 	// EdgeVideos holds the string denoting the videos edge name in mutations.
 	EdgeVideos = "videos"
 	// Table holds the table name of the videotag in the database.
@@ -32,6 +34,7 @@ var Columns = []string{
 	FieldID,
 	FieldTitle,
 	FieldNormalizedTitle,
+	FieldSeriesNumbering,
 }
 
 var (
@@ -55,6 +58,8 @@ var (
 	TitleValidator func(string) error
 	// NormalizedTitleValidator is a validator for the "normalized_title" field. It is called by the builders before save.
 	NormalizedTitleValidator func(string) error
+	// SeriesNumberingValidator is a validator for the "series_numbering" field. It is called by the builders before save.
+	SeriesNumberingValidator func(int) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
@@ -77,6 +82,11 @@ func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 // ByNormalizedTitle orders the results by the normalized_title field.
 func ByNormalizedTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNormalizedTitle, opts...).ToFunc()
+}
+
+// BySeriesNumbering orders the results by the series_numbering field.
+func BySeriesNumbering(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSeriesNumbering, opts...).ToFunc()
 }
 
 // ByVideosCount orders the results by videos count.

@@ -163,6 +163,20 @@ func (vc *VideoCreate) SetPublishedAt(t time.Time) *VideoCreate {
 	return vc
 }
 
+// SetNumbering sets the "numbering" field.
+func (vc *VideoCreate) SetNumbering(i int) *VideoCreate {
+	vc.mutation.SetNumbering(i)
+	return vc
+}
+
+// SetNillableNumbering sets the "numbering" field if the given value is not nil.
+func (vc *VideoCreate) SetNillableNumbering(i *int) *VideoCreate {
+	if i != nil {
+		vc.SetNumbering(*i)
+	}
+	return vc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (vc *VideoCreate) SetCreatedAt(t time.Time) *VideoCreate {
 	vc.mutation.SetCreatedAt(t)
@@ -413,6 +427,11 @@ func (vc *VideoCreate) check() error {
 	if _, ok := vc.mutation.PublishedAt(); !ok {
 		return &ValidationError{Name: "published_at", err: errors.New(`ent: missing required field "Video.published_at"`)}
 	}
+	if v, ok := vc.mutation.Numbering(); ok {
+		if err := video.NumberingValidator(v); err != nil {
+			return &ValidationError{Name: "numbering", err: fmt.Errorf(`ent: validator failed for field "Video.numbering": %w`, err)}
+		}
+	}
 	if _, ok := vc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Video.created_at"`)}
 	}
@@ -506,6 +525,10 @@ func (vc *VideoCreate) createSpec() (*Video, *sqlgraph.CreateSpec) {
 	if value, ok := vc.mutation.PublishedAt(); ok {
 		_spec.SetField(video.FieldPublishedAt, field.TypeTime, value)
 		_node.PublishedAt = value
+	}
+	if value, ok := vc.mutation.Numbering(); ok {
+		_spec.SetField(video.FieldNumbering, field.TypeInt, value)
+		_node.Numbering = value
 	}
 	if value, ok := vc.mutation.CreatedAt(); ok {
 		_spec.SetField(video.FieldCreatedAt, field.TypeTime, value)

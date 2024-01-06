@@ -42,6 +42,8 @@ type Video struct {
 	ActualEndAt time.Time `json:"actual_end_at,omitempty"`
 	// PublishedAt holds the value of the "published_at" field.
 	PublishedAt time.Time `json:"published_at,omitempty"`
+	// Numbering holds the value of the "numbering" field.
+	Numbering int `json:"numbering,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -147,7 +149,7 @@ func (*Video) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case video.FieldIsCollaboration, video.FieldHasTimeRange, video.FieldCapturePermission:
 			values[i] = new(sql.NullBool)
-		case video.FieldDurationSeconds:
+		case video.FieldDurationSeconds, video.FieldNumbering:
 			values[i] = new(sql.NullInt64)
 		case video.FieldID, video.FieldSourceID, video.FieldTitle, video.FieldStatus, video.FieldChatID:
 			values[i] = new(sql.NullString)
@@ -245,6 +247,12 @@ func (v *Video) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field published_at", values[i])
 			} else if value.Valid {
 				v.PublishedAt = value.Time
+			}
+		case video.FieldNumbering:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field numbering", values[i])
+			} else if value.Valid {
+				v.Numbering = int(value.Int64)
 			}
 		case video.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -364,6 +372,9 @@ func (v *Video) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("published_at=")
 	builder.WriteString(v.PublishedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("numbering=")
+	builder.WriteString(fmt.Sprintf("%v", v.Numbering))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(v.CreatedAt.Format(time.ANSIC))

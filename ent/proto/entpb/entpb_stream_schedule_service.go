@@ -39,8 +39,8 @@ func toProtoStreamSchedule(e *ent.StreamSchedule) (*StreamSchedule, error) {
 	v.Id = id
 	scheduled_at := timestamppb.New(e.ScheduledAt)
 	v.ScheduledAt = scheduled_at
-	_Title := e.Title
-	v.Title = _Title
+	title := e.Title
+	v.Title = title
 	updated_at := timestamppb.New(e.UpdatedAt)
 	v.UpdatedAt = updated_at
 	return v, nil

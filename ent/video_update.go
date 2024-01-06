@@ -240,6 +240,33 @@ func (vu *VideoUpdate) SetNillablePublishedAt(t *time.Time) *VideoUpdate {
 	return vu
 }
 
+// SetNumbering sets the "numbering" field.
+func (vu *VideoUpdate) SetNumbering(i int) *VideoUpdate {
+	vu.mutation.ResetNumbering()
+	vu.mutation.SetNumbering(i)
+	return vu
+}
+
+// SetNillableNumbering sets the "numbering" field if the given value is not nil.
+func (vu *VideoUpdate) SetNillableNumbering(i *int) *VideoUpdate {
+	if i != nil {
+		vu.SetNumbering(*i)
+	}
+	return vu
+}
+
+// AddNumbering adds i to the "numbering" field.
+func (vu *VideoUpdate) AddNumbering(i int) *VideoUpdate {
+	vu.mutation.AddNumbering(i)
+	return vu
+}
+
+// ClearNumbering clears the value of the "numbering" field.
+func (vu *VideoUpdate) ClearNumbering() *VideoUpdate {
+	vu.mutation.ClearNumbering()
+	return vu
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (vu *VideoUpdate) SetCreatedAt(t time.Time) *VideoUpdate {
 	vu.mutation.SetCreatedAt(t)
@@ -559,6 +586,11 @@ func (vu *VideoUpdate) check() error {
 			return &ValidationError{Name: "duration_seconds", err: fmt.Errorf(`ent: validator failed for field "Video.duration_seconds": %w`, err)}
 		}
 	}
+	if v, ok := vu.mutation.Numbering(); ok {
+		if err := video.NumberingValidator(v); err != nil {
+			return &ValidationError{Name: "numbering", err: fmt.Errorf(`ent: validator failed for field "Video.numbering": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -627,6 +659,15 @@ func (vu *VideoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := vu.mutation.PublishedAt(); ok {
 		_spec.SetField(video.FieldPublishedAt, field.TypeTime, value)
+	}
+	if value, ok := vu.mutation.Numbering(); ok {
+		_spec.SetField(video.FieldNumbering, field.TypeInt, value)
+	}
+	if value, ok := vu.mutation.AddedNumbering(); ok {
+		_spec.AddField(video.FieldNumbering, field.TypeInt, value)
+	}
+	if vu.mutation.NumberingCleared() {
+		_spec.ClearField(video.FieldNumbering, field.TypeInt)
 	}
 	if value, ok := vu.mutation.CreatedAt(); ok {
 		_spec.SetField(video.FieldCreatedAt, field.TypeTime, value)
@@ -1158,6 +1199,33 @@ func (vuo *VideoUpdateOne) SetNillablePublishedAt(t *time.Time) *VideoUpdateOne 
 	return vuo
 }
 
+// SetNumbering sets the "numbering" field.
+func (vuo *VideoUpdateOne) SetNumbering(i int) *VideoUpdateOne {
+	vuo.mutation.ResetNumbering()
+	vuo.mutation.SetNumbering(i)
+	return vuo
+}
+
+// SetNillableNumbering sets the "numbering" field if the given value is not nil.
+func (vuo *VideoUpdateOne) SetNillableNumbering(i *int) *VideoUpdateOne {
+	if i != nil {
+		vuo.SetNumbering(*i)
+	}
+	return vuo
+}
+
+// AddNumbering adds i to the "numbering" field.
+func (vuo *VideoUpdateOne) AddNumbering(i int) *VideoUpdateOne {
+	vuo.mutation.AddNumbering(i)
+	return vuo
+}
+
+// ClearNumbering clears the value of the "numbering" field.
+func (vuo *VideoUpdateOne) ClearNumbering() *VideoUpdateOne {
+	vuo.mutation.ClearNumbering()
+	return vuo
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (vuo *VideoUpdateOne) SetCreatedAt(t time.Time) *VideoUpdateOne {
 	vuo.mutation.SetCreatedAt(t)
@@ -1490,6 +1558,11 @@ func (vuo *VideoUpdateOne) check() error {
 			return &ValidationError{Name: "duration_seconds", err: fmt.Errorf(`ent: validator failed for field "Video.duration_seconds": %w`, err)}
 		}
 	}
+	if v, ok := vuo.mutation.Numbering(); ok {
+		if err := video.NumberingValidator(v); err != nil {
+			return &ValidationError{Name: "numbering", err: fmt.Errorf(`ent: validator failed for field "Video.numbering": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1575,6 +1648,15 @@ func (vuo *VideoUpdateOne) sqlSave(ctx context.Context) (_node *Video, err error
 	}
 	if value, ok := vuo.mutation.PublishedAt(); ok {
 		_spec.SetField(video.FieldPublishedAt, field.TypeTime, value)
+	}
+	if value, ok := vuo.mutation.Numbering(); ok {
+		_spec.SetField(video.FieldNumbering, field.TypeInt, value)
+	}
+	if value, ok := vuo.mutation.AddedNumbering(); ok {
+		_spec.AddField(video.FieldNumbering, field.TypeInt, value)
+	}
+	if vuo.mutation.NumberingCleared() {
+		_spec.ClearField(video.FieldNumbering, field.TypeInt)
 	}
 	if value, ok := vuo.mutation.CreatedAt(); ok {
 		_spec.SetField(video.FieldCreatedAt, field.TypeTime, value)

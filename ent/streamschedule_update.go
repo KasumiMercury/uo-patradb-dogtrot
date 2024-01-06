@@ -43,13 +43,13 @@ func (ssu *StreamScheduleUpdate) SetNillableScheduledAt(t *time.Time) *StreamSch
 	return ssu
 }
 
-// SetTitle sets the "Title" field.
+// SetTitle sets the "title" field.
 func (ssu *StreamScheduleUpdate) SetTitle(s string) *StreamScheduleUpdate {
 	ssu.mutation.SetTitle(s)
 	return ssu
 }
 
-// SetNillableTitle sets the "Title" field if the given value is not nil.
+// SetNillableTitle sets the "title" field if the given value is not nil.
 func (ssu *StreamScheduleUpdate) SetNillableTitle(s *string) *StreamScheduleUpdate {
 	if s != nil {
 		ssu.SetTitle(*s)
@@ -146,7 +146,7 @@ func (ssu *StreamScheduleUpdate) ExecX(ctx context.Context) {
 func (ssu *StreamScheduleUpdate) check() error {
 	if v, ok := ssu.mutation.Title(); ok {
 		if err := streamschedule.TitleValidator(v); err != nil {
-			return &ValidationError{Name: "Title", err: fmt.Errorf(`ent: validator failed for field "StreamSchedule.Title": %w`, err)}
+			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "StreamSchedule.title": %w`, err)}
 		}
 	}
 	return nil
@@ -239,13 +239,13 @@ func (ssuo *StreamScheduleUpdateOne) SetNillableScheduledAt(t *time.Time) *Strea
 	return ssuo
 }
 
-// SetTitle sets the "Title" field.
+// SetTitle sets the "title" field.
 func (ssuo *StreamScheduleUpdateOne) SetTitle(s string) *StreamScheduleUpdateOne {
 	ssuo.mutation.SetTitle(s)
 	return ssuo
 }
 
-// SetNillableTitle sets the "Title" field if the given value is not nil.
+// SetNillableTitle sets the "title" field if the given value is not nil.
 func (ssuo *StreamScheduleUpdateOne) SetNillableTitle(s *string) *StreamScheduleUpdateOne {
 	if s != nil {
 		ssuo.SetTitle(*s)
@@ -355,7 +355,7 @@ func (ssuo *StreamScheduleUpdateOne) ExecX(ctx context.Context) {
 func (ssuo *StreamScheduleUpdateOne) check() error {
 	if v, ok := ssuo.mutation.Title(); ok {
 		if err := streamschedule.TitleValidator(v); err != nil {
-			return &ValidationError{Name: "Title", err: fmt.Errorf(`ent: validator failed for field "StreamSchedule.Title": %w`, err)}
+			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "StreamSchedule.title": %w`, err)}
 		}
 	}
 	return nil

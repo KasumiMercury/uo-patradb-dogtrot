@@ -171,9 +171,9 @@ func init() {
 	_ = streamscheduleMixinFields0
 	streamscheduleFields := schema.StreamSchedule{}.Fields()
 	_ = streamscheduleFields
-	// streamscheduleDescTitle is the schema descriptor for Title field.
+	// streamscheduleDescTitle is the schema descriptor for title field.
 	streamscheduleDescTitle := streamscheduleFields[1].Descriptor()
-	// streamschedule.TitleValidator is a validator for the "Title" field. It is called by the builders before save.
+	// streamschedule.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	streamschedule.TitleValidator = streamscheduleDescTitle.Validators[0].(func(string) error)
 	// streamscheduleDescID is the schema descriptor for id field.
 	streamscheduleDescID := streamscheduleMixinFields0[0].Descriptor()
@@ -224,12 +224,16 @@ func init() {
 	videoDescCapturePermission := videoFields[7].Descriptor()
 	// video.DefaultCapturePermission holds the default value on creation for the capture_permission field.
 	video.DefaultCapturePermission = videoDescCapturePermission.Default.(bool)
+	// videoDescNumbering is the schema descriptor for numbering field.
+	videoDescNumbering := videoFields[12].Descriptor()
+	// video.NumberingValidator is a validator for the "numbering" field. It is called by the builders before save.
+	video.NumberingValidator = videoDescNumbering.Validators[0].(func(int) error)
 	// videoDescCreatedAt is the schema descriptor for created_at field.
-	videoDescCreatedAt := videoFields[12].Descriptor()
+	videoDescCreatedAt := videoFields[13].Descriptor()
 	// video.DefaultCreatedAt holds the default value on creation for the created_at field.
 	video.DefaultCreatedAt = videoDescCreatedAt.Default.(func() time.Time)
 	// videoDescUpdatedAt is the schema descriptor for updated_at field.
-	videoDescUpdatedAt := videoFields[13].Descriptor()
+	videoDescUpdatedAt := videoFields[14].Descriptor()
 	// video.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	video.DefaultUpdatedAt = videoDescUpdatedAt.Default.(func() time.Time)
 	// video.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
@@ -293,6 +297,10 @@ func init() {
 	videotagDescNormalizedTitle := videotagFields[1].Descriptor()
 	// videotag.NormalizedTitleValidator is a validator for the "normalized_title" field. It is called by the builders before save.
 	videotag.NormalizedTitleValidator = videotagDescNormalizedTitle.Validators[0].(func(string) error)
+	// videotagDescSeriesNumbering is the schema descriptor for series_numbering field.
+	videotagDescSeriesNumbering := videotagFields[2].Descriptor()
+	// videotag.SeriesNumberingValidator is a validator for the "series_numbering" field. It is called by the builders before save.
+	videotag.SeriesNumberingValidator = videotagDescSeriesNumbering.Validators[0].(func(int) error)
 	// videotagDescID is the schema descriptor for id field.
 	videotagDescID := videotagMixinFields0[0].Descriptor()
 	// videotag.DefaultID holds the default value on creation for the id field.

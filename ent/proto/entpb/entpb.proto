@@ -296,7 +296,7 @@ message StreamSchedule {
 
   google.protobuf.Timestamp scheduled_at = 2;
 
-  string Title = 3;
+  string title = 3;
 
   google.protobuf.Timestamp created_at = 4;
 
@@ -384,11 +384,13 @@ message Video {
 
   google.protobuf.Timestamp published_at = 12;
 
-  google.protobuf.Timestamp updated_at = 13;
+  google.protobuf.Int64Value numbering = 13;
 
-  repeated Channel channel = 14;
+  google.protobuf.Timestamp updated_at = 14;
 
-  repeated VideoTag video_tags = 15;
+  repeated Channel channel = 15;
+
+  repeated VideoTag video_tags = 16;
 }
 
 message CreateVideoRequest {
@@ -467,6 +469,8 @@ message VideoTag {
   string id = 1;
 
   string title = 2;
+
+  google.protobuf.Int64Value series_numbering = 4;
 
   repeated Video videos = 3;
 }

@@ -38,6 +38,8 @@ const (
 	FieldActualEndAt = "actual_end_at"
 	// FieldPublishedAt holds the string denoting the published_at field in the database.
 	FieldPublishedAt = "published_at"
+	// FieldNumbering holds the string denoting the numbering field in the database.
+	FieldNumbering = "numbering"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -120,6 +122,7 @@ var Columns = []string{
 	FieldActualStartAt,
 	FieldActualEndAt,
 	FieldPublishedAt,
+	FieldNumbering,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -156,6 +159,8 @@ var (
 	DefaultHasTimeRange bool
 	// DefaultCapturePermission holds the default value on creation for the "capture_permission" field.
 	DefaultCapturePermission bool
+	// NumberingValidator is a validator for the "numbering" field. It is called by the builders before save.
+	NumberingValidator func(int) error
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -234,6 +239,11 @@ func ByActualEndAt(opts ...sql.OrderTermOption) OrderOption {
 // ByPublishedAt orders the results by the published_at field.
 func ByPublishedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPublishedAt, opts...).ToFunc()
+}
+
+// ByNumbering orders the results by the numbering field.
+func ByNumbering(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNumbering, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

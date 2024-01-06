@@ -27,7 +27,7 @@ func (ssc *StreamScheduleCreate) SetScheduledAt(t time.Time) *StreamScheduleCrea
 	return ssc
 }
 
-// SetTitle sets the "Title" field.
+// SetTitle sets the "title" field.
 func (ssc *StreamScheduleCreate) SetTitle(s string) *StreamScheduleCreate {
 	ssc.mutation.SetTitle(s)
 	return ssc
@@ -125,11 +125,11 @@ func (ssc *StreamScheduleCreate) check() error {
 		return &ValidationError{Name: "scheduled_at", err: errors.New(`ent: missing required field "StreamSchedule.scheduled_at"`)}
 	}
 	if _, ok := ssc.mutation.Title(); !ok {
-		return &ValidationError{Name: "Title", err: errors.New(`ent: missing required field "StreamSchedule.Title"`)}
+		return &ValidationError{Name: "title", err: errors.New(`ent: missing required field "StreamSchedule.title"`)}
 	}
 	if v, ok := ssc.mutation.Title(); ok {
 		if err := streamschedule.TitleValidator(v); err != nil {
-			return &ValidationError{Name: "Title", err: fmt.Errorf(`ent: validator failed for field "StreamSchedule.Title": %w`, err)}
+			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "StreamSchedule.title": %w`, err)}
 		}
 	}
 	if _, ok := ssc.mutation.CreatedAt(); !ok {

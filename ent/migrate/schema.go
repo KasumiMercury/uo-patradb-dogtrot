@@ -153,6 +153,7 @@ var (
 		{Name: "actual_start_at", Type: field.TypeTime, Nullable: true},
 		{Name: "actual_end_at", Type: field.TypeTime, Nullable: true},
 		{Name: "published_at", Type: field.TypeTime},
+		{Name: "numbering", Type: field.TypeInt, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 	}
@@ -207,8 +208,9 @@ var (
 	// VideoTagsColumns holds the columns for the "video_tags" table.
 	VideoTagsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
-		{Name: "title", Type: field.TypeString, Unique: true, Size: 50},
+		{Name: "title", Type: field.TypeString, Size: 50},
 		{Name: "normalized_title", Type: field.TypeString, Unique: true, Size: 50},
+		{Name: "series_numbering", Type: field.TypeInt, Nullable: true},
 	}
 	// VideoTagsTable holds the schema information for the "video_tags" table.
 	VideoTagsTable = &schema.Table{

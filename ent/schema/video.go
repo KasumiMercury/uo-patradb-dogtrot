@@ -37,8 +37,9 @@ func (Video) Fields() []ent.Field {
 		field.Time("actual_start_at").Optional().Annotations(entproto.Field(10)),
 		field.Time("actual_end_at").Optional().Annotations(entproto.Field(11)),
 		field.Time("published_at").Annotations(entproto.Field(12)),
+		field.Int("numbering").Optional().Positive().Annotations(entproto.Field(13)),
 		field.Time("created_at").Default(func() time.Time { return time.Now() }).Annotations(entproto.Skip()),
-		field.Time("updated_at").Default(func() time.Time { return time.Now() }).UpdateDefault(func() time.Time { return time.Now() }).Annotations(entproto.Field(13)),
+		field.Time("updated_at").Default(func() time.Time { return time.Now() }).UpdateDefault(func() time.Time { return time.Now() }).Annotations(entproto.Field(14)),
 	}
 }
 
@@ -54,11 +55,11 @@ func (Video) Annotations() []schema.Annotation {
 func (Video) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("descriptions", Description.Type).Unique().StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
-		edge.To("channel", Channel.Type).Annotations(entproto.Field(14)),
+		edge.To("channel", Channel.Type).Annotations(entproto.Field(15)),
 		edge.To("video_play_ranges", VideoPlayRange.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
 		edge.To("video_disallow_ranges", VideoDisallowRange.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
 		edge.To("video_title_changes", VideoTitleChange.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
 		edge.To("pat_chats", PatChat.Type).StorageKey(edge.Column("video_id")).Annotations(entproto.Skip()),
-		edge.From("video_tags", VideoTag.Type).Ref("videos").Annotations(entproto.Field(15)),
+		edge.From("video_tags", VideoTag.Type).Ref("videos").Annotations(entproto.Field(16)),
 	}
 }

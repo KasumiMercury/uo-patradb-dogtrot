@@ -70,7 +70,7 @@ func ScheduledAt(v time.Time) predicate.StreamSchedule {
 	return predicate.StreamSchedule(sql.FieldEQ(FieldScheduledAt, v))
 }
 
-// Title applies equality check predicate on the "Title" field. It's identical to TitleEQ.
+// Title applies equality check predicate on the "title" field. It's identical to TitleEQ.
 func Title(v string) predicate.StreamSchedule {
 	return predicate.StreamSchedule(sql.FieldEQ(FieldTitle, v))
 }
@@ -125,67 +125,67 @@ func ScheduledAtLTE(v time.Time) predicate.StreamSchedule {
 	return predicate.StreamSchedule(sql.FieldLTE(FieldScheduledAt, v))
 }
 
-// TitleEQ applies the EQ predicate on the "Title" field.
+// TitleEQ applies the EQ predicate on the "title" field.
 func TitleEQ(v string) predicate.StreamSchedule {
 	return predicate.StreamSchedule(sql.FieldEQ(FieldTitle, v))
 }
 
-// TitleNEQ applies the NEQ predicate on the "Title" field.
+// TitleNEQ applies the NEQ predicate on the "title" field.
 func TitleNEQ(v string) predicate.StreamSchedule {
 	return predicate.StreamSchedule(sql.FieldNEQ(FieldTitle, v))
 }
 
-// TitleIn applies the In predicate on the "Title" field.
+// TitleIn applies the In predicate on the "title" field.
 func TitleIn(vs ...string) predicate.StreamSchedule {
 	return predicate.StreamSchedule(sql.FieldIn(FieldTitle, vs...))
 }
 
-// TitleNotIn applies the NotIn predicate on the "Title" field.
+// TitleNotIn applies the NotIn predicate on the "title" field.
 func TitleNotIn(vs ...string) predicate.StreamSchedule {
 	return predicate.StreamSchedule(sql.FieldNotIn(FieldTitle, vs...))
 }
 
-// TitleGT applies the GT predicate on the "Title" field.
+// TitleGT applies the GT predicate on the "title" field.
 func TitleGT(v string) predicate.StreamSchedule {
 	return predicate.StreamSchedule(sql.FieldGT(FieldTitle, v))
 }
 
-// TitleGTE applies the GTE predicate on the "Title" field.
+// TitleGTE applies the GTE predicate on the "title" field.
 func TitleGTE(v string) predicate.StreamSchedule {
 	return predicate.StreamSchedule(sql.FieldGTE(FieldTitle, v))
 }
 
-// TitleLT applies the LT predicate on the "Title" field.
+// TitleLT applies the LT predicate on the "title" field.
 func TitleLT(v string) predicate.StreamSchedule {
 	return predicate.StreamSchedule(sql.FieldLT(FieldTitle, v))
 }
 
-// TitleLTE applies the LTE predicate on the "Title" field.
+// TitleLTE applies the LTE predicate on the "title" field.
 func TitleLTE(v string) predicate.StreamSchedule {
 	return predicate.StreamSchedule(sql.FieldLTE(FieldTitle, v))
 }
 
-// TitleContains applies the Contains predicate on the "Title" field.
+// TitleContains applies the Contains predicate on the "title" field.
 func TitleContains(v string) predicate.StreamSchedule {
 	return predicate.StreamSchedule(sql.FieldContains(FieldTitle, v))
 }
 
-// TitleHasPrefix applies the HasPrefix predicate on the "Title" field.
+// TitleHasPrefix applies the HasPrefix predicate on the "title" field.
 func TitleHasPrefix(v string) predicate.StreamSchedule {
 	return predicate.StreamSchedule(sql.FieldHasPrefix(FieldTitle, v))
 }
 
-// TitleHasSuffix applies the HasSuffix predicate on the "Title" field.
+// TitleHasSuffix applies the HasSuffix predicate on the "title" field.
 func TitleHasSuffix(v string) predicate.StreamSchedule {
 	return predicate.StreamSchedule(sql.FieldHasSuffix(FieldTitle, v))
 }
 
-// TitleEqualFold applies the EqualFold predicate on the "Title" field.
+// TitleEqualFold applies the EqualFold predicate on the "title" field.
 func TitleEqualFold(v string) predicate.StreamSchedule {
 	return predicate.StreamSchedule(sql.FieldEqualFold(FieldTitle, v))
 }
 
-// TitleContainsFold applies the ContainsFold predicate on the "Title" field.
+// TitleContainsFold applies the ContainsFold predicate on the "title" field.
 func TitleContainsFold(v string) predicate.StreamSchedule {
 	return predicate.StreamSchedule(sql.FieldContainsFold(FieldTitle, v))
 }

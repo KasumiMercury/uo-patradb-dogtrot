@@ -20,8 +20,8 @@ type StreamSchedule struct {
 	ID string `json:"id,omitempty"`
 	// ScheduledAt holds the value of the "scheduled_at" field.
 	ScheduledAt time.Time `json:"scheduled_at,omitempty"`
-	// Title holds the value of the "Title" field.
-	Title string `json:"Title,omitempty"`
+	// Title holds the value of the "title" field.
+	Title string `json:"title,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -95,7 +95,7 @@ func (ss *StreamSchedule) assignValues(columns []string, values []any) error {
 			}
 		case streamschedule.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field Title", values[i])
+				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
 				ss.Title = value.String
 			}
@@ -162,7 +162,7 @@ func (ss *StreamSchedule) String() string {
 	builder.WriteString("scheduled_at=")
 	builder.WriteString(ss.ScheduledAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("Title=")
+	builder.WriteString("title=")
 	builder.WriteString(ss.Title)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")

@@ -73,6 +73,11 @@ func NormalizedTitle(v string) predicate.VideoTag {
 	return predicate.VideoTag(sql.FieldEQ(FieldNormalizedTitle, v))
 }
 
+// SeriesNumbering applies equality check predicate on the "series_numbering" field. It's identical to SeriesNumberingEQ.
+func SeriesNumbering(v int) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldEQ(FieldSeriesNumbering, v))
+}
+
 // TitleEQ applies the EQ predicate on the "title" field.
 func TitleEQ(v string) predicate.VideoTag {
 	return predicate.VideoTag(sql.FieldEQ(FieldTitle, v))
@@ -201,6 +206,56 @@ func NormalizedTitleEqualFold(v string) predicate.VideoTag {
 // NormalizedTitleContainsFold applies the ContainsFold predicate on the "normalized_title" field.
 func NormalizedTitleContainsFold(v string) predicate.VideoTag {
 	return predicate.VideoTag(sql.FieldContainsFold(FieldNormalizedTitle, v))
+}
+
+// SeriesNumberingEQ applies the EQ predicate on the "series_numbering" field.
+func SeriesNumberingEQ(v int) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldEQ(FieldSeriesNumbering, v))
+}
+
+// SeriesNumberingNEQ applies the NEQ predicate on the "series_numbering" field.
+func SeriesNumberingNEQ(v int) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldNEQ(FieldSeriesNumbering, v))
+}
+
+// SeriesNumberingIn applies the In predicate on the "series_numbering" field.
+func SeriesNumberingIn(vs ...int) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldIn(FieldSeriesNumbering, vs...))
+}
+
+// SeriesNumberingNotIn applies the NotIn predicate on the "series_numbering" field.
+func SeriesNumberingNotIn(vs ...int) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldNotIn(FieldSeriesNumbering, vs...))
+}
+
+// SeriesNumberingGT applies the GT predicate on the "series_numbering" field.
+func SeriesNumberingGT(v int) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldGT(FieldSeriesNumbering, v))
+}
+
+// SeriesNumberingGTE applies the GTE predicate on the "series_numbering" field.
+func SeriesNumberingGTE(v int) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldGTE(FieldSeriesNumbering, v))
+}
+
+// SeriesNumberingLT applies the LT predicate on the "series_numbering" field.
+func SeriesNumberingLT(v int) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldLT(FieldSeriesNumbering, v))
+}
+
+// SeriesNumberingLTE applies the LTE predicate on the "series_numbering" field.
+func SeriesNumberingLTE(v int) predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldLTE(FieldSeriesNumbering, v))
+}
+
+// SeriesNumberingIsNil applies the IsNil predicate on the "series_numbering" field.
+func SeriesNumberingIsNil() predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldIsNull(FieldSeriesNumbering))
+}
+
+// SeriesNumberingNotNil applies the NotNil predicate on the "series_numbering" field.
+func SeriesNumberingNotNil() predicate.VideoTag {
+	return predicate.VideoTag(sql.FieldNotNull(FieldSeriesNumbering))
 }
 
 // HasVideos applies the HasEdge predicate on the "videos" edge.

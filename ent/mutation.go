@@ -3371,7 +3371,7 @@ type StreamScheduleMutation struct {
 	typ           string
 	id            *string
 	scheduled_at  *time.Time
-	_Title        *string
+	title         *string
 	created_at    *time.Time
 	updated_at    *time.Time
 	clearedFields map[string]struct{}
@@ -3522,21 +3522,21 @@ func (m *StreamScheduleMutation) ResetScheduledAt() {
 	m.scheduled_at = nil
 }
 
-// SetTitle sets the "Title" field.
+// SetTitle sets the "title" field.
 func (m *StreamScheduleMutation) SetTitle(s string) {
-	m._Title = &s
+	m.title = &s
 }
 
-// Title returns the value of the "Title" field in the mutation.
+// Title returns the value of the "title" field in the mutation.
 func (m *StreamScheduleMutation) Title() (r string, exists bool) {
-	v := m._Title
+	v := m.title
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldTitle returns the old "Title" field's value of the StreamSchedule entity.
+// OldTitle returns the old "title" field's value of the StreamSchedule entity.
 // If the StreamSchedule object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *StreamScheduleMutation) OldTitle(ctx context.Context) (v string, err error) {
@@ -3553,9 +3553,9 @@ func (m *StreamScheduleMutation) OldTitle(ctx context.Context) (v string, err er
 	return oldValue.Title, nil
 }
 
-// ResetTitle resets all changes to the "Title" field.
+// ResetTitle resets all changes to the "title" field.
 func (m *StreamScheduleMutation) ResetTitle() {
-	m._Title = nil
+	m.title = nil
 }
 
 // SetCreatedAt sets the "created_at" field.
@@ -3707,7 +3707,7 @@ func (m *StreamScheduleMutation) Fields() []string {
 	if m.scheduled_at != nil {
 		fields = append(fields, streamschedule.FieldScheduledAt)
 	}
-	if m._Title != nil {
+	if m.title != nil {
 		fields = append(fields, streamschedule.FieldTitle)
 	}
 	if m.created_at != nil {
@@ -3944,6 +3944,8 @@ type VideoMutation struct {
 	actual_start_at              *time.Time
 	actual_end_at                *time.Time
 	published_at                 *time.Time
+	numbering                    *int
+	addnumbering                 *int
 	created_at                   *time.Time
 	updated_at                   *time.Time
 	clearedFields                map[string]struct{}
@@ -4594,6 +4596,76 @@ func (m *VideoMutation) ResetPublishedAt() {
 	m.published_at = nil
 }
 
+// SetNumbering sets the "numbering" field.
+func (m *VideoMutation) SetNumbering(i int) {
+	m.numbering = &i
+	m.addnumbering = nil
+}
+
+// Numbering returns the value of the "numbering" field in the mutation.
+func (m *VideoMutation) Numbering() (r int, exists bool) {
+	v := m.numbering
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNumbering returns the old "numbering" field's value of the Video entity.
+// If the Video object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VideoMutation) OldNumbering(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNumbering is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNumbering requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNumbering: %w", err)
+	}
+	return oldValue.Numbering, nil
+}
+
+// AddNumbering adds i to the "numbering" field.
+func (m *VideoMutation) AddNumbering(i int) {
+	if m.addnumbering != nil {
+		*m.addnumbering += i
+	} else {
+		m.addnumbering = &i
+	}
+}
+
+// AddedNumbering returns the value that was added to the "numbering" field in this mutation.
+func (m *VideoMutation) AddedNumbering() (r int, exists bool) {
+	v := m.addnumbering
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearNumbering clears the value of the "numbering" field.
+func (m *VideoMutation) ClearNumbering() {
+	m.numbering = nil
+	m.addnumbering = nil
+	m.clearedFields[video.FieldNumbering] = struct{}{}
+}
+
+// NumberingCleared returns if the "numbering" field was cleared in this mutation.
+func (m *VideoMutation) NumberingCleared() bool {
+	_, ok := m.clearedFields[video.FieldNumbering]
+	return ok
+}
+
+// ResetNumbering resets all changes to the "numbering" field.
+func (m *VideoMutation) ResetNumbering() {
+	m.numbering = nil
+	m.addnumbering = nil
+	delete(m.clearedFields, video.FieldNumbering)
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *VideoMutation) SetCreatedAt(t time.Time) {
 	m.created_at = &t
@@ -5063,7 +5135,7 @@ func (m *VideoMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *VideoMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 15)
 	if m.source_id != nil {
 		fields = append(fields, video.FieldSourceID)
 	}
@@ -5099,6 +5171,9 @@ func (m *VideoMutation) Fields() []string {
 	}
 	if m.published_at != nil {
 		fields = append(fields, video.FieldPublishedAt)
+	}
+	if m.numbering != nil {
+		fields = append(fields, video.FieldNumbering)
 	}
 	if m.created_at != nil {
 		fields = append(fields, video.FieldCreatedAt)
@@ -5138,6 +5213,8 @@ func (m *VideoMutation) Field(name string) (ent.Value, bool) {
 		return m.ActualEndAt()
 	case video.FieldPublishedAt:
 		return m.PublishedAt()
+	case video.FieldNumbering:
+		return m.Numbering()
 	case video.FieldCreatedAt:
 		return m.CreatedAt()
 	case video.FieldUpdatedAt:
@@ -5175,6 +5252,8 @@ func (m *VideoMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldActualEndAt(ctx)
 	case video.FieldPublishedAt:
 		return m.OldPublishedAt(ctx)
+	case video.FieldNumbering:
+		return m.OldNumbering(ctx)
 	case video.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case video.FieldUpdatedAt:
@@ -5272,6 +5351,13 @@ func (m *VideoMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetPublishedAt(v)
 		return nil
+	case video.FieldNumbering:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNumbering(v)
+		return nil
 	case video.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -5297,6 +5383,9 @@ func (m *VideoMutation) AddedFields() []string {
 	if m.addduration_seconds != nil {
 		fields = append(fields, video.FieldDurationSeconds)
 	}
+	if m.addnumbering != nil {
+		fields = append(fields, video.FieldNumbering)
+	}
 	return fields
 }
 
@@ -5307,6 +5396,8 @@ func (m *VideoMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case video.FieldDurationSeconds:
 		return m.AddedDurationSeconds()
+	case video.FieldNumbering:
+		return m.AddedNumbering()
 	}
 	return nil, false
 }
@@ -5322,6 +5413,13 @@ func (m *VideoMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddDurationSeconds(v)
+		return nil
+	case video.FieldNumbering:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddNumbering(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Video numeric field %s", name)
@@ -5345,6 +5443,9 @@ func (m *VideoMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(video.FieldActualEndAt) {
 		fields = append(fields, video.FieldActualEndAt)
+	}
+	if m.FieldCleared(video.FieldNumbering) {
+		fields = append(fields, video.FieldNumbering)
 	}
 	return fields
 }
@@ -5374,6 +5475,9 @@ func (m *VideoMutation) ClearField(name string) error {
 		return nil
 	case video.FieldActualEndAt:
 		m.ClearActualEndAt()
+		return nil
+	case video.FieldNumbering:
+		m.ClearNumbering()
 		return nil
 	}
 	return fmt.Errorf("unknown Video nullable field %s", name)
@@ -5418,6 +5522,9 @@ func (m *VideoMutation) ResetField(name string) error {
 		return nil
 	case video.FieldPublishedAt:
 		m.ResetPublishedAt()
+		return nil
+	case video.FieldNumbering:
+		m.ResetNumbering()
 		return nil
 	case video.FieldCreatedAt:
 		m.ResetCreatedAt()
@@ -6731,18 +6838,20 @@ func (m *VideoPlayRangeMutation) ResetEdge(name string) error {
 // VideoTagMutation represents an operation that mutates the VideoTag nodes in the graph.
 type VideoTagMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *string
-	title            *string
-	normalized_title *string
-	clearedFields    map[string]struct{}
-	videos           map[string]struct{}
-	removedvideos    map[string]struct{}
-	clearedvideos    bool
-	done             bool
-	oldValue         func(context.Context) (*VideoTag, error)
-	predicates       []predicate.VideoTag
+	op                  Op
+	typ                 string
+	id                  *string
+	title               *string
+	normalized_title    *string
+	series_numbering    *int
+	addseries_numbering *int
+	clearedFields       map[string]struct{}
+	videos              map[string]struct{}
+	removedvideos       map[string]struct{}
+	clearedvideos       bool
+	done                bool
+	oldValue            func(context.Context) (*VideoTag, error)
+	predicates          []predicate.VideoTag
 }
 
 var _ ent.Mutation = (*VideoTagMutation)(nil)
@@ -6921,6 +7030,76 @@ func (m *VideoTagMutation) ResetNormalizedTitle() {
 	m.normalized_title = nil
 }
 
+// SetSeriesNumbering sets the "series_numbering" field.
+func (m *VideoTagMutation) SetSeriesNumbering(i int) {
+	m.series_numbering = &i
+	m.addseries_numbering = nil
+}
+
+// SeriesNumbering returns the value of the "series_numbering" field in the mutation.
+func (m *VideoTagMutation) SeriesNumbering() (r int, exists bool) {
+	v := m.series_numbering
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSeriesNumbering returns the old "series_numbering" field's value of the VideoTag entity.
+// If the VideoTag object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VideoTagMutation) OldSeriesNumbering(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSeriesNumbering is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSeriesNumbering requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSeriesNumbering: %w", err)
+	}
+	return oldValue.SeriesNumbering, nil
+}
+
+// AddSeriesNumbering adds i to the "series_numbering" field.
+func (m *VideoTagMutation) AddSeriesNumbering(i int) {
+	if m.addseries_numbering != nil {
+		*m.addseries_numbering += i
+	} else {
+		m.addseries_numbering = &i
+	}
+}
+
+// AddedSeriesNumbering returns the value that was added to the "series_numbering" field in this mutation.
+func (m *VideoTagMutation) AddedSeriesNumbering() (r int, exists bool) {
+	v := m.addseries_numbering
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearSeriesNumbering clears the value of the "series_numbering" field.
+func (m *VideoTagMutation) ClearSeriesNumbering() {
+	m.series_numbering = nil
+	m.addseries_numbering = nil
+	m.clearedFields[videotag.FieldSeriesNumbering] = struct{}{}
+}
+
+// SeriesNumberingCleared returns if the "series_numbering" field was cleared in this mutation.
+func (m *VideoTagMutation) SeriesNumberingCleared() bool {
+	_, ok := m.clearedFields[videotag.FieldSeriesNumbering]
+	return ok
+}
+
+// ResetSeriesNumbering resets all changes to the "series_numbering" field.
+func (m *VideoTagMutation) ResetSeriesNumbering() {
+	m.series_numbering = nil
+	m.addseries_numbering = nil
+	delete(m.clearedFields, videotag.FieldSeriesNumbering)
+}
+
 // AddVideoIDs adds the "videos" edge to the Video entity by ids.
 func (m *VideoTagMutation) AddVideoIDs(ids ...string) {
 	if m.videos == nil {
@@ -7009,12 +7188,15 @@ func (m *VideoTagMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *VideoTagMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 3)
 	if m.title != nil {
 		fields = append(fields, videotag.FieldTitle)
 	}
 	if m.normalized_title != nil {
 		fields = append(fields, videotag.FieldNormalizedTitle)
+	}
+	if m.series_numbering != nil {
+		fields = append(fields, videotag.FieldSeriesNumbering)
 	}
 	return fields
 }
@@ -7028,6 +7210,8 @@ func (m *VideoTagMutation) Field(name string) (ent.Value, bool) {
 		return m.Title()
 	case videotag.FieldNormalizedTitle:
 		return m.NormalizedTitle()
+	case videotag.FieldSeriesNumbering:
+		return m.SeriesNumbering()
 	}
 	return nil, false
 }
@@ -7041,6 +7225,8 @@ func (m *VideoTagMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldTitle(ctx)
 	case videotag.FieldNormalizedTitle:
 		return m.OldNormalizedTitle(ctx)
+	case videotag.FieldSeriesNumbering:
+		return m.OldSeriesNumbering(ctx)
 	}
 	return nil, fmt.Errorf("unknown VideoTag field %s", name)
 }
@@ -7064,6 +7250,13 @@ func (m *VideoTagMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetNormalizedTitle(v)
 		return nil
+	case videotag.FieldSeriesNumbering:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSeriesNumbering(v)
+		return nil
 	}
 	return fmt.Errorf("unknown VideoTag field %s", name)
 }
@@ -7071,13 +7264,21 @@ func (m *VideoTagMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *VideoTagMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addseries_numbering != nil {
+		fields = append(fields, videotag.FieldSeriesNumbering)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *VideoTagMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case videotag.FieldSeriesNumbering:
+		return m.AddedSeriesNumbering()
+	}
 	return nil, false
 }
 
@@ -7086,6 +7287,13 @@ func (m *VideoTagMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *VideoTagMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case videotag.FieldSeriesNumbering:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddSeriesNumbering(v)
+		return nil
 	}
 	return fmt.Errorf("unknown VideoTag numeric field %s", name)
 }
@@ -7093,7 +7301,11 @@ func (m *VideoTagMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *VideoTagMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(videotag.FieldSeriesNumbering) {
+		fields = append(fields, videotag.FieldSeriesNumbering)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -7106,6 +7318,11 @@ func (m *VideoTagMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *VideoTagMutation) ClearField(name string) error {
+	switch name {
+	case videotag.FieldSeriesNumbering:
+		m.ClearSeriesNumbering()
+		return nil
+	}
 	return fmt.Errorf("unknown VideoTag nullable field %s", name)
 }
 
@@ -7118,6 +7335,9 @@ func (m *VideoTagMutation) ResetField(name string) error {
 		return nil
 	case videotag.FieldNormalizedTitle:
 		m.ResetNormalizedTitle()
+		return nil
+	case videotag.FieldSeriesNumbering:
+		m.ResetSeriesNumbering()
 		return nil
 	}
 	return fmt.Errorf("unknown VideoTag field %s", name)

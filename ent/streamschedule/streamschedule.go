@@ -64,7 +64,7 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// TitleValidator is a validator for the "Title" field. It is called by the builders before save.
+	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
@@ -85,7 +85,7 @@ func ByScheduledAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScheduledAt, opts...).ToFunc()
 }
 
-// ByTitle orders the results by the Title field.
+// ByTitle orders the results by the title field.
 func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
 }

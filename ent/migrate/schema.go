@@ -105,7 +105,7 @@ var (
 	// PeriodicDescriptionTemplatesColumns holds the columns for the "periodic_description_templates" table.
 	PeriodicDescriptionTemplatesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
-		{Name: "text", Type: field.TypeString, Size: 1000},
+		{Name: "text", Type: field.TypeString, Size: 5000},
 		{Name: "start_use_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_use_at", Type: field.TypeTime, Nullable: true},
 	}

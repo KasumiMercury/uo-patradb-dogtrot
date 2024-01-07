@@ -95,6 +95,8 @@ var (
 	SourceIDValidator func(string) error
 	// RawValidator is a validator for the "raw" field. It is called by the builders before save.
 	RawValidator func(string) error
+	// VariableValidator is a validator for the "variable" field. It is called by the builders before save.
+	VariableValidator func(string) error
 	// DefaultTemplateConfidence holds the default value on creation for the "template_confidence" field.
 	DefaultTemplateConfidence bool
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.

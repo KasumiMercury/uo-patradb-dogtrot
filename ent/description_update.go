@@ -244,6 +244,11 @@ func (du *DescriptionUpdate) check() error {
 			return &ValidationError{Name: "raw", err: fmt.Errorf(`ent: validator failed for field "Description.raw": %w`, err)}
 		}
 	}
+	if v, ok := du.mutation.Variable(); ok {
+		if err := description.VariableValidator(v); err != nil {
+			return &ValidationError{Name: "variable", err: fmt.Errorf(`ent: validator failed for field "Description.variable": %w`, err)}
+		}
+	}
 	if _, ok := du.mutation.VideoID(); du.mutation.VideoCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "Description.video"`)
 	}
@@ -630,6 +635,11 @@ func (duo *DescriptionUpdateOne) check() error {
 	if v, ok := duo.mutation.Raw(); ok {
 		if err := description.RawValidator(v); err != nil {
 			return &ValidationError{Name: "raw", err: fmt.Errorf(`ent: validator failed for field "Description.raw": %w`, err)}
+		}
+	}
+	if v, ok := duo.mutation.Variable(); ok {
+		if err := description.VariableValidator(v); err != nil {
+			return &ValidationError{Name: "variable", err: fmt.Errorf(`ent: validator failed for field "Description.variable": %w`, err)}
 		}
 	}
 	if _, ok := duo.mutation.VideoID(); duo.mutation.VideoCleared() && !ok {

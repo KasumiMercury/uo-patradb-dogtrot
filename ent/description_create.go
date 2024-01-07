@@ -221,6 +221,11 @@ func (dc *DescriptionCreate) check() error {
 			return &ValidationError{Name: "raw", err: fmt.Errorf(`ent: validator failed for field "Description.raw": %w`, err)}
 		}
 	}
+	if v, ok := dc.mutation.Variable(); ok {
+		if err := description.VariableValidator(v); err != nil {
+			return &ValidationError{Name: "variable", err: fmt.Errorf(`ent: validator failed for field "Description.variable": %w`, err)}
+		}
+	}
 	if _, ok := dc.mutation.TemplateConfidence(); !ok {
 		return &ValidationError{Name: "template_confidence", err: errors.New(`ent: missing required field "Description.template_confidence"`)}
 	}

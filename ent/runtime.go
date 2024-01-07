@@ -77,6 +77,10 @@ func init() {
 	descriptionDescRaw := descriptionFields[1].Descriptor()
 	// description.RawValidator is a validator for the "raw" field. It is called by the builders before save.
 	description.RawValidator = descriptionDescRaw.Validators[0].(func(string) error)
+	// descriptionDescVariable is the schema descriptor for variable field.
+	descriptionDescVariable := descriptionFields[2].Descriptor()
+	// description.VariableValidator is a validator for the "variable" field. It is called by the builders before save.
+	description.VariableValidator = descriptionDescVariable.Validators[0].(func(string) error)
 	// descriptionDescTemplateConfidence is the schema descriptor for template_confidence field.
 	descriptionDescTemplateConfidence := descriptionFields[3].Descriptor()
 	// description.DefaultTemplateConfidence holds the default value on creation for the template_confidence field.

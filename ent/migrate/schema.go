@@ -27,7 +27,7 @@ var (
 		{Name: "id", Type: field.TypeString, Size: 26},
 		{Name: "source_id", Type: field.TypeString, Unique: true, Size: 12},
 		{Name: "raw", Type: field.TypeString, Size: 5000},
-		{Name: "variable", Type: field.TypeString, Nullable: true},
+		{Name: "variable", Type: field.TypeString, Nullable: true, Size: 5000},
 		{Name: "template_confidence", Type: field.TypeBool, Default: false},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},

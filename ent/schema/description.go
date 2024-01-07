@@ -27,7 +27,7 @@ func (Description) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("source_id").MaxLen(12).Unique().Annotations(entproto.Field(3)),
 		field.String("raw").MaxLen(5000).Annotations(entproto.Field(4)),
-		field.String("variable").Optional().Annotations(entproto.Field(5)),
+		field.String("variable").MaxLen(5000).Optional().Annotations(entproto.Field(5)),
 		field.Bool("template_confidence").Default(false).Annotations(entproto.Field(6)),
 		field.Time("created_at").Default(func() time.Time { return time.Now() }).Annotations(entproto.Skip()),
 		field.Time("updated_at").Default(func() time.Time { return time.Now() }).UpdateDefault(func() time.Time { return time.Now() }).Annotations(entproto.Field(8)),

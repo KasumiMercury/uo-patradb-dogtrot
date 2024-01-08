@@ -18,6 +18,8 @@ const (
 	FieldStartUseAt = "start_use_at"
 	// FieldLastUseAt holds the string denoting the last_use_at field in the database.
 	FieldLastUseAt = "last_use_at"
+	// FieldHash holds the string denoting the hash field in the database.
+	FieldHash = "hash"
 	// EdgeDescriptions holds the string denoting the descriptions edge name in mutations.
 	EdgeDescriptions = "descriptions"
 	// Table holds the table name of the periodicdescriptiontemplate in the database.
@@ -37,6 +39,7 @@ var Columns = []string{
 	FieldText,
 	FieldStartUseAt,
 	FieldLastUseAt,
+	FieldHash,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -79,6 +82,11 @@ func ByStartUseAt(opts ...sql.OrderTermOption) OrderOption {
 // ByLastUseAt orders the results by the last_use_at field.
 func ByLastUseAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastUseAt, opts...).ToFunc()
+}
+
+// ByHash orders the results by the hash field.
+func ByHash(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHash, opts...).ToFunc()
 }
 
 // ByDescriptionsCount orders the results by descriptions count.

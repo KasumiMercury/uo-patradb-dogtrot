@@ -83,6 +83,27 @@ func (pdtu *PeriodicDescriptionTemplateUpdate) ClearLastUseAt() *PeriodicDescrip
 	return pdtu
 }
 
+// SetHash sets the "hash" field.
+func (pdtu *PeriodicDescriptionTemplateUpdate) SetHash(u uint64) *PeriodicDescriptionTemplateUpdate {
+	pdtu.mutation.ResetHash()
+	pdtu.mutation.SetHash(u)
+	return pdtu
+}
+
+// SetNillableHash sets the "hash" field if the given value is not nil.
+func (pdtu *PeriodicDescriptionTemplateUpdate) SetNillableHash(u *uint64) *PeriodicDescriptionTemplateUpdate {
+	if u != nil {
+		pdtu.SetHash(*u)
+	}
+	return pdtu
+}
+
+// AddHash adds u to the "hash" field.
+func (pdtu *PeriodicDescriptionTemplateUpdate) AddHash(u int64) *PeriodicDescriptionTemplateUpdate {
+	pdtu.mutation.AddHash(u)
+	return pdtu
+}
+
 // AddDescriptionIDs adds the "descriptions" edge to the Description entity by IDs.
 func (pdtu *PeriodicDescriptionTemplateUpdate) AddDescriptionIDs(ids ...string) *PeriodicDescriptionTemplateUpdate {
 	pdtu.mutation.AddDescriptionIDs(ids...)
@@ -187,6 +208,12 @@ func (pdtu *PeriodicDescriptionTemplateUpdate) sqlSave(ctx context.Context) (n i
 	}
 	if pdtu.mutation.LastUseAtCleared() {
 		_spec.ClearField(periodicdescriptiontemplate.FieldLastUseAt, field.TypeTime)
+	}
+	if value, ok := pdtu.mutation.Hash(); ok {
+		_spec.SetField(periodicdescriptiontemplate.FieldHash, field.TypeUint64, value)
+	}
+	if value, ok := pdtu.mutation.AddedHash(); ok {
+		_spec.AddField(periodicdescriptiontemplate.FieldHash, field.TypeUint64, value)
 	}
 	if pdtu.mutation.DescriptionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -304,6 +331,27 @@ func (pdtuo *PeriodicDescriptionTemplateUpdateOne) SetNillableLastUseAt(t *time.
 // ClearLastUseAt clears the value of the "last_use_at" field.
 func (pdtuo *PeriodicDescriptionTemplateUpdateOne) ClearLastUseAt() *PeriodicDescriptionTemplateUpdateOne {
 	pdtuo.mutation.ClearLastUseAt()
+	return pdtuo
+}
+
+// SetHash sets the "hash" field.
+func (pdtuo *PeriodicDescriptionTemplateUpdateOne) SetHash(u uint64) *PeriodicDescriptionTemplateUpdateOne {
+	pdtuo.mutation.ResetHash()
+	pdtuo.mutation.SetHash(u)
+	return pdtuo
+}
+
+// SetNillableHash sets the "hash" field if the given value is not nil.
+func (pdtuo *PeriodicDescriptionTemplateUpdateOne) SetNillableHash(u *uint64) *PeriodicDescriptionTemplateUpdateOne {
+	if u != nil {
+		pdtuo.SetHash(*u)
+	}
+	return pdtuo
+}
+
+// AddHash adds u to the "hash" field.
+func (pdtuo *PeriodicDescriptionTemplateUpdateOne) AddHash(u int64) *PeriodicDescriptionTemplateUpdateOne {
+	pdtuo.mutation.AddHash(u)
 	return pdtuo
 }
 
@@ -441,6 +489,12 @@ func (pdtuo *PeriodicDescriptionTemplateUpdateOne) sqlSave(ctx context.Context) 
 	}
 	if pdtuo.mutation.LastUseAtCleared() {
 		_spec.ClearField(periodicdescriptiontemplate.FieldLastUseAt, field.TypeTime)
+	}
+	if value, ok := pdtuo.mutation.Hash(); ok {
+		_spec.SetField(periodicdescriptiontemplate.FieldHash, field.TypeUint64, value)
+	}
+	if value, ok := pdtuo.mutation.AddedHash(); ok {
+		_spec.AddField(periodicdescriptiontemplate.FieldHash, field.TypeUint64, value)
 	}
 	if pdtuo.mutation.DescriptionsCleared() {
 		edge := &sqlgraph.EdgeSpec{

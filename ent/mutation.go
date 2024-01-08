@@ -2799,6 +2799,8 @@ type PeriodicDescriptionTemplateMutation struct {
 	text                *string
 	start_use_at        *time.Time
 	last_use_at         *time.Time
+	hash                *uint64
+	addhash             *int64
 	clearedFields       map[string]struct{}
 	descriptions        map[string]struct{}
 	removeddescriptions map[string]struct{}
@@ -3046,6 +3048,62 @@ func (m *PeriodicDescriptionTemplateMutation) ResetLastUseAt() {
 	delete(m.clearedFields, periodicdescriptiontemplate.FieldLastUseAt)
 }
 
+// SetHash sets the "hash" field.
+func (m *PeriodicDescriptionTemplateMutation) SetHash(u uint64) {
+	m.hash = &u
+	m.addhash = nil
+}
+
+// Hash returns the value of the "hash" field in the mutation.
+func (m *PeriodicDescriptionTemplateMutation) Hash() (r uint64, exists bool) {
+	v := m.hash
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHash returns the old "hash" field's value of the PeriodicDescriptionTemplate entity.
+// If the PeriodicDescriptionTemplate object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PeriodicDescriptionTemplateMutation) OldHash(ctx context.Context) (v uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHash is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHash requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHash: %w", err)
+	}
+	return oldValue.Hash, nil
+}
+
+// AddHash adds u to the "hash" field.
+func (m *PeriodicDescriptionTemplateMutation) AddHash(u int64) {
+	if m.addhash != nil {
+		*m.addhash += u
+	} else {
+		m.addhash = &u
+	}
+}
+
+// AddedHash returns the value that was added to the "hash" field in this mutation.
+func (m *PeriodicDescriptionTemplateMutation) AddedHash() (r int64, exists bool) {
+	v := m.addhash
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetHash resets all changes to the "hash" field.
+func (m *PeriodicDescriptionTemplateMutation) ResetHash() {
+	m.hash = nil
+	m.addhash = nil
+}
+
 // AddDescriptionIDs adds the "descriptions" edge to the Description entity by ids.
 func (m *PeriodicDescriptionTemplateMutation) AddDescriptionIDs(ids ...string) {
 	if m.descriptions == nil {
@@ -3134,7 +3192,7 @@ func (m *PeriodicDescriptionTemplateMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PeriodicDescriptionTemplateMutation) Fields() []string {
-	fields := make([]string, 0, 3)
+	fields := make([]string, 0, 4)
 	if m.text != nil {
 		fields = append(fields, periodicdescriptiontemplate.FieldText)
 	}
@@ -3143,6 +3201,9 @@ func (m *PeriodicDescriptionTemplateMutation) Fields() []string {
 	}
 	if m.last_use_at != nil {
 		fields = append(fields, periodicdescriptiontemplate.FieldLastUseAt)
+	}
+	if m.hash != nil {
+		fields = append(fields, periodicdescriptiontemplate.FieldHash)
 	}
 	return fields
 }
@@ -3158,6 +3219,8 @@ func (m *PeriodicDescriptionTemplateMutation) Field(name string) (ent.Value, boo
 		return m.StartUseAt()
 	case periodicdescriptiontemplate.FieldLastUseAt:
 		return m.LastUseAt()
+	case periodicdescriptiontemplate.FieldHash:
+		return m.Hash()
 	}
 	return nil, false
 }
@@ -3173,6 +3236,8 @@ func (m *PeriodicDescriptionTemplateMutation) OldField(ctx context.Context, name
 		return m.OldStartUseAt(ctx)
 	case periodicdescriptiontemplate.FieldLastUseAt:
 		return m.OldLastUseAt(ctx)
+	case periodicdescriptiontemplate.FieldHash:
+		return m.OldHash(ctx)
 	}
 	return nil, fmt.Errorf("unknown PeriodicDescriptionTemplate field %s", name)
 }
@@ -3203,6 +3268,13 @@ func (m *PeriodicDescriptionTemplateMutation) SetField(name string, value ent.Va
 		}
 		m.SetLastUseAt(v)
 		return nil
+	case periodicdescriptiontemplate.FieldHash:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHash(v)
+		return nil
 	}
 	return fmt.Errorf("unknown PeriodicDescriptionTemplate field %s", name)
 }
@@ -3210,13 +3282,21 @@ func (m *PeriodicDescriptionTemplateMutation) SetField(name string, value ent.Va
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *PeriodicDescriptionTemplateMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addhash != nil {
+		fields = append(fields, periodicdescriptiontemplate.FieldHash)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *PeriodicDescriptionTemplateMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case periodicdescriptiontemplate.FieldHash:
+		return m.AddedHash()
+	}
 	return nil, false
 }
 
@@ -3225,6 +3305,13 @@ func (m *PeriodicDescriptionTemplateMutation) AddedField(name string) (ent.Value
 // type.
 func (m *PeriodicDescriptionTemplateMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case periodicdescriptiontemplate.FieldHash:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddHash(v)
+		return nil
 	}
 	return fmt.Errorf("unknown PeriodicDescriptionTemplate numeric field %s", name)
 }
@@ -3275,6 +3362,9 @@ func (m *PeriodicDescriptionTemplateMutation) ResetField(name string) error {
 		return nil
 	case periodicdescriptiontemplate.FieldLastUseAt:
 		m.ResetLastUseAt()
+		return nil
+	case periodicdescriptiontemplate.FieldHash:
+		m.ResetHash()
 		return nil
 	}
 	return fmt.Errorf("unknown PeriodicDescriptionTemplate field %s", name)

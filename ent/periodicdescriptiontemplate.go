@@ -23,6 +23,8 @@ type PeriodicDescriptionTemplate struct {
 	StartUseAt time.Time `json:"start_use_at,omitempty"`
 	// LastUseAt holds the value of the "last_use_at" field.
 	LastUseAt time.Time `json:"last_use_at,omitempty"`
+	// Hash holds the value of the "hash" field.
+	Hash uint64 `json:"hash,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PeriodicDescriptionTemplateQuery when eager-loading is set.
 	Edges        PeriodicDescriptionTemplateEdges `json:"edges"`
@@ -52,6 +54,8 @@ func (*PeriodicDescriptionTemplate) scanValues(columns []string) ([]any, error) 
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case periodicdescriptiontemplate.FieldHash:
+			values[i] = new(sql.NullInt64)
 		case periodicdescriptiontemplate.FieldID, periodicdescriptiontemplate.FieldText:
 			values[i] = new(sql.NullString)
 		case periodicdescriptiontemplate.FieldStartUseAt, periodicdescriptiontemplate.FieldLastUseAt:
@@ -94,6 +98,12 @@ func (pdt *PeriodicDescriptionTemplate) assignValues(columns []string, values []
 				return fmt.Errorf("unexpected type %T for field last_use_at", values[i])
 			} else if value.Valid {
 				pdt.LastUseAt = value.Time
+			}
+		case periodicdescriptiontemplate.FieldHash:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field hash", values[i])
+			} else if value.Valid {
+				pdt.Hash = uint64(value.Int64)
 			}
 		default:
 			pdt.selectValues.Set(columns[i], values[i])
@@ -144,6 +154,9 @@ func (pdt *PeriodicDescriptionTemplate) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("last_use_at=")
 	builder.WriteString(pdt.LastUseAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("hash=")
+	builder.WriteString(fmt.Sprintf("%v", pdt.Hash))
 	builder.WriteByte(')')
 	return builder.String()
 }

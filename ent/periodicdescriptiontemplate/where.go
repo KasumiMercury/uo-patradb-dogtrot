@@ -80,6 +80,11 @@ func LastUseAt(v time.Time) predicate.PeriodicDescriptionTemplate {
 	return predicate.PeriodicDescriptionTemplate(sql.FieldEQ(FieldLastUseAt, v))
 }
 
+// Hash applies equality check predicate on the "hash" field. It's identical to HashEQ.
+func Hash(v uint64) predicate.PeriodicDescriptionTemplate {
+	return predicate.PeriodicDescriptionTemplate(sql.FieldEQ(FieldHash, v))
+}
+
 // TextEQ applies the EQ predicate on the "text" field.
 func TextEQ(v string) predicate.PeriodicDescriptionTemplate {
 	return predicate.PeriodicDescriptionTemplate(sql.FieldEQ(FieldText, v))
@@ -243,6 +248,46 @@ func LastUseAtIsNil() predicate.PeriodicDescriptionTemplate {
 // LastUseAtNotNil applies the NotNil predicate on the "last_use_at" field.
 func LastUseAtNotNil() predicate.PeriodicDescriptionTemplate {
 	return predicate.PeriodicDescriptionTemplate(sql.FieldNotNull(FieldLastUseAt))
+}
+
+// HashEQ applies the EQ predicate on the "hash" field.
+func HashEQ(v uint64) predicate.PeriodicDescriptionTemplate {
+	return predicate.PeriodicDescriptionTemplate(sql.FieldEQ(FieldHash, v))
+}
+
+// HashNEQ applies the NEQ predicate on the "hash" field.
+func HashNEQ(v uint64) predicate.PeriodicDescriptionTemplate {
+	return predicate.PeriodicDescriptionTemplate(sql.FieldNEQ(FieldHash, v))
+}
+
+// HashIn applies the In predicate on the "hash" field.
+func HashIn(vs ...uint64) predicate.PeriodicDescriptionTemplate {
+	return predicate.PeriodicDescriptionTemplate(sql.FieldIn(FieldHash, vs...))
+}
+
+// HashNotIn applies the NotIn predicate on the "hash" field.
+func HashNotIn(vs ...uint64) predicate.PeriodicDescriptionTemplate {
+	return predicate.PeriodicDescriptionTemplate(sql.FieldNotIn(FieldHash, vs...))
+}
+
+// HashGT applies the GT predicate on the "hash" field.
+func HashGT(v uint64) predicate.PeriodicDescriptionTemplate {
+	return predicate.PeriodicDescriptionTemplate(sql.FieldGT(FieldHash, v))
+}
+
+// HashGTE applies the GTE predicate on the "hash" field.
+func HashGTE(v uint64) predicate.PeriodicDescriptionTemplate {
+	return predicate.PeriodicDescriptionTemplate(sql.FieldGTE(FieldHash, v))
+}
+
+// HashLT applies the LT predicate on the "hash" field.
+func HashLT(v uint64) predicate.PeriodicDescriptionTemplate {
+	return predicate.PeriodicDescriptionTemplate(sql.FieldLT(FieldHash, v))
+}
+
+// HashLTE applies the LTE predicate on the "hash" field.
+func HashLTE(v uint64) predicate.PeriodicDescriptionTemplate {
+	return predicate.PeriodicDescriptionTemplate(sql.FieldLTE(FieldHash, v))
 }
 
 // HasDescriptions applies the HasEdge predicate on the "descriptions" edge.

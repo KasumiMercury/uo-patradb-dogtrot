@@ -55,6 +55,12 @@ func (pdtc *PeriodicDescriptionTemplateCreate) SetNillableLastUseAt(t *time.Time
 	return pdtc
 }
 
+// SetHash sets the "hash" field.
+func (pdtc *PeriodicDescriptionTemplateCreate) SetHash(u uint64) *PeriodicDescriptionTemplateCreate {
+	pdtc.mutation.SetHash(u)
+	return pdtc
+}
+
 // SetID sets the "id" field.
 func (pdtc *PeriodicDescriptionTemplateCreate) SetID(s string) *PeriodicDescriptionTemplateCreate {
 	pdtc.mutation.SetID(s)
@@ -135,6 +141,9 @@ func (pdtc *PeriodicDescriptionTemplateCreate) check() error {
 			return &ValidationError{Name: "text", err: fmt.Errorf(`ent: validator failed for field "PeriodicDescriptionTemplate.text": %w`, err)}
 		}
 	}
+	if _, ok := pdtc.mutation.Hash(); !ok {
+		return &ValidationError{Name: "hash", err: errors.New(`ent: missing required field "PeriodicDescriptionTemplate.hash"`)}
+	}
 	if v, ok := pdtc.mutation.ID(); ok {
 		if err := periodicdescriptiontemplate.IDValidator(v); err != nil {
 			return &ValidationError{Name: "id", err: fmt.Errorf(`ent: validator failed for field "PeriodicDescriptionTemplate.id": %w`, err)}
@@ -186,6 +195,10 @@ func (pdtc *PeriodicDescriptionTemplateCreate) createSpec() (*PeriodicDescriptio
 	if value, ok := pdtc.mutation.LastUseAt(); ok {
 		_spec.SetField(periodicdescriptiontemplate.FieldLastUseAt, field.TypeTime, value)
 		_node.LastUseAt = value
+	}
+	if value, ok := pdtc.mutation.Hash(); ok {
+		_spec.SetField(periodicdescriptiontemplate.FieldHash, field.TypeUint64, value)
+		_node.Hash = value
 	}
 	if nodes := pdtc.mutation.DescriptionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

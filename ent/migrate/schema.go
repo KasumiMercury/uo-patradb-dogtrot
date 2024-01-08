@@ -108,6 +108,7 @@ var (
 		{Name: "text", Type: field.TypeString, Size: 5000},
 		{Name: "start_use_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_use_at", Type: field.TypeTime, Nullable: true},
+		{Name: "hash", Type: field.TypeUint64},
 	}
 	// PeriodicDescriptionTemplatesTable holds the schema information for the "periodic_description_templates" table.
 	PeriodicDescriptionTemplatesTable = &schema.Table{

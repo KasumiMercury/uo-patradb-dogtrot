@@ -27,6 +27,7 @@ func (PeriodicDescriptionTemplate) Fields() []ent.Field {
 		field.String("text").MaxLen(5000).Annotations(entproto.Field(2)),
 		field.Time("start_use_at").Optional().Annotations(entproto.Field(3)),
 		field.Time("last_use_at").Optional().Annotations(entproto.Field(4)),
+		field.Uint64("hash").Annotations(entproto.Skip()),
 	}
 }
 

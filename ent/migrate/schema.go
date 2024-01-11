@@ -58,7 +58,7 @@ var (
 	DescriptionChangesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Size: 26},
 		{Name: "raw", Type: field.TypeString, Size: 5000},
-		{Name: "variable", Type: field.TypeString, Nullable: true},
+		{Name: "variable", Type: field.TypeString, Nullable: true, Size: 5000},
 		{Name: "changed_at", Type: field.TypeTime},
 		{Name: "description_id", Type: field.TypeString, Size: 26},
 	}

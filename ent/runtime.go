@@ -110,6 +110,10 @@ func init() {
 	descriptionchangeDescRaw := descriptionchangeFields[0].Descriptor()
 	// descriptionchange.RawValidator is a validator for the "raw" field. It is called by the builders before save.
 	descriptionchange.RawValidator = descriptionchangeDescRaw.Validators[0].(func(string) error)
+	// descriptionchangeDescVariable is the schema descriptor for variable field.
+	descriptionchangeDescVariable := descriptionchangeFields[1].Descriptor()
+	// descriptionchange.VariableValidator is a validator for the "variable" field. It is called by the builders before save.
+	descriptionchange.VariableValidator = descriptionchangeDescVariable.Validators[0].(func(string) error)
 	// descriptionchangeDescChangedAt is the schema descriptor for changed_at field.
 	descriptionchangeDescChangedAt := descriptionchangeFields[2].Descriptor()
 	// descriptionchange.DefaultChangedAt holds the default value on creation for the changed_at field.

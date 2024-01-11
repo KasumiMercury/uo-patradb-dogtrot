@@ -133,6 +133,11 @@ func (dcu *DescriptionChangeUpdate) check() error {
 			return &ValidationError{Name: "raw", err: fmt.Errorf(`ent: validator failed for field "DescriptionChange.raw": %w`, err)}
 		}
 	}
+	if v, ok := dcu.mutation.Variable(); ok {
+		if err := descriptionchange.VariableValidator(v); err != nil {
+			return &ValidationError{Name: "variable", err: fmt.Errorf(`ent: validator failed for field "DescriptionChange.variable": %w`, err)}
+		}
+	}
 	if _, ok := dcu.mutation.DescriptionID(); dcu.mutation.DescriptionCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "DescriptionChange.description"`)
 	}
@@ -327,6 +332,11 @@ func (dcuo *DescriptionChangeUpdateOne) check() error {
 	if v, ok := dcuo.mutation.Raw(); ok {
 		if err := descriptionchange.RawValidator(v); err != nil {
 			return &ValidationError{Name: "raw", err: fmt.Errorf(`ent: validator failed for field "DescriptionChange.raw": %w`, err)}
+		}
+	}
+	if v, ok := dcuo.mutation.Variable(); ok {
+		if err := descriptionchange.VariableValidator(v); err != nil {
+			return &ValidationError{Name: "variable", err: fmt.Errorf(`ent: validator failed for field "DescriptionChange.variable": %w`, err)}
 		}
 	}
 	if _, ok := dcuo.mutation.DescriptionID(); dcuo.mutation.DescriptionCleared() && !ok {
